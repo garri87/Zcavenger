@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf024635cc165114f8a391313e719346, type: 3}
+  m_Name: Shotgun
+  m_EditorClassIdentifier: 
+  weaponClass: 1
+  ID: 5004
+  weaponIcon: {fileID: 21300000, guid: fbbcee837d9b15e4da95f9c736a6bbbe, type: 3}
+  weaponName: Shotgun
+  description: Action pump shotgun. Uses 12 gauge shells
+  bulletID: 9004
+  bulletImpactPrefab: {fileID: 100002, guid: 9d25129d5c3e42841a660568a12d1f5b, type: 3}
+  enemyImpactPrefab: {fileID: 4574046231875852703, guid: 072c806ec52c79f419ddf9b0ec5ccfdf, type: 3}
+  muzzleFlashPrefab: {fileID: 100006, guid: ffda10e980415944bb80e1a2263b1712, type: 3}
+  damage: 20
+  fireRate: 1
+  bulletsPerShot: 9
+  magazineCap: 8
+  recoilDuration: 0.5
+  recoilMaxRotation: -90

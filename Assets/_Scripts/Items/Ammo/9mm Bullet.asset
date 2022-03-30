@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e02616116b91934c98c6ba22c75a25e, type: 3}
+  m_Name: 9mm Bullet
+  m_EditorClassIdentifier: 
+  ID: 9001
+  itemName: 9mm Bullets
+  description: 9mm rounds
+  itemIcon: {fileID: 21300000, guid: 2c92d7ed7e0ecf94fbba2389e3e5f1e2, type: 3}
+  itemPrefab: {fileID: 6848770636809359475, guid: 916b06599212b7c4d9cc03d5894da463, type: 3}
+  usable: 0
+  consumable: 0
+  isStackable: 1
+  maxStack: 100
+  healthRestore: 0
+  foodRestore: 0
+  waterRestore: 0

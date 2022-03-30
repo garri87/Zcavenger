@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e02616116b91934c98c6ba22c75a25e, type: 3}
+  m_Name: Canned_Food
+  m_EditorClassIdentifier: 
+  ID: 7004
+  itemName: Canned Food
+  description: Preservated industrial food. The expiration date in the can is unreadable.
+  itemIcon: {fileID: 21300000, guid: 322c2d6a23c08e14a84d70a69549e8ff, type: 3}
+  itemPrefab: {fileID: 8824187999535572472, guid: 270ced50a5d1dd24eb381f53ce9a0806, type: 3}
+  usable: 1
+  consumable: 1
+  isStackable: 1
+  maxStack: 20
+  healthRestore: 0
+  foodRestore: 30
+  waterRestore: 5

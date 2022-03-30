@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf024635cc165114f8a391313e719346, type: 3}
+  m_Name: Baseball Bat
+  m_EditorClassIdentifier: 
+  weaponClass: 3
+  ID: 1002
+  weaponIcon: {fileID: 21300000, guid: 2e6ee5bcf507eda468375a8387026e31, type: 3}
+  weaponName: Baseball bat
+  description: Modern version of the cavemen's club. To throw balls very far... and
+    heads too, why not?
+  bulletID: 0
+  bulletImpactPrefab: {fileID: 0}
+  enemyImpactPrefab: {fileID: 0}
+  muzzleFlashPrefab: {fileID: 0}
+  damage: 12
+  fireRate: 1
+  bulletsPerShot: 1
+  magazineCap: 0
+  recoilDuration: 0
+  recoilMaxRotation: 0
