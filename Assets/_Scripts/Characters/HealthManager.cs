@@ -26,16 +26,21 @@ public class HealthManager : MonoBehaviour
     public int currentFood;
     public int maxWater;
     public int currentWater;
+    public int healthWarningValue = 15;
     
     [Header("Regen Rate")]
     
     public float updateRate = 15;//Value in seconds that update the regeneration
     public float lowNutritionUpdateRate = 20;
+    public float bleedingUpdateRate = 5;
+    public int bleedingDamagePerRate;
     [HideInInspector] public float currentUpdateRate;
     public int regenRate; // Amount of regeneration points when timer reaches updateRate
     public int targetRegen; //Set the limit of regeneration depending the consumed item
     public int currentRegen; //the current regenerated points
-    private float timer; 
+    private float _updateTimer; 
+    private float _regenTimer; 
+    private float _bleedingTimer; 
 
     
     [Header("Stamina")]
@@ -48,6 +53,12 @@ public class HealthManager : MonoBehaviour
     public float meleeAttackPenalty = 40;
     public float rollPenalty = 20;
     public float blockHitPenalty = 20;
+
+    [Header("Status")] 
+    public bool isBleeding;
+    public bool isInjured;
+    public bool isSick;
+    
     
     private bool isDead = false;
 
@@ -78,6 +89,8 @@ public class HealthManager : MonoBehaviour
                 currentFood = maxFood;
                 currentWater = maxWater;
                 currentStamina = maxStamina;
+
+                _bleedingTimer = 0;
                 break;
         }
 
@@ -95,19 +108,27 @@ public class HealthManager : MonoBehaviour
             {
                 currentUpdateRate = updateRate;
             }
-            
+
+            if (currentHealth <= healthWarningValue)
+            {
+                isInjured = true;
+            }
+            else
+            {
+                isInjured = false;
+            }
             
             if (!_playerController.jump)
             { 
                 currentStamina += Time.deltaTime * staminaRegenRate;
             }
+            
 
+            _updateTimer += Time.fixedDeltaTime;
 
-            timer += Time.fixedDeltaTime;
-
-            if (timer >= currentUpdateRate)
+            if (_updateTimer >= currentUpdateRate)
             {
-                timer = 0;
+                _updateTimer = 0;
                 currentFood -= Random.Range(1,5);
                 currentWater -= Random.Range(1,5);
                 currentHealth += regenRate;
@@ -122,9 +143,6 @@ public class HealthManager : MonoBehaviour
                 {
                     currentHealth = maxHealth;
                 }
-
-                
-                
                 
                 if (currentFood <= 0)
                 {
@@ -137,9 +155,10 @@ public class HealthManager : MonoBehaviour
                     currentWater = 0;
                     currentHealth -= 1;
                 }
-
-                
             }
+            
+            BleedingStatus(isBleeding);
+            InjuredStatus(isInjured);
         }
         
         
@@ -195,14 +214,29 @@ public class HealthManager : MonoBehaviour
         currentStamina -= staminaCost;
     }
     
-    public void BleedingStatus()
+    public void BleedingStatus(bool enabled)
     {
-        //TODO: Implementar efecto de sangrado: Perdida gradual de vida
+        if (enabled == true)
+        {
+            _bleedingTimer += Time.fixedDeltaTime;
+            if (_bleedingTimer >= bleedingUpdateRate)
+            {
+                currentHealth -= bleedingDamagePerRate;
+                _bleedingTimer = 0;
+                return;
+            }
+        }
+        _playerController._animator.SetBool("Bleeding", enabled);
     }
 
-    public void InjuredStatus()
+    public void InjuredStatus(bool enabled)
     {
-        //TODO: Implementar efecto de jugador lastimado: Velocidad de movimiento reducida
+        if (enabled)
+        {
+            _playerController.currentSpeed = _playerController.injuredSpeed;
+        }
+        _playerController._animator.SetBool("Injured", enabled);
+
     }
 
     public void SickStatus()

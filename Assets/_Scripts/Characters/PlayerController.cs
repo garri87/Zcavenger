@@ -47,9 +47,9 @@ public class PlayerController : MonoBehaviour
         IsReloading,
         
         IsHidden,
-        
-        IsCrippled,
-
+        IsBleeding,
+        IsInjured,
+        IsSick,
     }
 
     public PlayerState playerState;
@@ -84,6 +84,7 @@ public class PlayerController : MonoBehaviour
     public float currentSpeed;
     public float jumpSpeed;
     public float crouchWalkSpeed;
+    public float injuredSpeed = 1;
     public float acceleration = 4;
     public float normalSpeed;
     public float struggleForce = 3; 
@@ -115,7 +116,6 @@ public class PlayerController : MonoBehaviour
 
     #endregion
     
-   
     #region Ladders & Ledge Climb variables
 
     private Climber _climber;
@@ -647,7 +647,10 @@ public class PlayerController : MonoBehaviour
         }
 
         //JUMPING
-        if (Input.GetKeyDown(keyAssignments.jumpKey.keyCode) && _checkGround.isGrounded && _healthManager.currentStamina >= _healthManager.jumpPenalty)
+        if (Input.GetKeyDown(keyAssignments.jumpKey.keyCode) 
+            && _checkGround.isGrounded 
+            && _healthManager.currentStamina >= _healthManager.jumpPenalty
+            && !_healthManager.isInjured)
         {
             jump = true;
             _rigidbody.velocity = new Vector3(0, 0, 0);
@@ -718,7 +721,9 @@ public class PlayerController : MonoBehaviour
                 {
                     //Has double tapped
                        
-                    if (_animator.GetFloat("Speed") > 0.1f && _healthManager.currentStamina >= _healthManager.rollPenalty)
+                    if (_animator.GetFloat("Speed") > 0.1f 
+                        && _healthManager.currentStamina >= _healthManager.rollPenalty
+                        && !_healthManager.isInjured)
                     {
                         _animator.SetBool("Crouch", false);
                         roll = true;

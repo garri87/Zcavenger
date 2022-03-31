@@ -113,33 +113,19 @@ public class IKManager : MonoBehaviour
         switch (playerType)
         {
             case PlayerType.Player:
-                if (_inventory.drawWeapon || _inventory.holsterWeapon || _playerController.isAiming || _playerController.reloadingWeapon)
-                {
-                    _animator.SetLayerWeight(_animator.GetLayerIndex("UpperBody"), 1); 
-                }
-                else
-                {
-                    _animator.SetLayerWeight(_animator.GetLayerIndex("UpperBody"), 0); 
-                }
+              SetLayerWeight();
                 break;
         }
        
     }
-    
+
     private void Update()
     {
         switch (playerType)
         {
             case PlayerType.Player:
                 
-                if (_inventory.drawWeapon || _inventory.holsterWeapon || _playerController.isAiming || _playerController.reloadingWeapon)
-                {
-                    _animator.SetLayerWeight(_animator.GetLayerIndex("UpperBody"), 1); 
-                }
-                else
-                {
-                    _animator.SetLayerWeight(_animator.GetLayerIndex("UpperBody"), 0); 
-                }
+                SetLayerWeight();
                 
                 upperBodyLayerWeight = _animator.GetLayerWeight(1);
                 _animator.SetFloat("LayerWeight", upperBodyLayerWeight);
@@ -257,7 +243,29 @@ public class IKManager : MonoBehaviour
         }
     }
     
-    
+    public void SetLayerWeight()
+    {
+        if (_inventory.drawWeapon || 
+            _inventory.holsterWeapon || 
+            _playerController.isAiming || 
+            _playerController.reloadingWeapon || 
+            _playerController._healthManager.isBleeding)
+        {
+            if (!_playerController.climbingLadder)
+            {   
+                _animator.SetLayerWeight(_animator.GetLayerIndex("UpperBody"), 1);
+            }
+            else
+            {
+                _animator.SetLayerWeight(_animator.GetLayerIndex("UpperBody"), 0); 
+            }
+        }
+        else
+        {
+            _animator.SetLayerWeight(_animator.GetLayerIndex("UpperBody"), 0); 
+        }
+    }
+
     private void AimAtTarget(Transform spineTransform, Vector3 targetPosition, float weight)
     {
         Vector3 aimDirection;
