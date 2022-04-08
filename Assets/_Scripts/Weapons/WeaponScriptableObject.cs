@@ -14,6 +14,7 @@ public class WeaponScriptableObject : ScriptableObject
       Primary,
       Secondary,
       Melee,
+      Throwable,
    }
  
    [Header("Weapon ID")]
@@ -36,7 +37,8 @@ public class WeaponScriptableObject : ScriptableObject
    public int magazineCap;
    public float recoilDuration;
    public float recoilMaxRotation;
-   
-   
+
+   [Header("Throwable Attributes")]
+   public float explosionRange;
    
 }

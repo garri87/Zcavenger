@@ -36,14 +36,11 @@ public class WeaponItem : MonoBehaviour
     public Transform gripTransform;
     public Collider muzzleCollider;
     public Light flashLight;
-    public bool flashLightPower;
     public Transform magHolder;
-    public GameObject magGameObject;
+    [HideInInspector]public GameObject magGameObject;
 
     [Header("Weapon Render")] 
     public Sprite weaponIcon;
-    public Mesh weaponMesh;
-    public MeshFilter meshFilter;
     public MeshRenderer meshRenderer;
     public Outline modelOutline;
 
@@ -58,6 +55,7 @@ public class WeaponItem : MonoBehaviour
         Container,
         Player,
         Inventory,
+        Throwed,
     }
 
     public WeaponLocation weaponLocation;
@@ -85,8 +83,9 @@ public class WeaponItem : MonoBehaviour
     private Animator playerAnimator;
     private HealthManager playerHealthManager;
     private PlayerController playerController;
-    private Inventory inventory;
+    private Inventory playerInventory;
     private IKManager playerIKManager;
+    public Throwable _throwable;
 
     #endregion
 
@@ -101,6 +100,7 @@ public class WeaponItem : MonoBehaviour
 
     private Vector3 originalScale;
     private Quaternion originalRot;
+    public bool throwableActive;
 
     
     private void OnValidate()
@@ -119,16 +119,18 @@ public class WeaponItem : MonoBehaviour
     {
         originalScale = this.transform.localScale;
         originalRot = Quaternion.identity;
+        
         playerTransform = GameObject.Find("Player").GetComponent<Transform>();
         playerAnimator = playerTransform.GetComponent<Animator>();
         playerHealthManager = playerTransform.GetComponent<HealthManager>();
-        inventory = playerTransform.GetComponent<Inventory>();
+        playerInventory = playerTransform.GetComponent<Inventory>();
         playerController = playerTransform.GetComponent<PlayerController>();
+        
+        pickupCollider = GetComponent<BoxCollider>();
 
         titleTextMesh = titleTextGameObject.GetComponent<TextMeshPro>();
         GetWeaponScriptableObject(weaponScriptableObject);
         titleTextMesh.text = weaponName;
-        pickupCollider = GetComponent<BoxCollider>();
         titleTextMesh.enabled = false;
         modelOutline.enabled = false;
 
@@ -143,13 +145,17 @@ public class WeaponItem : MonoBehaviour
         switch (weaponItemClass)
         {
             case WeaponScriptableObject.WeaponClass.Primary:
-                holderTarget = inventory.uIManager.primaryEquipSlot.Find("WeaponHolder");
+                holderTarget = playerInventory.uIManager.primaryEquipSlot.Find("WeaponHolder");
                 break;
             case WeaponScriptableObject.WeaponClass.Secondary:
-                holderTarget = inventory.uIManager.secondaryEquipSlot.Find("WeaponHolder");
+                holderTarget = playerInventory.uIManager.secondaryEquipSlot.Find("WeaponHolder");
                 break;
             case WeaponScriptableObject.WeaponClass.Melee:
-                holderTarget = inventory.uIManager.meleeEquipSlot.Find("WeaponHolder");
+                holderTarget = playerInventory.uIManager.meleeEquipSlot.Find("WeaponHolder");
+                break;
+            case WeaponScriptableObject.WeaponClass.Throwable:
+                holderTarget = playerInventory.uIManager.throwableEquipSlot.Find("WeaponHolder");
+                _throwable = GetComponent<Throwable>();
                 break;
         }
 
@@ -163,15 +169,17 @@ public class WeaponItem : MonoBehaviour
 
     private void OnEnable()
     {
-
         switch (weaponLocation)
         {
             case WeaponLocation.World:
 
                 weaponEquipped = false;
                 pickupCollider.enabled = true;
-                muzzleCollider.enabled = false;
-                meshFilter.mesh = weaponMesh;
+
+                if (weaponItemClass != WeaponScriptableObject.WeaponClass.Melee && weaponItemClass != WeaponScriptableObject.WeaponClass.Throwable)
+                {
+                    muzzleCollider.enabled = false;
+                }
                 meshRenderer.enabled = true;
                 transform.localScale = originalScale;
                 gripTransform.position = this.transform.position;
@@ -202,26 +210,19 @@ public class WeaponItem : MonoBehaviour
                 playerTransform = GameObject.Find("Player").GetComponent<Transform>();
                 _weaponSound = GetComponent<WeaponSound>();
                 playerController = playerTransform.GetComponent<PlayerController>();
-                inventory = playerTransform.GetComponent<Inventory>();
+                playerInventory = playerTransform.GetComponent<Inventory>();
                 playerAnimator = playerTransform.GetComponent<Animator>();
                 playerHealthManager = playerTransform.GetComponent<HealthManager>();
                 playerIKManager = playerTransform.GetComponent<IKManager>();
-                inventory.currentWeaponImage.sprite = weaponIcon;
+                playerInventory.currentWeaponImage.sprite = weaponIcon;
                 pickupCollider.enabled = false;
                 muzzleCollider.enabled = true;
-                meshFilter.mesh = weaponMesh;
                 meshRenderer.enabled = true;
                 modelOutline.enabled = false;
-               
-
                 
                 if (flashLight !=null)
                 {
-                    flashLight.enabled = flashLightPower;
-                    if (Input.GetKeyDown(KeyAssignments.SharedInstance.flashLightKey.keyCode))
-                    {
-                        flashLightPower = !flashLightPower;
-                    }
+                    flashLight.enabled = false;
                 }
                 
                 switch (weaponItemClass)
@@ -247,6 +248,18 @@ public class WeaponItem : MonoBehaviour
                         playerAnimator.SetBool("PistolEquip", false);
                         playerAnimator.SetBool("RifleEquip", false);
                         playerAnimator.SetBool("MeleeEquip", true);
+                        break;
+                    
+                    case WeaponScriptableObject.WeaponClass.Throwable:
+                        _throwable = GetComponent<Throwable>();
+                        muzzleCollider.isTrigger = true;
+                        _throwable.explosionRadius.explosionDamage = damage;
+                        playerAnimator.SetBool("PistolEquip", false);
+                        playerAnimator.SetBool("RifleEquip", false);
+                        playerAnimator.SetBool("BatEquip", false);
+                        playerAnimator.SetBool("KnifeEquip", false);
+                        playerAnimator.SetBool("MeleeEquip", false);
+                        playerAnimator.SetBool("ThrowableEquip", true);
                         break;
                 }
 
@@ -281,19 +294,14 @@ public class WeaponItem : MonoBehaviour
 
         if (weaponLocation == WeaponLocation.Player)
         {
-            
-                Transform rightHandTransform = playerAnimator.GetBoneTransform(HumanBodyBones.RightMiddleProximal);
+            Transform rightHandTransform = playerAnimator.GetBoneTransform(HumanBodyBones.RightMiddleProximal);
                 
-                gripTransform.position = inventory.playerHandHolderTransform.position;
-               //gripTransform.rotation = Quaternion.LookRotation(rightHandTransform.up);
+                gripTransform.position = playerInventory.playerHandHolderTransform.position;
                 gripTransform.rotation = Quaternion.LookRotation(playerController._weaponHolderTransform.up);
                 //Vector3(0.00249999994,0.00889999978,0.000310000003) pos
                 //Vector3(332.349915,357.041718,5.11632919) rot
                 playerIKManager.HoldWeapon(gripTransform,handguardTransform);
-                
         }
-
-        
         
         if (weaponLocation == WeaponLocation.World)
         {
@@ -357,23 +365,44 @@ public class WeaponItem : MonoBehaviour
                 { 
                     if (weaponEquipped)
                     {
-                        totalBullets = inventory.CheckItemsLeft(bulletID, totalBullets);
-                        inventory.UpdateBulletCounter(this);
+                        totalBullets = playerInventory.CheckItemsLeft(bulletID, totalBullets);
+                        playerInventory.UpdateBulletCounter(this);
                         
                         if (playerController.isAiming)
                         {
                             muzzleCollider.enabled = true;
+                            if (Input.GetKeyDown(KeyAssignments.SharedInstance.attackKey.keyCode)
+                                && !attacking
+                                && !playerInventory.showInventory
+                                && !reloadingWeapon
+                                && !playerController.canStomp
+                                && weaponItemClass == WeaponScriptableObject.WeaponClass.Throwable)
+                            {
+                                //TODO: lanzar objeto
+                                playerAnimator.SetTrigger("Throw");
+                                Debug.Log("throwing");
+                                weaponEquipped = false;
+                            }
                         }
                         else
                         {
-                            muzzleCollider.enabled = false;
+                            if (weaponItemClass != WeaponScriptableObject.WeaponClass.Throwable)
+                            {
+                                muzzleCollider.enabled = false;
+                            }
                         }
                         if (!playerController.climbingLadder)
                         {
-                            if (Input.GetKey(KeyAssignments.SharedInstance.attackKey.keyCode) && !attacking && !inventory.showInventory && !reloadingWeapon && !playerController.canStomp)
+                            if (Input.GetKey(KeyAssignments.SharedInstance.attackKey.keyCode) 
+                                && !attacking 
+                                && !playerInventory.showInventory 
+                                && !reloadingWeapon 
+                                && !playerController.canStomp)
                             {
-                                if (weaponItemClass == WeaponScriptableObject.WeaponClass.Melee && !playerController.prone &&
-                                    playerController._checkGround.isGrounded && playerHealthManager.currentStamina >= playerHealthManager.meleeAttackPenalty)
+                                if (weaponItemClass == WeaponScriptableObject.WeaponClass.Melee 
+                                    && !playerController.prone 
+                                    && playerController._checkGround.isGrounded 
+                                    && playerHealthManager.currentStamina >= playerHealthManager.meleeAttackPenalty)
                                 {
                                     attacking = true;
                                     switch (ID)
@@ -391,6 +420,7 @@ public class WeaponItem : MonoBehaviour
                                     playerAnimator.SetBool("MeleeAttack" + attackNumber, attacking);
                                     
                                 }
+                               
                                 else if (playerController.isAiming && bulletsInMag > 0)
                                 {
                                     firing = true;
@@ -409,12 +439,12 @@ public class WeaponItem : MonoBehaviour
                                 }
                             }
 
-                            if (!attacking)
+                           /* if (!attacking || weaponItemClass != WeaponScriptableObject.WeaponClass.Throwable)
                             {
                                 playerAnimator.SetBool("MeleeAttack1", false);
                                 playerAnimator.SetBool("MeleeAttack2", false);
                                 playerAnimator.SetBool("MeleeAttack3", false);
-                            }
+                            }*/
                             
                             if (Input.GetKeyDown(KeyAssignments.SharedInstance.reloadKey.keyCode) && bulletsInMag < magazineCap) 
                             {
@@ -422,8 +452,8 @@ public class WeaponItem : MonoBehaviour
                                 
                                 if (!reloadingWeapon)
                                 {
-                                    totalBullets = inventory.CheckItemsLeft(bulletID, totalBullets);
-                                    inventory.UpdateBulletCounter(this);
+                                    totalBullets = playerInventory.CheckItemsLeft(bulletID, totalBullets);
+                                    playerInventory.UpdateBulletCounter(this);
                                     if (totalBullets > 0)
                                     {
                                         reloadingWeapon = true;
@@ -436,7 +466,7 @@ public class WeaponItem : MonoBehaviour
                                 }
                             }
 
-                            if (attacking)
+                            if (attacking && weaponItemClass != WeaponScriptableObject.WeaponClass.Throwable)
                             {
                                 meleeAttackTimer -= Time.deltaTime;
                                 if (meleeAttackTimer<=0)
@@ -454,11 +484,25 @@ public class WeaponItem : MonoBehaviour
                     }
                 }
                 break;
+            
+            case WeaponLocation.Throwed:
+                pickupCollider.enabled = false;
+                muzzleCollider.isTrigger = false;
+                break;
         }
     }
     
     private void OnTriggerEnter(Collider other)
     {
+        if (weaponItemClass == WeaponScriptableObject.WeaponClass.Throwable)
+        {
+            if (other.CompareTag("Ground") && throwableActive)
+            {
+                
+            }
+        }
+        
+        
         if (other.CompareTag("Player") && !weaponPicked)
         {
             titleTextMesh.enabled = true;
@@ -480,7 +524,6 @@ public class WeaponItem : MonoBehaviour
     {
         if (ID == 5004)
         {
-
             float shootAngle = shotgunMinFireAngle;
             float nextAngle =  (shotgunMinFireAngle*-1 + shotgunMaxFireAngle)/bulletsPerShot;
             
@@ -553,8 +596,7 @@ public class WeaponItem : MonoBehaviour
                 HealthManager enemyHealth = meleeHit.collider.GetComponentInParent<HealthManager>();
                 AudioSource enemyAudioSource = meleeHit.collider.GetComponentInParent<AudioSource>();
                 EnemyAudio enemyAudio = meleeHit.collider.GetComponentInParent<EnemyAudio>();
-                agentController.headBodyWeight = 1;
-                agentController.upperBodyWeight = 1;
+                agentController.hisHit = true;
                 enemyAnimator.SetTrigger("Hit");
                 int critical = damage * 2;
                 int damageGiven = damage;
@@ -579,11 +621,11 @@ public class WeaponItem : MonoBehaviour
     
     public void ReloadMagazine()
     {
-        totalBullets= inventory.CheckItemsLeft(bulletID, totalBullets);
+        totalBullets= playerInventory.CheckItemsLeft(bulletID, totalBullets);
         
-        for (int i = 0; i < inventory.totalSlots; i++)
+        for (int i = 0; i < playerInventory.totalSlots; i++)
         {
-            Slot slotIndex = inventory.slotCount[i].GetComponent<Slot>();
+            Slot slotIndex = playerInventory.slotCount[i].GetComponent<Slot>();
             if (!slotIndex.empty && slotIndex.itemScriptableObject != null)
             {
                 if (slotIndex.itemID == bulletID)
@@ -601,8 +643,8 @@ public class WeaponItem : MonoBehaviour
 
                         if (bulletsInMag == magazineCap)
                         {
-                            totalBullets = inventory.CheckItemsLeft(bulletID, totalBullets);
-                            inventory.UpdateBulletCounter(this);
+                            totalBullets = playerInventory.CheckItemsLeft(bulletID, totalBullets);
+                            playerInventory.UpdateBulletCounter(this);
                             return; //stop the method if we fill the magazine
                         }
                     }

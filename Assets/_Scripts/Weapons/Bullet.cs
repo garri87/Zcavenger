@@ -9,6 +9,7 @@ public class Bullet : MonoBehaviour
 {
     public Collider _collider;
     public Transform playerTransform;
+    public AgentController agentController;
     public HealthManager enemyHealth;
     public Animator enemyAnimator;
     public PlayerController playerController;
@@ -114,9 +115,10 @@ public class Bullet : MonoBehaviour
         if (hitCollider.CompareTag("Enemy"))
         {
             int damage = Mathf.RoundToInt(bulletDamage / weaponItem.bulletsPerShot);
+            agentController = hitCollider.GetComponent<AgentController>();
             enemyHealth = hitCollider.GetComponentInParent<HealthManager>();
             enemyAnimator = hitCollider.GetComponentInParent<Animator>();
-            
+            agentController.hisHit = true;
             enemyHealth.currentHealth -= (bulletDamage / weaponItem.bulletsPerShot);
             Debug.Log("Enemy Took " + damage);
             enemyAnimator.SetTrigger("Hit");

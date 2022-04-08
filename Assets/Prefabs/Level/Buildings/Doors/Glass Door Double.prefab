@@ -6839,6 +6839,7 @@ GameObject:
   - component: {fileID: 7966295927555801616}
   - component: {fileID: 7391899976964699747}
   - component: {fileID: 2472201848015962219}
+  - component: {fileID: 3346414306424435760}
   m_Layer: 0
   m_Name: Glass Door Double
   m_TagString: Door
@@ -6894,6 +6895,26 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2.1576715, y: 1.8219168, z: 4.3323984}
   m_Center: {x: 1.1341617, y: 1.0468179, z: 0.047259808}
+--- !u!205 &3346414306424435760
+LODGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4236211815612348176}
+  serializedVersion: 2
+  m_LocalReferencePoint: {x: 1.1310151, y: 1.0890968, z: 0.0077323653}
+  m_Size: 2.280414
+  m_FadeMode: 0
+  m_AnimateCrossFading: 0
+  m_LastLODIsBillboard: 0
+  m_LODs:
+  - screenRelativeHeight: 0.20149998
+    fadeTransitionWidth: 0
+    renderers:
+    - renderer: {fileID: 754804652719661101}
+    - renderer: {fileID: 8577150996704924620}
+  m_Enabled: 1
 --- !u!1 &8085046845836122208
 GameObject:
   m_ObjectHideFlags: 0

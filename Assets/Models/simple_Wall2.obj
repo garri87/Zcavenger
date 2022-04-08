@@ -1,0 +1,54 @@
+# ProBuilder 4.5.2
+# https://unity3d.com/unity/features/worldbuilding/probuilder
+# 5/4/2022 12:35:08 p. m.
+
+mtllib ./simple_Wall2.mtl
+o simple_Wall2
+
+g Wall (10)
+v 0 0 0
+v -0.1 0 0
+v 0 3 0
+v -0.1 3 0
+v -0.1 0 -4.5
+v -0.1 3 -4.5
+v 0 0 -4.5
+v 0 3 -4.5
+
+vt 0 0
+vt -0.1 0
+vt 0 3
+vt -0.1 3
+vt 2.752928 -0.9767355
+vt -1.747072 -0.9767355
+vt 2.752928 2.023264
+vt -1.747072 2.023264
+vt 0.1 0
+vt 0.1 3
+vt 2.8125 1.125
+vt 1.6875 1.125
+vt 2.8125 1.875
+vt 1.6875 1.875
+vt 0 -4.5
+vt 0.1 -4.5
+vt -0.1 -4.5
+
+vn 0 0 1
+vn -1 0 0
+vn 0 0 -1
+vn 1 0 0
+vn 0 1 0
+vn 0 -1 0
+
+usemtl Lit
+f 3/3/1 4/4/1 2/2/1 1/1/1
+f 6/10/3 8/3/3 7/1/3 5/9/3
+f 8/15/5 6/16/5 4/9/5 3/1/5
+f 1/1/6 2/2/6 5/17/6 7/15/6
+
+usemtl Mat_Walllime01_C
+f 8/13/4 3/14/4 1/12/4 7/11/4
+
+usemtl OfficeWallMaterial_Interior
+f 4/7/2 6/8/2 5/6/2 2/5/2
+

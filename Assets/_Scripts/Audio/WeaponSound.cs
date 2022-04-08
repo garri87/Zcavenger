@@ -16,7 +16,7 @@ public class WeaponSound : MonoBehaviour
     public AudioClip axeSlashSound;
     public AudioClip batSwingSound;
     public AudioClip knifeSlashSound;
-    
+    public AudioClip molotovExplosionSound;
     public AudioClip magazineOutSound;
     public AudioClip magazineInSound;
     public AudioClip shotgunReloadEndSound;
@@ -61,6 +61,10 @@ public class WeaponSound : MonoBehaviour
             
             case "Knife":
                 _audioSource.PlayOneShot(knifeSlashSound);
+                break;
+            
+            case "Molotov":
+                _audioSource.PlayOneShot(molotovExplosionSound);
                 break;
         }
     }

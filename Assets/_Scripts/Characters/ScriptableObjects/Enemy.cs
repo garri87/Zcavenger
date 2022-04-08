@@ -26,5 +26,6 @@ public class Enemy : ScriptableObject
     public float minSpeed;
     public float speed;
     public float attackDistance;
+    public int bleedDamageProbability;
 
 }

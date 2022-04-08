@@ -20,6 +20,7 @@ public class AgentController : MonoBehaviour
     [HideInInspector] public HealthManager _healthManager;
     [HideInInspector] public CheckGround _checkGround;
     [HideInInspector] public EnemyFOV enemyFov;
+    [HideInInspector] public IKManager iKManager;
     public CapsuleCollider hipsCollider;
     #endregion
 
@@ -62,6 +63,7 @@ public class AgentController : MonoBehaviour
     public float attackDistance;
     private int minDamage;
     private int maxDamage;
+    private int bleedDamageProbability;
     #endregion
 
     #region Attacks Variables
@@ -71,20 +73,6 @@ public class AgentController : MonoBehaviour
     public LayerMask attackLayerMask;
 
     #endregion
-
-    #region Animator variables
-
-    private int
-        lowerBodyLayer,
-        upperBodyLayer,
-        headBodyLayer;
-    
-    public float 
-        lowerBodyWeight, 
-        upperBodyWeight, 
-        headBodyWeight;
-    #endregion
-    
     
     #region Playline Variables
 
@@ -101,6 +89,8 @@ public class AgentController : MonoBehaviour
     
     
     #endregion
+
+    [HideInInspector]public bool hisHit;
     
     private void OnValidate()
     {
@@ -113,6 +103,7 @@ public class AgentController : MonoBehaviour
             minSpeed = enemyScriptableObject.minSpeed;
             minDamage = enemyScriptableObject.minDamage;
             maxDamage = enemyScriptableObject.maxDamage;
+            bleedDamageProbability = enemyScriptableObject.bleedDamageProbability;
             attackDistance = enemyScriptableObject.attackDistance;
             
         }
@@ -132,18 +123,13 @@ public class AgentController : MonoBehaviour
         playerController = player.GetComponent<PlayerController>();
         playerHealtManager = player.GetComponent<HealthManager>();
         playerAnimator = player.GetComponent<Animator>();
-        lowerBodyLayer = _animator.GetLayerIndex("Base Layer");
-        upperBodyLayer = _animator.GetLayerIndex("UpperBody");
-        headBodyLayer = _animator.GetLayerIndex("HeadLayer");
-        lowerBodyWeight = 1;
-        upperBodyWeight = 0;
-        headBodyWeight = 0;
 
         enemyType = enemyScriptableObject.enemyType;
         maxSpeed = enemyScriptableObject.speed;
         minSpeed = enemyScriptableObject.minSpeed;
         minDamage = enemyScriptableObject.minDamage;
         maxDamage = enemyScriptableObject.maxDamage;
+        bleedDamageProbability = enemyScriptableObject.bleedDamageProbability;
         attackDistance = enemyScriptableObject.attackDistance;
         _navMeshAgent.speed = Random.Range(minSpeed,maxSpeed);
         _navMeshAgent.updateRotation = false;
@@ -209,9 +195,6 @@ public class AgentController : MonoBehaviour
         { 
             _navMeshAgent.enabled = false; 
         }
-        _animator.SetLayerWeight(lowerBodyLayer,lowerBodyWeight);
-        _animator.SetLayerWeight(upperBodyLayer,upperBodyWeight);
-        _animator.SetLayerWeight(headBodyLayer,headBodyWeight);
         
     }
 
@@ -246,16 +229,7 @@ public class AgentController : MonoBehaviour
         }
         if (!_healthManager.IsDead)
         {
-            if (attacking || playerCatch)
-            {
-                upperBodyWeight = 1;
-                headBodyWeight = 1;
-                agentState = AgentState.Ontransition;
-            }
-            else
-            {
-                agentState = AgentState.Active;
-            }
+            
         }
         
         switch (agentState)
@@ -272,8 +246,7 @@ public class AgentController : MonoBehaviour
                     }
                     
                     if (enemyFov.playerInSight)
-                    {
-                        headBodyWeight = 1;
+                    { 
                         alertTimer = agentAlertTime;
                         
                         if (enemyType == Enemy.EnemyType.Crippled) 
@@ -300,11 +273,6 @@ public class AgentController : MonoBehaviour
                                 attacking = false;
                             }
                             
-                            
-                            if (attacking)
-                            {
-                                agentState = AgentState.Ontransition;
-                            }
 
                             if (!attacking)
                             {
@@ -323,8 +291,6 @@ public class AgentController : MonoBehaviour
                     
                     if (!enemyFov.playerInSight || !enemyFov.playerInRange)
                     {
-                        headBodyWeight = 0;
-                        upperBodyWeight = 0;
                         if (_navMeshAgent.enabled == true)
                         { 
                             alertTimer -= Time.deltaTime;
@@ -553,8 +519,6 @@ public class AgentController : MonoBehaviour
             playerController.alreadyCatched = false;
         }
         _animator.SetBool("IsMoving", false);
-        headBodyWeight = 0;
-        upperBodyWeight = 0;
         attacking = false;
         enemyFov.enabled = false;
         _capsuleCollider.isTrigger = true;
@@ -575,6 +539,13 @@ public class AgentController : MonoBehaviour
     }
     private void DealDamage()
     {
+        int bleedingProb = Random.Range(0,100);
+        if (bleedingProb <=bleedDamageProbability)
+        {
+            
+            Debug.Log("Player is Bleeding! by a chance of: " + bleedingProb + " %");
+            playerHealtManager.isBleeding = true;
+        }
         int damageGiven = Random.Range(minDamage, maxDamage);
         playerHealtManager.currentHealth -= damageGiven;
         Debug.Log("Player Took " + damageGiven + " damage");

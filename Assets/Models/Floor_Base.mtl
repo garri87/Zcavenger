@@ -1,0 +1,20 @@
+newmtl Dark
+Kd 0 0 0
+d 1
+
+newmtl OfficeFloor_Front
+bump -o 0 0 -s 1 1 Floor_normal.png
+map_Kd -o 0 0 -s 0.2 0.2 Floor.png
+Kd 0.8301887 0.8301887 0.8301887
+d 1
+
+newmtl Ceiling_Gypsum_001
+map_Pm -o 0 0 -s 1 1 Ceiling_Gypsum_001_Metallic.jpg
+bump -o 0 0 -s 1 1 Ceiling_Gypsum_001_Normal.jpg
+disp -o 0 0 -s 1 1 Ceiling_Gypsum_001_Height.png
+map_Ke -o 0 0 -s 1 1 Ceiling_Gypsum_001_emissive.jpg
+map_d -o 0 0 -s 1 1 Ceiling_Gypsum_001_Objects_Mask.jpg
+map_Kd -o 0 0 -s 1 1 Ceiling_Gypsum_001_Base_Color.jpg
+Kd 1 1 1
+d 1
+

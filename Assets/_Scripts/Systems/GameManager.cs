@@ -208,7 +208,7 @@ public class GameManager : MonoBehaviour
         uiManager.gameOverCanvas.gameObject.SetActive(true);
         if (uiManager.gameOverCanvasGroup.alpha < 1)
         {
-            uiManager.gameOverCanvasGroup.alpha += Time.deltaTime;
+            uiManager.gameOverCanvasGroup.alpha += Time.deltaTime/4;
         }
         else
         {

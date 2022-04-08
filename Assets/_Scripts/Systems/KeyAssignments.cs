@@ -40,6 +40,7 @@ public class KeyAssignments : MonoBehaviour
    public KeyStr primaryKey = new KeyStr(KeyCode.Alpha1,"Draw primary");
    public KeyStr secondaryKey = new KeyStr(KeyCode.Alpha2,"Draw secondary");
    public KeyStr meleeKey = new KeyStr(KeyCode.Alpha3,"Draw melee");
+   public KeyStr throwableKey = new KeyStr(KeyCode.Alpha4,"Draw Throwable");
    
    
    public KeyStr[] keyCodes;
@@ -63,6 +64,7 @@ public class KeyAssignments : MonoBehaviour
          primaryKey,
          secondaryKey,
          meleeKey,
+         throwableKey,
       };
       keyCodesLength = keyCodes.Length;
       keybindChildCount = keyAssignTransform.childCount;

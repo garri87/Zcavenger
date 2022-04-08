@@ -1,0 +1,24 @@
+newmtl Lit
+Kd 0.5 0.5 0.5
+d 1
+
+newmtl Ceiling_Gypsum_001
+map_Pm -o 0 0 -s 1 1 Ceiling_Gypsum_001_Metallic.jpg
+bump -o 0 0 -s 1 1 Ceiling_Gypsum_001_Normal.jpg
+disp -o 0 0 -s 1 1 Ceiling_Gypsum_001_Height.png
+map_Ke -o 0 0 -s 1 1 Ceiling_Gypsum_001_emissive.jpg
+map_d -o 0 0 -s 1 1 Ceiling_Gypsum_001_Objects_Mask.jpg
+map_Kd -o 0 0 -s 1 1 Ceiling_Gypsum_001_Base_Color.jpg
+Kd 1 1 1
+d 1
+
+newmtl Dark
+Kd 0 0 0
+d 1
+
+newmtl Wood_floor
+bump -o 0 0 -s 1 1 floor - Copy.png
+map_Kd -o 0 0 -s 1 1 floor.png
+Kd 0.4716981 0.3876321 0.2959237
+d 1
+

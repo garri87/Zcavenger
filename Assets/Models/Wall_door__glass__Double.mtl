@@ -1,0 +1,16 @@
+newmtl MB_Glass_mat
+bump -o 0 0 -s 1 1 MB_Glass_Normal.png
+map_Kd -o 0 0 -s 1 1 MB_Glass_AlbedoTransparency.png
+Kd 1 1 1
+d 0.4392157
+
+newmtl Dark
+Kd 0 0 0
+d 1
+
+newmtl KB3D_NEC_MetalLightGreyWorn
+bump -o 0 0 -s 1 1 KB3D_NEC_MetalLightGreyWorn_normal.png
+map_Kd -o 0 0 -s 1 1 KB3D_NEC_MetalLightGreyWorn_basecolor.png
+Kd 1 1 1
+d 1
+

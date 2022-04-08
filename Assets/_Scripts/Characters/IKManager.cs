@@ -115,6 +115,10 @@ public class IKManager : MonoBehaviour
             case PlayerType.Player:
               SetLayerWeight();
                 break;
+            
+            case PlayerType.Enemy:
+                SetLayerWeight();
+                break;
         }
        
     }
@@ -148,6 +152,8 @@ public class IKManager : MonoBehaviour
                 break;
             
             case PlayerType.Enemy:
+                
+                SetLayerWeight();
                 if (_agentController.enemyFov.playerInSight || _agentController.enemyFov.playerInRange)
                 {
                     agentHead.LookAt(targetPosition+ Vector3.up);
@@ -172,16 +178,21 @@ public class IKManager : MonoBehaviour
             case PlayerType.Player:
                 if (_playerController.weaponEquipped && _playerController.isAiming)
                 {
-                    RecoilAnimation();
-                    targetPosition = GetTargetPosition();
-
-                    for (int i = 0; i < 10; i++)
+                    if (!_playerController.drinking 
+                        || !_playerController.bandaging
+                        || !_playerController.eating)
                     {
-                        for (int b = 0; b < boneTransforms.Length; b++)
+                        RecoilAnimation();
+                        targetPosition = GetTargetPosition();
+
+                        for (int i = 0; i < 10; i++)
                         {
-                            Transform bone = boneTransforms[b];
-                            float boneWeight = humanBones[b].weight * weight;
-                            AimAtTarget(bone, targetPosition, weight);
+                            for (int b = 0; b < boneTransforms.Length; b++)
+                            {
+                                Transform bone = boneTransforms[b];
+                                float boneWeight = humanBones[b].weight * weight;
+                                AimAtTarget(bone, targetPosition, weight);
+                            }
                         }
                     }
                 } 
@@ -245,25 +256,63 @@ public class IKManager : MonoBehaviour
     
     public void SetLayerWeight()
     {
-        if (_inventory.drawWeapon || 
-            _inventory.holsterWeapon || 
-            _playerController.isAiming || 
-            _playerController.reloadingWeapon || 
-            _playerController._healthManager.isBleeding)
+        switch (playerType)
         {
-            if (!_playerController.climbingLadder)
-            {   
-                _animator.SetLayerWeight(_animator.GetLayerIndex("UpperBody"), 1);
-            }
-            else
-            {
-                _animator.SetLayerWeight(_animator.GetLayerIndex("UpperBody"), 0); 
-            }
+            case PlayerType.Player:
+            
+                if (!_playerController._healthManager.IsDead)
+                { 
+                    if (_inventory.drawWeapon ||
+                        _inventory.holsterWeapon ||
+                        _playerController.isAiming ||
+                        _playerController.reloadingWeapon ||
+                        _playerController._healthManager.isBleeding||
+                        _playerController.bandaging||
+                        _playerController.drinking||
+                        _playerController.eating||
+                        _playerController.grabItem
+
+                        )
+                    {
+                        if (!_playerController.climbingLadder)
+                        {
+                            _animator.SetLayerWeight(_animator.GetLayerIndex("UpperBody"), 1); 
+                        }
+                        else
+                        {
+                            _animator.SetLayerWeight(_animator.GetLayerIndex("UpperBody"), 0);
+                        }
+                    }
+
+                    else
+                    {
+                        _animator.SetLayerWeight(_animator.GetLayerIndex("UpperBody"), 0);
+                    }
+                }
+                else
+                {
+                    _animator.SetLayerWeight(_animator.GetLayerIndex("UpperBody"), 0);
+                }
+                break;
+            
+            case PlayerType.Enemy:
+
+                if (_agentController.attacking||
+                    _agentController.playerCatch||
+                    _agentController.enemyFov.playerInSight|| _agentController.hisHit)
+                {
+                    _animator.SetLayerWeight(_animator.GetLayerIndex("UpperBody"), 1);
+                }
+                else
+                {
+                    _animator.SetLayerWeight(_animator.GetLayerIndex("UpperBody"), 0);
+                }
+                
+                
+                break;
+            
         }
-        else
-        {
-            _animator.SetLayerWeight(_animator.GetLayerIndex("UpperBody"), 0); 
-        }
+        
     }
 
     private void AimAtTarget(Transform spineTransform, Vector3 targetPosition, float weight)
@@ -275,7 +324,14 @@ public class IKManager : MonoBehaviour
         switch (playerType)
         {
             case PlayerType.Player:
-                muzzleTransform = weaponItem.gunMuzzleTransform.GetComponent<Transform>();
+                if (weaponItem.weaponItemClass != WeaponScriptableObject.WeaponClass.Throwable)
+                {
+                    muzzleTransform = weaponItem.gunMuzzleTransform;
+                }
+                else
+                {
+                    muzzleTransform = _animator.GetBoneTransform(HumanBodyBones.Head);
+                }
                 aimDirection = muzzleTransform.forward;
                 targetDirection = targetPosition - muzzleTransform.position;
                 aimTowards = Quaternion.FromToRotation(aimDirection, targetDirection);
@@ -309,7 +365,7 @@ public class IKManager : MonoBehaviour
         switch (playerType)
         {
             case PlayerType.Player:
-                muzzleTransform = weaponItem.gunMuzzleTransform.GetComponent<Transform>();
+                muzzleTransform = weaponItem.gunMuzzleTransform;
                 targetDirection = _playerController.targetTransform.position - muzzleTransform.position;
                 aimDirection = muzzleTransform.forward;
                 blendOut = 0.0f;

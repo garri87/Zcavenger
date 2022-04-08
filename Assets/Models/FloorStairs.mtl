@@ -1,0 +1,19 @@
+newmtl Lit
+Kd 0.5 0.5 0.5
+d 1
+
+newmtl Dark
+Kd 0 0 0
+d 1
+
+newmtl TileFloorB1
+bump -o 0 0 -s 1 1 TileNormal.png
+map_Kd -o 0 0 -s 0.5 0.5 TileFloorB.png
+Kd 0.4433962 0.4433962 0.4433962
+d 1
+
+newmtl Ceiling_White
+map_Kd -o 0 0 -s 1 1 Concrete - texture.png
+Kd 1 1 1
+d 1
+

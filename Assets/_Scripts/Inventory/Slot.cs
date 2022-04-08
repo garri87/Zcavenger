@@ -494,22 +494,47 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, I
     {
       if (scriptableObject.consumable)
       {
-        HealthManager _healthManager = GameObject.FindWithTag("Player").GetComponent<HealthManager>();
+        GameObject player = GameObject.FindWithTag("Player");
+        PlayerController playerController = player.GetComponent<PlayerController>();
+        HealthManager healthManager = player.GetComponent<HealthManager>();
         switch (scriptableObject.ID)
         {
-          //food
+          //food - water
           case 7004: case 7005:
-            _healthManager.targetRegen += scriptableObject.healthRestore;
-            _healthManager.regenRate = scriptableObject.healthRestore/ Mathf.RoundToInt(_healthManager.updateRate);
-            _healthManager.currentFood += scriptableObject.foodRestore;
-            _healthManager.currentWater += scriptableObject.waterRestore;
+            healthManager.targetRegen += scriptableObject.healthRestore;
+            healthManager.regenRate = scriptableObject.healthRestore/ Mathf.RoundToInt(healthManager.updateRate);
+            healthManager.currentFood += scriptableObject.foodRestore;
+            healthManager.currentWater += scriptableObject.waterRestore;
+            if (scriptableObject.ID == 7004)
+            {
+              playerController.eating = true;
+            }
+
+            if (scriptableObject.ID == 7005)
+            {
+              playerController.drinking = true;
+            }
             quantity -= 1;
             break;
 
-          case 7002: //First Aid Kit
-            if (_healthManager.currentHealth < _healthManager.maxHealth)
+          case 7002: case 7001://First Aid Kit - Bandage
+            if (healthManager.currentHealth < healthManager.maxHealth )
             {
-              _healthManager.currentHealth += scriptableObject.healthRestore;
+              playerController.bandaging = true;
+              healthManager.currentHealth += scriptableObject.healthRestore;
+              healthManager.isBleeding = false;
+              quantity -= 1;
+            }
+            else
+            {
+              Debug.Log("Health is already full");
+            }
+            break;
+          
+          case 7003: // epinephrine
+            if (healthManager.currentHealth < healthManager.maxHealth)
+            {
+              healthManager.currentHealth += scriptableObject.healthRestore;
               quantity -= 1;
             }
             else

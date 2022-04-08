@@ -1,0 +1,13 @@
+newmtl stair
+bump -o 0 0 -s 1 1 KB3D_NEC_MetalDarkWorn_normal.png
+map_Kd -o 0 0 -s 1 1 stair.jpg
+Kd 1 1 1
+d 1
+
+newmtl MB_5_FireEscape_mat
+map_Pm -o 0 0 -s 1 1 MB_5_FireEscape_MetallicSmoothness.png
+bump -o 0 0 -s 1 1 MB_5_FireEscape_Normal.png
+map_Kd -o 0 0 -s 1 1 MB_5_FireEscape_AlbedoTransparency.png
+Kd 1 1 1
+d 1
+

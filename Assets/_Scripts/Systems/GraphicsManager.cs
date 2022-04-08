@@ -24,7 +24,7 @@ public class GraphicsManager : MonoBehaviour
         customSettingsURPAsset;
     
     public RenderPipelineAsset currentRenderPipelineAsset;
-    
+    private LightRenderingMode _lightRenderingMode;
     #region Postprocessing
     public Volume globalVolume;
     public VolumeProfile mainTitlevolumeProfile;

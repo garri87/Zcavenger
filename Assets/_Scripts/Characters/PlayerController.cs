@@ -74,9 +74,11 @@ public class PlayerController : MonoBehaviour
     public bool alreadyCatched;
     public bool onConduct;
     public bool onTransition;
-   
-    
-    
+    public bool bandaging;
+    public bool drinking;
+    public bool eating;
+    public bool grabItem;
+
     private float _crouchColliderHeight;
     private Vector3 _crouchColliderCenter;
     private Vector3 _proneColliderCenter;
@@ -87,7 +89,8 @@ public class PlayerController : MonoBehaviour
     public float injuredSpeed = 1;
     public float acceleration = 4;
     public float normalSpeed;
-    public float struggleForce = 3; 
+    public float struggleForce = 3;
+    public float throwForce = 5;
     public float hitDistance;
     
 
@@ -134,13 +137,13 @@ public class PlayerController : MonoBehaviour
 
     #region Weapon Handling Variables
 
+    public Transform targetTransform;
+    public Transform _weaponHolderTransform;
     public WeaponItem equippedWeaponItem;
     public bool weaponEquipped;
-    public Transform _weaponHolderTransform;
     [HideInInspector]public bool isAiming;
     [HideInInspector]public bool attacking;
     [HideInInspector] public bool reloadingWeapon;
-    public Transform targetTransform;
     private SpriteRenderer crosshair;
     public LayerMask mouseAimMask;
 
@@ -200,6 +203,8 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        keyAssignments = gameManager.GetComponent<KeyAssignments>();
         mainCamera = Camera.main;
         _healthManager = GetComponent<HealthManager>();
         _rigidbody = GetComponent<Rigidbody>();
@@ -208,6 +213,7 @@ public class PlayerController : MonoBehaviour
         _checkGround = GetComponentInChildren<CheckGround>();
         _playerAudio = GetComponent<PlayerAudio>();
         _climber = GetComponent<Climber>();
+        _collider = GetComponent<CapsuleCollider>();
         currentSpeed = normalSpeed;
         crosshair = targetTransform.GetComponent<SpriteRenderer>();
         
@@ -388,6 +394,12 @@ public class PlayerController : MonoBehaviour
         _animator.SetBool("Blocking", blocking);
         _animator.SetBool("Trapped",trapped);
         _animator.SetBool("Bitten", bitten);
+        _animator.SetBool("Bandage", bandaging);
+        _animator.SetBool("Drink", drinking);
+        _animator.SetBool("Eat", eating);
+        _animator.SetBool("GrabItem", grabItem);
+
+        
 
         #endregion
     }
@@ -600,7 +612,7 @@ public class PlayerController : MonoBehaviour
 
         if (weaponEquipped )
         {
-            if (Input.GetKey(keyAssignments.aimBlockKey.keyCode))
+            if (Input.GetKey(keyAssignments.aimBlockKey.keyCode) && !bandaging && !drinking && !eating && !grabItem)
             {
                 if (equippedWeaponItem.weaponItemClass != WeaponScriptableObject.WeaponClass.Melee)
                 {
@@ -915,6 +927,22 @@ public class PlayerController : MonoBehaviour
                 _animator.applyRootMotion = false;
                 onTransition = false;
                 break;
+            
+            case "BandageEnd":
+                bandaging = false;
+                break;
+            
+            case "DrinkEnd":
+                drinking = false;
+                break;
+            
+            case "EatingEnd":
+                eating = false;
+                break;
+            
+            case "GrabItemEnd":
+                grabItem = false;
+                break;
         }
     }
 
@@ -1033,6 +1061,10 @@ public class PlayerController : MonoBehaviour
             
             case "MeleeEnd":
                 equippedWeaponItem.MeleeAttackAnim("MeleeEnd");
+                break;
+            
+            case "Throw":
+                equippedWeaponItem._throwable.ThrowObject(enabled);
                 break;
         }
     }

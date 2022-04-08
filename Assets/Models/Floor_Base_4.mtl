@@ -1,0 +1,21 @@
+newmtl Lit
+Kd 0.5 0.5 0.5
+d 1
+
+newmtl Ceiling_White
+map_Kd -o 0 0 -s 1 1 Concrete - texture.png
+Kd 1 1 1
+d 1
+
+newmtl Dark
+Kd 0 0 0
+d 1
+
+newmtl Wood_Floor_011
+map_Pm -o 0 0 -s 1 1 Wood_Floor_011_roughness.jpg
+bump -o 0 0 -s 1 1 Wood_Floor_011_normal.jpg
+disp -o 0 0 -s 1 1 Wood_Floor_011_height.png
+map_Kd -o 0 0 -s 1 1 Wood_Floor_011_basecolor.jpg
+Kd 0.9150943 0.6158457 0.366901
+d 1
+

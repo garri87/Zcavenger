@@ -1,0 +1,25 @@
+newmtl KB3D_NEC_MetalDarkWorn
+map_Pm -o 0 0 -s 1 1 KB3D_NEC_MetalDarkWorn_mads.png
+bump -o 0 0 -s 1 1 KB3D_NEC_MetalDarkWorn_normal.png
+map_Kd -o 0 0 -s 1 1 KB3D_NEC_MetalDarkWorn_basecolor.png
+Kd 1 1 1
+d 1
+
+newmtl Shiny_Metal_03
+bump -o 0 0 -s 1 1 BrushedMetal_N.png
+Kd 0.2650853 0.280929 0.3490565
+d 1
+
+newmtl Glass_mat_broken
+bump -o 0 0 -s 1 1 WireReinforced_N.jpg
+map_Kd -o 0 0 -s 1 1 WireReinforced_S.jpg
+Kd 0.6886792 0.6886792 0.6886792
+d 0.572549
+
+newmtl KB3D_NEC_MetalDarkWorn_red
+map_Pm -o 0 0 -s 1 1 KB3D_NEC_MetalDarkWorn_mads.png
+bump -o 0 0 -s 1 1 KB3D_NEC_MetalDarkWorn_normal.png
+map_Kd -o 0 0 -s 1 1 KB3D_NEC_MetalDarkWorn_basecolor.png
+Kd 1 0 0
+d 0.8588235
+

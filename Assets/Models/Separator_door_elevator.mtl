@@ -1,0 +1,17 @@
+newmtl Wall_mat
+map_Pm -o 0 0 -s 1 1 MB2_Wall_MetallicSmoothness.png
+bump -o 0 0 -s 1 1 MB2_Wall_Normal.png
+map_Kd -o 0 0 -s 1 1 MB2_Wall_AlbedoTransparency.png
+Kd 0.5377358 0.5377358 0.5377358
+d 1
+
+newmtl Dark
+Kd 0 0 0
+d 1
+
+newmtl OfficeWallMaterial_Interior
+bump -o 0 0 -s 1 1 Concrete_NORM.png
+map_Kd -o 0 0 -s 1 1 KB3D_NEC_ConcreteAccent_basecolor.png
+Kd 0.2264151 0.2264151 0.2264151
+d 1
+

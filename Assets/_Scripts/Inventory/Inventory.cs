@@ -50,6 +50,7 @@ public class Inventory : MonoBehaviour
         Primary,
         Secondary,
         Melee,
+        Throwable,
     }
 
     public SelectedWeapon selectedWeapon;
@@ -90,6 +91,7 @@ public class Inventory : MonoBehaviour
                 if (targetItem != null)
                 {
                     AddItemToInventory(targetItem);
+                    _playerController.grabItem = true;
                     onItem = false;
                 }
                 
@@ -100,6 +102,7 @@ public class Inventory : MonoBehaviour
                 if (targetWeapon != null)
                 {
                     AddWeaponToInventory(targetWeapon);
+                    _playerController.grabItem = true;
                     onWeaponItem = false;
                 }
             }
@@ -133,6 +136,13 @@ public class Inventory : MonoBehaviour
 
                     ChangeWeapon(uIManager.meleeEquipSlot,SelectedWeapon.Melee);
                 }
+                if (Input.GetKeyDown(_playerController.keyAssignments.throwableKey.keyCode))
+                {
+                    selectedWeapon = SelectedWeapon.Throwable;
+
+                    ChangeWeapon(uIManager.throwableEquipSlot,SelectedWeapon.Throwable);
+                }
+                
             }
         }
 
@@ -141,6 +151,8 @@ public class Inventory : MonoBehaviour
             currentWeaponImage.sprite = emptyWeaponImage;
             bulletCounterTMPUGUI.text = null;
         }
+
+        
     }
     #endregion
     
@@ -396,7 +408,6 @@ public class Inventory : MonoBehaviour
                 slotWeaponHolder.GetChild(0).parent = playerHandHolderTransform;
                 drawWeapon = true;
                 Debug.Log("Changing weapon to " + equipWeaponItem.weaponName + " as " + selectedWeapon);
-                Debug.Log(" ");
             }
             else if (playerHandHolderTransform.childCount >0)
             {
@@ -452,6 +463,11 @@ public class Inventory : MonoBehaviour
                     if (drawWeapon) _animator.SetBool("MeleeEquip", true);
                     else _animator.SetBool("MeleeEquip", false);
                     break;
+                
+                case SelectedWeapon.Throwable:
+                    if (drawWeapon) _animator.SetBool("ThrowableEquip", true);
+                    else _animator.SetBool("ThrowableEquip", false);
+                    break;
             }
         }
         
@@ -478,6 +494,9 @@ public class Inventory : MonoBehaviour
             
                 case SelectedWeapon.Melee:
                     uIManager.meleeEquipSlot.Find("WeaponHolder").GetChild(0).parent = playerHandHolderTransform;
+                    break;
+                case SelectedWeapon.Throwable:
+                    uIManager.throwableEquipSlot.Find("WeaponHolder").GetChild(0).parent = playerHandHolderTransform;
                     break;
             }
         }
@@ -544,6 +563,10 @@ public class Inventory : MonoBehaviour
                         { 
                             _animator.SetBool("KnifeEquip", false);
                         }
+
+                        break;
+                    case WeaponScriptableObject.WeaponClass.Throwable:
+                        _animator.SetBool("ThrowableEquip", false);
                         break;
                 }
             }
@@ -622,7 +645,16 @@ public class Inventory : MonoBehaviour
     }
     public void UpdateBulletCounter(WeaponItem playerWeaponItem)
     {
-        bulletCounterTMPUGUI.SetText(playerWeaponItem.bulletsInMag  + "/" + playerWeaponItem.totalBullets);
+        if (selectedWeapon == SelectedWeapon.Melee 
+            || selectedWeapon == SelectedWeapon.Throwable)
+        {
+            bulletCounterTMPUGUI.SetText("-/-");
+        }
+        else
+        {
+            bulletCounterTMPUGUI.SetText(playerWeaponItem.bulletsInMag  + "/" + playerWeaponItem.totalBullets);  
+        }
+        
         if (playerWeaponItem.bulletsInMag < 5)
         {
             bulletCounterTMPUGUI.color = Color.red;

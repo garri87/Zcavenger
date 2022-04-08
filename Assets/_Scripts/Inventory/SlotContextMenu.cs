@@ -90,6 +90,7 @@ public class SlotContextMenu : MonoBehaviour
             weaponToThrowItem.weaponLocation = WeaponItem.WeaponLocation.World;
             weaponToThrow.gameObject.SetActive(true);
             slot.UpdateWeaponSlot(null);
+
         }else if (slot._item != null)
         {
             GameObject itemToThrow = Instantiate(itemCollectTemplate, playerPos.position + Vector3.up,
