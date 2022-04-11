@@ -254,7 +254,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   toogleLight: 1
   lightShapes:
-  - {fileID: 0}
+  - {fileID: 2297183474517419932}
   lightSources:
   - {fileID: 7981624593175321023}
 --- !u!205 &4482079992443094368
@@ -320,10 +320,10 @@ Light:
   m_Type: 0
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 29.64
-  m_Range: 5.7
-  m_SpotAngle: 125.43706
-  m_InnerSpotAngle: 96.98695
+  m_Intensity: 15.39
+  m_Range: 4.62
+  m_SpotAngle: 164.956
+  m_InnerSpotAngle: 123.90605
   m_CookieSize: 10
   m_Shadows:
     m_Type: 1
@@ -357,7 +357,7 @@ Light:
   m_RenderMode: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 270657
   m_RenderingLayerMask: 1
   m_Lightmapping: 1
   m_LightShadowCasterMode: 0
@@ -365,7 +365,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_BoundingSphereOverride: {x: 7.2064716e+31, y: 6.9776278e+22, z: 1.0585578e-38, w: 1.5954394e+31}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
@@ -451,6 +451,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4eb5d1bbe38a5d04b809cfd1626f666f, type: 3}
+--- !u!1 &2297183474517419932 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3020942087206004718, guid: 4eb5d1bbe38a5d04b809cfd1626f666f, type: 3}
+  m_PrefabInstance: {fileID: 3894970327753736306}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1489262791963606310 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2497064015616851284, guid: 4eb5d1bbe38a5d04b809cfd1626f666f, type: 3}

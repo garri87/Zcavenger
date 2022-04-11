@@ -1,0 +1,15 @@
+newmtl Wall_Plaster_blue
+map_Pm -o 0 0 -s 1 1 Wall_Plaster_001_roughness.jpg
+bump -o 0 0 -s 1 1 Wall_Plaster_001_normal.jpg
+disp -o 0 0 -s 1 1 Wall_Plaster_001_height.png
+map_Kd -o 0 0 -s 1 1 Wall_Plaster_001_basecolor.jpg
+Kd 0.6037736 0.6037736 0.6037736
+d 1
+
+newmtl Wall_mat
+map_Pm -o 0 0 -s 1 1 MB2_Wall_MetallicSmoothness.png
+bump -o 0 0 -s 1 1 MB2_Wall_Normal.png
+map_Kd -o 0 0 -s 1 1 MB2_Wall_AlbedoTransparency.png
+Kd 0.5377358 0.5377358 0.5377358
+d 1
+
