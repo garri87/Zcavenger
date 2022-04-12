@@ -27,6 +27,7 @@ public class Throwable : MonoBehaviour
     {
         _weaponItem = GetComponent<WeaponItem>();
         _rigidbody = GetComponent<Rigidbody>();
+        ignitionParticle.SetActive(false);
     }
 
     private void OnEnable()
@@ -35,6 +36,7 @@ public class Throwable : MonoBehaviour
         disableTimer = disableTime;
         _playerController = GameObject.Find("Player").GetComponent<PlayerController>();
         _weaponSound = GetComponent<WeaponSound>();
+        exploded = false;
         switch (_weaponItem.weaponLocation)
         {
             case WeaponItem.WeaponLocation.World:
@@ -58,7 +60,12 @@ public class Throwable : MonoBehaviour
         if (explosiveArmed && !exploded)
         {
             detonateTimer -= Time.deltaTime;
+            if (detonateTimer <= 0)
+            {
+                Explode();
+            }
         }
+        
         
         if (exploded)
         {
@@ -79,21 +86,24 @@ public class Throwable : MonoBehaviour
     {
         if (other.collider.CompareTag("Ground") || other.collider.CompareTag("Enemy") )
         {
-            if (explosiveArmed)
+            if (_weaponItem.ID == 6002)//molotov
             {
-                ignitionParticle.SetActive(false);
-               
-                _explosionParticle.transform.position = other.GetContact(0).point;
-                _explosionParticle.transform.parent = null;
-                Explode();
-                foreach (ContactPoint contactPoint in other.contacts)
+                if (explosiveArmed)
                 {
-                    //TODO: INSTANCIAR FLAMAS SOLO EN CASO DE MOLOTOV
-                    GameObject damageFlame = ObjectPool.SharedInstance.GetPooledObject("DamageFlame");
-                    damageFlame.transform.position = contactPoint.point;
-                    damageFlame.SetActive(true);
-                }
+                    ignitionParticle.SetActive(false);
+               
+                    _explosionParticle.transform.position = other.GetContact(0).point;
+                    _explosionParticle.transform.parent = null;
+                    Explode();
+                    foreach (ContactPoint contactPoint in other.contacts)
+                    {
+                        GameObject damageFlame = ObjectPool.SharedInstance.GetPooledObject("DamageFlame");
+                        damageFlame.transform.position = contactPoint.point;
+                        damageFlame.SetActive(true);
+                    }
+                } 
             }
+            
         }
     }
 
@@ -132,11 +142,12 @@ public class Throwable : MonoBehaviour
             _playerController._animator.SetBool("ThrowableEquip", false);
             _playerController.isAiming = false;
             explosiveArmed = true;
+            detonateTimer = detonationTime;
             transform.parent = null;
             throwableCollider.enabled = true;
             _weaponItem.weaponEquipped = false;
             _weaponItem.weaponLocation = WeaponItem.WeaponLocation.Throwed;
-            
+            throwableCollider.isTrigger = false;
             ignitionParticle.SetActive(true);
             _rigidbody.useGravity = true;
             Vector3 throwDirection = _playerController.targetTransform.position - _playerController.transform.position;

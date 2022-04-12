@@ -406,7 +406,7 @@ MonoBehaviour:
   _rigidbody: {fileID: 7112459797971582009}
   _impactFlameParticle: {fileID: 0}
   explosionRadius: 5
-  explosionForce: 7
+  explosionForce: 70
   explosiveArmed: 0
   detonationTime: 5
   disableTime: 10
@@ -510,7 +510,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 8
-  m_CollisionDetection: 2
+  m_CollisionDetection: 1
 --- !u!82 &6433609313215409261
 AudioSource:
   m_ObjectHideFlags: 0
@@ -636,7 +636,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4381990893864398317
 Transform:
   m_ObjectHideFlags: 0

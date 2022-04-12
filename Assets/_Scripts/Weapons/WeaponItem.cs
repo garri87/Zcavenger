@@ -187,7 +187,10 @@ public class WeaponItem : MonoBehaviour
                 
                 gripTransform.localPosition = Vector3.zero;
                 gripTransform.localRotation = Quaternion.Euler(0,transform.rotation.y,0);
-
+                if (weaponItemClass == WeaponScriptableObject.WeaponClass.Throwable)
+                {
+                    _throwable.throwableCollider.isTrigger = true;
+                }
                 break;
 
             case WeaponLocation.Container:
