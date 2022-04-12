@@ -70,12 +70,9 @@ MonoBehaviour:
   gripTransform: {fileID: 4268980898541358266}
   muzzleCollider: {fileID: 7974566602406068590}
   flashLight: {fileID: 0}
-  flashLightPower: 0
   magHolder: {fileID: 3484926331407043161}
   magGameObject: {fileID: 6517919750986459616}
   weaponIcon: {fileID: 21300000, guid: aec9ed21126005d40817c1918f9e8a54, type: 3}
-  weaponMesh: {fileID: 4300000, guid: 7699cf0cd0d0a82468d34664d323fe9f, type: 2}
-  meshFilter: {fileID: 4825504029107378030}
   meshRenderer: {fileID: 8021718632048697983}
   modelOutline: {fileID: 9106104362720769822}
   bulletImpactPrefab: {fileID: 100002, guid: 9d25129d5c3e42841a660568a12d1f5b, type: 3}
@@ -97,11 +94,13 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 257
   _weaponSound: {fileID: 576297614038277336}
+  _throwable: {fileID: 0}
   quantity: 1
   titleTextGameObject: {fileID: 3707575511531987007}
   pickupCollider: {fileID: 0}
   rotationSpeed: 2
   titleTextMesh: {fileID: 8009431256897338362}
+  throwableActive: 0
 --- !u!114 &576297614038277336
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -115,16 +114,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _audioSource: {fileID: 7394767986362673450}
-  pistolFireSound: {fileID: 0}
-  shotgunFireSound: {fileID: 0}
-  rifleFireSound: {fileID: 8300000, guid: 01bcb4f63bfb2884786ffd0294fa5363, type: 3}
-  axeSlashSound: {fileID: 0}
-  batSwingSound: {fileID: 0}
-  knifeSlashSound: {fileID: 0}
+  shotSound: {fileID: 8300000, guid: 01bcb4f63bfb2884786ffd0294fa5363, type: 3}
+  meleeAttackSound: {fileID: 0}
+  ExplosionSound: {fileID: 0}
   magazineOutSound: {fileID: 8300000, guid: e0c70bed5c1a4443083a81de5648c7d5, type: 3}
   magazineInSound: {fileID: 8300000, guid: eb5685b26a6494994af389a3293064e8, type: 3}
-  shotgunReloadEndSound: {fileID: 0}
-  rifleReloadEndSound: {fileID: 8300000, guid: cb968281071c8e844bbe158fa98e47ef, type: 3}
+  reloadEndSound: {fileID: 8300000, guid: cb968281071c8e844bbe158fa98e47ef, type: 3}
   drawWeaponSound: {fileID: 8300000, guid: 95d6c402778044a598e0c2fd3fe3cdb7, type: 3}
 --- !u!65 &2537434731063509867
 BoxCollider:

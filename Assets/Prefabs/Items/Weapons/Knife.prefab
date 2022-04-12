@@ -216,12 +216,9 @@ MonoBehaviour:
   gripTransform: {fileID: 6152523093848556577}
   muzzleCollider: {fileID: 7001440505548376312}
   flashLight: {fileID: 0}
-  flashLightPower: 0
   magHolder: {fileID: 0}
   magGameObject: {fileID: 0}
   weaponIcon: {fileID: 0}
-  weaponMesh: {fileID: 4300000, guid: 8329ab1b997074e4ca18a93612829dd6, type: 3}
-  meshFilter: {fileID: 7001440505548376314}
   meshRenderer: {fileID: 7001440505548376313}
   modelOutline: {fileID: 7420476773463014977}
   bulletImpactPrefab: {fileID: 0}
@@ -243,11 +240,13 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 257
   _weaponSound: {fileID: 2400073828645561481}
+  _throwable: {fileID: 0}
   quantity: 1
   titleTextGameObject: {fileID: 9188882286512042284}
   pickupCollider: {fileID: 0}
   rotationSpeed: 2
   titleTextMesh: {fileID: 5056526551565918376}
+  throwableActive: 0
 --- !u!65 &-2958571176825060298
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -370,16 +369,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _audioSource: {fileID: 3750783316749081341}
-  pistolFireSound: {fileID: 8300000, guid: 2203773368e4340d98c114f55c2dd7fd, type: 3}
-  shotgunFireSound: {fileID: 8300000, guid: d83854217c01af14d86b098d854e090f, type: 3}
-  rifleFireSound: {fileID: 8300000, guid: 5cfe195fb5ce30d4db2164b79b4de1c2, type: 3}
-  axeSlashSound: {fileID: 8300000, guid: 63feefa6af00789428cbadbe886de15f, type: 3}
-  batSwingSound: {fileID: 8300000, guid: 3b0c7476922dc954a99b11915f0b0180, type: 3}
-  knifeSlashSound: {fileID: 8300000, guid: 3b0c7476922dc954a99b11915f0b0180, type: 3}
-  magazineOutSound: {fileID: 8300000, guid: e0c70bed5c1a4443083a81de5648c7d5, type: 3}
-  magazineInSound: {fileID: 8300000, guid: eb5685b26a6494994af389a3293064e8, type: 3}
-  shotgunReloadEndSound: {fileID: 8300000, guid: 1bf98f85abd40b842847f65472b5e6b0, type: 3}
-  rifleReloadEndSound: {fileID: 8300000, guid: cb968281071c8e844bbe158fa98e47ef, type: 3}
+  shotSound: {fileID: 0}
+  meleeAttackSound: {fileID: 8300000, guid: 63feefa6af00789428cbadbe886de15f, type: 3}
+  ExplosionSound: {fileID: 0}
+  magazineOutSound: {fileID: 0}
+  magazineInSound: {fileID: 0}
+  reloadEndSound: {fileID: 0}
   drawWeaponSound: {fileID: 8300000, guid: 95d6c402778044a598e0c2fd3fe3cdb7, type: 3}
 --- !u!1 &7559032917042879564
 GameObject:
@@ -445,7 +440,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 1.173}
+  m_AnchoredPosition: {x: 0, y: 1}
   m_SizeDelta: {x: 2.3468, y: 0.8448}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &8887434418896500819
@@ -467,7 +462,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 4127300954115255742, guid: dedf3ab6e57f1a844985eeb60c59a1e5, type: 2}
+  - {fileID: 5452839780596693328, guid: 14e28600741141443bf0321514f37e3e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -511,15 +506,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: Tactical Knife
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: dedf3ab6e57f1a844985eeb60c59a1e5, type: 2}
-  m_sharedMaterial: {fileID: 4127300954115255742, guid: dedf3ab6e57f1a844985eeb60c59a1e5, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 14e28600741141443bf0321514f37e3e, type: 2}
+  m_sharedMaterial: {fileID: 5452839780596693328, guid: 14e28600741141443bf0321514f37e3e, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4278248959
+  m_fontColor: {r: 1, g: 0.89918447, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -536,10 +531,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 3.7
-  m_fontSizeBase: 10.3
+  m_fontSize: 3
+  m_fontSizeBase: 3
   m_fontWeight: 400
-  m_enableAutoSizing: 1
+  m_enableAutoSizing: 0
   m_fontSizeMin: 0
   m_fontSizeMax: 72
   m_fontStyle: 0
@@ -576,7 +571,7 @@ MonoBehaviour:
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
-  m_renderer: {fileID: 8887434418896500819}
+  m_renderer: {fileID: 0}
   m_maskType: 0
   _SortingLayer: 0
   _SortingLayerID: 0

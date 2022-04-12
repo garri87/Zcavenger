@@ -1,4 +1,8 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using UnityEditor;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -6,14 +10,9 @@ public class EnemyAudio : MonoBehaviour
 {
     private AgentController _agentController;
     
-    public AudioClip[] walkerIdleSounds;
-    public AudioClip[] runnerIdleSounds;
-    public AudioClip[] runStepsClips;
-    public AudioClip[] walkStepsClips;
-    public AudioClip[] bruteStepsClips;
-    public AudioClip[] proneMovementClips;
-    public AudioClip[] walkerGrowlSounds;
-    public AudioClip[] runnerGrowlSounds;
+    public AudioClip[] idleSounds;
+    public AudioClip[] stepsClips;
+    public AudioClip[] growlSounds;
     public AudioClip[] attackSounds;
     public AudioClip[] hitSounds;
     public AudioClip[] deathSounds;
@@ -23,12 +22,6 @@ public class EnemyAudio : MonoBehaviour
     public AudioClip damagedSound;
     public AudioClip deathEndSound;
     public AudioClip biteSound;
-    
-    public AudioClip pistolFireSound;
-    public AudioClip rifleFireSound;
-    public AudioClip shotgunFireSound;
-
-    
     
     private AudioSource enemyAudioSource;
     
@@ -40,74 +33,23 @@ public class EnemyAudio : MonoBehaviour
         enemyAudioSource = GetComponent<AudioSource>();
         _agentController = GetComponent<AgentController>();
     }
-
-    private void Update()
-    {
-         
-    }
-
+    
     public void IdleSound()
     {
-        chance = Random.Range(0,2);
-        if (chance >= 1)
+        chance = Random.Range(0,3);
+        if (chance == 0)
         {
-            switch (_agentController.enemyType)
-            {
-                case Enemy.EnemyType.Walker:
-                    selectedClip = Random.Range(0, walkerIdleSounds.Length);
-                    enemyAudioSource.PlayOneShot(walkerIdleSounds[selectedClip]);
-                    break;
-            
-                case Enemy.EnemyType.Runner:
-                    selectedClip = Random.Range(0, runnerIdleSounds.Length);
-                    enemyAudioSource.PlayOneShot(runnerIdleSounds[selectedClip]);
-                    break;
-            
-                case Enemy.EnemyType.Brute:
-                
-                    break;
-            
-                case Enemy.EnemyType.Crippled:
-                    selectedClip = Random.Range(0, walkerIdleSounds.Length);
-                    enemyAudioSource.PlayOneShot(walkerIdleSounds[selectedClip]);
-                    break;
-            
-                case Enemy.EnemyType.Crawler:
-                    selectedClip = Random.Range(0, runnerIdleSounds.Length);
-                    enemyAudioSource.PlayOneShot(runnerIdleSounds[selectedClip]);
-                    break;
-            }
+            selectedClip = Random.Range(0, idleSounds.Length);
+            enemyAudioSource.PlayOneShot(idleSounds[selectedClip]);
         }
     }
     
-    public void WalkSound()
+    public void StepSound()
     {
-        selectedClip = Random.Range(0, walkStepsClips.Length);
-        enemyAudioSource.clip = walkStepsClips[selectedClip];
+        selectedClip = Random.Range(0, stepsClips.Length);
+        enemyAudioSource.clip = stepsClips[selectedClip];
         enemyAudioSource.PlayOneShot(enemyAudioSource.clip);    
     }
-
-    public void RunSound()
-    {
-        if (_agentController.enemyType == Enemy.EnemyType.Brute)
-        {
-            selectedClip = Random.Range(0, bruteStepsClips.Length);
-            enemyAudioSource.PlayOneShot(bruteStepsClips[selectedClip]);
-        }
-        else
-        {
-            selectedClip = Random.Range(0, runStepsClips.Length);
-            enemyAudioSource.PlayOneShot(runStepsClips[selectedClip]);
-        }
-
-    }
-
-    public void ProneSound()
-    {
-        selectedClip = Random.Range(0, proneMovementClips.Length);
-        enemyAudioSource.PlayOneShot(proneMovementClips[selectedClip]);
-    }
-    
     public void JumpSound(string command)
     {
         switch (command)
@@ -160,54 +102,8 @@ public class EnemyAudio : MonoBehaviour
 
     public void GrowlSound()
     {
-        switch (_agentController.enemyType)
-        {
-            case Enemy.EnemyType.Walker:
-                selectedClip = Random.Range(0, walkerGrowlSounds.Length);
-                enemyAudioSource.PlayOneShot(walkerGrowlSounds[selectedClip]);
-                break;
-            
-            case Enemy.EnemyType.Runner:
-                selectedClip = Random.Range(0, runnerGrowlSounds.Length);
-                enemyAudioSource.PlayOneShot(runnerGrowlSounds[selectedClip]);
-                break;
-            
-            case Enemy.EnemyType.Brute:
-                
-                break;
-            
-            case Enemy.EnemyType.Crippled:
-                selectedClip = Random.Range(0, walkerGrowlSounds.Length);
-                enemyAudioSource.PlayOneShot(walkerGrowlSounds[selectedClip]);
-                break;
-            
-            case Enemy.EnemyType.Crawler:
-                selectedClip = Random.Range(0, runnerGrowlSounds.Length);
-                enemyAudioSource.PlayOneShot(runnerGrowlSounds[selectedClip]);
-                break; 
-        }
+        selectedClip = Random.Range(0, growlSounds.Length);
+        enemyAudioSource.PlayOneShot(growlSounds[selectedClip]);
     }
-    
-    public void FireWeaponSound(string weaponType)
-    {
-        switch (weaponType)
-        {
-            case "Pistol":
-                enemyAudioSource.PlayOneShot(pistolFireSound);
-
-                break;
-            
-            case "Shotgun":
-                enemyAudioSource.PlayOneShot(shotgunFireSound);
-
-                break;
-            
-            case "Rifle":
-                enemyAudioSource.PlayOneShot(rifleFireSound);
-
-                break;
-        }
-    }
-    
 }
 

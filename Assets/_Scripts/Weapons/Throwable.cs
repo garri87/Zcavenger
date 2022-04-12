@@ -7,26 +7,32 @@ public class Throwable : MonoBehaviour
 {
     public WeaponItem _weaponItem;
     public GameObject _explosionParticle;
-    public GameObject bottleFireParticle;
+    public GameObject ignitionParticle;
     public MeshRenderer objectRenderer;
-    public CapsuleCollider throwableCollider;
+    public Collider throwableCollider;
     public Rigidbody _rigidbody;
     public GameObject _impactFlameParticle;
-    public ExplosionRadius explosionRadius;
+    public float explosionRadius;
+    public float explosionForce;
     private PlayerController _playerController;
     private WeaponSound _weaponSound;
     public bool explosiveArmed;
     private bool exploded;
+    private float detonateTimer;
+    public float detonationTime = 5;
     public float disableTime = 10;
     private float disableTimer;
 
     private void Awake()
     {
+        _weaponItem = GetComponent<WeaponItem>();
+        _rigidbody = GetComponent<Rigidbody>();
     }
 
     private void OnEnable()
     {
-        disableTimer = 0;
+        detonateTimer = detonationTime;
+        disableTimer = disableTime;
         _playerController = GameObject.Find("Player").GetComponent<PlayerController>();
         _weaponSound = GetComponent<WeaponSound>();
         switch (_weaponItem.weaponLocation)
@@ -38,8 +44,6 @@ public class Throwable : MonoBehaviour
             case WeaponItem.WeaponLocation.Player:
                 objectRenderer.enabled = true;
                 _rigidbody.constraints = RigidbodyConstraints.FreezePositionZ;
-                
-
                 break;
         }
     }
@@ -51,14 +55,20 @@ public class Throwable : MonoBehaviour
     
     private void Update()
     {
+        if (explosiveArmed && !exploded)
+        {
+            detonateTimer -= Time.deltaTime;
+        }
+        
         if (exploded)
         {
             explosiveArmed = false;
-            disableTimer += Time.deltaTime;
-            if (disableTimer >= disableTime)
+            disableTimer -= Time.deltaTime;
+            if (disableTimer <= 0)
             {
                 exploded = false;
-                disableTimer = 0;
+                disableTimer = disableTime;
+                detonateTimer = detonationTime;
                 gameObject.SetActive(false);
                 
             }
@@ -71,16 +81,17 @@ public class Throwable : MonoBehaviour
         {
             if (explosiveArmed)
             {
-                bottleFireParticle.SetActive(false);
-                Explode();
+                ignitionParticle.SetActive(false);
+               
                 _explosionParticle.transform.position = other.GetContact(0).point;
                 _explosionParticle.transform.parent = null;
+                Explode();
                 foreach (ContactPoint contactPoint in other.contacts)
                 {
+                    //TODO: INSTANCIAR FLAMAS SOLO EN CASO DE MOLOTOV
                     GameObject damageFlame = ObjectPool.SharedInstance.GetPooledObject("DamageFlame");
                     damageFlame.transform.position = contactPoint.point;
                     damageFlame.SetActive(true);
-                    
                 }
             }
         }
@@ -88,9 +99,26 @@ public class Throwable : MonoBehaviour
 
     public void Explode()
     {
-        _weaponSound.FireWeaponSound("Molotov");
-        explosionRadius.gameObject.SetActive(true);
-        bottleFireParticle.SetActive(false);
+        Collider[] colliders = Physics.OverlapSphere(transform.position,explosionRadius);
+
+        foreach (var objectsInRange in colliders)
+        {
+            Rigidbody rigidbody = objectsInRange.GetComponent<Rigidbody>();
+
+            if (rigidbody != null)
+            {
+                rigidbody.AddExplosionForce(explosionForce*10,transform.position,explosionRadius);
+            }
+
+            HealthManager healthManager = objectsInRange.GetComponent<HealthManager>();
+            if (healthManager != null)
+            {
+                healthManager.currentHealth -= _weaponItem.damage;
+            }            
+        }
+        ignitionParticle.SetActive(false);
+        _weaponSound.ExplosiveSound();
+        _explosionParticle.SetActive(true);
         objectRenderer.enabled = false;
         exploded = true;
         Debug.Log("Item exploded!");
@@ -109,11 +137,17 @@ public class Throwable : MonoBehaviour
             _weaponItem.weaponEquipped = false;
             _weaponItem.weaponLocation = WeaponItem.WeaponLocation.Throwed;
             
-            bottleFireParticle.SetActive(true);
+            ignitionParticle.SetActive(true);
             _rigidbody.useGravity = true;
             Vector3 throwDirection = _playerController.targetTransform.position - _playerController.transform.position;
             _rigidbody.AddForce(throwDirection * _playerController.throwForce, ForceMode.Impulse);
         }   
         
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position,explosionRadius);
     }
 }

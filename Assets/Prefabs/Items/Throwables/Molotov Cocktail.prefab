@@ -5193,17 +5193,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _audioSource: {fileID: 4886881220276673613}
-  pistolFireSound: {fileID: 8300000, guid: 2203773368e4340d98c114f55c2dd7fd, type: 3}
-  shotgunFireSound: {fileID: 8300000, guid: d83854217c01af14d86b098d854e090f, type: 3}
-  rifleFireSound: {fileID: 8300000, guid: 5cfe195fb5ce30d4db2164b79b4de1c2, type: 3}
-  axeSlashSound: {fileID: 8300000, guid: 63feefa6af00789428cbadbe886de15f, type: 3}
-  batSwingSound: {fileID: 8300000, guid: 3b0c7476922dc954a99b11915f0b0180, type: 3}
-  knifeSlashSound: {fileID: 8300000, guid: 3b0c7476922dc954a99b11915f0b0180, type: 3}
-  molotovExplosionSound: {fileID: 8300000, guid: 82338c76b9b416d418b25c575f409016, type: 3}
-  magazineOutSound: {fileID: 8300000, guid: e0c70bed5c1a4443083a81de5648c7d5, type: 3}
-  magazineInSound: {fileID: 8300000, guid: eb5685b26a6494994af389a3293064e8, type: 3}
-  shotgunReloadEndSound: {fileID: 8300000, guid: 1bf98f85abd40b842847f65472b5e6b0, type: 3}
-  rifleReloadEndSound: {fileID: 8300000, guid: cb968281071c8e844bbe158fa98e47ef, type: 3}
+  shotSound: {fileID: 0}
+  meleeAttackSound: {fileID: 0}
+  explosionSound: {fileID: 8300000, guid: 82338c76b9b416d418b25c575f409016, type: 3}
+  magazineOutSound: {fileID: 0}
+  magazineInSound: {fileID: 0}
+  reloadEndSound: {fileID: 0}
   drawWeaponSound: {fileID: 8300000, guid: 95d6c402778044a598e0c2fd3fe3cdb7, type: 3}
 --- !u!82 &4886881220276673613
 AudioSource:
@@ -5315,13 +5310,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _weaponItem: {fileID: 3249049379115829774}
   _explosionParticle: {fileID: 7576001798568016514}
-  bottleFireParticle: {fileID: 3451795091920070308}
+  ignitionParticle: {fileID: 3451795091920070308}
   objectRenderer: {fileID: 3671828493690031043}
   throwableCollider: {fileID: 8201129235037941855}
   _rigidbody: {fileID: 1999817040446651859}
   _impactFlameParticle: {fileID: 0}
-  explosionRadius: {fileID: 6516906048771699529}
+  explosionRadius: 0
+  explosionForce: 0
   explosiveArmed: 0
+  detonationTime: 5
   disableTime: 10
 --- !u!1 &3648675894937363295
 GameObject:
@@ -6179,49 +6176,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e1b08032bec16ba4eb1ae23cbd572664, type: 3}
---- !u!1 &7576001798568016514 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1121192042590650, guid: e1b08032bec16ba4eb1ae23cbd572664, type: 3}
-  m_PrefabInstance: {fileID: 7575237954519534392}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7579331062135186190 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4388947112716342, guid: e1b08032bec16ba4eb1ae23cbd572664, type: 3}
   m_PrefabInstance: {fileID: 7575237954519534392}
   m_PrefabAsset: {fileID: 0}
---- !u!198 &7773801412788356592 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 198917022394846920, guid: e1b08032bec16ba4eb1ae23cbd572664, type: 3}
+--- !u!1 &7576001798568016514 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1121192042590650, guid: e1b08032bec16ba4eb1ae23cbd572664, type: 3}
   m_PrefabInstance: {fileID: 7575237954519534392}
   m_PrefabAsset: {fileID: 0}
---- !u!135 &9222594936540565943
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7576001798568016514}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 3.5
-  m_Center: {x: -0.07155204, y: 0.034017928, z: 0.58366764}
---- !u!114 &6516906048771699529
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7576001798568016514}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d2bd5ad8a8cef64a942271c9bf397d8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  explosiveType: 1
-  sphereCollider: {fileID: 9222594936540565943}
-  explosionParticle: {fileID: 7773801412788356592}
-  explosionRange: 2.5
-  explosionDamage: 10
-  explosionSpeed: 20

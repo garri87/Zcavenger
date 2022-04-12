@@ -386,12 +386,9 @@ MonoBehaviour:
   gripTransform: {fileID: 5750457336715732661}
   muzzleCollider: {fileID: 3274602283360518535}
   flashLight: {fileID: 0}
-  flashLightPower: 0
   magHolder: {fileID: 0}
   magGameObject: {fileID: 0}
   weaponIcon: {fileID: 21300000, guid: 5c55224dc3f75a249ac829740720d108, type: 3}
-  weaponMesh: {fileID: 4300000, guid: e9761215d79323f49a2301e1040de95c, type: 3}
-  meshFilter: {fileID: 5793074789278231198}
   meshRenderer: {fileID: 5391846739462023835}
   modelOutline: {fileID: 8400447600903067389}
   bulletImpactPrefab: {fileID: 100002, guid: 9d25129d5c3e42841a660568a12d1f5b, type: 3}
@@ -413,11 +410,13 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 257
   _weaponSound: {fileID: 7819149292089502495}
+  _throwable: {fileID: 0}
   quantity: 1
   titleTextGameObject: {fileID: 4831336047659758360}
   pickupCollider: {fileID: 0}
   rotationSpeed: 2
   titleTextMesh: {fileID: 7164198099746023875}
+  throwableActive: 0
 --- !u!65 &-8086112424985084089
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -444,16 +443,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _audioSource: {fileID: 1151407296180729884}
-  pistolFireSound: {fileID: 8300000, guid: 2203773368e4340d98c114f55c2dd7fd, type: 3}
-  shotgunFireSound: {fileID: 8300000, guid: d83854217c01af14d86b098d854e090f, type: 3}
-  rifleFireSound: {fileID: 8300000, guid: 5cfe195fb5ce30d4db2164b79b4de1c2, type: 3}
-  axeSlashSound: {fileID: 8300000, guid: 63feefa6af00789428cbadbe886de15f, type: 3}
-  batSwingSound: {fileID: 8300000, guid: 3b0c7476922dc954a99b11915f0b0180, type: 3}
-  knifeSlashSound: {fileID: 8300000, guid: 3b0c7476922dc954a99b11915f0b0180, type: 3}
-  magazineOutSound: {fileID: 8300000, guid: e0c70bed5c1a4443083a81de5648c7d5, type: 3}
-  magazineInSound: {fileID: 8300000, guid: eb5685b26a6494994af389a3293064e8, type: 3}
-  shotgunReloadEndSound: {fileID: 8300000, guid: 1bf98f85abd40b842847f65472b5e6b0, type: 3}
-  rifleReloadEndSound: {fileID: 8300000, guid: cb968281071c8e844bbe158fa98e47ef, type: 3}
+  shotSound: {fileID: 0}
+  meleeAttackSound: {fileID: 8300000, guid: 63feefa6af00789428cbadbe886de15f, type: 3}
+  ExplosionSound: {fileID: 0}
+  magazineOutSound: {fileID: 0}
+  magazineInSound: {fileID: 0}
+  reloadEndSound: {fileID: 0}
   drawWeaponSound: {fileID: 8300000, guid: 95d6c402778044a598e0c2fd3fe3cdb7, type: 3}
 --- !u!82 &1151407296180729884
 AudioSource:

@@ -78,6 +78,7 @@ public class WeaponItem : MonoBehaviour
     #region Components
 
     public WeaponSound _weaponSound;
+    private WeaponSound playerWeaponSound;
 
     private Transform playerTransform;
     private Animator playerAnimator;
@@ -125,11 +126,11 @@ public class WeaponItem : MonoBehaviour
         playerHealthManager = playerTransform.GetComponent<HealthManager>();
         playerInventory = playerTransform.GetComponent<Inventory>();
         playerController = playerTransform.GetComponent<PlayerController>();
-        
         pickupCollider = GetComponent<BoxCollider>();
 
         titleTextMesh = titleTextGameObject.GetComponent<TextMeshPro>();
         GetWeaponScriptableObject(weaponScriptableObject);
+        _weaponSound = GetComponent<WeaponSound>();
         titleTextMesh.text = weaponName;
         titleTextMesh.enabled = false;
         modelOutline.enabled = false;
@@ -208,7 +209,8 @@ public class WeaponItem : MonoBehaviour
             case WeaponLocation.Player:
                 transform.localScale = originalScale;
                 playerTransform = GameObject.Find("Player").GetComponent<Transform>();
-                _weaponSound = GetComponent<WeaponSound>();
+                playerWeaponSound = playerTransform.GetComponent<WeaponSound>();
+                UpdatePlayerWeaponSounds();
                 playerController = playerTransform.GetComponent<PlayerController>();
                 playerInventory = playerTransform.GetComponent<Inventory>();
                 playerAnimator = playerTransform.GetComponent<Animator>();
@@ -252,8 +254,8 @@ public class WeaponItem : MonoBehaviour
                     
                     case WeaponScriptableObject.WeaponClass.Throwable:
                         _throwable = GetComponent<Throwable>();
+                        _throwable.explosionRadius = weaponScriptableObject.explosionRange;
                         muzzleCollider.isTrigger = true;
-                        _throwable.explosionRadius.explosionDamage = damage;
                         playerAnimator.SetBool("PistolEquip", false);
                         playerAnimator.SetBool("RifleEquip", false);
                         playerAnimator.SetBool("BatEquip", false);
@@ -571,9 +573,8 @@ public class WeaponItem : MonoBehaviour
                 muzzleFlash.SetActive(true);
             }
             bulletsInMag -=1;
-            GetWeaponSound();
+            _weaponSound.FireWeaponSound();
 
-            
         }
         else
         {
@@ -724,30 +725,16 @@ public class WeaponItem : MonoBehaviour
         muzzleFlashPrefab = weaponScriptableObject.muzzleFlashPrefab;
     }
 
-    public void GetWeaponSound()
+    public void UpdatePlayerWeaponSounds()
     {
-        switch (ID)
-        {
-            case 3003: // m4a1
-                _weaponSound.FireWeaponSound("Rifle");
-                break;
-                
-            case 3004:// ak74
-                _weaponSound.FireWeaponSound("Rifle");
-                break;
-                
-            case 2004:
-                _weaponSound.FireWeaponSound("Pistol");
-                break;
-                
-            case 2005://M1911
-                _weaponSound.FireWeaponSound("Pistol");
-                break;
-            case 5004:
-                _weaponSound.FireWeaponSound("Shotgun");
-                
-                playerAnimator.SetTrigger("FireShotgun");
-                break;
-        }
+        if(_weaponSound.shotSound != null) { playerWeaponSound.shotSound = _weaponSound.shotSound;}
+        if(_weaponSound.drawWeaponSound != null) { playerWeaponSound.drawWeaponSound = _weaponSound.drawWeaponSound;}
+        if(_weaponSound.explosionSound != null){playerWeaponSound.explosionSound = _weaponSound.explosionSound;}
+        if(_weaponSound.magazineInSound != null){playerWeaponSound.magazineInSound = _weaponSound.magazineInSound;}
+        if(_weaponSound.magazineOutSound != null){playerWeaponSound.magazineOutSound = _weaponSound.magazineOutSound;}
+        if(_weaponSound.meleeAttackSound != null){playerWeaponSound.meleeAttackSound = _weaponSound.meleeAttackSound;}
+        if(_weaponSound.reloadEndSound != null){playerWeaponSound.reloadEndSound = _weaponSound.reloadEndSound;}
+        
+        
     }
 }

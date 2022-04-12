@@ -762,12 +762,9 @@ MonoBehaviour:
   gripTransform: {fileID: 7106650662424781015}
   muzzleCollider: {fileID: 4694340802215358803}
   flashLight: {fileID: 0}
-  flashLightPower: 0
   magHolder: {fileID: 585362953197786046}
   magGameObject: {fileID: 7138969390436510643}
   weaponIcon: {fileID: 21300000, guid: 6edc021b266c59446a0d2daa24201805, type: 3}
-  weaponMesh: {fileID: 2941274158721294118, guid: eae20e08799ae3542b87d15342278eec, type: 3}
-  meshFilter: {fileID: 4489582452363823067}
   meshRenderer: {fileID: 4174208565431765181}
   modelOutline: {fileID: 2180320236845726308}
   bulletImpactPrefab: {fileID: 100002, guid: 9d25129d5c3e42841a660568a12d1f5b, type: 3}
@@ -789,11 +786,13 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 257
   _weaponSound: {fileID: 3320007712664421668}
+  _throwable: {fileID: 0}
   quantity: 1
   titleTextGameObject: {fileID: 7908815216115135706}
   pickupCollider: {fileID: 0}
   rotationSpeed: 2
   titleTextMesh: {fileID: 3727440016544505250}
+  throwableActive: 0
 --- !u!65 &1809095861853553496
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -916,16 +915,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _audioSource: {fileID: 9115604665980684958}
-  pistolFireSound: {fileID: 8300000, guid: 5d1e99c47439bf24f90b7fba08506522, type: 3}
-  shotgunFireSound: {fileID: 0}
-  rifleFireSound: {fileID: 0}
-  axeSlashSound: {fileID: 0}
-  batSwingSound: {fileID: 0}
-  knifeSlashSound: {fileID: 0}
+  shotSound: {fileID: 8300000, guid: 5d1e99c47439bf24f90b7fba08506522, type: 3}
+  meleeAttackSound: {fileID: 0}
+  ExplosionSound: {fileID: 0}
   magazineOutSound: {fileID: 8300000, guid: e0c70bed5c1a4443083a81de5648c7d5, type: 3}
   magazineInSound: {fileID: 8300000, guid: eb5685b26a6494994af389a3293064e8, type: 3}
-  shotgunReloadEndSound: {fileID: 0}
-  rifleReloadEndSound: {fileID: 8300000, guid: 0fd3487b0790af44ebca4e557e039a5c, type: 3}
+  reloadEndSound: {fileID: 8300000, guid: 0fd3487b0790af44ebca4e557e039a5c, type: 3}
   drawWeaponSound: {fileID: 8300000, guid: 95d6c402778044a598e0c2fd3fe3cdb7, type: 3}
 --- !u!1001 &7809851170977483274
 PrefabInstance:

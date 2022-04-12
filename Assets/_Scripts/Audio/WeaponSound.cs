@@ -10,18 +10,12 @@ public class WeaponSound : MonoBehaviour
     private PlayerController _playerController;
 
     [Header("Audio Clips")]
-    public AudioClip pistolFireSound;
-    public AudioClip shotgunFireSound;
-    public AudioClip rifleFireSound;
-    public AudioClip axeSlashSound;
-    public AudioClip batSwingSound;
-    public AudioClip knifeSlashSound;
-    public AudioClip molotovExplosionSound;
+    public AudioClip shotSound;
+    public AudioClip meleeAttackSound;
+    public AudioClip explosionSound;
     public AudioClip magazineOutSound;
     public AudioClip magazineInSound;
-    public AudioClip shotgunReloadEndSound;
-    public AudioClip rifleReloadEndSound;
-    
+    public AudioClip reloadEndSound;
     public AudioClip drawWeaponSound;
 
 
@@ -32,43 +26,20 @@ public class WeaponSound : MonoBehaviour
         _audioSource = GetComponent<AudioSource>();
     }
 
-    public void FireWeaponSound(string weaponType)
+    public void FireWeaponSound()
     {
-        switch (weaponType)
-        {
-            case "Pistol":
-                _audioSource.PlayOneShot(pistolFireSound);
-
-                break;
-            
-            case "Shotgun":
-                _audioSource.PlayOneShot(shotgunFireSound);
-
-                break;
-            
-            case "Rifle":
-                _audioSource.PlayOneShot(rifleFireSound);
-
-                break;
-            
-            case "Axe":
-                _audioSource.PlayOneShot(axeSlashSound);
-                break;
-            
-            case "Bat":
-                _audioSource.PlayOneShot(batSwingSound);
-                break;
-            
-            case "Knife":
-                _audioSource.PlayOneShot(knifeSlashSound);
-                break;
-            
-            case "Molotov":
-                _audioSource.PlayOneShot(molotovExplosionSound);
-                break;
-        }
+        _audioSource.PlayOneShot(shotSound);
     }
-    
+
+    public void MeleeAttackSound()
+    {
+        _audioSource.PlayOneShot(meleeAttackSound);
+
+    }
+    public void ExplosiveSound()
+    {
+        _audioSource.PlayOneShot(explosionSound);
+    }
     public void ReloadSound(string command)
     {
         switch (command)
@@ -84,17 +55,7 @@ public class WeaponSound : MonoBehaviour
                 break;
             
             case "End":
-                _weaponItem = _playerController.equippedWeaponItem;
-                switch (_weaponItem.ID)
-                {
-                    case 5004: //Shotgun
-                        _audioSource.PlayOneShot(shotgunReloadEndSound);
-                        break;
-                    
-                    case 3003: //Rifle
-                        _audioSource.PlayOneShot(rifleReloadEndSound);
-                        break;
-                }
+                _audioSource.PlayOneShot(reloadEndSound);
                 break;
         }
     }

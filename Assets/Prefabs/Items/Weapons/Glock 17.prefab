@@ -241,12 +241,9 @@ MonoBehaviour:
   gripTransform: {fileID: 481371649694861535}
   muzzleCollider: {fileID: 2671883617784109403}
   flashLight: {fileID: 0}
-  flashLightPower: 0
   magHolder: {fileID: 0}
   magGameObject: {fileID: 0}
   weaponIcon: {fileID: 21300000, guid: c1643b47113f32945a21f728903ae7f1, type: 3}
-  weaponMesh: {fileID: 346469088309326284, guid: 726e329e1719c8f42949342e6a5b42e3, type: 3}
-  meshFilter: {fileID: 5250348119972860981}
   meshRenderer: {fileID: 8014169305565339903}
   modelOutline: {fileID: 2529503406211561340}
   bulletImpactPrefab: {fileID: 100002, guid: 9d25129d5c3e42841a660568a12d1f5b, type: 3}
@@ -268,11 +265,13 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 257
   _weaponSound: {fileID: 5342043782549712172}
+  _throwable: {fileID: 0}
   quantity: 1
   titleTextGameObject: {fileID: 716081556462050514}
   pickupCollider: {fileID: 0}
   rotationSpeed: 2
   titleTextMesh: {fileID: 6308222679474779562}
+  throwableActive: 0
 --- !u!65 &9019297117024758608
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -395,16 +394,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _audioSource: {fileID: 1923296307950264982}
-  pistolFireSound: {fileID: 8300000, guid: 2203773368e4340d98c114f55c2dd7fd, type: 3}
-  shotgunFireSound: {fileID: 0}
-  rifleFireSound: {fileID: 0}
-  axeSlashSound: {fileID: 0}
-  batSwingSound: {fileID: 0}
-  knifeSlashSound: {fileID: 0}
+  shotSound: {fileID: 8300000, guid: 2203773368e4340d98c114f55c2dd7fd, type: 3}
+  meleeAttackSound: {fileID: 0}
+  ExplosionSound: {fileID: 0}
   magazineOutSound: {fileID: 8300000, guid: e0c70bed5c1a4443083a81de5648c7d5, type: 3}
   magazineInSound: {fileID: 8300000, guid: eb5685b26a6494994af389a3293064e8, type: 3}
-  shotgunReloadEndSound: {fileID: 0}
-  rifleReloadEndSound: {fileID: 8300000, guid: 0fd3487b0790af44ebca4e557e039a5c, type: 3}
+  reloadEndSound: {fileID: 8300000, guid: 0fd3487b0790af44ebca4e557e039a5c, type: 3}
   drawWeaponSound: {fileID: 8300000, guid: 95d6c402778044a598e0c2fd3fe3cdb7, type: 3}
 --- !u!1 &3376372571583491119
 GameObject:

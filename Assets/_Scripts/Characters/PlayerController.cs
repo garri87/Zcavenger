@@ -228,7 +228,6 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-
         #region axis inputs
         
         horizontalInput = Input.GetAxis("Horizontal");
