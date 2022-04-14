@@ -201,11 +201,16 @@ public class PlayerController : MonoBehaviour
     {
     }
 
+    private void Awake()
+    {
+        mainCamera = Camera.main;
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+
+    }
+
     void Start()
     {
-        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         keyAssignments = gameManager.GetComponent<KeyAssignments>();
-        mainCamera = Camera.main;
         _healthManager = GetComponent<HealthManager>();
         _rigidbody = GetComponent<Rigidbody>();
         _animator = GetComponent<Animator>();

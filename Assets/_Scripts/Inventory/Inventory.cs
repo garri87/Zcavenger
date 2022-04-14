@@ -12,7 +12,7 @@ public class Inventory : MonoBehaviour
 {
     public bool showInventory;
 
-    [HideInInspector] public int totalSlots;
+    [HideInInspector] public int totalInventorySlots;
 
     [Header("UI Transforms")] 
     public UIManager uIManager;
@@ -23,7 +23,7 @@ public class Inventory : MonoBehaviour
     [HideInInspector]public TextMeshProUGUI bulletCounterTMPUGUI;
     [HideInInspector]public TextMeshProUGUI capacityText;
         
-    [HideInInspector]public GameObject[] slotCount;
+    [HideInInspector]public GameObject[] slotArray;
     [HideInInspector]public GameObject[] quickSlotCount;
     public List<GameObject> itemList = new List<GameObject>();
 
@@ -62,20 +62,33 @@ public class Inventory : MonoBehaviour
 
     void Start()
     {
-        
         _playerController = GetComponent<PlayerController>();
         _animator = GetComponent<Animator>();
-        totalQuickSlots = uIManager.quickInventoryUI.childCount; // get the number of quickslots
-        totalSlots = uIManager.inventorySlotArea.childCount; // get the number of inventory slots
-        bulletCounterTMPUGUI = uIManager.ammoPanel.Find("AmmoCount").GetComponent<TextMeshProUGUI>();
         inventoryUICanvas = uIManager.inventoryUI.GetComponent<Canvas>();
-        slotCount = new GameObject[totalSlots];
+        bulletCounterTMPUGUI = uIManager.ammoPanel.Find("AmmoCount").GetComponent<TextMeshProUGUI>();
+
+       // totalQuickSlots = uIManager.quickInventoryUI.childCount; // get the number of quickslots
+        totalInventorySlots = uIManager.inventorySlotArea.childCount; // get the number of inventory slots
+        slotArray = new GameObject[totalInventorySlots];
         quickSlotCount = new GameObject[totalQuickSlots];
 
-        CheckEmptySlots(slotCount, totalSlots, uIManager.inventorySlotArea);
-        CheckEmptySlots(quickSlotCount, totalQuickSlots, uIManager.quickInventoryUI);
+        CheckInventorySlots();
+       // CheckInventorySlots(quickSlotCount, totalQuickSlots, uIManager.quickInventoryUI);
     }
-
+    public void CheckInventorySlots()
+    {
+        for (int i = 0; i < totalInventorySlots; i++)
+        {
+            slotArray[i] = uIManager.inventorySlotArea.GetChild(i).gameObject;
+            Slot slot = slotArray[i].GetComponent<Slot>();
+            slot.CheckSlotContent();
+            if (slot.empty)
+            {
+                inventoryFull = false;
+            }
+        }
+    }
+    
     private void FixedUpdate()
     {
         
@@ -198,6 +211,10 @@ public class Inventory : MonoBehaviour
         if (Input.GetKeyDown(_playerController.keyAssignments.inventoryKey.keyCode))
         {
             showInventory = !showInventory;
+            if (showInventory == true)
+            {
+                CheckInventorySlots();
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -209,7 +226,7 @@ public class Inventory : MonoBehaviour
         {
             _playerController.OnUIController();
             currentCapacity = itemList.Count;
-            maxCapacity = totalSlots;
+            maxCapacity = totalInventorySlots;
             capacityText.SetText(currentCapacity + " / " + maxCapacity);
         }
 
@@ -219,23 +236,7 @@ public class Inventory : MonoBehaviour
         }
     }
     
-    public void CheckEmptySlots(GameObject[] slotType, int slotgroup, Transform area)
-    {
-        for (int i = 0; i < slotgroup; i++)
-        {
-            slotType[i] = uIManager.inventorySlotArea.transform.GetChild(i).gameObject;
-            Slot slot = slotType[i].GetComponent<Slot>();
-            if (slot._item == null && slot.weaponItem == null)
-            {
-                slot.empty = true;
-                inventoryFull = false;
-            }
-            else if (slot._item != null || slot.weaponItem != null)
-            {
-                slot.empty = false;
-            }
-        }
-    }
+    
     
     
     /// <summary>
@@ -246,10 +247,10 @@ public class Inventory : MonoBehaviour
     /// <param name="itemQuantity"> amount to add </param>
     public void AddItemToInventory(Transform itemTransform)
     {
-        CheckEmptySlots(slotCount, totalSlots, uIManager.inventorySlotArea); // refresh the inventory
-        for (int i = 0; i < totalSlots; i++) // checks every slot in inventory
+        CheckInventorySlots(); // refresh the inventory
+        for (int i = 0; i < totalInventorySlots; i++) // checks every slot in inventory
         {
-            Slot slotIndex = slotCount[i].GetComponent<Slot>();
+            Slot slotIndex = slotArray[i].GetComponent<Slot>();
             Item itemComponent = itemTransform.GetComponent<Item>();
 
             if (slotIndex.empty == true) // if the slot is empty, store the picked item
@@ -261,10 +262,10 @@ public class Inventory : MonoBehaviour
                 Debug.Log("slotIndex.UpdateItemSlot(itemComponent.itemScriptableObject)");
                 itemComponent.itemPicked = true;
                 itemComponent.itemLocation = Item.ItemLocation.Inventory;
-                itemList.Add(slotCount[i].GetComponent<GameObject>());
+                itemList.Add(slotArray[i].GetComponent<GameObject>());
                 slotIndex.empty = false;
                 CheckSlotQuantity(itemComponent, i); // check if the slot exceed the stacking limit
-                CheckEmptySlots(slotCount, totalSlots, uIManager.inventorySlotArea); // refresh the inventory
+                CheckInventorySlots(); // refresh the inventory again
                 return;
             }
 
@@ -297,9 +298,9 @@ public class Inventory : MonoBehaviour
     
     public void CheckSlotQuantity(Item item, int slotOrder)
     {
-        for (int i = slotOrder; i < totalSlots; i++)
+        for (int i = slotOrder; i < totalInventorySlots; i++)
         {
-            Slot slotIndex = slotCount[i].GetComponent<Slot>();
+            Slot slotIndex = slotArray[i].GetComponent<Slot>();
 
             if (slotIndex.isStackable && slotIndex.quantity > slotIndex.maxStack)
                 // if the quantity surpasses the max stack capacity, transfer leftover units to the next slot
@@ -309,11 +310,11 @@ public class Inventory : MonoBehaviour
                 int leftOver = slotIndex.quantity - slotIndex.maxStack;//150-100
                 Debug.Log("remaining units: " + leftOver);//50
                 
-                if (i + 1 < totalSlots)
+                if (i + 1 < totalInventorySlots)
                 {
-                    for (int j = i+1; j < totalSlots; j++)
+                    for (int j = i+1; j < totalInventorySlots; j++)
                     {
-                        Slot nextSlot = slotCount[j].GetComponent<Slot>();
+                        Slot nextSlot = slotArray[j].GetComponent<Slot>();
                         if (nextSlot.empty)
                         {
                             item.quantity = 0;
@@ -331,7 +332,7 @@ public class Inventory : MonoBehaviour
                             nextSlot.empty = false; // tell the next slot is not empty
                             Debug.Log(" nextSlot.empty: " + nextSlot.empty);
                             Debug.Log("transferred " + leftOver + " units to the next slot");
-                            itemList.Add(slotCount[i + 1].GetComponent<GameObject>());
+                            itemList.Add(slotArray[i + 1].GetComponent<GameObject>());
                             CheckSlotQuantity(item,slotOrder+1);
                             return;
                         }
@@ -345,7 +346,7 @@ public class Inventory : MonoBehaviour
                     item.itemLocation = Item.ItemLocation.World;
                     item.itemPicked = false;
                     inventoryFull = true;
-                    CheckEmptySlots(slotCount, totalSlots, uIManager.inventorySlotArea);
+                    CheckInventorySlots();
                     slotIndex.quantity = slotIndex.maxStack;
                     //slotIndex.UpdateItemSlot(item);
                     Debug.Log("Inventory is Full");
@@ -371,9 +372,9 @@ public class Inventory : MonoBehaviour
     /// <param name="weaponItem">weaponObject component of the picked item</param>
     public void AddWeaponToInventory(Transform targetTransform)
     {
-        for (int i = 0; i < totalSlots; i++)
+        for (int i = 0; i < totalInventorySlots; i++)
         {
-            Slot slotIndex = slotCount[i].GetComponent<Slot>();
+            Slot slotIndex = slotArray[i].GetComponent<Slot>();
             WeaponItem targetWeaponItem = targetTransform.GetComponent<WeaponItem>();
             if (slotIndex.empty)
             {
@@ -384,7 +385,7 @@ public class Inventory : MonoBehaviour
                 Debug.Log("the slot in order " + i + " was filled by " + targetWeaponItem.weaponName);
                 slotIndex.empty = false;
                 itemList.Add(targetTransform.gameObject);
-                CheckEmptySlots(slotCount, totalSlots, uIManager.inventorySlotArea);
+                CheckInventorySlots();
                 return;
             }
         }
@@ -628,9 +629,9 @@ public class Inventory : MonoBehaviour
         //Debug.Log("seeking inventory for ID " + id);
 
         total = 0;
-        for (int i = 0; i < totalSlots; i++)
+        for (int i = 0; i < totalInventorySlots; i++)
         {
-            Slot slotIndex = slotCount[i].GetComponent<Slot>();
+            Slot slotIndex = slotArray[i].GetComponent<Slot>();
             if (!slotIndex.empty && slotIndex.itemScriptableObject != null)
             {
                 if (slotIndex.itemScriptableObject.ID == id)

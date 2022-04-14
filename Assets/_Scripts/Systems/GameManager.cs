@@ -49,6 +49,14 @@ public class GameManager : MonoBehaviour
     public bool gameOver;
 
 
+    private void Awake()
+    {
+#if UNITY_EDITOR
+        Debug.unityLogger.logEnabled = true;
+#else
+        Debug.unityLogger.logEnabled = false;
+#endif
+    }
 
     void Start()
     {
@@ -124,9 +132,9 @@ public class GameManager : MonoBehaviour
             case SceneType.inLevel:
 
                 loadingGame = false;
-                uiManager.mainMenu.SetActive(false);
-                uiManager.loadingScreen.SetActive(false);
-                uiManager.inventoryUI.gameObject.SetActive(true);
+                //uiManager.mainMenu.SetActive(false);
+                //uiManager.loadingScreen.SetActive(false);
+                //uiManager.inventoryUI.gameObject.SetActive(true);
                 if (playerHealthManager.IsDead)
                 {
                     GameOver("YOU ARE DEAD");

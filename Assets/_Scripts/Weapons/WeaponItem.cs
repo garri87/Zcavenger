@@ -627,9 +627,9 @@ public class WeaponItem : MonoBehaviour
     {
         totalBullets= playerInventory.CheckItemsLeft(bulletID, totalBullets);
         
-        for (int i = 0; i < playerInventory.totalSlots; i++)
+        for (int i = 0; i < playerInventory.totalInventorySlots; i++)
         {
-            Slot slotIndex = playerInventory.slotCount[i].GetComponent<Slot>();
+            Slot slotIndex = playerInventory.slotArray[i].GetComponent<Slot>();
             if (!slotIndex.empty && slotIndex.itemScriptableObject != null)
             {
                 if (slotIndex.itemID == bulletID)

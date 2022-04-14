@@ -37,6 +37,7 @@ public class Throwable : MonoBehaviour
         _playerController = GameObject.Find("Player").GetComponent<PlayerController>();
         _weaponSound = GetComponent<WeaponSound>();
         exploded = false;
+
         switch (_weaponItem.weaponLocation)
         {
             case WeaponItem.WeaponLocation.World:
@@ -117,7 +118,7 @@ public class Throwable : MonoBehaviour
 
             if (rigidbody != null)
             {
-                rigidbody.AddExplosionForce(explosionForce*10,transform.position,explosionRadius);
+                rigidbody.AddExplosionForce(explosionForce*100,transform.position,explosionRadius);
             }
 
             HealthManager healthManager = objectsInRange.GetComponent<HealthManager>();
@@ -128,6 +129,8 @@ public class Throwable : MonoBehaviour
         }
         ignitionParticle.SetActive(false);
         _weaponSound.ExplosiveSound();
+        _rigidbody.freezeRotation = true;
+        _rigidbody.velocity = Vector3.zero;
         _explosionParticle.SetActive(true);
         objectRenderer.enabled = false;
         exploded = true;
@@ -144,12 +147,15 @@ public class Throwable : MonoBehaviour
             explosiveArmed = true;
             detonateTimer = detonationTime;
             transform.parent = null;
+            Slot throwableSlot = _playerController.gameManager.uiManager.throwableEquipSlot.GetComponent<Slot>();
+            throwableSlot.UpdateWeaponSlot(null);
             throwableCollider.enabled = true;
             _weaponItem.weaponEquipped = false;
             _weaponItem.weaponLocation = WeaponItem.WeaponLocation.Throwed;
             throwableCollider.isTrigger = false;
             ignitionParticle.SetActive(true);
             _rigidbody.useGravity = true;
+            
             Vector3 throwDirection = _playerController.targetTransform.position - _playerController.transform.position;
             _rigidbody.AddForce(throwDirection * _playerController.throwForce, ForceMode.Impulse);
         }   

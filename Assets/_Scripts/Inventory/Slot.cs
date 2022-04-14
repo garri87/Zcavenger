@@ -137,7 +137,7 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, I
   
   private void Update()
   {
-    CheckSlotContent();
+   // CheckSlotContent();
 
     switch (slotType)
     {
@@ -165,17 +165,12 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, I
         }
         break;
     }
-
-    
     
     if (mouseOverSlot)
     {
       quickInfoPanelUI.transform.position = new Vector3(Input.mousePosition.x+20,Input.mousePosition.y -20, Input.mousePosition.z);
     }
-    
   }
-
- 
 
   public void CheckSlotContent()
   {
@@ -224,7 +219,6 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, I
         }
       }
     }
-
     
     if (slotType == SlotType.inventorySlot || slotType == SlotType.ContainerSlot)
     {
@@ -253,10 +247,10 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, I
   {
     if (eventData.button == PointerEventData.InputButton.Left)
     {
-
-      for (int i = 0; i < inventory.totalSlots; i++)
+      
+      for (int i = 0; i < inventory.totalInventorySlots; i++)
       {
-        Slot slotIndex = inventory.slotCount[i].GetComponent<Slot>();
+        Slot slotIndex = inventory.slotArray[i].GetComponent<Slot>();
         slotIndex.showSlotMenu = false;
       }
       switch (slotType)
@@ -280,6 +274,7 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, I
               }
             }
           } 
+          CheckSlotContent();
           break;
 
         case SlotType.EquipmentSlot: //unequip weapon and holster if is in player hands
@@ -554,16 +549,13 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, I
       UpdateItemSlot(null);
       slotImage.sprite = null;
     }
+    CheckSlotContent();
   }
 
   public void EquipWeapon(Transform weaponToEquip)
   {
     WeaponItem weaponToEquipWeaponItem = weaponToEquip.GetComponent<WeaponItem>(); // get the weapon script
-    Slot slotToEquip = weaponToEquipWeaponItem.holderTarget.GetComponentInParent<Slot>();
-
-
-    //BUSCAR EL SLOT DE EQUIPO CORRESPONDIENTE
-
+    Slot slotToEquip = weaponToEquipWeaponItem.holderTarget.GetComponentInParent<Slot>(); //BUSCAR EL SLOT DE EQUIPO CORRESPONDIENTE
     Debug.Log("SlotToEquip is: " + slotToEquip.gameObject.name);
 
     if (slotToEquip.weaponHolderTransform.childCount > 0)
@@ -592,15 +584,10 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, I
     weaponToEquip.parent = slotToEquip.weaponHolderTransform;
     UpdateWeaponSlot(null);
     UpdateItemSlot(null);
-  
-
-}
-  
-  private void ShowItemDescription()
-  {
-    //TODO: hacer que aparezca un cuadro de texto al lado del mouse con la info del item
+    slotToEquip.UpdateWeaponSlot(weaponToEquipWeaponItem);
+    slotToEquip.CheckSlotContent();
   }
-
+  
   public void ShowContextualMenu()
   {
     contextMenu.enabled = showSlotMenu;
