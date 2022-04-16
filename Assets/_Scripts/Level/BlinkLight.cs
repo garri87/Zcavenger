@@ -21,22 +21,17 @@ public class BlinkLight : MonoBehaviour
 
     IEnumerator BlinkCycle()
     {
-        
-        for (int i = 0; i < targetLights.Length; i++)
+        foreach (Light light in targetLights)
         {
-            
-        
             if (power == false)
             {
                 power = true;
-                targetLights[i].enabled = false;
+                light.enabled = false;
                 yield return new WaitForSeconds(blinkRate);
-                targetLights[i].enabled = true;
+                light.enabled = true;
                 yield return new WaitForSeconds(blinkRate);
                 power = false;
-            }  
+            }   
         }
-        
-
     }
 }
