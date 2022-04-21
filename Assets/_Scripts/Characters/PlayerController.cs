@@ -1172,7 +1172,7 @@ public class PlayerController : MonoBehaviour
                 currentPlayLine = playLine3;
                 break;
         }
-        mouseTargetLayer.transform.position = new Vector3(transform.position.x,transform.position.y, currentPlayLine);
+        mouseTargetLayer.transform.position = new Vector3(mouseTargetLayer.position.x,transform.position.y, currentPlayLine);
     }
 
     #endregion
