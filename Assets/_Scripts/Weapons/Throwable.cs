@@ -21,7 +21,7 @@ public class Throwable : MonoBehaviour
     private float detonateTimer;
     public float detonationTime = 5;
     public float disableTime = 10;
-    private float disableTimer;
+    [SerializeField]private float disableTimer;
 
     private void Awake()
     {
@@ -110,12 +110,19 @@ public class Throwable : MonoBehaviour
 
     public void Explode()
     {
+        
         Collider[] colliders = Physics.OverlapSphere(transform.position,explosionRadius);
-
+        Transform originPos = this.transform;
         foreach (var objectsInRange in colliders)
         {
             Rigidbody rigidbody = objectsInRange.GetComponent<Rigidbody>();
 
+            if (objectsInRange.CompareTag("Crashable"))
+            {
+                CrashObject crashObject = objectsInRange.GetComponent<CrashObject>();
+                crashObject.Crash();
+            }
+            
             if (rigidbody != null)
             {
                 rigidbody.AddExplosionForce(explosionForce*100,transform.position,explosionRadius);
@@ -127,6 +134,8 @@ public class Throwable : MonoBehaviour
                 healthManager.currentHealth -= _weaponItem.damage;
             }            
         }
+
+        transform.position = originPos.position;
         ignitionParticle.SetActive(false);
         _weaponSound.ExplosiveSound();
         _rigidbody.freezeRotation = true;
@@ -142,6 +151,7 @@ public class Throwable : MonoBehaviour
     {
         if (enabled)
         {
+            disableTimer = disableTime;
             _playerController._animator.SetBool("ThrowableEquip", false);
             _playerController.isAiming = false;
             explosiveArmed = true;

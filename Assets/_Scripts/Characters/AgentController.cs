@@ -90,6 +90,7 @@ public class AgentController : MonoBehaviour
     
     #endregion
 
+    private bool growl;
     [HideInInspector]public bool hisHit;
     
     private void OnValidate()
@@ -246,7 +247,9 @@ public class AgentController : MonoBehaviour
                     }
                     
                     if (enemyFov.playerInSight)
-                    { 
+                    {
+                       
+                        
                         alertTimer = agentAlertTime;
                         
                         if (enemyType == Enemy.EnemyType.Crippled) 
@@ -254,7 +257,11 @@ public class AgentController : MonoBehaviour
                             _rigidbody.MoveRotation(Quaternion.Euler(new Vector3(0, 0,
                                 90 * Mathf.Sign(playerPosition.position.x - transform.position.x)))); 
                         }
-                        
+                        if (!growl)
+                        {
+                            _animator.SetTrigger("Growl");
+                            growl = true;
+                        }
                         if (_navMeshAgent.enabled == true) 
                         { 
                            
@@ -298,6 +305,7 @@ public class AgentController : MonoBehaviour
                             {
                                 _navMeshAgent.SetDestination(enemyFov.playerLastLocation);
                                 _animator.SetBool("IsMoving", true);
+                                growl = false;
                             }
                             
                             if (_navMeshAgent.remainingDistance < 0.2f)

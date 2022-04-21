@@ -329,7 +329,7 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4741363384105253001}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 01571ba68fb2dad46aa03094ab219579, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -412,11 +412,12 @@ MonoBehaviour:
   throwableCollider: {fileID: 2571418708668234953}
   _rigidbody: {fileID: 7112459797971582009}
   _impactFlameParticle: {fileID: 0}
-  explosionRadius: 5
+  explosionRadius: 3
   explosionForce: 70
   explosiveArmed: 0
   detonationTime: 5
   disableTime: 10
+  disableTimer: 0
 --- !u!114 &8906633463642159343
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -777,6 +778,10 @@ PrefabInstance:
     - target: {fileID: 100008, guid: 7075bd5fe1480184695a32611c15da57, type: 3}
       propertyPath: m_Name
       value: WFX_Explosion Simple
+      objectReference: {fileID: 0}
+    - target: {fileID: 100008, guid: 7075bd5fe1480184695a32611c15da57, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400008, guid: 7075bd5fe1480184695a32611c15da57, type: 3}
       propertyPath: m_RootOrder
