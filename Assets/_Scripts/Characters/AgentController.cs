@@ -257,11 +257,7 @@ public class AgentController : MonoBehaviour
                             _rigidbody.MoveRotation(Quaternion.Euler(new Vector3(0, 0,
                                 90 * Mathf.Sign(playerPosition.position.x - transform.position.x)))); 
                         }
-                        if (!growl)
-                        {
-                            _animator.SetTrigger("Growl");
-                            growl = true;
-                        }
+                        
                         if (_navMeshAgent.enabled == true) 
                         { 
                            
@@ -293,6 +289,11 @@ public class AgentController : MonoBehaviour
                                 _animator.SetBool("IsMoving", false);
                                 playerCatch = false;
                             }
+                        }
+                        if (!growl)
+                        {
+                            _animator.SetTrigger("Growl");
+                            growl = true;
                         }
                     }
                     
