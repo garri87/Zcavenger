@@ -132,16 +132,19 @@ public class EnemyFOV : MonoBehaviour
             {
                 playerHealthManager = other.GetComponent<HealthManager>();
             }
+            playerInRange = true;
         }
     }
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (!playerInRange)
         {
-            playerInRange = true;
+            if (other.CompareTag("Player"))
+            {
+                playerInRange = true;
+            }  
         }
-        
     }
 
     private void OnTriggerExit(Collider other)
