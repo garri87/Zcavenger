@@ -565,6 +565,20 @@ public class AgentController : MonoBehaviour
         Gizmos.color = Color.magenta;
         Gizmos.DrawRay(transform.position + Vector3.up, transform.TransformDirection(Vector3.forward) * attackDistance);
     }
-    
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Noise") && !enemyFov.playerInSight)
+        {
+            if (_navMeshAgent.enabled)
+            {
+                if (_navMeshAgent.CalculatePath(other.transform.position,_navMeshAgent.path))
+                {
+                    _navMeshAgent.SetDestination(other.transform.position);
+                    alertTimer = agentAlertTime;
+                }
+            }
+        }
+    }
 }
 
