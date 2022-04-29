@@ -25,7 +25,11 @@ public class PlayerAudio : MonoBehaviour
     
     private int selectedClip;
     
-    
+    public float lowSoundSensorScale = 20f;
+    public float normalSoundSensorScale = 50f;
+    public float highSoundSensorScale = 100f;
+
+    public SoundSensor _soundSensor;
 
     private void Start()
     {
@@ -34,24 +38,28 @@ public class PlayerAudio : MonoBehaviour
 
     public void WalkSound()
     {
+        _soundSensor.sensorScale = lowSoundSensorScale;
         selectedClip = Random.Range(0, walkStepsClips.Length);
         playerAudioSource.PlayOneShot(walkStepsClips[selectedClip]);    
     }
 
     public void RunSound()
     {
+        _soundSensor.sensorScale = normalSoundSensorScale;
         selectedClip = Random.Range(0, runStepsClips.Length);
         playerAudioSource.PlayOneShot(runStepsClips[selectedClip]);    
     }
 
     public void ProneSound()
     {
+        _soundSensor.sensorScale = lowSoundSensorScale;
         selectedClip = Random.Range(0, proneMovementClips.Length);
         playerAudioSource.PlayOneShot(proneMovementClips[selectedClip]);
     }
 
     public void RollSound()
     {
+        _soundSensor.sensorScale = normalSoundSensorScale;
         playerAudioSource.PlayOneShot(rollSound);
 
     }
@@ -61,10 +69,12 @@ public class PlayerAudio : MonoBehaviour
         switch (command)
         {
             case "JumpStart":
+                _soundSensor.sensorScale = lowSoundSensorScale;
                 playerAudioSource.PlayOneShot(jumpStartSound);
                 break;
             
             case "JumpEnd":
+                _soundSensor.sensorScale = normalSoundSensorScale;
                 playerAudioSource.PlayOneShot(jumpEndSound);
                 break;
             
@@ -77,34 +87,33 @@ public class PlayerAudio : MonoBehaviour
         switch (command)
         {
             case "LadderClimb":
+                _soundSensor.sensorScale = lowSoundSensorScale;
                 playerAudioSource.PlayOneShot(ladderClimbSound);
                 break;
         }
     }
     public void HitSound()
     {
+        _soundSensor.sensorScale = 0;
         selectedClip = Random.Range(0, hitSounds.Length);
         playerAudioSource.PlayOneShot(hitSounds[selectedClip]); 
     }
 
     public void DeathSound()
     {
+        _soundSensor.sensorScale = highSoundSensorScale;
         playerAudioSource.PlayOneShot(deathSound);
     }
 
     public void StompHeadSound()
     {
+        _soundSensor.sensorScale = normalSoundSensorScale;
         playerAudioSource.PlayOneShot(stompHeadSound);
     }
 
     public void StompHitSound()
     {
+        _soundSensor.sensorScale = normalSoundSensorScale;
         playerAudioSource.PlayOneShot(stompHitSound);
-
     }
-
-
-
-
-
 }

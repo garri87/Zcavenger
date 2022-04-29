@@ -570,12 +570,14 @@ public class AgentController : MonoBehaviour
     {
         if (other.CompareTag("Noise") && !enemyFov.playerInSight)
         {
+            enemyFov.playerLastLocation = other.transform.position;
             if (_navMeshAgent.enabled)
             {
                 if (_navMeshAgent.CalculatePath(other.transform.position,_navMeshAgent.path))
                 {
                     _navMeshAgent.SetDestination(other.transform.position);
                     alertTimer = agentAlertTime;
+                    _animator.SetBool("IsMoving", true);
                 }
             }
         }

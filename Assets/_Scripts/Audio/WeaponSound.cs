@@ -18,30 +18,38 @@ public class WeaponSound : MonoBehaviour
     public AudioClip reloadEndSound;
     public AudioClip drawWeaponSound;
 
+    public SoundSensor _soundSensor;
+    
+    public float lowSoundSensorScale = 20f;
+    public float normalSoundSensorScale = 200f;
+    public float highSoundSensorScale = 400f;
 
     private void OnEnable()
     {
         _playerController = GetComponent<PlayerController>();
-        
         _audioSource = GetComponent<AudioSource>();
     }
 
     public void FireWeaponSound()
     {
+        _soundSensor.sensorScale = normalSoundSensorScale;
         _audioSource.PlayOneShot(shotSound);
     }
 
     public void MeleeAttackSound()
     {
+        _soundSensor.sensorScale = lowSoundSensorScale;
         _audioSource.PlayOneShot(meleeAttackSound);
-
     }
     public void ExplosiveSound()
     {
+        _soundSensor.sensorScale = highSoundSensorScale;
         _audioSource.PlayOneShot(explosionSound);
     }
     public void ReloadSound(string command)
     {
+        _soundSensor.sensorScale = lowSoundSensorScale;
+
         switch (command)
         {
             case "MagOut":
@@ -62,6 +70,7 @@ public class WeaponSound : MonoBehaviour
     
     public void DrawWeaponSound()
     {
+        _soundSensor.sensorScale = 0;
         _audioSource.PlayOneShot(drawWeaponSound);
     }
 }

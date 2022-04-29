@@ -93,7 +93,6 @@ public class PlayerController : MonoBehaviour
     public float throwForce = 5;
     public float hitDistance;
     
-
     private bool doubleTap;
     private float doubleTapTime = 0.5f;
     private int tapCount = 0;
@@ -159,6 +158,7 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] public CheckGround _checkGround;
     private Camera mainCamera;
     private PlayerAudio _playerAudio;
+    private SoundSensor _soundSensor;
     [HideInInspector]public AgentController stompTargetAgentController;
     public StompDetector _stompDetector;
 
@@ -205,7 +205,7 @@ public class PlayerController : MonoBehaviour
     {
         mainCamera = Camera.main;
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-
+        _soundSensor = GetComponent<SoundSensor>();
     }
 
     void Start()
@@ -325,14 +325,13 @@ public class PlayerController : MonoBehaviour
             {
                 controllerType = ControllerType.StandByController;
             }
-            
-            //STOMP ENEMIES
-            if (canStomp && !bitten && Input.GetKeyDown(keyAssignments.attackKey.keyCode))
-            {
-                _animator.SetTrigger("Stomp");
-            }
 
-            #region Ladder Climbing
+           
+            
+            
+            
+          
+                #region Ladder Climbing
 
             if (nextToLadder)
             {
@@ -768,8 +767,12 @@ public class PlayerController : MonoBehaviour
             }
         }
         
-        
-        
+        //STOMP ENEMIES
+        if (canStomp && !bitten && Input.GetKeyDown(keyAssignments.attackKey.keyCode))
+        {
+            _animator.SetTrigger("Stomp");
+        }
+
         //INTERACTION
         if (Input.GetKeyDown(keyAssignments.useKey.keyCode) && onDoor)
         {
@@ -786,8 +789,6 @@ public class PlayerController : MonoBehaviour
         }
         #endregion
 
-        
-        
         #region PUSH OBJECTS
 
         if (IKManager.pushingObject == true)
