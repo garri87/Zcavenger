@@ -77,8 +77,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _audioSource: {fileID: 1321479984099538161}
-  sphereCollider: {fileID: 2851051130409102906}
-  sensorScale: 200
+  sensorScale: 0
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!135 &2851051130409102906
 SphereCollider:
   m_ObjectHideFlags: 0

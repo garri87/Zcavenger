@@ -106,6 +106,10 @@ public class Throwable : MonoBehaviour
             }
             
         }
+        if (other.collider.CompareTag("Ground"))
+        {
+            _weaponItem._weaponSound.DropSound();
+        }
     }
 
     public void Explode()

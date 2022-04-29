@@ -353,12 +353,13 @@ MonoBehaviour:
   _audioSource: {fileID: 4886881220276673613}
   shotSound: {fileID: 0}
   meleeAttackSound: {fileID: 0}
+  dropSound: {fileID: 0}
   explosionSound: {fileID: 8300000, guid: 82338c76b9b416d418b25c575f409016, type: 3}
   magazineOutSound: {fileID: 0}
   magazineInSound: {fileID: 0}
   reloadEndSound: {fileID: 0}
   drawWeaponSound: {fileID: 8300000, guid: 95d6c402778044a598e0c2fd3fe3cdb7, type: 3}
-  _soundSensor: {fileID: 0}
+  _soundSensor: {fileID: 8388965986950539882}
   lowSoundSensorScale: 0.5
   normalSoundSensorScale: 5
   highSoundSensorScale: 10
@@ -647,8 +648,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _audioSource: {fileID: 4886881220276673613}
-  sphereCollider: {fileID: 496365696637548622}
-  sensorScale: 400
+  sensorScale: 0
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!135 &496365696637548622
 SphereCollider:
   m_ObjectHideFlags: 0

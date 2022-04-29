@@ -12,6 +12,7 @@ public class WeaponSound : MonoBehaviour
     [Header("Audio Clips")]
     public AudioClip shotSound;
     public AudioClip meleeAttackSound;
+    public AudioClip dropSound;
     public AudioClip explosionSound;
     public AudioClip magazineOutSound;
     public AudioClip magazineInSound;
@@ -72,5 +73,11 @@ public class WeaponSound : MonoBehaviour
     {
         _soundSensor.sensorScale = 0;
         _audioSource.PlayOneShot(drawWeaponSound);
+    }
+
+    public void DropSound()
+    {
+        _soundSensor.sensorScale = normalSoundSensorScale;
+        _audioSource.PlayOneShot(dropSound);
     }
 }

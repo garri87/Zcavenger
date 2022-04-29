@@ -383,9 +383,7 @@ public class WeaponItem : MonoBehaviour
                                 && !playerController.canStomp
                                 && weaponItemClass == WeaponScriptableObject.WeaponClass.Throwable)
                             {
-                                //TODO: lanzar objeto
                                 playerAnimator.SetTrigger("Throw");
-                                Debug.Log("throwing");
                                 weaponEquipped = false;
                             }
                         }
@@ -737,7 +735,6 @@ public class WeaponItem : MonoBehaviour
         if(_weaponSound.magazineOutSound != null){playerWeaponSound.magazineOutSound = _weaponSound.magazineOutSound;}
         if(_weaponSound.meleeAttackSound != null){playerWeaponSound.meleeAttackSound = _weaponSound.meleeAttackSound;}
         if(_weaponSound.reloadEndSound != null){playerWeaponSound.reloadEndSound = _weaponSound.reloadEndSound;}
-        
-        
+        if(_weaponSound.dropSound != null){playerWeaponSound.dropSound = _weaponSound.dropSound;}
     }
 }

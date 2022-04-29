@@ -35,7 +35,7 @@ public class AgentController : MonoBehaviour
 
     [Header("AI Behaviour")]
     public float agentAlertTime = 5;
-    private float alertTimer;
+    [HideInInspector]public float alertTimer;
     
     public AgentState agentState;
     public int animationState;
@@ -570,16 +570,7 @@ public class AgentController : MonoBehaviour
     {
         if (other.CompareTag("Noise") && !enemyFov.playerInSight)
         {
-            enemyFov.playerLastLocation = other.transform.position;
-            if (_navMeshAgent.enabled)
-            {
-                if (_navMeshAgent.CalculatePath(other.transform.position,_navMeshAgent.path))
-                {
-                    _navMeshAgent.SetDestination(other.transform.position);
-                    alertTimer = agentAlertTime;
-                    _animator.SetBool("IsMoving", true);
-                }
-            }
+           
         }
     }
 }
