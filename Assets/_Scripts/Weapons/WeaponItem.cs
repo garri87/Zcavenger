@@ -103,6 +103,8 @@ public class WeaponItem : MonoBehaviour
     private Quaternion originalRot;
     public bool throwableActive;
 
+    private Vector3 playerHandHolderPos;
+    private Quaternion playerHandHolderRot;
     
     private void OnValidate()
     {
@@ -225,6 +227,8 @@ public class WeaponItem : MonoBehaviour
                 meshRenderer.enabled = true;
                 modelOutline.enabled = false;
                 
+                
+                
                 if (flashLight !=null)
                 {
                     flashLight.enabled = false;
@@ -299,13 +303,14 @@ public class WeaponItem : MonoBehaviour
 
         if (weaponLocation == WeaponLocation.Player)
         {
-            Transform rightHandTransform = playerAnimator.GetBoneTransform(HumanBodyBones.RightMiddleProximal);
-                
-                gripTransform.position = playerInventory.playerHandHolderTransform.position;
-                gripTransform.rotation = Quaternion.LookRotation(playerController._weaponHolderTransform.up);
-                //Vector3(0.00249999994,0.00889999978,0.000310000003) pos
+            playerHandHolderPos = playerInventory.playerHandHolderTransform.position;
+            playerHandHolderRot = Quaternion.LookRotation(playerController._weaponHolderTransform.up);
+            
+            transform.position = playerHandHolderPos;
+            transform.rotation = playerHandHolderRot;
+            //Vector3(0.00249999994,0.00889999978,0.000310000003) pos
                 //Vector3(332.349915,357.041718,5.11632919) rot
-                playerIKManager.HoldWeapon(gripTransform,handguardTransform);
+            playerIKManager.HoldWeapon(gripTransform,handguardTransform);
         }
         
         if (weaponLocation == WeaponLocation.World)

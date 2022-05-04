@@ -10,6 +10,7 @@ public class SoundSensor : MonoBehaviour
     public float sensorScale;
     public LayerMask layerMask;
 
+    private AgentController listenerAgentController;
     private void Awake()
     {
         sensorScale = 0;
@@ -35,25 +36,33 @@ public class SoundSensor : MonoBehaviour
         {
             if (listener.CompareTag("Enemy"))
             {
-
-                Debug.Log(listener.name + " is in range of noise ");
+                if (listener.transform.GetComponent<AgentController>() == null)
+                {
+                    listenerAgentController = listener.transform.GetComponentInParent<AgentController>();
+                }
+                else
+                {
+                    listenerAgentController = listener.transform.GetComponent<AgentController>();
+                }
+                
+                Debug.Log(listener.name + " is in range of noise "); 
                 Debug.Log(listener.name + " found the noise source");
-                    AgentController listenerAgentController = listener.GetComponent<AgentController>();
-                    if (!listenerAgentController.enemyFov
-                        .playerInSight) //if the agent had not seen the player before, look for the noise source
-                    {
-                        listenerAgentController.enemyFov.playerLastLocation = origin;
-                        if (listenerAgentController._navMeshAgent.enabled)
-                        {
-                            if (listenerAgentController._navMeshAgent.CalculatePath(origin,
-                                listenerAgentController._navMeshAgent.path))
-                            {
-                                listenerAgentController._navMeshAgent.SetDestination(origin);
-                                listenerAgentController.alertTimer = listenerAgentController.agentAlertTime;
-                                listenerAgentController._animator.SetBool("IsMoving", true);
-                            }
+                
+                if (!listenerAgentController.enemyFov.playerInSight) 
+                    //if the agent had not seen the player before, look for the noise source
+                { 
+                    listenerAgentController.enemyFov.playerLastLocation = origin; 
+                    if (listenerAgentController._navMeshAgent.enabled) 
+                    { 
+                        if (listenerAgentController._navMeshAgent.CalculatePath(origin, 
+                            listenerAgentController._navMeshAgent.path)) 
+                        { 
+                            listenerAgentController._navMeshAgent.SetDestination(origin);
+                            listenerAgentController.alertTimer = listenerAgentController.agentAlertTime;
+                            listenerAgentController._animator.SetBool("IsMoving", true);
                         }
                     }
+                }
             }
         }
     }
