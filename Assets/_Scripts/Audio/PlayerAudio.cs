@@ -25,9 +25,9 @@ public class PlayerAudio : MonoBehaviour
     
     private int selectedClip;
     
-    public float lowSoundSensorScale = 20f;
-    public float normalSoundSensorScale = 50f;
-    public float highSoundSensorScale = 100f;
+    public float lowSoundSensorScale = 0.2f;
+    public float normalSoundSensorScale = 2f;
+    public float highSoundSensorScale = 5f;
 
     public SoundSensor _soundSensor;
 

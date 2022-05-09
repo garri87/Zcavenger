@@ -439,6 +439,10 @@ public class PlayerController : MonoBehaviour
             doorPos = other.GetComponent<Transform>();
             onDoor = true;
         }
+        if (other.CompareTag("Conduct"))
+        {
+            onConduct = true;
+        }
 
         if (other.CompareTag("Finish"))
         {
@@ -447,12 +451,9 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void OnTriggerStay(Collider other)
+    /*private void OnTriggerStay(Collider other)
     {
-        if (other.CompareTag("Conduct"))
-        {
-            onConduct = true;
-        }
+        
 
         if (other.CompareTag("Ladder") && !climbingLadder)
         {
@@ -469,7 +470,7 @@ public class PlayerController : MonoBehaviour
             onDoor = true;
         }
         
-    }
+    }*/
 
     private void OnTriggerExit(Collider other)
     {

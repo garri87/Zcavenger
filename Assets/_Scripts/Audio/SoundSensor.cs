@@ -45,14 +45,14 @@ public class SoundSensor : MonoBehaviour
                     listenerAgentController = listener.transform.GetComponent<AgentController>();
                 }
                 
-                Debug.Log(listener.name + " is in range of noise "); 
-                Debug.Log(listener.name + " found the noise source");
+               // Debug.Log(listener.name + " is in range of noise "); 
+               // Debug.Log(listener.name + " found the noise source");
                 
                 if (!listenerAgentController.enemyFov.playerInSight) 
                     //if the agent had not seen the player before, look for the noise source
                 { 
                     listenerAgentController.enemyFov.playerLastLocation = origin; 
-                    if (listenerAgentController._navMeshAgent.enabled) 
+                    if (listenerAgentController._navMeshAgent.isOnNavMesh) 
                     { 
                         if (listenerAgentController._navMeshAgent.CalculatePath(origin, 
                             listenerAgentController._navMeshAgent.path)) 
