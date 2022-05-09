@@ -41,6 +41,8 @@ public class EnemyFOV : MonoBehaviour
         _attackDistance = _agentController.enemyScriptableObject.attackDistance;
         playerLastLocation = transform.position;
         groundDistance = Mathf.Infinity;
+
+        FOVObject.transform.parent = _agentController._animator.GetBoneTransform(HumanBodyBones.Head);
     }
 
     private void FixedUpdate()
@@ -136,7 +138,7 @@ public class EnemyFOV : MonoBehaviour
         }
     }
 
-    private void OnTriggerStay(Collider other)
+    /*private void OnTriggerStay(Collider other)
     {
         if (!playerInRange)
         {
@@ -145,7 +147,7 @@ public class EnemyFOV : MonoBehaviour
                 playerInRange = true;
             }  
         }
-    }
+    }*/
 
     private void OnTriggerExit(Collider other)
     {
