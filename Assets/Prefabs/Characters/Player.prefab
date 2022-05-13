@@ -271,7 +271,7 @@ MonoBehaviour:
   updateRate: 15
   lowNutritionUpdateRate: 20
   bleedingUpdateRate: 5
-  bleedingDamagePerRate: 0
+  bleedingDamagePerRate: 2
   currentUpdateRate: 0
   regenRate: 5
   targetRegen: 0
@@ -422,10 +422,10 @@ CapsuleCollider:
   m_Material: {fileID: 13400000, guid: 8aa9d1af9c346e049bb4b77aacabccbf, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.3
+  m_Radius: 0.17302635
   m_Height: 1.7759877
   m_Direction: 1
-  m_Center: {x: -0.0031814575, y: 0.8888642, z: 0.00093597174}
+  m_Center: {x: -0.0031814575, y: 0.8888642, z: -0.034052044}
 --- !u!82 &4870130169391375447
 AudioSource:
   m_ObjectHideFlags: 0
@@ -570,6 +570,10 @@ MonoBehaviour:
   jumpEndSound: {fileID: 8300000, guid: 3d8f480d252db9449b2f978284506f8e, type: 3}
   ladderClimbSound: {fileID: 8300000, guid: 3e299b9129329f24692bb63f57f33d19, type: 3}
   deathSound: {fileID: 8300000, guid: e67003b7e81c21a42b50c9cbf46ada03, type: 3}
+  lowSoundSensorScale: 0.2
+  normalSoundSensorScale: 2
+  highSoundSensorScale: 5
+  _soundSensor: {fileID: 4460588204559082577}
 --- !u!114 &4870130169611580303
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -582,14 +586,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebd1a9715cd55164eb9b7bdfba16f429, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _audioSource: {fileID: 0}
+  _audioSource: {fileID: 4870130169391375447}
   shotSound: {fileID: 0}
   meleeAttackSound: {fileID: 0}
+  dropSound: {fileID: 0}
   explosionSound: {fileID: 0}
   magazineOutSound: {fileID: 8300000, guid: e0c70bed5c1a4443083a81de5648c7d5, type: 3}
   magazineInSound: {fileID: 8300000, guid: eb5685b26a6494994af389a3293064e8, type: 3}
   reloadEndSound: {fileID: 0}
   drawWeaponSound: {fileID: 8300000, guid: 95d6c402778044a598e0c2fd3fe3cdb7, type: 3}
+  _soundSensor: {fileID: 4460588204559082577}
+  lowSoundSensorScale: 0.2
+  normalSoundSensorScale: 2
+  highSoundSensorScale: 5
 --- !u!114 &6351341365214343333
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -804,7 +813,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2286637858669286395}
   - component: {fileID: 4460588204559082577}
-  - component: {fileID: 5423933617746428812}
   m_Layer: 6
   m_Name: SoundSensor
   m_TagString: Noise
@@ -840,279 +848,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _audioSource: {fileID: 4870130169391375447}
-  sphereCollider: {fileID: 5423933617746428812}
   sensorScale: 200
-  audioSamples:
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  amplitude: 0
---- !u!135 &5423933617746428812
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5692251592964534290}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 1
-  m_Center: {x: 0, y: 1, z: 0}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!1 &9006865956765126533
 GameObject:
   m_ObjectHideFlags: 0
@@ -1333,11 +1072,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -3215998983573333008, guid: b8d6e560c5b59ee4fb9f2f5e73b66bca, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.7071068
+      value: 0.7071067
+      objectReference: {fileID: 0}
+    - target: {fileID: -3215998983573333008, guid: b8d6e560c5b59ee4fb9f2f5e73b66bca, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -3215998983573333008, guid: b8d6e560c5b59ee4fb9f2f5e73b66bca, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -3215998983573333008, guid: b8d6e560c5b59ee4fb9f2f5e73b66bca, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

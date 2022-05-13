@@ -24,7 +24,7 @@ public class CheckGround : MonoBehaviour
     
   }
 
-  /*private void OnTriggerStay(Collider other)
+  private void OnTriggerStay(Collider other)
   {
     if (!isGrounded)
     {
@@ -35,7 +35,7 @@ public class CheckGround : MonoBehaviour
       }
     }
     
-  }*/
+  }
 
   private void OnTriggerExit(Collider other)
   {
