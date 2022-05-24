@@ -63,7 +63,7 @@ public class Inventory : MonoBehaviour
     void Start()
     {
         _playerController = GetComponent<PlayerController>();
-        _animator = GetComponent<Animator>();
+        _animator = GetComponentInChildren<Animator>();
         inventoryUICanvas = uIManager.inventoryUI.GetComponent<Canvas>();
         bulletCounterTMPUGUI = uIManager.ammoPanel.Find("AmmoCount").GetComponent<TextMeshProUGUI>();
 

@@ -191,17 +191,20 @@ public class PlayerController : MonoBehaviour
     #region Inventory Variables
 
     [HideInInspector] public Inventory _inventory;
-    private static readonly int Speed = Animator.StringToHash("Speed");
+    private static readonly int AnimatorSpeed = Animator.StringToHash("Speed");
 
     #endregion
 
     public bool finishedLevel = false;
 
+    private Transform leftFoot, rightFoot;
+    
     private void OnValidate()
     {
+        
     }
 
-    private void Awake()
+   private void Awake()
     {
         mainCamera = Camera.main;
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
@@ -237,17 +240,46 @@ public class PlayerController : MonoBehaviour
         
         horizontalInput = Input.GetAxis("Horizontal");
         verticalInput = Input.GetAxis("Vertical");
-        _animator.SetFloat("VerticalInput", verticalInput);
 
         #endregion
 
-        CheckFallingState();
-        
+        #region Animator parameters
 
+        _animator.SetFloat("VerticalInput", verticalInput);
+        
+        _animator.SetBool("ClimbingLadder", climbingLadder);
+        _animator.SetBool("UpLadder", upLadder);
+        _animator.SetBool("ClimbingToTop", climbingToTop);
+        _animator.SetBool("Aim", isAiming);
+        _animator.SetBool("Jump", jump);
+        _animator.SetBool("Walking", walking);
+        _animator.SetBool("Crouch", crouch);
+        _animator.SetBool("Prone", prone);
+        _animator.SetBool("Roll", roll);
+        _animator.SetBool("IsDead", _healthManager.IsDead);
+        _animator.SetBool("Blocking", blocking);
+        _animator.SetBool("Trapped",trapped);
+        _animator.SetBool("Bitten", bitten);
+        _animator.SetBool("Bandage", bandaging);
+        _animator.SetBool("Drink", drinking);
+        _animator.SetBool("Eat", eating);
+        _animator.SetBool("GrabItem", grabItem);
+        #endregion
+
+        
+        CheckFallingState();
+        //CALCULATE DISTANCE TO GROUND
+        leftFoot = _animator.GetBoneTransform(HumanBodyBones.LeftFoot);
+        rightFoot = _animator.GetBoneTransform(HumanBodyBones.RightFoot);
+        
+        _animator.SetFloat("GroundDistance", CalculateDistance(
+            Vector3.Lerp( leftFoot.position, rightFoot.position, 0.5f) + Vector3.down / 8, Vector3.down,
+            "Ground"));
         if (_weaponHolderTransform.childCount > 0)
         {
             weaponEquipped = true;
-            equippedWeaponItem = _weaponHolderTransform.GetChild(0).GetComponent<WeaponItem>();
+            equippedWeaponItem = _weaponHolderTransform.GetChild(0).GetComponent<WeaponItem>(); //TODO: CACHEAR
+            
             attacking = equippedWeaponItem.attacking;
         }
         else
@@ -325,12 +357,7 @@ public class PlayerController : MonoBehaviour
             {
                 controllerType = ControllerType.StandByController;
             }
-
-           
             
-            
-            
-          
                 #region Ladder Climbing
 
             if (nextToLadder)
@@ -357,8 +384,6 @@ public class PlayerController : MonoBehaviour
             {
                 controllerType = ControllerType.OnLadderController;
             }
-            
-            
 
             #endregion
 
@@ -382,29 +407,7 @@ public class PlayerController : MonoBehaviour
 
         #endregion
 
-        #region Animator parameters
-
-        _animator.SetBool("ClimbingLadder", climbingLadder);
-        _animator.SetBool("UpLadder", upLadder);
-        _animator.SetBool("ClimbingToTop", climbingToTop);
-        _animator.SetBool("Aim", isAiming);
-        _animator.SetBool("Jump", jump);
-        _animator.SetBool("Walking", walking);
-        _animator.SetBool("Crouch", crouch);
-        _animator.SetBool("Prone", prone);
-        _animator.SetBool("Roll", roll);
-        _animator.SetBool("IsDead", _healthManager.IsDead);
-        _animator.SetBool("Blocking", blocking);
-        _animator.SetBool("Trapped",trapped);
-        _animator.SetBool("Bitten", bitten);
-        _animator.SetBool("Bandage", bandaging);
-        _animator.SetBool("Drink", drinking);
-        _animator.SetBool("Eat", eating);
-        _animator.SetBool("GrabItem", grabItem);
-
         
-
-        #endregion
     }
 
 
@@ -511,24 +514,21 @@ public class PlayerController : MonoBehaviour
         #region BASIC MOVEMENT
 
         //Determines the horizontal facing direction of the player towards the mouse
-
+        
         _rigidbody.MoveRotation(Quaternion.Euler(new Vector3(0,
-            90 * Mathf.Sign(targetTransform.position.x - transform.position.x))));
-
+            Mathf.Sign(targetTransform.position.x - transform.position.x)*90,transform.position.z)));
+       
+       
         //Set the horizontal keys to move player
         _rigidbody.velocity = new Vector3(horizontalInput * currentSpeed,
             _rigidbody.velocity.y, 0);
 
         //replicate velocity data to animator
-        _animator.SetFloat("Speed",
-            (FacingSign * horizontalInput * currentSpeed));
+        _animator.SetFloat(AnimatorSpeed,
+            (Mathf.Sign(FacingSign)* horizontalInput * currentSpeed));
         _animator.SetFloat("VerticalVelocity", _rigidbody.velocity.y);
 
-        //CALCULATE DISTANCE TO GROUND
-        CalculateDistance(
-            Vector3.Lerp(_animator.GetBoneTransform(HumanBodyBones.LeftFoot).position,
-                _animator.GetBoneTransform(HumanBodyBones.RightFoot).position, 0.5f) + Vector3.down / 8, Vector3.down,
-            "Ground");
+        
 
         //MOVING ANIMATION
         if (horizontalInput != 0)
@@ -587,7 +587,7 @@ public class PlayerController : MonoBehaviour
                 currentSpeed -= Time.deltaTime * acceleration;
             }
 
-            _animator.SetFloat("Speed", FacingSign * horizontalInput * currentSpeed);
+            _animator.SetFloat(AnimatorSpeed, Mathf.Sign(FacingSign) * horizontalInput * currentSpeed);
         }
         else if (!crouch && !prone)
         {
@@ -685,7 +685,7 @@ public class PlayerController : MonoBehaviour
 
         if (_checkGround.isGrounded)
         {
-            if (Input.GetKeyDown(keyAssignments.crouchKey.keyCode) && !onConduct && _animator.GetFloat("Speed") <= crouchWalkSpeed)
+            if (Input.GetKeyDown(keyAssignments.crouchKey.keyCode) && !onConduct && _animator.GetFloat(AnimatorSpeed) <= crouchWalkSpeed)
             {
                 crouch = !crouch;
                 if (prone)
@@ -737,7 +737,7 @@ public class PlayerController : MonoBehaviour
                 {
                     //Has double tapped
                        
-                    if (_animator.GetFloat("Speed") > 0.1f 
+                    if (_animator.GetFloat(AnimatorSpeed) > 0.1f 
                         && _healthManager.currentStamina >= _healthManager.rollPenalty
                         && !_healthManager.isInjured)
                     {
@@ -804,7 +804,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnUIController()
     {
-        _animator.SetFloat("Speed",0);
+        _animator.SetFloat(AnimatorSpeed,0);
         
         if (Input.GetKeyDown(KeyCode.Escape) || _inventory.showInventory == false)
         {
@@ -873,11 +873,11 @@ public class PlayerController : MonoBehaviour
         if (ledgeOrientation == Climbable.Orientation.Right || ledgeOrientation == Climbable.Orientation.Left)
         {
             _rigidbody.velocity = Vector3.zero;
-            _animator.SetFloat("Speed",0);
+            _animator.SetFloat(AnimatorSpeed,0);
         }
         if (ledgeOrientation == Climbable.Orientation.Back)
         {
-            _animator.SetFloat("Speed",horizontalInput * currentSpeed);
+            _animator.SetFloat(AnimatorSpeed,horizontalInput * currentSpeed);
             _rigidbody.velocity = new Vector3(horizontalInput * currentSpeed,
                 0, 0);
         }
@@ -886,7 +886,7 @@ public class PlayerController : MonoBehaviour
     public void StandByController()
     {
         _rigidbody.velocity = Vector3.zero;
-        _animator.SetFloat("Speed", 0);
+        _animator.SetFloat(AnimatorSpeed, 0);
         
         if (weaponEquipped && Input.GetKeyUp(keyAssignments.aimBlockKey.keyCode))
         {
@@ -1118,7 +1118,6 @@ public class PlayerController : MonoBehaviour
 
     private void MouseAim()
     {
-        
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
        
         RaycastHit hit;
@@ -1128,7 +1127,6 @@ public class PlayerController : MonoBehaviour
         {
             targetTransform.position = hit.point;
         }
-        
     }
     public void AttachOnLadder(string startPoint)
     {
@@ -1214,7 +1212,7 @@ public class PlayerController : MonoBehaviour
     /// <param name="origin"></param>
     /// <param name="direction"></param>
     /// <param name="targetTag"></param>
-    private void CalculateDistance(Vector3 origin , Vector3 direction, string targetTag)
+    private float CalculateDistance(Vector3 origin , Vector3 direction, string targetTag)
     {
         RaycastHit Hit = new RaycastHit();
         if (Physics.Raycast(origin, direction, out Hit))
@@ -1223,10 +1221,10 @@ public class PlayerController : MonoBehaviour
             {
                 hitDistance = Hit.distance;
                 Debug.DrawRay(origin, direction * hitDistance, Color.yellow);
-                
-                _animator.SetFloat("GroundDistance", hitDistance);
             }
         }
+
+        return hitDistance;
     }
 
     public void SetColliderShape(PlayerState state)

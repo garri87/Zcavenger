@@ -24,7 +24,7 @@ public class Climber : MonoBehaviour
  private void Start()
  {
   _playerController = GetComponent<PlayerController>();
-  _animator = GetComponent<Animator>();
+  _animator = GetComponentInChildren<Animator>();
  }
  
  private void Update()

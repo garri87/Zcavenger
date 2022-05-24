@@ -14,35 +14,35 @@ public class CheckGround : MonoBehaviour
     playerAnimator = GetComponentInParent<Animator>();
   }
 
+  private void Update()
+  {
+    playerAnimator.SetBool("IsGrounded",isGrounded);
+  }
+
+  private void SetGrounded(Collider collider, bool value)
+  {
+    if (collider.CompareTag("Ground") || collider.CompareTag("Crashable"))
+    {
+      isGrounded = value;
+    }
+  }
+
   private void OnTriggerEnter(Collider other)
   {
-    if (other.CompareTag("Ground") || other.CompareTag("Crashable"))
-    {
-      isGrounded = true;
-      playerAnimator.SetBool("IsGrounded",isGrounded);
-    }
-    
+    SetGrounded(other,true);
   }
 
   private void OnTriggerStay(Collider other)
   {
     if (!isGrounded)
     {
-      if (other.CompareTag("Ground") || other.CompareTag("Crashable"))
-      {
-        isGrounded = true;
-        playerAnimator.SetBool("IsGrounded",isGrounded);
-      }
+      SetGrounded(other,true);
     }
     
   }
 
   private void OnTriggerExit(Collider other)
   {
-    if (other.CompareTag("Ground") || other.CompareTag("Crashable"))
-    {
-      isGrounded = false;
-      playerAnimator.SetBool("IsGrounded",isGrounded);
-    }
+    SetGrounded(other,false);
   }
 }
