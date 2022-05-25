@@ -188,7 +188,7 @@ public class AgentController : MonoBehaviour
     {
         playerPosition = player.transform;
         playerDirection = (player.transform.position - transform.position).normalized;
-        if (_checkGround.isGrounded && _navMeshAgent.isOnNavMesh)
+        if (_checkGround.isGrounded)
         {
             _navMeshAgent.enabled = true;
         }

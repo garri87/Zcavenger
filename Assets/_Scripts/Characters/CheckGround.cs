@@ -32,14 +32,14 @@ public class CheckGround : MonoBehaviour
     SetGrounded(other,true);
   }
 
-  private void OnTriggerStay(Collider other)
+  /*private void OnTriggerStay(Collider other)
   {
     if (!isGrounded)
     {
       SetGrounded(other,true);
     }
     
-  }
+  }*/
 
   private void OnTriggerExit(Collider other)
   {

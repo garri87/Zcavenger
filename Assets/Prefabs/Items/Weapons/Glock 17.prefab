@@ -399,7 +399,6 @@ MonoBehaviour:
   _audioSource: {fileID: 1923296307950264982}
   shotSound: {fileID: 8300000, guid: 2203773368e4340d98c114f55c2dd7fd, type: 3}
   meleeAttackSound: {fileID: 0}
-  dropSound: {fileID: 0}
   explosionSound: {fileID: 0}
   magazineOutSound: {fileID: 8300000, guid: e0c70bed5c1a4443083a81de5648c7d5, type: 3}
   magazineInSound: {fileID: 8300000, guid: eb5685b26a6494994af389a3293064e8, type: 3}
@@ -419,6 +418,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6674137024954592119}
   - component: {fileID: 1165829594996723095}
+  - component: {fileID: 6354996122407685103}
   m_Layer: 13
   m_Name: SoundSensor
   m_TagString: Noise
@@ -458,6 +458,19 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 256
+--- !u!135 &6354996122407685103
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1128344777734387193}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &3376372571583491119
 GameObject:
   m_ObjectHideFlags: 0

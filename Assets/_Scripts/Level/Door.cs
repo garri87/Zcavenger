@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Random = UnityEngine.Random;
 
 public class Door : MonoBehaviour
 {
@@ -15,24 +14,12 @@ public class Door : MonoBehaviour
     }
 
     public DoorType doorType;
-    public string doorID;
     private Collider _doorZoneCollider;
     public GameObject textGameObject;
     [HideInInspector]public TextMeshPro text;
-    public Transform doorTransform;
+    [HideInInspector]public Transform doorTransform;
     public PlayerController.PlayLine insidePlayLine;
     public PlayerController.PlayLine outsidePlayLine;
-    private HingeJoint _hingeJoint;
-    
-    private AudioSource _audioSource;
-    public AudioClip[] doorOpenSounds;
-    public AudioClip[] doorCloseSounds;
-
-    private bool doorOpen;
-    private bool doorClose;
-
-    public bool locked;
-    
     
     private void OnValidate()
     {
@@ -61,31 +48,7 @@ public class Door : MonoBehaviour
         text = textGameObject.GetComponent<TextMeshPro>();
         text.text = "Open Door [ " + KeyAssignments.SharedInstance.useKey.keyCode.ToString() + " ]";
         textGameObject.SetActive(false);
-        _audioSource = GetComponent<AudioSource>();
-        _hingeJoint = doorTransform.GetComponent<HingeJoint>();
-    }
-
-    private void Update()
-    {
-        if (_hingeJoint.angle <-0.2f || _hingeJoint.angle >0.2f)
-        {
-            if (doorClose)
-            {
-                _audioSource.PlayOneShot(doorOpenSounds[Random.Range(0,doorOpenSounds.Length)]);  
-            }
-            doorClose = false;
-            doorOpen = true;
-        }
-        else
-        {
-            
-            if (doorOpen)
-            {
-                _audioSource.PlayOneShot(doorCloseSounds[Random.Range(0,doorCloseSounds.Length)]);
-            }
-            doorClose = true;
-            doorOpen = false;
-        }
+        doorTransform = GetComponent<Transform>();
     }
 
     private void OnTriggerEnter(Collider other)

@@ -71,7 +71,6 @@ public class WeaponSound : MonoBehaviour
     
     public void DrawWeaponSound()
     {
-        
         _soundSensor.sensorScale = 0;
         _audioSource.PlayOneShot(drawWeaponSound);
     }
