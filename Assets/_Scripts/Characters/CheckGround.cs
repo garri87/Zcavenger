@@ -19,6 +19,7 @@ public class CheckGround : MonoBehaviour
     playerAnimator.SetBool("IsGrounded",isGrounded);
   }
 
+<<<<<<< HEAD
   private void SetGrounded(Collider collider, bool value)
   {
     if (collider.CompareTag("Ground") || collider.CompareTag("Crashable"))
@@ -32,6 +33,8 @@ public class CheckGround : MonoBehaviour
     SetGrounded(other,true);
   }
 
+=======
+>>>>>>> parent of ec30881 (Update V0.4 Alpha)
   /*private void OnTriggerStay(Collider other)
   {
     if (!isGrounded)
