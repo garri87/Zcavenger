@@ -204,7 +204,7 @@ public class PlayerController : MonoBehaviour
         
     }
 
-   private void Awake()
+    private void Awake()
     {
         mainCamera = Camera.main;
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
@@ -233,48 +233,23 @@ public class PlayerController : MonoBehaviour
     {
         
     }
-
+    
     void Update()
     {
         #region axis inputs
-        
         horizontalInput = Input.GetAxis("Horizontal");
         verticalInput = Input.GetAxis("Vertical");
-
         #endregion
 
-        #region Animator parameters
-
-        _animator.SetFloat("VerticalInput", verticalInput);
-        
-        _animator.SetBool("ClimbingLadder", climbingLadder);
-        _animator.SetBool("UpLadder", upLadder);
-        _animator.SetBool("ClimbingToTop", climbingToTop);
-        _animator.SetBool("Aim", isAiming);
-        _animator.SetBool("Jump", jump);
-        _animator.SetBool("Walking", walking);
-        _animator.SetBool("Crouch", crouch);
-        _animator.SetBool("Prone", prone);
-        _animator.SetBool("Roll", roll);
-        _animator.SetBool("IsDead", _healthManager.IsDead);
-        _animator.SetBool("Blocking", blocking);
-        _animator.SetBool("Trapped",trapped);
-        _animator.SetBool("Bitten", bitten);
-        _animator.SetBool("Bandage", bandaging);
-        _animator.SetBool("Drink", drinking);
-        _animator.SetBool("Eat", eating);
-        _animator.SetBool("GrabItem", grabItem);
-        #endregion
-
-        
-        CheckFallingState();
-        //CALCULATE DISTANCE TO GROUND
         leftFoot = _animator.GetBoneTransform(HumanBodyBones.LeftFoot);
         rightFoot = _animator.GetBoneTransform(HumanBodyBones.RightFoot);
         
-        _animator.SetFloat("GroundDistance", CalculateDistance(
-            Vector3.Lerp( leftFoot.position, rightFoot.position, 0.5f) + Vector3.down / 8, Vector3.down,
-            "Ground"));
+        #region Animator parameters
+        AnimatorParameters();
+        #endregion
+        
+        CheckFallingState();
+        
         if (_weaponHolderTransform.childCount > 0)
         {
             weaponEquipped = true;
@@ -357,8 +332,7 @@ public class PlayerController : MonoBehaviour
             {
                 controllerType = ControllerType.StandByController;
             }
-            
-                #region Ladder Climbing
+            #region Ladder Climbing
 
             if (nextToLadder)
             {
@@ -406,12 +380,8 @@ public class PlayerController : MonoBehaviour
         }
 
         #endregion
-
-        
     }
-
-
-
+    
     #region Collider OnTrigger Functions
 
     private void OnTriggerEnter(Collider other)
@@ -896,6 +866,32 @@ public class PlayerController : MonoBehaviour
     }
 
     #endregion
+    public void AnimatorParameters()
+    {
+        _animator.SetFloat("VerticalInput", verticalInput);
+        
+        _animator.SetBool("ClimbingLadder", climbingLadder);
+        _animator.SetBool("UpLadder", upLadder);
+        _animator.SetBool("ClimbingToTop", climbingToTop);
+        _animator.SetBool("Aim", isAiming);
+        _animator.SetBool("Jump", jump);
+        _animator.SetBool("Walking", walking);
+        _animator.SetBool("Crouch", crouch);
+        _animator.SetBool("Prone", prone);
+        _animator.SetBool("Roll", roll);
+        _animator.SetBool("IsDead", _healthManager.IsDead);
+        _animator.SetBool("Blocking", blocking);
+        _animator.SetBool("Trapped",trapped);
+        _animator.SetBool("Bitten", bitten);
+        _animator.SetBool("Bandage", bandaging);
+        _animator.SetBool("Drink", drinking);
+        _animator.SetBool("Eat", eating);
+        _animator.SetBool("GrabItem", grabItem);
+        
+        _animator.SetFloat("GroundDistance", CalculateDistance(
+            Vector3.Lerp( leftFoot.position, rightFoot.position, 0.5f) + Vector3.down / 8, Vector3.down,
+            "Ground"));
+    }
 
     #region Animator Event Functions
 
@@ -1176,10 +1172,11 @@ public class PlayerController : MonoBehaviour
     }
 
     #endregion
-    
+
     /// <summary>
     /// Checks if the object is falling or ascending
     /// </summary>
+    
     private void CheckFallingState()
     {
         Vector3 currentPosition = transform.position;
@@ -1270,8 +1267,6 @@ public class PlayerController : MonoBehaviour
         }
         
     }
-
     
-
 }
 

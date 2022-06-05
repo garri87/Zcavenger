@@ -315,44 +315,6 @@ public class IKManager : MonoBehaviour
         
     }
 
-    private void AimAtTarget(Transform spineTransform, Vector3 targetPosition, float weight)
-    {
-        Vector3 aimDirection;
-        Vector3 targetDirection;
-        Quaternion aimTowards;
-        Quaternion blendedRotation;
-        switch (playerType)
-        {
-            case PlayerType.Player:
-                if (weaponItem.weaponItemClass != WeaponScriptableObject.WeaponClass.Throwable)
-                {
-                    muzzleTransform = weaponItem.gunMuzzleTransform;
-                }
-                else
-                {
-                    muzzleTransform = _animator.GetBoneTransform(HumanBodyBones.Head);
-                }
-                aimDirection = muzzleTransform.forward;
-                targetDirection = targetPosition - muzzleTransform.position;
-                aimTowards = Quaternion.FromToRotation(aimDirection, targetDirection);
-                blendedRotation = Quaternion.Slerp(Quaternion.identity, aimTowards, weight);
-                spineTransform.rotation = blendedRotation * spineTransform.rotation;
-                break;
-            
-            case PlayerType.Enemy:
-                aimDirection = agentHead.forward;
-                targetDirection = targetPosition - agentHead.position;
-                aimTowards = Quaternion.FromToRotation(aimDirection, targetDirection);
-                blendedRotation = Quaternion.Slerp(Quaternion.identity, aimTowards, weight);
-                spineTransform.rotation = blendedRotation * spineTransform.rotation;
-                break;
-        }
-        
-        
-        
-        
-    }
-
     Vector3 GetTargetPosition()
     {
         Vector3 targetDirection;
@@ -403,6 +365,45 @@ public class IKManager : MonoBehaviour
         }
         return targetPosition;
     }
+    private void AimAtTarget(Transform spineTransform, Vector3 targetPosition, float weight)
+    {
+        Vector3 aimDirection;
+        Vector3 targetDirection;
+        Quaternion aimTowards;
+        Quaternion blendedRotation;
+        switch (playerType)
+        {
+            case PlayerType.Player:
+                if (weaponItem.weaponItemClass != WeaponScriptableObject.WeaponClass.Throwable)
+                {
+                    muzzleTransform = weaponItem.gunMuzzleTransform;
+                }
+                else
+                {
+                    muzzleTransform = _animator.GetBoneTransform(HumanBodyBones.Head);
+                }
+                aimDirection = muzzleTransform.forward;
+                targetDirection = targetPosition - muzzleTransform.position;
+                aimTowards = Quaternion.FromToRotation(aimDirection, targetDirection);
+                blendedRotation = Quaternion.Slerp(Quaternion.identity, aimTowards, weight);
+                spineTransform.rotation = blendedRotation * spineTransform.rotation;
+                break;
+            
+            case PlayerType.Enemy:
+                aimDirection = agentHead.forward;
+                targetDirection = targetPosition - agentHead.position;
+                aimTowards = Quaternion.FromToRotation(aimDirection, targetDirection);
+                blendedRotation = Quaternion.Slerp(Quaternion.identity, aimTowards, weight);
+                spineTransform.rotation = blendedRotation * spineTransform.rotation;
+                break;
+        }
+        
+        
+        
+        
+    }
+
+    
 
     IEnumerator WaitTime()
     {

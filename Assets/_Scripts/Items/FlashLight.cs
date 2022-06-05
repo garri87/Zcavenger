@@ -5,19 +5,24 @@ using UnityEngine;
 public class FlashLight : MonoBehaviour
 {
     private Light _light;
+    private KeyAssignments _keyAssignments;
 
     public bool power;
     void Start()
     {
         _light = GetComponent<Light>();
+        _keyAssignments = KeyAssignments.SharedInstance;
     }
 
     void Update()
     {
         _light.enabled = power;
-        if (Input.GetKeyDown(KeyAssignments.SharedInstance.flashLightKey.keyCode))
+        if (_keyAssignments != null)
         {
-            power = !power;
+            if (Input.GetKeyDown(_keyAssignments.flashLightKey.keyCode))
+            {
+                power = !power;
+            }
         }
     }
 }
