@@ -777,15 +777,18 @@ public class PlayerController : MonoBehaviour
         //INTERACTION
         if (Input.GetKeyDown(keyAssignments.useKey.keyCode) && onDoor)
         {
-            transform.position = new Vector3(doorPos.position.x, transform.position.y, transform.position.z);
-            if (doorPos.position.z > transform.position.z)
+            if (!_inventory.onItem && !_inventory.onWeaponItem)
             {
+                transform.position = new Vector3(doorPos.position.x, transform.position.y, transform.position.z);
+                if (doorPos.position.z > transform.position.z)
+                {
                 
-                SwitchPlayLine(doorScript.insidePlayLine);
-            }
-            else
-            {
-                SwitchPlayLine(doorScript.outsidePlayLine);
+                    SwitchPlayLine(doorScript.insidePlayLine);
+                }
+                else
+                {
+                    SwitchPlayLine(doorScript.outsidePlayLine);
+                }
             }
         }
         #endregion

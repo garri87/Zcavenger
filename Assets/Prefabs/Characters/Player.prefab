@@ -40,7 +40,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3157721666349505446}
-  - component: {fileID: 3157721666349505447}
   - component: {fileID: 3157721666349505444}
   m_Layer: 12
   m_Name: CheckGround
@@ -64,19 +63,6 @@ Transform:
   m_Father: {fileID: 3153213578429466681}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &3157721666349505447
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3157721666349505465}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.32513428, y: 0.33761668, z: 0.39508837}
-  m_Center: {x: -0.008441925, y: -0.06217876, z: 0.026123434}
 --- !u!114 &3157721666349505444
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -90,6 +76,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isGrounded: 0
+  distance: 0.26
 --- !u!1 &3158749863113102037
 GameObject:
   m_ObjectHideFlags: 0
@@ -234,7 +221,7 @@ MonoBehaviour:
   totalInventorySlots: 0
   uIManager: {fileID: 0}
   inventoryUICanvas: {fileID: 0}
-  playerHandHolderTransform: {fileID: 702155433607124030}
+  playerWeaponHolderTransform: {fileID: 702155433607124030}
   currentWeaponImage: {fileID: 0}
   emptyWeaponImage: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
   bulletCounterTMPUGUI: {fileID: 0}
@@ -245,6 +232,8 @@ MonoBehaviour:
   currentCapacity: 0
   maxCapacity: 0
   inventoryFull: 0
+  onItem: 0
+  onWeaponItem: 0
   drawWeapon: 0
   holsterWeapon: 0
   selectedWeapon: 0
@@ -570,6 +559,10 @@ MonoBehaviour:
   jumpEndSound: {fileID: 8300000, guid: 3d8f480d252db9449b2f978284506f8e, type: 3}
   ladderClimbSound: {fileID: 8300000, guid: 3e299b9129329f24692bb63f57f33d19, type: 3}
   deathSound: {fileID: 8300000, guid: e67003b7e81c21a42b50c9cbf46ada03, type: 3}
+  lowSoundSensorScale: 0.2
+  normalSoundSensorScale: 2
+  highSoundSensorScale: 5
+  _soundSensor: {fileID: 0}
 --- !u!114 &4870130169611580303
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -585,11 +578,16 @@ MonoBehaviour:
   _audioSource: {fileID: 0}
   shotSound: {fileID: 0}
   meleeAttackSound: {fileID: 0}
+  dropSound: {fileID: 0}
   explosionSound: {fileID: 0}
   magazineOutSound: {fileID: 8300000, guid: e0c70bed5c1a4443083a81de5648c7d5, type: 3}
   magazineInSound: {fileID: 8300000, guid: eb5685b26a6494994af389a3293064e8, type: 3}
   reloadEndSound: {fileID: 0}
   drawWeaponSound: {fileID: 8300000, guid: 95d6c402778044a598e0c2fd3fe3cdb7, type: 3}
+  _soundSensor: {fileID: 0}
+  lowSoundSensorScale: 20
+  normalSoundSensorScale: 200
+  highSoundSensorScale: 400
 --- !u!114 &6351341365214343333
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -840,266 +838,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _audioSource: {fileID: 4870130169391375447}
-  sphereCollider: {fileID: 5423933617746428812}
   sensorScale: 200
-  audioSamples:
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  amplitude: 0
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!135 &5423933617746428812
 SphereCollider:
   m_ObjectHideFlags: 0

@@ -17,7 +17,7 @@ public class Inventory : MonoBehaviour
     [Header("UI Transforms")] 
     public UIManager uIManager;
     [HideInInspector]public Canvas inventoryUICanvas;
-    public Transform playerHandHolderTransform;
+    public Transform playerWeaponHolderTransform;
     public Image currentWeaponImage;
     public Sprite emptyWeaponImage;
     [HideInInspector]public TextMeshProUGUI bulletCounterTMPUGUI;
@@ -37,8 +37,8 @@ public class Inventory : MonoBehaviour
     [HideInInspector]public int maxCapacity;
     public bool inventoryFull;
 
-    private bool onItem;
-    private bool onWeaponItem;
+    [HideInInspector] public bool onItem;
+    [HideInInspector] public bool onWeaponItem;
     private Transform targetItem;
     private Transform targetWeapon;
 
@@ -404,15 +404,15 @@ public class Inventory : MonoBehaviour
         if (slotWeaponHolder.childCount > 0)
         {
             WeaponItem equipWeaponItem = equipSlot.weaponItem;
-            if (playerHandHolderTransform.childCount <=0) 
+            if (playerWeaponHolderTransform.childCount <=0) 
             {
-                slotWeaponHolder.GetChild(0).parent = playerHandHolderTransform;
+                slotWeaponHolder.GetChild(0).parent = playerWeaponHolderTransform;
                 drawWeapon = true;
                 Debug.Log("Changing weapon to " + equipWeaponItem.weaponName + " as " + selectedWeapon);
             }
-            else if (playerHandHolderTransform.childCount >0)
+            else if (playerWeaponHolderTransform.childCount >0)
             {
-                WeaponItem playerWeaponItem = playerHandHolderTransform.GetChild(0).GetComponent<WeaponItem>();
+                WeaponItem playerWeaponItem = playerWeaponHolderTransform.GetChild(0).GetComponent<WeaponItem>();
                 if (equipWeaponItem.ID == playerWeaponItem.ID)
                 {
                     Debug.Log("Holstering Weapon...");
@@ -438,7 +438,7 @@ public class Inventory : MonoBehaviour
             }
             if (!equipSlot.empty)
             {
-                if (playerHandHolderTransform.childCount > 0)
+                if (playerWeaponHolderTransform.childCount > 0)
                 {
                     holsterWeapon = true;
                     drawWeapon = false;
@@ -481,34 +481,34 @@ public class Inventory : MonoBehaviour
     /// <param name="weaponToDraw"></param>
     public void DrawWeapon(SelectedWeapon selectedWeapon)
     {
-        if (playerHandHolderTransform.childCount <=0)
+        if (playerWeaponHolderTransform.childCount <=0)
         {
             switch (selectedWeapon)
             {
                 case SelectedWeapon.Primary:
-                    uIManager.primaryEquipSlot.Find("WeaponHolder").GetChild(0).parent = playerHandHolderTransform;
+                    uIManager.primaryEquipSlot.Find("WeaponHolder").GetChild(0).parent = playerWeaponHolderTransform;
                     break;
             
                 case SelectedWeapon.Secondary:
-                   uIManager.secondaryEquipSlot.Find("WeaponHolder").GetChild(0).parent = playerHandHolderTransform;
+                   uIManager.secondaryEquipSlot.Find("WeaponHolder").GetChild(0).parent = playerWeaponHolderTransform;
                     break;
             
                 case SelectedWeapon.Melee:
-                    uIManager.meleeEquipSlot.Find("WeaponHolder").GetChild(0).parent = playerHandHolderTransform;
+                    uIManager.meleeEquipSlot.Find("WeaponHolder").GetChild(0).parent = playerWeaponHolderTransform;
                     break;
                 case SelectedWeapon.Throwable:
-                    uIManager.throwableEquipSlot.Find("WeaponHolder").GetChild(0).parent = playerHandHolderTransform;
+                    uIManager.throwableEquipSlot.Find("WeaponHolder").GetChild(0).parent = playerWeaponHolderTransform;
                     break;
             }
         }
 
-        if (playerHandHolderTransform.childCount > 0)
+        if (playerWeaponHolderTransform.childCount > 0)
         {
-            WeaponItem playerWeaponItem = playerHandHolderTransform.GetChild(0).GetComponent<WeaponItem>();
+            WeaponItem playerWeaponItem = playerWeaponHolderTransform.GetChild(0).GetComponent<WeaponItem>();
             playerWeaponItem.holderTarget.GetComponentInParent<Slot>().UpdateWeaponSlot(playerWeaponItem);
             playerWeaponItem.weaponLocation = WeaponItem.WeaponLocation.Player;
         }
-        playerHandHolderTransform.GetChild(0).gameObject.SetActive(true);
+        playerWeaponHolderTransform.GetChild(0).gameObject.SetActive(true);
     }
 
     /// <summary>
@@ -517,9 +517,9 @@ public class Inventory : MonoBehaviour
     /// <param name="weaponToHolster"></param>
     public void HolsterWeaponTo(Transform holderTransform)
     {
-        if (playerHandHolderTransform.childCount > 0)
+        if (playerWeaponHolderTransform.childCount > 0)
         {
-            Transform weaponToHolster = playerHandHolderTransform.GetChild(0);
+            Transform weaponToHolster = playerWeaponHolderTransform.GetChild(0);
             WeaponItem weaponToHolsterWeaponItem = weaponToHolster.GetComponent<WeaponItem>();
             
             if (holderTransform.childCount > 0)
@@ -575,9 +575,9 @@ public class Inventory : MonoBehaviour
             if (drawWeapon)
             {
                 DrawWeapon(selectedWeapon);
-                if (playerHandHolderTransform.childCount > 0)
+                if (playerWeaponHolderTransform.childCount > 0)
                 {
-                    playerHandHolderTransform.GetChild(0).gameObject.SetActive(false);
+                    playerWeaponHolderTransform.GetChild(0).gameObject.SetActive(false);
                 }
             }
                 
@@ -604,9 +604,9 @@ public class Inventory : MonoBehaviour
 
                 if (holsterWeapon)
                 {
-                    if (playerHandHolderTransform.childCount > 0)
+                    if (playerWeaponHolderTransform.childCount > 0)
                     {
-                        WeaponItem playerWeaponItem = playerHandHolderTransform.GetChild(0).GetComponent<WeaponItem>();
+                        WeaponItem playerWeaponItem = playerWeaponHolderTransform.GetChild(0).GetComponent<WeaponItem>();
                         HolsterWeaponTo(playerWeaponItem.holderTarget);
                     }
                 }

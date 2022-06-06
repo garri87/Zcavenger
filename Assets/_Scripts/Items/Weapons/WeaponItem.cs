@@ -105,6 +105,8 @@ public class WeaponItem : MonoBehaviour
 
     private Vector3 playerHandHolderPos;
     private Quaternion playerHandHolderRot;
+
+    public float xOffset, yOffset, zOffset;
     
     private void OnValidate()
     {
@@ -303,10 +305,11 @@ public class WeaponItem : MonoBehaviour
 
         if (weaponLocation == WeaponLocation.Player)
         {
-            playerHandHolderPos = playerInventory.playerHandHolderTransform.position;
-            playerHandHolderRot = Quaternion.LookRotation(playerController._weaponHolderTransform.up);
             
-            transform.position = playerHandHolderPos;
+            playerHandHolderPos = playerInventory.playerWeaponHolderTransform.position;
+            playerHandHolderRot = Quaternion.LookRotation(playerAnimator.GetBoneTransform(HumanBodyBones.RightHand).up);
+            
+            transform.position = new Vector3(playerHandHolderPos.x + xOffset,playerHandHolderPos.y + yOffset,playerHandHolderPos.z + zOffset);
             transform.rotation = playerHandHolderRot;
             //Vector3(0.00249999994,0.00889999978,0.000310000003) pos
                 //Vector3(332.349915,357.041718,5.11632919) rot

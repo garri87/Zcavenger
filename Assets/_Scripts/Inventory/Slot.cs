@@ -205,15 +205,15 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, I
     {
       if(weaponHolderTransform.childCount <= 0)
       {
-        if (inventory.playerHandHolderTransform.childCount >0)
+        if (inventory.playerWeaponHolderTransform.childCount >0)
         {
-          WeaponItem playerWeaponItem = inventory.playerHandHolderTransform.GetChild(0).GetComponent<WeaponItem>();
+          WeaponItem playerWeaponItem = inventory.playerWeaponHolderTransform.GetChild(0).GetComponent<WeaponItem>();
           if (playerWeaponItem.weaponItemClass == weaponItemClass)
           {
             UpdateWeaponSlot(playerWeaponItem);
           }
         }
-        else if(inventory.playerHandHolderTransform.childCount <=0)
+        else if(inventory.playerWeaponHolderTransform.childCount <=0)
         {
           UpdateWeaponSlot(null);
         }
@@ -282,7 +282,7 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, I
           if (weaponHolderTransform.childCount > 0)
           {
             WeaponItem holderWeaponItem = weaponHolderTransform.GetChild(0).GetComponent<WeaponItem>();
-            if (inventory.playerHandHolderTransform.childCount > 0)
+            if (inventory.playerWeaponHolderTransform.childCount > 0)
             {
               
               /*WeaponItem playerWeaponItem = inventory.playerHandHolderTransform.GetChild(0).GetComponent<WeaponItem>();
@@ -291,7 +291,7 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, I
                 inventory.AddWeaponToInventory(weaponHolderTransform.GetChild(0));
               //} 
             }
-            if (inventory.playerHandHolderTransform.childCount <= 0)
+            if (inventory.playerWeaponHolderTransform.childCount <= 0)
             {
               inventory.AddWeaponToInventory(weaponHolderTransform.GetChild(0));
             }
@@ -306,16 +306,16 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, I
 
             if (!empty)
             {
-              if (inventory.playerHandHolderTransform.childCount > 0)
+              if (inventory.playerWeaponHolderTransform.childCount > 0)
               {
-                WeaponItem playerWeaponItem = inventory.playerHandHolderTransform.GetChild(0).GetComponent<WeaponItem>();
+                WeaponItem playerWeaponItem = inventory.playerWeaponHolderTransform.GetChild(0).GetComponent<WeaponItem>();
                 if (playerWeaponItem.ID == weaponID)
                 {
                   inventory.holsterWeapon = true;
                 }
               }
 
-              if (inventory.playerHandHolderTransform.childCount <= 0)
+              if (inventory.playerWeaponHolderTransform.childCount <= 0)
               {
                 UpdateWeaponSlot(null);
               }
@@ -567,10 +567,10 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, I
     {
       // if the selected equip slot is empty, replace the weapon, then equip
       Debug.Log("slotToEquip is NOT empty");
-      if (inventory.playerHandHolderTransform.childCount > 0)
+      if (inventory.playerWeaponHolderTransform.childCount > 0)
       {
         Debug.Log("Player HAS weapon in hands");
-        WeaponItem playerWeaponItem = inventory.playerHandHolderTransform.GetChild(0).GetComponent<WeaponItem>();
+        WeaponItem playerWeaponItem = inventory.playerWeaponHolderTransform.GetChild(0).GetComponent<WeaponItem>();
         if (playerWeaponItem.weaponItemClass == weaponToEquipWeaponItem.weaponItemClass)
         {
           // if player have a weapon in hands, and are the same class, replace the weapon, then equip and draw
