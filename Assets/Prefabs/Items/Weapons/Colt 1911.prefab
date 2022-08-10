@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 6739493330020178065}
   - component: {fileID: 7498480294093371199}
   - component: {fileID: 1531494263512577310}
-  - component: {fileID: 3991136314760273693}
   m_Layer: 0
   m_Name: Slider
   m_TagString: Untagged
@@ -105,21 +104,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &3991136314760273693
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1521239782239786427}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f6ad9487e2296d644a97dcadf0ad0dae, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  weaponItem: {fileID: 6805280673742843826}
-  _animator: {fileID: 1531494263512577310}
-  keyAssignments: {fileID: 0}
 --- !u!1 &2872822600767252890
 GameObject:
   m_ObjectHideFlags: 0
@@ -820,6 +804,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponItemClass: 2
+  weaponLocation: 0
   holderTarget: {fileID: 0}
   weaponScriptableObject: {fileID: 11400000, guid: dfbe86df1e5ef8f4c86844e282dcba5c, type: 2}
   ID: 2004
@@ -850,7 +835,6 @@ MonoBehaviour:
   bulletImpactPrefab: {fileID: 100002, guid: 9d25129d5c3e42841a660568a12d1f5b, type: 3}
   enemyImpactPrefab: {fileID: 4574046231875852703, guid: 0d492ff9a23dd6348aa4d45b85825187, type: 3}
   muzzleFlashPrefab: {fileID: 100006, guid: ffda10e980415944bb80e1a2263b1712, type: 3}
-  weaponLocation: 0
   weaponPicked: 0
   weaponEquipped: 0
   totalBullets: 0
@@ -873,6 +857,9 @@ MonoBehaviour:
   rotationSpeed: 2
   titleTextMesh: {fileID: 3727440016544505250}
   throwableActive: 0
+  xOffset: 0
+  yOffset: 0
+  zOffset: 0
 --- !u!65 &1809095861853553496
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -997,6 +984,7 @@ MonoBehaviour:
   _audioSource: {fileID: 9115604665980684958}
   shotSound: {fileID: 8300000, guid: 5d1e99c47439bf24f90b7fba08506522, type: 3}
   meleeAttackSound: {fileID: 0}
+  dropSound: {fileID: 0}
   explosionSound: {fileID: 0}
   magazineOutSound: {fileID: 8300000, guid: e0c70bed5c1a4443083a81de5648c7d5, type: 3}
   magazineInSound: {fileID: 8300000, guid: eb5685b26a6494994af389a3293064e8, type: 3}

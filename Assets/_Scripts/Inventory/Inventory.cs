@@ -24,10 +24,8 @@ public class Inventory : MonoBehaviour
     [HideInInspector]public TextMeshProUGUI capacityText;
         
     [HideInInspector]public GameObject[] slotArray;
-    [HideInInspector]public GameObject[] quickSlotCount;
     public List<GameObject> itemList = new List<GameObject>();
 
-    private int totalQuickSlots;
     private int activeSlots;
     
     private PlayerController _playerController;
@@ -67,13 +65,13 @@ public class Inventory : MonoBehaviour
         inventoryUICanvas = uIManager.inventoryUI.GetComponent<Canvas>();
         bulletCounterTMPUGUI = uIManager.ammoPanel.Find("AmmoCount").GetComponent<TextMeshProUGUI>();
 
-       // totalQuickSlots = uIManager.quickInventoryUI.childCount; // get the number of quickslots
         totalInventorySlots = uIManager.inventorySlotArea.childCount; // get the number of inventory slots
         slotArray = new GameObject[totalInventorySlots];
-        quickSlotCount = new GameObject[totalQuickSlots];
 
         CheckInventorySlots();
-       // CheckInventorySlots(quickSlotCount, totalQuickSlots, uIManager.quickInventoryUI);
+        
+        
+        
     }
     public void CheckInventorySlots()
     {

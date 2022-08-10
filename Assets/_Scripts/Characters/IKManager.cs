@@ -6,37 +6,27 @@ using UnityEngine;
 using UnityEngine.PlayerLoop;
 using UnityEngine.XR;
 
-[System.Serializable]
-public class HumanBone
-{
-    public HumanBodyBones bone;
-    public float weight = 1f;
-}
-
 public class IKManager : MonoBehaviour
 {
+    public bool isIKActive;
+
     public enum PlayerType
     {
         Player,
         Enemy,
     }
-
     public PlayerType playerType;
     
     public Animator _animator;
     
-    public HumanBone[] humanBones;
-    [SerializeField]private Transform[] boneTransforms;
-    public float angleLimit = 90.0f;
-    public float distanceLimit = 1.5f;
-     
     public Transform leftHandTarget;
     public Transform rightHandTarget;
     public Transform leftElbowTarget;
     public Transform rightElbowTarget;
+    public Transform spineTarget;
+    
     
     public Transform agentHead;
-
     
     private PlayerController _playerController;
     private AgentController _agentController;
@@ -54,8 +44,6 @@ public class IKManager : MonoBehaviour
     public float recoilTimer;
     #endregion
     
-    
-    
     private float leftHandIKWeight;
     private float rightHandIKWeight;
     private float leftHandRotWeight;
@@ -65,10 +53,8 @@ public class IKManager : MonoBehaviour
     
     public float distanceToObject;
     public float verticalOffset;
-   
-    public bool isIKActive;
-
-    public static bool pushingObject;
+    
+    [HideInInspector] public static bool pushingObject;
     
     private RaycastHit frontHit, backHit, leftHit, rightHit;
     
@@ -77,13 +63,8 @@ public class IKManager : MonoBehaviour
     
     [Range(0,1)]public float weight = 1f;
     [Range(0,1)]public float upperBodyLayerWeight;
-
     
-    public float distanceToGround;
-
-    
-
-    
+    private float distanceToGround;
     
     void Awake()
     {
@@ -100,12 +81,7 @@ public class IKManager : MonoBehaviour
         }
         
         _animator = GetComponent<Animator>();
-        boneTransforms = new Transform[humanBones.Length];
-        for (int i = 0; i < boneTransforms.Length; i++)
-        {
-            boneTransforms[i] = _animator.GetBoneTransform(humanBones[i].bone);
-        }
-        
+        spineTarget = _animator.GetBoneTransform(HumanBodyBones.Spine);
     }
     
     void FixedUpdate()
@@ -167,9 +143,7 @@ public class IKManager : MonoBehaviour
         }
         
     }
-
-   
-
+    
     private void LateUpdate()
     {
         switch (playerType)
@@ -183,40 +157,14 @@ public class IKManager : MonoBehaviour
                         || !_playerController.eating)
                     {
                         RecoilAnimation();
-                        targetPosition = GetTargetPosition();
-
-                        for (int i = 0; i < 10; i++)
-                        {
-                            for (int b = 0; b < boneTransforms.Length; b++)
-                            {
-                                Transform bone = boneTransforms[b];
-                                float boneWeight = humanBones[b].weight * weight;
-                                AimAtTarget(bone, targetPosition, weight);
-                            }
-                        }
                     }
                 } 
                 break;
             case PlayerType.Enemy:
-                if (_agentController.enemyFov.playerInSight || _agentController.enemyFov.playerInRange)
-                {
-                    targetPosition = GetTargetPosition();
-
-                    for (int i = 0; i < 10; i++)
-                    {
-                        for (int j = 0; j < boneTransforms.Length; j++)
-                        {
-                            Transform bone = boneTransforms[j];
-                            float boneWeight = humanBones[j].weight * weight;
-                            AimAtTarget(bone, targetPosition + Vector3.up, weight);
-                        }
-                    }
-                }
+                
                 break;
         }
-       
     }
-
     private void OnAnimatorIK(int layerIndex)
     {
         if (isIKActive)
@@ -271,10 +219,9 @@ public class IKManager : MonoBehaviour
                         _playerController.drinking||
                         _playerController.eating||
                         _playerController.grabItem
-
-                        )
+                    )
                     {
-                        if (!_playerController.climbingLadder)
+                        if (!_playerController.climbingLadder || !_playerController.equippedWeaponItem.attacking || !_playerController.blocking)
                         {
                             _animator.SetLayerWeight(_animator.GetLayerIndex("UpperBody"), 1); 
                         }
@@ -314,105 +261,7 @@ public class IKManager : MonoBehaviour
         }
         
     }
-
-    Vector3 GetTargetPosition()
-    {
-        Vector3 targetDirection;
-        Vector3 aimDirection;
-        float blendOut;
-        float targetAngle;
-        float targetDistance;
-        Vector3 direction;
-        
-        switch (playerType)
-        {
-            case PlayerType.Player:
-                muzzleTransform = weaponItem.gunMuzzleTransform;
-                targetDirection = _playerController.targetTransform.position - muzzleTransform.position;
-                aimDirection = muzzleTransform.forward;
-                blendOut = 0.0f;
-                targetAngle = Vector3.Angle(targetDirection, aimDirection);
-                if (targetAngle > angleLimit)
-                {
-                    blendOut += (targetAngle - angleLimit) / 50.0f;
-                }
-                targetDistance = targetDirection.magnitude;
-                if (targetDistance < distanceLimit)
-                {
-                    blendOut += distanceLimit - targetDistance;
-                }
-                direction = Vector3.Slerp(targetDirection, aimDirection, blendOut);
-                targetPosition = muzzleTransform.position + direction;
-                break;
-            
-            case PlayerType.Enemy:
-                targetDirection = _agentController.player.transform.position - agentHead.position;
-                aimDirection = agentHead.forward;
-                blendOut = 0.0f;
-                targetAngle = Vector3.Angle(targetDirection, aimDirection);
-                if (targetAngle > angleLimit)
-                {
-                    blendOut += (targetAngle - angleLimit) / 50.0f;
-                }
-                targetDistance = targetDirection.magnitude;
-                if (targetDistance < distanceLimit)
-                {
-                    blendOut += distanceLimit - targetDistance;
-                }
-                direction = Vector3.Slerp(targetDirection, aimDirection, blendOut);
-                targetPosition = agentHead.position + direction;
-                break;
-        }
-        return targetPosition;
-    }
-    private void AimAtTarget(Transform spineTransform, Vector3 targetPosition, float weight)
-    {
-        Vector3 aimDirection;
-        Vector3 targetDirection;
-        Quaternion aimTowards;
-        Quaternion blendedRotation;
-        switch (playerType)
-        {
-            case PlayerType.Player:
-                if (weaponItem.weaponItemClass != WeaponScriptableObject.WeaponClass.Throwable)
-                {
-                    muzzleTransform = weaponItem.gunMuzzleTransform;
-                }
-                else
-                {
-                    muzzleTransform = _animator.GetBoneTransform(HumanBodyBones.Head);
-                }
-                aimDirection = muzzleTransform.forward;
-                targetDirection = targetPosition - muzzleTransform.position;
-                aimTowards = Quaternion.FromToRotation(aimDirection, targetDirection);
-                blendedRotation = Quaternion.Slerp(Quaternion.identity, aimTowards, weight);
-                spineTransform.rotation = blendedRotation * spineTransform.rotation;
-                break;
-            
-            case PlayerType.Enemy:
-                aimDirection = agentHead.forward;
-                targetDirection = targetPosition - agentHead.position;
-                aimTowards = Quaternion.FromToRotation(aimDirection, targetDirection);
-                blendedRotation = Quaternion.Slerp(Quaternion.identity, aimTowards, weight);
-                spineTransform.rotation = blendedRotation * spineTransform.rotation;
-                break;
-        }
-        
-        
-        
-        
-    }
-
     
-
-    IEnumerator WaitTime()
-    {
-        weight += 0.02f*Time.deltaTime;
-        weight = Mathf.Clamp(weight, 0, 0.4f);
-        yield return new WaitForSeconds(0.3f);
-        weight = 0.4f;
-    }
-
     private void IKLimbPlacement(AvatarIKGoal leftLimb, AvatarIKGoal rightLimb, 
         string ikLeftWeight, string iKRightWeight, Vector3 rayDirection, float rayDistance)
     {
@@ -455,26 +304,7 @@ public class IKManager : MonoBehaviour
         Debug.DrawRay(_animator.GetIKPosition(leftLimb), rayDirection * distanceToGround, Color.green);
         Debug.DrawRay(_animator.GetIKPosition(rightLimb), rayDirection * distanceToGround, Color.green);
     }
-
-    public void HoldWeapon(Transform gripTransform, Transform handguardTransform)
-    {
-        
-        if (_playerController.weaponEquipped)
-        {
-            rightHandTarget.position = gripTransform.position;
-            rightElbowTarget.position = transform.position + transform.forward * -0.5f + transform.up + transform.forward * 0.5f;
-
-            if (!weaponItem.reloadingWeapon)
-            {
-                
-                leftHandTarget.position = handguardTransform.position + transform.right * -0.3f;
-                leftHandTarget.rotation = Quaternion.LookRotation(transform.up + transform.forward, handguardTransform.position);
-                leftElbowTarget.position = transform.position + transform.forward * -0.5f + transform.up + transform.forward * -0.5f;
-
-            }
-        }
-        
-    }
+    
     private void CheckSideObject()
     {
         if (isIKActive && !_playerController.isAiming)
@@ -518,8 +348,7 @@ public class IKManager : MonoBehaviour
                 leftElbowIKWeight = Mathf.Lerp(leftElbowIKWeight, 0, Time.fixedDeltaTime * 5);
             }
         }
-    } //experimental
-
+    } 
     private void CheckFrontObject()
     {
         if (isIKActive)
@@ -591,6 +420,7 @@ public class IKManager : MonoBehaviour
         {
               leftElbowTarget.Rotate(Vector3.up,bulletRecoilCurve.Evaluate(curveTime) * recoilMaxRotation, Space.Self);
               rightElbowTarget.Rotate(Vector3.up,bulletRecoilCurve.Evaluate(curveTime) * recoilMaxRotation, Space.Self);
+              spineTarget.Rotate(Vector3.left,bulletRecoilCurve.Evaluate(curveTime) * recoilMaxRotation/2, Space.Self);
         }
     }
     private void OnDrawGizmos()

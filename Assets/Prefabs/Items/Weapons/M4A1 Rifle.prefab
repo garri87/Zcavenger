@@ -50,6 +50,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponItemClass: 1
+  weaponLocation: 0
   holderTarget: {fileID: 0}
   weaponScriptableObject: {fileID: 11400000, guid: 8310276fa64aa184f91548b44036909b, type: 2}
   ID: 3003
@@ -61,7 +62,7 @@ MonoBehaviour:
   magazineCap: 0
   bulletsInMag: 0
   recoilDuration: 0
-  recoilMaxRotation: 0
+  recoilMaxRotation: 15
   shotgunMaxFireAngle: 45
   shotgunMinFireAngle: -45
   bulletsPerShot: 10
@@ -79,7 +80,6 @@ MonoBehaviour:
   bulletImpactPrefab: {fileID: 100002, guid: 9d25129d5c3e42841a660568a12d1f5b, type: 3}
   enemyImpactPrefab: {fileID: 4574046231875852703, guid: 0d492ff9a23dd6348aa4d45b85825187, type: 3}
   muzzleFlashPrefab: {fileID: 100006, guid: ffda10e980415944bb80e1a2263b1712, type: 3}
-  weaponLocation: 0
   weaponPicked: 0
   weaponEquipped: 0
   totalBullets: 0
@@ -102,6 +102,9 @@ MonoBehaviour:
   rotationSpeed: 2
   titleTextMesh: {fileID: 8009431256897338362}
   throwableActive: 0
+  xOffset: 0
+  yOffset: 0
+  zOffset: 0
 --- !u!114 &576297614038277336
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -117,6 +120,7 @@ MonoBehaviour:
   _audioSource: {fileID: 7394767986362673450}
   shotSound: {fileID: 8300000, guid: 01bcb4f63bfb2884786ffd0294fa5363, type: 3}
   meleeAttackSound: {fileID: 0}
+  dropSound: {fileID: 0}
   explosionSound: {fileID: 0}
   magazineOutSound: {fileID: 8300000, guid: e0c70bed5c1a4443083a81de5648c7d5, type: 3}
   magazineInSound: {fileID: 8300000, guid: eb5685b26a6494994af389a3293064e8, type: 3}
@@ -259,8 +263,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 619842888766764644}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 0.029, y: 0.043293186, z: 0.17099996}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0.046293184, z: 0.13799997}
+  m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3484926331407043161}
@@ -293,8 +297,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1458746306604222167}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.10199318, z: 0.6707}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0.09686529, z: 0.5436062}
+  m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4268980898541358266}
@@ -762,8 +766,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8155889708158799509}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.074, z: 0.325}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0.072, z: 0.2673}
+  m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4268980898541358266}
@@ -779,7 +783,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4454422626668662584}
   - component: {fileID: 8218495157192600326}
-  - component: {fileID: 7463396589445491170}
   m_Layer: 13
   m_Name: SoundSensor
   m_TagString: Noise
@@ -819,19 +822,6 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 256
---- !u!135 &7463396589445491170
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8415010759938323534}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &6961040838615552582
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -844,16 +834,28 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 350922004401132140, guid: c27bd78f3f92b1940b296a3a2e1d410e, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 350922004401132140, guid: c27bd78f3f92b1940b296a3a2e1d410e, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 350922004401132140, guid: c27bd78f3f92b1940b296a3a2e1d410e, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 350922004401132140, guid: c27bd78f3f92b1940b296a3a2e1d410e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 350922004401132140, guid: c27bd78f3f92b1940b296a3a2e1d410e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.050293177
+      value: 0.069
       objectReference: {fileID: 0}
     - target: {fileID: 350922004401132140, guid: c27bd78f3f92b1940b296a3a2e1d410e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.63199997
+      value: 0.354
       objectReference: {fileID: 0}
     - target: {fileID: 350922004401132140, guid: c27bd78f3f92b1940b296a3a2e1d410e, type: 3}
       propertyPath: m_LocalRotation.w

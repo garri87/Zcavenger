@@ -133,6 +133,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponItemClass: 1
+  weaponLocation: 1
   holderTarget: {fileID: 0}
   weaponScriptableObject: {fileID: 11400000, guid: 70c6a61a196a7644d9cf8fa0b641e2bd, type: 2}
   ID: 3004
@@ -144,7 +145,7 @@ MonoBehaviour:
   magazineCap: 0
   bulletsInMag: 0
   recoilDuration: 0
-  recoilMaxRotation: 0
+  recoilMaxRotation: 20
   shotgunMaxFireAngle: 45
   shotgunMinFireAngle: -45
   bulletsPerShot: 10
@@ -162,7 +163,6 @@ MonoBehaviour:
   bulletImpactPrefab: {fileID: 100002, guid: 9d25129d5c3e42841a660568a12d1f5b, type: 3}
   enemyImpactPrefab: {fileID: 4574046231875852703, guid: 0d492ff9a23dd6348aa4d45b85825187, type: 3}
   muzzleFlashPrefab: {fileID: 100006, guid: ffda10e980415944bb80e1a2263b1712, type: 3}
-  weaponLocation: 1
   weaponPicked: 0
   weaponEquipped: 0
   totalBullets: 0
@@ -185,6 +185,9 @@ MonoBehaviour:
   rotationSpeed: 2
   titleTextMesh: {fileID: 8009431256897338362}
   throwableActive: 0
+  xOffset: 0
+  yOffset: 0
+  zOffset: 0
 --- !u!114 &576297614038277336
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -200,6 +203,7 @@ MonoBehaviour:
   _audioSource: {fileID: 248336373672548398}
   shotSound: {fileID: 8300000, guid: 22e21b3121e101e4d915dab56ebf0f00, type: 3}
   meleeAttackSound: {fileID: 0}
+  dropSound: {fileID: 0}
   explosionSound: {fileID: 0}
   magazineOutSound: {fileID: 8300000, guid: e0c70bed5c1a4443083a81de5648c7d5, type: 3}
   magazineInSound: {fileID: 8300000, guid: eb5685b26a6494994af389a3293064e8, type: 3}
@@ -811,7 +815,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5591919743231521058}
   - component: {fileID: 5919829657804674961}
-  - component: {fileID: 1344889695570077339}
   m_Layer: 13
   m_Name: SoundSensor
   m_TagString: Noise
@@ -851,19 +854,6 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 256
---- !u!135 &1344889695570077339
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3521303361172894900}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &3707575511531987007
 GameObject:
   m_ObjectHideFlags: 0
@@ -1613,7 +1603,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8155889708158799509}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.001, y: 0.0608463, z: 0.331}
+  m_LocalPosition: {x: 0.001, y: 0.0608463, z: 0.3104}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

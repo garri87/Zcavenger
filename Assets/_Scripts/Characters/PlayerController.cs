@@ -79,6 +79,8 @@ public class PlayerController : MonoBehaviour
     public bool eating;
     public bool grabItem;
 
+    public bool inAction;
+    
     private float _crouchColliderHeight;
     private Vector3 _crouchColliderCenter;
     private Vector3 _proneColliderCenter;
@@ -248,6 +250,15 @@ public class PlayerController : MonoBehaviour
         AnimatorParameters();
         #endregion
         
+        if (bandaging || drinking || eating || grabItem)
+        {
+            inAction = true;
+        }
+        else if (!bandaging && !drinking && !eating && !grabItem)
+        {
+            inAction = false;
+        }
+        
         CheckFallingState();
         
         if (_weaponHolderTransform.childCount > 0)
@@ -380,6 +391,8 @@ public class PlayerController : MonoBehaviour
         }
 
         #endregion
+
+        
     }
     
     #region Collider OnTrigger Functions
@@ -586,11 +599,11 @@ public class PlayerController : MonoBehaviour
 
         if (weaponEquipped )
         {
-            if (Input.GetKey(keyAssignments.aimBlockKey.keyCode) && !bandaging && !drinking && !eating && !grabItem)
+            if (Input.GetKey(keyAssignments.aimBlockKey.keyCode) && !inAction)
             {
                 if (equippedWeaponItem.weaponItemClass != WeaponScriptableObject.WeaponClass.Melee)
                 {
-                    if (_checkGround.isGrounded && !_climber.attachedToLedge && !trapped && !bitten)
+                    if (_checkGround.isGrounded && !_climber.attachedToLedge && !trapped && !bitten && !inAction)
                     {
                         playerState = PlayerState.IsAiming;
                         isAiming = true;   
@@ -871,6 +884,7 @@ public class PlayerController : MonoBehaviour
     #endregion
     public void AnimatorParameters()
     {
+        
         _animator.SetFloat("VerticalInput", verticalInput);
         
         _animator.SetBool("ClimbingLadder", climbingLadder);
@@ -1124,7 +1138,7 @@ public class PlayerController : MonoBehaviour
         
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, mouseAimMask.value))
         {
-            targetTransform.position = hit.point;
+            targetTransform.position = new Vector3(hit.point.x,hit.point.y,currentPlayLine);
         }
     }
     public void AttachOnLadder(string startPoint)

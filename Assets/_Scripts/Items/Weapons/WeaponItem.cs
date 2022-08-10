@@ -3,22 +3,34 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class WeaponItem : MonoBehaviour
 {
     [Header("Weapon ID")]
-    public WeaponScriptableObject.WeaponClass weaponItemClass;
+   [HideInInspector]public WeaponScriptableObject.WeaponClass weaponItemClass;
 
+    public enum WeaponLocation
+    {
+        World,
+        Container,
+        Player,
+        Inventory,
+        Throwed,
+    }
+
+    public WeaponLocation weaponLocation;
+    
     [HideInInspector]public Transform holderTarget;
     
     public WeaponScriptableObject weaponScriptableObject;
 
-    public int ID;
-    public string weaponName;
-    public string description;
-    public int bulletID;
+    [HideInInspector]public int ID;
+    [HideInInspector]public string weaponName;
+    [HideInInspector]public string description;
+    [HideInInspector]public int bulletID;
     
-    [Header("Weapon Attributes")] 
+    [Header("Weapon Attributes")]  
     public int damage;
     public float fireRate;
     public int magazineCap;
@@ -49,16 +61,7 @@ public class WeaponItem : MonoBehaviour
     public GameObject enemyImpactPrefab;
     public GameObject muzzleFlashPrefab;
 
-    public enum WeaponLocation
-    {
-        World,
-        Container,
-        Player,
-        Inventory,
-        Throwed,
-    }
-
-    public WeaponLocation weaponLocation;
+   
 
     public bool weaponPicked;
     public bool weaponEquipped;
@@ -229,8 +232,6 @@ public class WeaponItem : MonoBehaviour
                 meshRenderer.enabled = true;
                 modelOutline.enabled = false;
                 
-                
-                
                 if (flashLight !=null)
                 {
                     flashLight.enabled = false;
@@ -305,15 +306,15 @@ public class WeaponItem : MonoBehaviour
 
         if (weaponLocation == WeaponLocation.Player)
         {
-            
             playerHandHolderPos = playerInventory.playerWeaponHolderTransform.position;
+           // playerHandHolderRot = Quaternion.LookRotation(playerInventory.playerWeaponHolderTransform.up);
             playerHandHolderRot = Quaternion.LookRotation(playerAnimator.GetBoneTransform(HumanBodyBones.RightHand).up);
-            
-            transform.position = new Vector3(playerHandHolderPos.x + xOffset,playerHandHolderPos.y + yOffset,playerHandHolderPos.z + zOffset);
+            transform.position = playerHandHolderPos;
             transform.rotation = playerHandHolderRot;
+            //transform.position = new Vector3(playerHandHolderPos.x + xOffset,playerHandHolderPos.y + yOffset,playerHandHolderPos.z + zOffset);
+            //  transform.rotation = playerHandHolderRot;
             //Vector3(0.00249999994,0.00889999978,0.000310000003) pos
-                //Vector3(332.349915,357.041718,5.11632919) rot
-            playerIKManager.HoldWeapon(gripTransform,handguardTransform);
+            //Vector3(332.349915,357.041718,5.11632919) rot
         }
         
         if (weaponLocation == WeaponLocation.World)

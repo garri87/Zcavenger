@@ -94,7 +94,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4140730333025544727}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.076, z: 0.652}
+  m_LocalPosition: {x: 0, y: 0.076, z: 0.64}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -139,7 +139,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6765120173680540335}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.036, z: 0.343}
+  m_LocalPosition: {x: 0, y: 0.034, z: 0.343}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -444,6 +444,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponItemClass: 1
+  weaponLocation: 0
   holderTarget: {fileID: 0}
   weaponScriptableObject: {fileID: 11400000, guid: abc3129808eaf484bb1665f543b1812c, type: 2}
   ID: 0
@@ -473,7 +474,6 @@ MonoBehaviour:
   bulletImpactPrefab: {fileID: 100002, guid: 9d25129d5c3e42841a660568a12d1f5b, type: 3}
   enemyImpactPrefab: {fileID: 4574046231875852703, guid: 0d492ff9a23dd6348aa4d45b85825187, type: 3}
   muzzleFlashPrefab: {fileID: 100006, guid: ffda10e980415944bb80e1a2263b1712, type: 3}
-  weaponLocation: 0
   weaponPicked: 0
   weaponEquipped: 0
   totalBullets: 0
@@ -496,6 +496,9 @@ MonoBehaviour:
   rotationSpeed: 2
   titleTextMesh: {fileID: 4441712891633340766}
   throwableActive: 0
+  xOffset: 0
+  yOffset: 0
+  zOffset: 0
 --- !u!65 &6786238618529572707
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -524,6 +527,7 @@ MonoBehaviour:
   _audioSource: {fileID: -8603155758252956643}
   shotSound: {fileID: 8300000, guid: d83854217c01af14d86b098d854e090f, type: 3}
   meleeAttackSound: {fileID: 0}
+  dropSound: {fileID: 0}
   explosionSound: {fileID: 0}
   magazineOutSound: {fileID: 8300000, guid: e0c70bed5c1a4443083a81de5648c7d5, type: 3}
   magazineInSound: {fileID: 8300000, guid: eb5685b26a6494994af389a3293064e8, type: 3}
@@ -655,7 +659,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8544753262806854252}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.009, z: 0.253}
+  m_LocalPosition: {x: 0, y: 0, z: 0.241}
   m_LocalScale: {x: 0.15, y: 0.15, z: 0.15}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -729,11 +733,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 350922004401132140, guid: c27bd78f3f92b1940b296a3a2e1d410e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.06799999
+      value: 0.035
       objectReference: {fileID: 0}
     - target: {fileID: 350922004401132140, guid: c27bd78f3f92b1940b296a3a2e1d410e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.633
+      value: 0.619
       objectReference: {fileID: 0}
     - target: {fileID: 350922004401132140, guid: c27bd78f3f92b1940b296a3a2e1d410e, type: 3}
       propertyPath: m_LocalRotation.w
