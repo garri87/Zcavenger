@@ -17,10 +17,11 @@ public class BuildingGenerator : MonoBehaviour
    public Transform rightLimit;
 
    public GameObject roomTemplate;
-   private RoomGenerator _roomGenerator;
+   private RoomGenerator _roomGen;
    
    public List<RoomGenerator> rooms;
 
+   private GameObject instRoom;
    private void Awake()
    {
    }
@@ -29,24 +30,27 @@ public class BuildingGenerator : MonoBehaviour
    { 
        
        rightLimit.position = Vector3.right * maxWidth * 3;
-       for (int i = 0; i < maxWidth; i++) 
+       
+       for (int i = 0; i < maxHeight; i++)
        {
-           if (spawnOrigin.position.x < rightLimit.position.x)
+           for (int j = 0; j < maxWidth; j++)
            {
-               GameObject instRoom = Instantiate(roomTemplate, spawnOrigin.position, transform.rotation, transform); 
-               _roomGenerator = instRoom.GetComponent<RoomGenerator>();
-               _roomGenerator.roomWidth = Random.Range(minRoomWidth, maxRoomWidth);
-               _roomGenerator.roomHeight = 1;
-               _roomGenerator.gameObject.SetActive(true);
-               spawnOrigin.position = instRoom.transform.position + Vector3.right * _roomGenerator.roomWidth * _roomGenerator.pieceDimension;
+               if (spawnOrigin.position.x < rightLimit.position.x)
+               {
+                   instRoom = Instantiate(roomTemplate, spawnOrigin.position, transform.rotation, transform);
+                   _roomGen = instRoom.GetComponent<RoomGenerator>();
+                   _roomGen.StartGeneration(Random.Range(minRoomWidth, maxRoomWidth),1,  _roomGen.backDoorCount);
+                   spawnOrigin.position = _roomGen.rightExtent.position + Vector3.right * 1.45f;
+               }
+               else
+               {
+                   Debug.Log("Reached the Right Limit");
+                   spawnOrigin.position = new Vector3(0,(i + 1) *_roomGen.pieceDimension,transform.position.z);
+               }
            }
-           else
-           {
-               Debug.Log("Reached the Right Limit");
-               return;
-           }
+           spawnOrigin.position = new Vector3(0,(i + 1) *_roomGen.pieceDimension,transform.position.z);
            
-           
+
        }
    }
 }

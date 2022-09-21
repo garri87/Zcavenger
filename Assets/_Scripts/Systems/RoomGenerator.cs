@@ -20,8 +20,8 @@ public class RoomGenerator : MonoBehaviour
 
     public Transform leftExtent, rightExtent, backExtent, frontExtent;
 
-    private GameObject leftEnd;
-    private GameObject rightEnd;
+    public GameObject leftEnd;
+    public GameObject rightEnd;
 
     [SerializeField] private List<GameObject> baseWalls;
 
@@ -36,7 +36,7 @@ public class RoomGenerator : MonoBehaviour
 
     public GameObject GenerateSide(GameObject gameObject, Vector3 spawnPoint)
     {
-        GameObject end = Instantiate(gameObject, spawnPoint - Vector3.right * 1.45f, Quaternion.Euler(0, 90, 0));
+        GameObject end = Instantiate(gameObject, spawnPoint - Vector3.right * 1.45f, Quaternion.Euler(0, 90, 0),transform);
         return end;
 
     }
@@ -104,6 +104,12 @@ public class RoomGenerator : MonoBehaviour
                 leftEnd = GenerateSide(doorWallGo, spawnXPoint);
                 leftEnd.name += " left";
             }
+            else
+            {
+                leftExtent.position = leftEnd.transform.position;
+                rightExtent.position = rightEnd.transform.position;
+                return;
+            }
 
 
             //Generate Room Width
@@ -120,6 +126,11 @@ public class RoomGenerator : MonoBehaviour
             if (Mathf.RoundToInt(spawnXPoint.x) < _buildingGenerator.rightLimit.position.x)
             {
                 rightEnd = GenerateSide(doorWallGo, spawnXPoint);
+                rightEnd.name += " right";
+            }
+            else
+            {
+                rightEnd = GenerateSide(doorWallGo, new Vector3(_buildingGenerator.rightLimit.position.x, transform.position.y));
                 rightEnd.name += " right";
             }
 
@@ -146,22 +157,11 @@ public class RoomGenerator : MonoBehaviour
                 GameObject selectedWall = baseWalls[Random.Range(0, baseWalls.Count)];
                 selectedWall.SetActive(false);
                 Quaternion wallDoorRot = Quaternion.Euler(0, selectedWall.transform.rotation.y, 0);
-                GameObject instDoorWall = Instantiate(doorWallGo, selectedWall.transform.position, wallDoorRot);
+                GameObject instDoorWall = Instantiate(doorWallGo, selectedWall.transform.position, wallDoorRot,transform);
             }
 
             leftExtent.position = leftEnd.transform.position;
-            rightExtent.position = rightEnd.transform.position;
-            _buildingGenerator.spawnOrigin.position = rightExtent.position;
+            rightExtent.position = rightEnd.transform.position; 
         }
-    }
-
-    private void Awake()
-    {
-        gameObject.SetActive(false);
-    }
-
-    void OnEnable()
-    {
-        StartGeneration(roomWidth, roomHeight, backDoorCount);
     }
 }
