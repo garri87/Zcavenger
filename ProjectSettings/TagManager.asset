@@ -30,7 +30,6 @@ TagManager:
   - Cloth
   - FxTemporaire
   - door
-  - button f4
   - button f5
   - button f3
   - button f2
@@ -44,6 +43,7 @@ TagManager:
   - ExplosionRadius
   - DamageFlame
   - Noise
+  - Elevator
   layers:
   - Default
   - TransparentFX
@@ -64,9 +64,9 @@ TagManager:
   - PostProcess
   - StompDetector
   - Collectible
-  - vlight
-  - 
-  - 
+  - PlayerDetector
+  - Door
+  - Elevator
   - 
   - 
   - 

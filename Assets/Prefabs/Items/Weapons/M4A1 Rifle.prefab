@@ -98,6 +98,7 @@ MonoBehaviour:
   _throwable: {fileID: 0}
   quantity: 1
   titleTextGameObject: {fileID: 3707575511531987007}
+  textFontSize: 4
   pickupCollider: {fileID: 0}
   rotationSpeed: 2
   titleTextMesh: {fileID: 8009431256897338362}
@@ -417,7 +418,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: M4A1 Assault Rifle
+  m_text: M4A1 Rifle
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 14e28600741141443bf0321514f37e3e, type: 2}
   m_sharedMaterial: {fileID: 5452839780596693328, guid: 14e28600741141443bf0321514f37e3e, type: 2}
@@ -444,8 +445,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 2.13
-  m_fontSizeBase: 2.13
+  m_fontSize: 4
+  m_fontSizeBase: 4
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 0

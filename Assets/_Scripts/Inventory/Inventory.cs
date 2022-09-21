@@ -402,6 +402,7 @@ public class Inventory : MonoBehaviour
         if (slotWeaponHolder.childCount > 0)
         {
             WeaponItem equipWeaponItem = equipSlot.weaponItem;
+            _playerController.equippedWeaponItem = equipWeaponItem;
             if (playerWeaponHolderTransform.childCount <=0) 
             {
                 slotWeaponHolder.GetChild(0).parent = playerWeaponHolderTransform;

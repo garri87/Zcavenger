@@ -13,7 +13,7 @@ public class RotateLight : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        blueLight.Rotate(Vector3.up * Time.deltaTime * rotationSpeed);
-        redLight.Rotate(Vector3.up * Time.deltaTime * rotationSpeed);
+        blueLight.Rotate(Vector3.up * Time.deltaTime * rotationSpeed * 100);
+        redLight.Rotate(Vector3.up * Time.deltaTime * rotationSpeed * 100);
     }
 }

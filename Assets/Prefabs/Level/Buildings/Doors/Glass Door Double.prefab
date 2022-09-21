@@ -3330,6 +3330,37 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.3976452, y: 2.693336, z: 0.11445618}
   m_Center: {x: 0.69501567, y: 1.3576752, z: -7.959882e-16}
+--- !u!1 &1838183602249291341
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 780154899786066983}
+  m_Layer: 0
+  m_Name: Center
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &780154899786066983
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1838183602249291341}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.13, y: 1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7966295927555801616}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2762944464762011710
 GameObject:
   m_ObjectHideFlags: 0
@@ -6863,14 +6894,15 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4236211815612348176}
-  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 3.0650635, y: 0.08440447, z: 1.3831354}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4317329443283127406}
   - {fileID: 4865057178513539407}
   - {fileID: 7689331962372979166}
+  - {fileID: 780154899786066983}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
@@ -6886,13 +6918,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5f52af17fe04e6489d45f044b22ff12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  doorType: 0
+  doorOrientation: 1
   doorID: 
   textGameObject: {fileID: 8085046845836122208}
   text: {fileID: 6402053817961061281}
-  doorTransform: {fileID: 4317329443283127406}
-  insidePlayLine: 0
-  outsidePlayLine: 0
+  doorTransform: {fileID: 780154899786066983}
+  insidePlayLine: 2
+  outsidePlayLine: 1
   doorOpenSounds:
   - {fileID: 8300000, guid: 2590abbc7a195bb489ac737033389abb, type: 3}
   - {fileID: 8300000, guid: d520670dcb3edf147844b5014c7dd3a7, type: 3}
@@ -6922,6 +6954,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 7e16955726b184c4f975fb28ad8e112f, type: 3}
   - {fileID: 8300000, guid: eabba26bdf69d72488acdb3f28feaee3, type: 3}
   locked: 0
+  doorPos: {x: 0, y: 0, z: 0}
 --- !u!65 &2472201848015962219
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6931,7 +6964,7 @@ BoxCollider:
   m_GameObject: {fileID: 4236211815612348176}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 2.1576715, y: 1.8219168, z: 4.3323984}
   m_Center: {x: 1.1341617, y: 1.0468179, z: 0.047259808}

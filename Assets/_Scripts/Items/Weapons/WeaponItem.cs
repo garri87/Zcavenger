@@ -96,7 +96,8 @@ public class WeaponItem : MonoBehaviour
 
     public int quantity = 1;
 
-    public GameObject titleTextGameObject; 
+    public GameObject titleTextGameObject;
+    [SerializeField] private float textFontSize = 3;
     [HideInInspector] public BoxCollider pickupCollider;
 
     public float rotationSpeed = 2f;
@@ -121,6 +122,8 @@ public class WeaponItem : MonoBehaviour
         {
             titleTextMesh.text = "No Scriptable Object";
         }
+
+        titleTextMesh.fontSize = textFontSize;
     }
 
     private void Awake()

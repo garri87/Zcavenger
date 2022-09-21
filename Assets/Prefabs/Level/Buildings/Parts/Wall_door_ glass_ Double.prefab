@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1148322570587791150}
+  - component: {fileID: 1417886892165198630}
   m_Layer: 0
   m_Name: Wall_door_ glass_ Double
   m_TagString: Ground
@@ -23,14 +24,34 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 334526308090545556}
-  m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 2.3939972, y: 6.3458633, z: 1.0963974}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7722050574052137186}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
+--- !u!205 &1417886892165198630
+LODGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 334526308090545556}
+  serializedVersion: 2
+  m_LocalReferencePoint: {x: 0.08805488, y: 1.4984585, z: -2.2500014}
+  m_Size: 4.500003
+  m_FadeMode: 0
+  m_AnimateCrossFading: 0
+  m_LastLODIsBillboard: 0
+  m_LODs:
+  - screenRelativeHeight: 0.19776735
+    fadeTransitionWidth: 0
+    renderers:
+    - renderer: {fileID: 1887335355631337057}
+  m_Enabled: 1
 --- !u!1 &6745138544602003768
 GameObject:
   m_ObjectHideFlags: 0
@@ -43,7 +64,6 @@ GameObject:
   - component: {fileID: 8328048387222023151}
   - component: {fileID: 1887335355631337057}
   - component: {fileID: 7727726022381628040}
-  - component: {fileID: 4495256371303531430}
   m_Layer: 0
   m_Name: Wall_door__glass__Double
   m_TagString: Ground
@@ -61,6 +81,7 @@ Transform:
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1148322570587791150}
   m_RootOrder: 0
@@ -84,6 +105,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -94,7 +116,7 @@ MeshRenderer:
   m_Materials:
   - {fileID: 2100000, guid: 49ac650bb0c013f47976afbe93976583, type: 2}
   - {fileID: 2100000, guid: 46daf3ba0ea4fee48bf4bb4c54627425, type: 2}
-  - {fileID: 2100000, guid: f9eb4fd7e9ab3f8489fa602f70f3a200, type: 2}
+  - {fileID: 2100000, guid: 9d16e46d651be3c4688917617f6df4ae, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -130,22 +152,3 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -8789775988983373943, guid: 27bd0d75b4f7f2b4f8e97e663b2c2af3, type: 3}
---- !u!205 &4495256371303531430
-LODGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6745138544602003768}
-  serializedVersion: 2
-  m_LocalReferencePoint: {x: 0.08805488, y: 1.4984585, z: -2.2500014}
-  m_Size: 4.500003
-  m_FadeMode: 0
-  m_AnimateCrossFading: 0
-  m_LastLODIsBillboard: 0
-  m_LODs:
-  - screenRelativeHeight: 0.19776735
-    fadeTransitionWidth: 0
-    renderers:
-    - renderer: {fileID: 1887335355631337057}
-  m_Enabled: 1

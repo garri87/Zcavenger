@@ -200,6 +200,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponItemClass: 3
+  weaponLocation: 0
   holderTarget: {fileID: 0}
   weaponScriptableObject: {fileID: 11400000, guid: 080934a1844c6d14cb65f2912d087a92, type: 2}
   ID: 0
@@ -229,7 +230,6 @@ MonoBehaviour:
   bulletImpactPrefab: {fileID: 0}
   enemyImpactPrefab: {fileID: 4574046231875852703, guid: 0d492ff9a23dd6348aa4d45b85825187, type: 3}
   muzzleFlashPrefab: {fileID: 0}
-  weaponLocation: 0
   weaponPicked: 0
   weaponEquipped: 0
   totalBullets: 0
@@ -248,10 +248,14 @@ MonoBehaviour:
   _throwable: {fileID: 0}
   quantity: 1
   titleTextGameObject: {fileID: 9188882286512042284}
+  textFontSize: 4
   pickupCollider: {fileID: 0}
   rotationSpeed: 2
   titleTextMesh: {fileID: 5056526551565918376}
   throwableActive: 0
+  xOffset: 0
+  yOffset: 0
+  zOffset: 0
 --- !u!65 &-2958571176825060298
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -376,6 +380,7 @@ MonoBehaviour:
   _audioSource: {fileID: 3750783316749081341}
   shotSound: {fileID: 0}
   meleeAttackSound: {fileID: 8300000, guid: 63feefa6af00789428cbadbe886de15f, type: 3}
+  dropSound: {fileID: 0}
   explosionSound: {fileID: 0}
   magazineOutSound: {fileID: 0}
   magazineInSound: {fileID: 0}
@@ -606,8 +611,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 3
-  m_fontSizeBase: 3
+  m_fontSize: 4
+  m_fontSizeBase: 4
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 0

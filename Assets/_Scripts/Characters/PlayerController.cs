@@ -79,7 +79,7 @@ public class PlayerController : MonoBehaviour
     public bool eating;
     public bool grabItem;
 
-    public bool inAction;
+    public bool playerBusy;
     
     private float _crouchColliderHeight;
     private Vector3 _crouchColliderCenter;
@@ -184,8 +184,7 @@ public class PlayerController : MonoBehaviour
     public static float playLine2 = 8;
     public static float playLine3 = 12;
     [HideInInspector]public static float currentPlayLine = playLine0;
-    private Transform doorPos;
-    [HideInInspector]public Door doorScript;
+    public Door doorScript;
     public Transform mouseTargetLayer;
 
     #endregion
@@ -200,11 +199,8 @@ public class PlayerController : MonoBehaviour
     public bool finishedLevel = false;
 
     private Transform leftFoot, rightFoot;
+
     
-    private void OnValidate()
-    {
-        
-    }
 
     private void Awake()
     {
@@ -215,25 +211,26 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        keyAssignments = gameManager.GetComponent<KeyAssignments>();
-        _healthManager = GetComponent<HealthManager>();
-        _rigidbody = GetComponent<Rigidbody>();
-        _animator = GetComponent<Animator>();
-        _inventory = GetComponent<Inventory>();
-        _checkGround = GetComponentInChildren<CheckGround>();
-        _playerAudio = GetComponent<PlayerAudio>();
-        _climber = GetComponent<Climber>();
-        _collider = GetComponent<CapsuleCollider>();
+        #region GetComponents
+
+            keyAssignments = gameManager.GetComponent<KeyAssignments>();
+            _healthManager = GetComponent<HealthManager>();
+            _rigidbody = GetComponent<Rigidbody>();
+            _animator = GetComponent<Animator>();
+            _inventory = GetComponent<Inventory>();
+            _checkGround = GetComponentInChildren<CheckGround>();
+            _playerAudio = GetComponent<PlayerAudio>();
+            _climber = GetComponent<Climber>();
+            _collider = GetComponent<CapsuleCollider>();
+            crosshair = targetTransform.GetComponent<SpriteRenderer>();
+
+        #endregion
+       
+
         currentSpeed = normalSpeed;
-        crosshair = targetTransform.GetComponent<SpriteRenderer>();
         
         transform.position = gameManager.startingPosition.position;
         SwitchPlayLine(gameManager.startingPlayline);
-    }
-
-    private void FixedUpdate()
-    {
-        
     }
     
     void Update()
@@ -242,38 +239,16 @@ public class PlayerController : MonoBehaviour
         horizontalInput = Input.GetAxis("Horizontal");
         verticalInput = Input.GetAxis("Vertical");
         #endregion
-
-        leftFoot = _animator.GetBoneTransform(HumanBodyBones.LeftFoot);
-        rightFoot = _animator.GetBoneTransform(HumanBodyBones.RightFoot);
         
         #region Animator parameters
+        leftFoot = _animator.GetBoneTransform(HumanBodyBones.LeftFoot);
+        rightFoot = _animator.GetBoneTransform(HumanBodyBones.RightFoot);
         AnimatorParameters();
         #endregion
         
-        if (bandaging || drinking || eating || grabItem)
-        {
-            inAction = true;
-        }
-        else if (!bandaging && !drinking && !eating && !grabItem)
-        {
-            inAction = false;
-        }
-        
         CheckFallingState();
-        
-        if (_weaponHolderTransform.childCount > 0)
-        {
-            weaponEquipped = true;
-            equippedWeaponItem = _weaponHolderTransform.GetChild(0).GetComponent<WeaponItem>(); //TODO: CACHEAR
-            
-            attacking = equippedWeaponItem.attacking;
-        }
-        else
-        {
-            weaponEquipped = false;
-            attacking = false;
-            equippedWeaponItem = null;
-        }
+
+        CheckWeaponEquipped();
         
         #region PlayLine placement
 
@@ -422,7 +397,6 @@ public class PlayerController : MonoBehaviour
         if (other.CompareTag("Door"))
         {
             doorScript = other.GetComponent<Door>();
-            doorPos = other.GetComponent<Transform>();
             onDoor = true;
         }
         if (other.CompareTag("Conduct"))
@@ -437,26 +411,18 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    /*private void OnTriggerStay(Collider other)
+    private void OnTriggerStay(Collider other)
     {
-        
-
-        if (other.CompareTag("Ladder") && !climbingLadder)
+        /*if (other.CompareTag("Elevator"))
         {
-            nextToLadder = true;
-        }
+            transform.position = new Vector3(transform.position.x,other.transform.position.y,transform.position.z);
+        }*/
 
-        if (other.CompareTag("UpLadder") && !climbingLadder)
-        {
-            nextToLadder = true;
-        }
-        
         if (other.CompareTag("Door"))
         {
             onDoor = true;
         }
-        
-    }*/
+    }
 
     private void OnTriggerExit(Collider other)
     {
@@ -480,8 +446,6 @@ public class PlayerController : MonoBehaviour
         {
             onDoor = false;
         }
-
-        
     }
 
     #endregion
@@ -551,8 +515,7 @@ public class PlayerController : MonoBehaviour
         
 
         #region PLAYER ACTIONS
-
-
+        
         //MOVEMENT SPEED
         
         if (prone)
@@ -595,15 +558,14 @@ public class PlayerController : MonoBehaviour
         {
             crosshair.enabled = false;
         }
-
-
+        
         if (weaponEquipped )
         {
-            if (Input.GetKey(keyAssignments.aimBlockKey.keyCode) && !inAction)
+            if (Input.GetKey(keyAssignments.aimBlockKey.keyCode) && !PlayerBusy())
             {
                 if (equippedWeaponItem.weaponItemClass != WeaponScriptableObject.WeaponClass.Melee)
                 {
-                    if (_checkGround.isGrounded && !_climber.attachedToLedge && !trapped && !bitten && !inAction)
+                    if (_checkGround.isGrounded && !_climber.attachedToLedge && !trapped && !bitten && !PlayerBusy())
                     {
                         playerState = PlayerState.IsAiming;
                         isAiming = true;   
@@ -633,11 +595,7 @@ public class PlayerController : MonoBehaviour
             {
                 isAiming = false;
             }
-            
-            
         }
-        
-        
         
         if (weaponEquipped && Input.GetKeyUp(keyAssignments.aimBlockKey.keyCode))
         {
@@ -758,19 +716,37 @@ public class PlayerController : MonoBehaviour
         }
 
         //INTERACTION
-        if (Input.GetKeyDown(keyAssignments.useKey.keyCode) && onDoor)
+        if (onDoor && Input.GetKeyDown(keyAssignments.useKey.keyCode))
         {
             if (!_inventory.onItem && !_inventory.onWeaponItem)
             {
-                transform.position = new Vector3(doorPos.position.x, transform.position.y, transform.position.z);
-                if (doorPos.position.z > transform.position.z)
-                {
                 
-                    SwitchPlayLine(doorScript.insidePlayLine);
+                if (!doorScript.locked && doorScript.doorOrientation == Door.DoorOrientation.Back)
+                {
+                    Debug.Log("doorScript.doorPos.z: " + doorScript.doorPos.z);
+                    Debug.Log("transform.position.z: " + transform.position.z);
+                    if (doorScript.doorTransform.position.z > transform.position.z)
+                    {
+                        SwitchPlayLine(doorScript.insidePlayLine);
+                        Debug.Log("Switching to insidePlayLine");
+                    }
+                    else
+                    {
+                        SwitchPlayLine(doorScript.outsidePlayLine);
+                        Debug.Log("Switching to outsidePlayLine");
+                    }  
+                   
                 }
                 else
                 {
-                    SwitchPlayLine(doorScript.outsidePlayLine);
+                    if (doorScript.transform.TryGetComponent(out ElevatorDoors elevatorDoors))
+                    {
+                        Elevator elevator = elevatorDoors.GetComponentInParent<Elevator>();
+                        if (!elevator.playerInside && elevator.currentFloor != elevatorDoors.floor)
+                        {
+                            elevator.GoToFloor(elevatorDoors.floor);
+                        }
+                    }
                 }
             }
         }
@@ -787,7 +763,7 @@ public class PlayerController : MonoBehaviour
         #endregion
 
     }
-
+    
     public void OnUIController()
     {
         _animator.SetFloat(AnimatorSpeed,0);
@@ -886,7 +862,6 @@ public class PlayerController : MonoBehaviour
     {
         
         _animator.SetFloat("VerticalInput", verticalInput);
-        
         _animator.SetBool("ClimbingLadder", climbingLadder);
         _animator.SetBool("UpLadder", upLadder);
         _animator.SetBool("ClimbingToTop", climbingToTop);
@@ -996,6 +971,42 @@ public class PlayerController : MonoBehaviour
         _animator.SetLayerWeight(index,value);
     }//Used for Animator events
 
+    private bool PlayerBusy()
+    {
+        if (bandaging || drinking || eating || grabItem)
+        {
+            playerBusy = true;
+        }
+        else if (!bandaging && !drinking && !eating && !grabItem)
+        {
+            playerBusy = false;
+            
+        }
+
+        return playerBusy;
+    }
+    
+    private void CheckWeaponEquipped()
+    {
+        if (_weaponHolderTransform.childCount > 0)
+        {
+            weaponEquipped = true;
+            if (equippedWeaponItem ==null)
+            {
+                equippedWeaponItem = _weaponHolderTransform.GetComponentInChildren<WeaponItem>(); //TODO: CACHEAR
+            }
+            else
+            {
+                attacking = equippedWeaponItem.attacking;
+            }
+        }
+        else
+        {
+            weaponEquipped = false;
+            attacking = false;
+            equippedWeaponItem = null;
+        }
+    }
     public void JumpAnim(float value)//Used for Animator events
         {
             if (value == 0)//jump start
@@ -1185,6 +1196,11 @@ public class PlayerController : MonoBehaviour
                 currentPlayLine = playLine3;
                 break;
         }
+
+        if (doorScript != null)
+        {
+            transform.position = new Vector3(doorScript.doorPos.x, transform.position.y, transform.position.z);
+        }
         mouseTargetLayer.transform.position = new Vector3(mouseTargetLayer.position.x,transform.position.y, currentPlayLine);
     }
 
@@ -1284,6 +1300,9 @@ public class PlayerController : MonoBehaviour
         }
         
     }
+    
+    
+    
     
 }
 
