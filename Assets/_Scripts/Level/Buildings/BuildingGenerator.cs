@@ -1,3 +1,33 @@
+/*
+-Definir área de las piezas (por defecto 3) cada pieza representa una unidad (ud) en altura, anchura y profundidad
+
+-Definir dimensión del edificio en X, Y y Z en ud
+
+-Definir familia del edificio
+
+-Cargar recursos de partes según tipo de familia de edificio
+
+-Colocar un generador de habitación en la base  en las coordenadas 0,0,0
+
+-Establecer dimensión de la primera habitación en Y en 1ud e X según anchura del edificio
+
+-BUCLE I: desde 0 hasta el ancho del edificio
+    *SI: la habitación comienza en coordenada 0 de Y. HACER:
+        *>Generar una entrada a la izquierda.
+        *>BUCLE J: desde I hasta ancho del edificio
+                Generar una ud de bloque de base, pared y techo según altura de la habitacion.
+                -Guardar la pared en una lista
+        FIN BUCLE J.<*
+            
+    -Generar una salida a la derecha.
+
+Mover punto de origen en coordenada X:0 e Y en 1 ud
+FIN BUCLE I.
+
+
+
+*/
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
