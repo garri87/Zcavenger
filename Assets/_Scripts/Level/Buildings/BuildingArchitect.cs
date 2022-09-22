@@ -3,6 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public class RoomStyle
+{
+    public GameObject doorType;
+    public GameObject floorType;
+    public GameObject wallType;
+    public GameObject CeilingType;
+    
+
+}
+
 public class BuildingArchitect : MonoBehaviour
 {
     public enum BuildingStyle

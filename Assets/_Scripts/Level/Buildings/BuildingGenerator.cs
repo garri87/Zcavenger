@@ -49,10 +49,10 @@ public class BuildingGenerator : MonoBehaviour
        {
            for (int j = 0; j < maxWidth; j++)
            {
-               instRoom = Instantiate(roomSeed, spawnOrigin.position, transform.rotation, roomsTransform);
-               _roomGen = instRoom.GetComponent<RoomGenerator>();
+               
                if (spawnOrigin.position.x < rightLimit.position.x)
-               { 
+               { instRoom = Instantiate(roomSeed, spawnOrigin.position, transform.rotation, roomsTransform);
+                   _roomGen = instRoom.GetComponent<RoomGenerator>();
                    _roomGen.StartGeneration(Random.Range(minRoomWidth, maxRoomWidth),1,  _roomGen.backDoorCount);
                    spawnOrigin.position = _roomGen.rightExtent.position + Vector3.right * 1.45f;
                    foreach (GameObject doorWall in _roomGen.doorWalls)
@@ -62,10 +62,13 @@ public class BuildingGenerator : MonoBehaviour
                    }
                }
            }
-           spawnOrigin.position = new Vector3(0,(i + 1) *_roomGen.pieceDimension,transform.position.z);
+           _roomGen.exitRight = false;
+           
+           spawnOrigin.position = new Vector3(0,(i + 1) * _roomGen.pieceDimension * 1.025f,transform.position.z);
            
        }
-       CombineMeshes();
+       
+       //CombineMeshes();
    }
    public void GetResources()
    {

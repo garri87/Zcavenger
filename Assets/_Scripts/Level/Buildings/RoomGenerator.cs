@@ -51,23 +51,7 @@ public class RoomGenerator : MonoBehaviour
         return end;
 
     }
-
-    public GameObject GenerateWidth(GameObject gameObject, Vector3 spawnPoint, Vector3 direction, float dimension)
-    {
-        GameObject go = Instantiate(gameObject, spawnPoint + (direction * dimension),
-            gameObject.transform.rotation);
-        spawnPoint = gameObject.transform.position;
-        return go;
-    }
-
-    public GameObject GenerateCeiling(GameObject gameObject, float x, float y, float z)
-    {
-        //Generate Ceiling
-        Vector3 ceilingPos = new Vector3(x, y - 1.45f, z);
-        GameObject instantiatedCeiling = Instantiate(gameObject, ceilingPos, gameObject.transform.rotation);
-        return instantiatedCeiling;
-    }
-
+    
     public void GenerateBlock(int width, int height)
     {
 
@@ -112,8 +96,28 @@ public class RoomGenerator : MonoBehaviour
             //Generate Left End
             if (Mathf.RoundToInt(spawnXPoint.x) < _buildingGenerator.rightLimit.position.x)
             {
-                leftEnd = GenerateSide(doorWallGo, spawnXPoint); 
-                doorWalls.Add(leftEnd);
+                if (spawnXPoint.y == 0 && spawnXPoint.x == 0)//point is at his base
+                {
+                    leftEnd = GenerateSide(doorWallGo, spawnXPoint); 
+                    doorWalls.Add(leftEnd);
+                    exitLeft = true;
+                }
+                else if (spawnXPoint.x < 1)
+                {
+                    leftEnd = GenerateSide(wallGo, spawnXPoint);
+                    
+                }
+                else if(spawnXPoint.y <1)
+                {
+                    leftEnd = GenerateSide(doorWallGo, spawnXPoint);
+                }
+                else
+                {
+                    leftEnd = GenerateSide(doorWallGo, spawnXPoint);
+                    leftEnd.SetActive(false);
+                }
+                
+
                 leftEnd.name += " left";
             }
             else
@@ -126,9 +130,8 @@ public class RoomGenerator : MonoBehaviour
 
             //Generate Room Width
             for (int i = 0; i < width; i++)
-            {
-                if (Mathf.RoundToInt(spawnXPoint.x) <
-                    _buildingGenerator.rightLimit.position.x) //continue generating if the room doesn't exceed the building width
+            { //continue generating if the room doesn't exceed the building width
+                if (Mathf.RoundToInt(spawnXPoint.x) < _buildingGenerator.rightLimit.position.x) 
                 {
                     GenerateBlock(width, height);
                 }
@@ -140,12 +143,30 @@ public class RoomGenerator : MonoBehaviour
                 rightEnd = GenerateSide(doorWallGo, spawnXPoint);
                 rightEnd.name += " right";
                 rightEnd.SetActive(false);
+                doorWalls.Add(rightEnd);
+                exitRight = true;
             }
             else
             {
-                rightEnd = GenerateSide(doorWallGo, new Vector3(_buildingGenerator.rightLimit.position.x, transform.position.y));
+                if (_buildingGenerator.spawnOrigin.position.y != 0)
+                {
+                    exitRight = false;
+                }
+                else
+                {
+                    exitRight = true;
+                }
+                
+                if (exitRight)
+                {
+                    rightEnd = GenerateSide(doorWallGo, new Vector3(_buildingGenerator.rightLimit.position.x, transform.position.y));
                     doorWalls.Add(rightEnd);
-                    rightEnd.name += " right";
+                }
+                else
+                {
+                    rightEnd = GenerateSide(wallGo, new Vector3(_buildingGenerator.rightLimit.position.x, transform.position.y));
+                }
+                rightEnd.name += " right";
             }
             
             //Fill Side Walls
@@ -164,7 +185,7 @@ public class RoomGenerator : MonoBehaviour
                 sideWallRightPos = instSideRWall.transform.position;
             }
 
-            //generate back doors
+            //generate back doorWalls
             for (int l = 0; l < backDoors; l++)
             {
                 GameObject selectedWall = baseWalls[Random.Range(0, baseWalls.Count)];
@@ -176,11 +197,9 @@ public class RoomGenerator : MonoBehaviour
 
             leftExtent.position = leftEnd.transform.position;
             rightExtent.position = rightEnd.transform.position;
-            
-            
-            CombineMeshes();
-        
-            
+
+
+          //  CombineMeshes();
         }
     }
 

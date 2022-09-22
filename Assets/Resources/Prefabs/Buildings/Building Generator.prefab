@@ -113,6 +113,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6647963886140235092}
   - component: {fileID: 6647963886140235093}
+  - component: {fileID: 864574593}
   m_Layer: 0
   m_Name: Building Generator
   m_TagString: Untagged
@@ -150,16 +151,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38551f5955a5c08438626e79a9e5c98d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxWidth: 20
-  maxHeight: 7
+  maxWidth: 1
+  maxHeight: 1
   maxDepth: 1
   minRoomWidth: 2
   maxRoomWidth: 4
   spawnOrigin: {fileID: 6647963887409707923}
   rightLimit: {fileID: 6647963886843385218}
-  roomTemplate: {fileID: 8911910263573839973, guid: 1d018241eceb31c4b85b1ecf223d3b5b, type: 3}
+  roomSeed: {fileID: 8911910263573839973, guid: 1d018241eceb31c4b85b1ecf223d3b5b, type: 3}
   rooms: []
   roomsTransform: {fileID: 1752135001}
+  doorPrefabList: []
+  architect: {fileID: 0}
+--- !u!114 &864574593
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6647963886140235090}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c03fcbe942d97a843bc58e03a3d94e78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buildingStyle: 3
+  buildingWidth: 0
+  buildingHeight: 0
+  floors: 0
+  roomsPerFloor: 0
+  roomType: 0
+  buildOrder: 0000000000000000000000000000000000000000
+  resourcePath: Prefabs/Buildings/ResidentialRuined
 --- !u!1 &6647963886843385217
 GameObject:
   m_ObjectHideFlags: 0
