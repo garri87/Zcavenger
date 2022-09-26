@@ -75,7 +75,7 @@ public class KeyAssignments : MonoBehaviour
    private void Awake()
    {    
       SharedInstance = this;
-
+      InitInputOptionsKeys();
    }
 
    public void InitInputOptionsKeys()

@@ -350,11 +350,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2748475014760012453, guid: 5c774c9a3e3a72247b614284ddbeebe2, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.000000017203991
+      value: 0.000000017203998
       objectReference: {fileID: 0}
     - target: {fileID: 2748475014760012453, guid: 5c774c9a3e3a72247b614284ddbeebe2, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 2.8665417e-10
+      value: -2.8665428e-10
       objectReference: {fileID: 0}
     - target: {fileID: 2748475014760012453, guid: 5c774c9a3e3a72247b614284ddbeebe2, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -423,11 +423,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4603698110121654974, guid: c1eacc18507c42e429c1f309c05ff7a5, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.000000017203991
+      value: 0.000000017203998
       objectReference: {fileID: 0}
     - target: {fileID: 4603698110121654974, guid: c1eacc18507c42e429c1f309c05ff7a5, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 2.8665417e-10
+      value: -2.8665428e-10
       objectReference: {fileID: 0}
     - target: {fileID: 4603698110121654974, guid: c1eacc18507c42e429c1f309c05ff7a5, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -564,12 +564,32 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6647963886140235093, guid: 3ef247bdb14b70040b08a35a3c3d0116, type: 3}
+      propertyPath: maxBldDepth
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6647963886140235093, guid: 3ef247bdb14b70040b08a35a3c3d0116, type: 3}
+      propertyPath: maxBldWidth
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 6647963886140235093, guid: 3ef247bdb14b70040b08a35a3c3d0116, type: 3}
+      propertyPath: maxBldHeight
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6647963886140235093, guid: 3ef247bdb14b70040b08a35a3c3d0116, type: 3}
       propertyPath: maxRoomWidth
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6647963886140235093, guid: 3ef247bdb14b70040b08a35a3c3d0116, type: 3}
       propertyPath: minRoomWidth
-      value: 1
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6647963886140235093, guid: 3ef247bdb14b70040b08a35a3c3d0116, type: 3}
+      propertyPath: buildingStyle
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6647963886140235093, guid: 3ef247bdb14b70040b08a35a3c3d0116, type: 3}
+      propertyPath: roomsPerFloor
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3ef247bdb14b70040b08a35a3c3d0116, type: 3}

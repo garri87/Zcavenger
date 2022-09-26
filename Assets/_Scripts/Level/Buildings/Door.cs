@@ -68,7 +68,6 @@ public class Door : MonoBehaviour
     {
         
         text = textGameObject.GetComponent<TextMeshPro>();
-        text.text = text.text +  " " + KeyAssignments.SharedInstance.useKey.keyCode.ToString() + " ]";
         textGameObject.SetActive(false);
         _audioSource = GetComponent<AudioSource>();
         for (int i = 0; i < transform.childCount; i++)
@@ -117,6 +116,8 @@ public class Door : MonoBehaviour
             {
                 textGameObject.SetActive(true);
                 text.enabled = true;  
+                text.text = text.text +  " " + KeyAssignments.SharedInstance.useKey.keyCode.ToString() + " ]";
+
             }
             if (TryGetComponent(out ElevatorDoors elevatorDoors))
             {
