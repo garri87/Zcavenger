@@ -3354,7 +3354,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1838183602249291341}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.13, y: 1, z: 0}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6721,7 +6721,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3908112819817670024}
   m_LocalRotation: {x: -0, y: -1, z: -0, w: 0.0000028461216}
-  m_LocalPosition: {x: 2.2620602, y: 0, z: 0.0154697895}
+  m_LocalPosition: {x: 1.13, y: 0, z: 0}
   m_LocalScale: {x: 0.8, y: 0.8, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6807,7 +6807,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3912700575449356739}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -1.13, y: 0, z: 0}
   m_LocalScale: {x: 0.8, y: 0.8, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6905,7 +6905,7 @@ Transform:
   - {fileID: 780154899786066983}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7391899976964699747
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6920,9 +6920,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   doorOrientation: 1
   doorID: 
-  textGameObject: {fileID: 8085046845836122208}
-  text: {fileID: 6402053817961061281}
   doorTransform: {fileID: 780154899786066983}
+  doorPos: {x: 0, y: 0, z: 0}
+  doorRotation: 90
+  textGameObject: {fileID: 8085046845836122208}
+  locked: 0
+  _doorZoneCollider: {fileID: 2472201848015962219}
+  text: {fileID: 6402053817961061281}
   insidePlayLine: 2
   outsidePlayLine: 1
   doorOpenSounds:
@@ -6953,8 +6957,6 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 6df9ac5da95af864ba179ce19ccacd2b, type: 3}
   - {fileID: 8300000, guid: 7e16955726b184c4f975fb28ad8e112f, type: 3}
   - {fileID: 8300000, guid: eabba26bdf69d72488acdb3f28feaee3, type: 3}
-  locked: 0
-  doorPos: {x: 0, y: 0, z: 0}
 --- !u!65 &2472201848015962219
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6966,8 +6968,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2.1576715, y: 1.8219168, z: 4.3323984}
-  m_Center: {x: 1.1341617, y: 1.0468179, z: 0.047259808}
+  m_Size: {x: 1.8, y: 1.8219168, z: 4.3323984}
+  m_Center: {x: 0, y: 1.0468179, z: 0.047259808}
 --- !u!205 &3346414306424435760
 LODGroup:
   m_ObjectHideFlags: 0
@@ -7121,7 +7123,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.971, y: 2.753}
+  m_AnchoredPosition: {x: -0.15899998, y: 2.753}
   m_SizeDelta: {x: 2.7006, y: 1.1347}
   m_Pivot: {x: 0.5, y: 0.50000024}
 --- !u!23 &8253454935225352938
@@ -7270,7 +7272,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8233d90336aea43098adf6dbabd606a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_MeshFormatVersion: 1
+  m_MeshFormatVersion: 2
   m_Faces:
   - m_Indexes: 2c0000002d0000002e000000
     m_SmoothingGroup: 0
@@ -7754,7 +7756,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 0
+  m_VersionIndex: 4
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []

@@ -7,31 +7,17 @@ using UnityEngine;
 
 public class HideFrontFace : MonoBehaviour
 {
-    public GameObject frontSide;
+    public List<GameObject> facesToHide;
     //private Color frontSideColor;
-
-    public bool fadeOut;
-    public bool fadeIn;
-    private float fadeAmount;
-    public float transitionSpeed;
-    public float currentValue;
-
-    void Start()
-    {
-    }
-
-    void Update()
-    {
-
-    }
-
+    
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            for (int i = 0; i < transform.childCount; i++)
+            Debug.Log("Faces Hidden!");
+            foreach (GameObject face in facesToHide)
             {
-                transform.GetChild(i).gameObject.SetActive(false);
+                face.SetActive(false);
             }
         }
 
@@ -42,10 +28,9 @@ public class HideFrontFace : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            for (int i = 0; i < transform.childCount; i++)
+            foreach (GameObject face in facesToHide)
             {
-                transform.GetChild(i).gameObject.SetActive(true);
-
+                face.SetActive(true);
             }
         }
     }

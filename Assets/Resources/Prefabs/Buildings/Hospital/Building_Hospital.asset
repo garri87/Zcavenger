@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af2178f8dd4289a44ae206f8c7d4abfd, type: 3}
+  m_Name: Building_Hospital
+  m_EditorClassIdentifier: 
+  buildingStyle: 5
+  doorsPrefabsList:
+  - {fileID: 4466889636972523376, guid: c5a12fda17d96fc408017b12b1caf667, type: 3}
+  - {fileID: 5237847287048580478, guid: 81426e75428a49143b980d49e5f4170f, type: 3}
+  wallsPrefabsList:
+  - {fileID: 5484078044615444097, guid: 84c94a35639ab864fbda1da9e19a8705, type: 3}
+  doorWallsPrefabsList:
+  - {fileID: 9038470090336078098, guid: fb25e42a9a53ebb439f52e46f993f8e0, type: 3}
+  floorBasesPrefabsList:
+  - {fileID: 6409289816688692336, guid: 627ba5ff7a4766742b40d801e9352b33, type: 3}
+  exteriorWallsPrefabsList:
+  - {fileID: 7552461067605726105, guid: d911205ee76d51349a29192e0effb4fc, type: 3}
+  - {fileID: 6905190928926450421, guid: abaefd6b10ba5ca4f8a8281c4a8b69d1, type: 3}
+  exteriorDoorWallsPrefabsList:
+  - {fileID: 4402348816516600235, guid: 4b8eac40a2cfc074fae8e4f9dcd02ba6, type: 3}
+  roofPrefabsList:
+  - {fileID: 3925909910735618799, guid: ab0a5792e333a8246853ebefb43579df, type: 3}
+  decorPrefabsList:
+  - {fileID: 3279511732269549126, guid: 85952352c4815b040a3628210212a14b, type: 3}
+  - {fileID: 6395361566495248222, guid: 669da9ff3c2c14849a8e5e2763bda13e, type: 3}
+  - {fileID: 8497078378754291581, guid: 86871e79be0ac9e43915e601528c4a52, type: 3}
+  - {fileID: 7277665343951783625, guid: f88722dff4e053d4e8130f2bcc84ba43, type: 3}
+  - {fileID: 1339096134368962727, guid: c28a957df4a0e914bac0002ab38666b7, type: 3}
+  - {fileID: 4793460118003122189, guid: 81f727857577be2439fedd801afe04e0, type: 3}
+  - {fileID: 6709122848613042247, guid: 2a398b7f4ac5ea941bbb302d27d4a9d5, type: 3}
+  - {fileID: 4665325882452833061, guid: 4674b1bcc36b4e74d928a2c95162407f, type: 3}
+  - {fileID: 4449303437167208726, guid: 3cd7007f9317b614480b5cabe172bd39, type: 3}
+  - {fileID: 6890279964226000793, guid: dec2094c53217c14b85bf187b5a99f3e, type: 3}
+  - {fileID: 5138047460253471168, guid: e2135ad7abb1bad42a0a02613a6cc69f, type: 3}
+  mainDoorPrefab: {fileID: 4236211815612348176, guid: a3194e2d970e16f44b3867709701791f, type: 3}
+  roofCornice: {fileID: 3925909910735618799, guid: ab0a5792e333a8246853ebefb43579df, type: 3}
+  roofCorniceCorner: {fileID: 8584746072988293884, guid: 09c03c35794192340947ee2eb4ec9bab, type: 3}

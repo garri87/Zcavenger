@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5193714060909618710
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1476066829940770689}
+  m_Layer: 0
+  m_Name: BackWallGroup
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1476066829940770689
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5193714060909618710}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8911910263573839975}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8911910263573839973
 GameObject:
   m_ObjectHideFlags: 0
@@ -31,7 +62,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1476066829940770689}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -53,23 +85,16 @@ MonoBehaviour:
   baseGo: {fileID: 6409289816688692336, guid: 627ba5ff7a4766742b40d801e9352b33, type: 3}
   wallGo: {fileID: 5484078044615444097, guid: 84c94a35639ab864fbda1da9e19a8705, type: 3}
   doorWallGo: {fileID: 9038470090336078098, guid: fb25e42a9a53ebb439f52e46f993f8e0, type: 3}
-  backDoorCount: 1
-  leftExtent: {fileID: 0}
-  rightExtent: {fileID: 0}
-  backExtent: {fileID: 0}
-  frontExtent: {fileID: 0}
-  leftEnd: {fileID: 0}
-  rightEnd: {fileID: 0}
+  bases: []
   backWalls: []
+  backDoorWalls: []
   doorWalls: []
-  spawnXPoint: {x: 0, y: 0, z: 0}
+  decorationSetPrefabs: []
   spawnYPoint: {x: 0, y: 0, z: 0}
-  exitLeft: 0
-  exitRight: 0
-  exitFront: 0
-  exitBack: 0
+  backWallGroup: {fileID: 1476066829940770689}
   _buildingGenerator: {fileID: 0}
   _meshCombiner: {fileID: -4568913972215904817}
+  roomStyle: 0
 --- !u!33 &-2128729240743703100
 MeshFilter:
   m_ObjectHideFlags: 0
