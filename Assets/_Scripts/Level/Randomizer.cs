@@ -12,14 +12,13 @@ public class Randomizer : MonoBehaviour
     public bool selectAllChilds;
     public bool randomRotation;
     public bool randomActivation;
+    public int activationProbabilty = 2;
     public bool randomMaterial;
     public Material[] materials;
     
     
     private void Awake()
     {
-        
-        
         if (selectAllChilds)
         {
             if (transform.childCount > 0)
@@ -36,32 +35,34 @@ public class Randomizer : MonoBehaviour
             }
         }
 
-        
+
+
+        foreach (GameObject gameObject in gameObjects)
+        {
             if (randomActivation)
             {
-                foreach (GameObject gameObject in gameObjects)
+                float randomNum = Mathf.RoundToInt(Random.Range(0f, activationProbabilty));
+                if (randomNum == activationProbabilty)
                 {
-                    gameObject.SetActive(Convert.ToBoolean(Random.Range(0, 2)));
+                    gameObject.SetActive(true);
+                }
+                else
+                {
+                    gameObject.SetActive(false);
                 }
             }
-        
-            if (randomRotation) 
+
+            if (randomRotation)
             {
-                foreach (GameObject gameObject in gameObjects)
-                {
-                    gameObject.transform.eulerAngles = new Vector3(gameObject.transform.eulerAngles.x,
-                        Random.Range(minRotation, maxRotation),gameObject.transform.eulerAngles.z);
-                }
+                gameObject.transform.eulerAngles = new Vector3(gameObject.transform.eulerAngles.x,
+                    Random.Range(minRotation, maxRotation), gameObject.transform.eulerAngles.z);
             }
 
             if (randomMaterial)
             {
                 if (materials.Length > 0)
                 {
-                    foreach (GameObject gameObject in gameObjects)
-                    {
-                        gameObject.GetComponent<MeshRenderer>().material = materials[Random.Range(0, materials.Length)];
-                    }  
+                    gameObject.GetComponent<MeshRenderer>().material = materials[Random.Range(0, materials.Length)];
                 }
                 else
                 {
@@ -69,6 +70,6 @@ public class Randomizer : MonoBehaviour
                 }
                 
             }
+        }
     }
-    
 }

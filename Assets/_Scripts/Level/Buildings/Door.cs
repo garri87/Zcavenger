@@ -29,18 +29,14 @@ public class Door : MonoBehaviour
     [HideInInspector]public TextMeshPro text;
     private HingeJoint _hingeJoint;
     
-    public PlayerController.PlayLine insidePlayLine;
-    public PlayerController.PlayLine outsidePlayLine;
+    public float insidePlayLine;
+    public float outsidePlayLine;
    
     
     private AudioSource _audioSource;
     public AudioClip[] doorOpenSounds;
     public AudioClip[] doorCloseSounds;
-
     
-
-    
-
     private void OnValidate()
     {
         text = textGameObject.GetComponent<TextMeshPro>();
@@ -105,6 +101,11 @@ public class Door : MonoBehaviour
                 doorOpen = false;
             }
         }
+
+        if (doorOrientation == DoorOrientation.Side)
+        {
+            _doorZoneCollider.enabled = false;
+        }
         
     }
 
@@ -116,7 +117,8 @@ public class Door : MonoBehaviour
             {
                 textGameObject.SetActive(true);
                 text.enabled = true;  
-                text.text = text.text +  " " + KeyAssignments.SharedInstance.useKey.keyCode.ToString() + " ]";
+                
+                text.text = " Open " + "[ " + KeyAssignments.SharedInstance.useKey.keyCode.ToString() + " ]";
 
             }
             if (TryGetComponent(out ElevatorDoors elevatorDoors))

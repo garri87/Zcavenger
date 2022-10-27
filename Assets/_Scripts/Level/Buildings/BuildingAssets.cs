@@ -14,7 +14,7 @@ public class BuildingAssets : ScriptableObject
         Residential3,
         ResidentialRuined,
         Office,
-        Hospital,
+        Hospital, //ok
         Market,
         PoliceStation,
         FireStation,
@@ -28,11 +28,18 @@ public class BuildingAssets : ScriptableObject
     public List<GameObject> exteriorWallsPrefabsList;
     public List<GameObject> exteriorDoorWallsPrefabsList;
     public List<GameObject> roofPrefabsList;
-    
+    public List<GameObject> stairsPrefabsList;
     public List<GameObject> decorPrefabsList;
+    public List<GameObject> roofCornices;
+    public List<GameObject> roofCorniceCorners;
+    public List<GameObject> lightsPrefabsList;
 
-    public GameObject mainDoorPrefab;
-    public GameObject roofCornice;
-    public GameObject roofCorniceCorner;
+    public List<GameObject> mainDoorPrefabs;
+    
+    
+    public Material[] exteriorMaterials;
+    public Material[] interiorMaterials;
+    public Material[] floorBaseMaterials;
+
     
 }

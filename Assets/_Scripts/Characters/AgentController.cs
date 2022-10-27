@@ -75,18 +75,8 @@ public class AgentController : MonoBehaviour
     #endregion
     
     #region Playline Variables
-
-    public enum PlayLine
-    {
-        playLine0,
-        playLine1,
-        playLine2,
-    }
-
-    public PlayLine playLine;
-    public float currentPlayLine;
-
     
+    public float currentPlayLine;
     
     #endregion
 
@@ -169,19 +159,8 @@ public class AgentController : MonoBehaviour
             hipsCollider.enabled = false;
         }
 
-            switch (playLine)
-        {
-            case PlayLine.playLine0:
-                currentPlayLine = PlayerController.playLine0;
-                break;
-            
-            case PlayLine.playLine1:
-                currentPlayLine = PlayerController.playLine1;
-                break;        
-            case PlayLine.playLine2:
-                currentPlayLine = PlayerController.playLine2;
-                break;
-        }
+        currentPlayLine = transform.position.z;
+
     }
 
     private void FixedUpdate()
