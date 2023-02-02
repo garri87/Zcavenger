@@ -1,15 +1,38 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class BlinkLight : MonoBehaviour
 {
+    public bool randomActivation;
+    public int probability;
     public Light[] targetLights;
     public float blinkRate;
     private bool power = false;
     public bool randomBlink;
     public float minBlinkRate;
     public float maxBlinkRate;
+
+    private void Start()
+    {
+        if (randomActivation)
+        {
+            int randomNum = Random.Range(0, probability);
+
+            if (randomNum == probability-1)
+            {
+                this.enabled = true;
+                randomBlink = true;
+            }
+            else
+            {
+                this.enabled = false;
+            }
+        }
+    }
+
     void Update()
     {
         if (randomBlink)

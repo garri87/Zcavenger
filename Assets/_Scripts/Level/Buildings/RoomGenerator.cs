@@ -11,128 +11,123 @@ public class RoomGenerator : MonoBehaviour
 {
     public int roomWidth;
     public int roomHeight;
-    public int partsSize;
-
-    public GameObject baseGo;
-    public GameObject wallGo;
-    public GameObject doorWallGo;
-
-    public int backDoorCount;
-
-    public Transform leftExtent, rightExtent, backExtent, frontExtent;
-
-    public GameObject leftEnd;
-    public GameObject rightEnd;
-
-    [SerializeField] private List<GameObject> backWalls;
-    [SerializeField] public List<GameObject> doorWalls;
-
     
+    public List<GameObject> bases; 
+    public List<GameObject> ceilings; 
+    public List<GameObject> backWalls; 
+    public List<GameObject> backDoorWalls;
+    public List<GameObject> doorWalls;
+
+    public List<GameObject> decorationSetPrefabs;
+
+    public Material exteriorMaterial;
+    public Material interiorMaterial;
+    public Material floorBaseMaterial;
     
-    private GameObject instantiatedXGO;
-    private GameObject instantiatedYGO;
-    public Vector3 spawnXPoint;
     public Vector3 spawnYPoint;
 
-    public bool exitLeft, exitRight, exitFront, exitBack;
-
+    public Transform backWallGroup;
+    public Transform wallsAndInteriorGroup;
+    
     public BuildingGenerator _buildingGenerator;
-
-    public MeshCombiner _meshCombiner;
     
-    private void Awake()
+    public enum RoomStyle
     {
+       // EmptyRoom,
+        Hospital_Lobby, //ok 4
+        Hospital_Reception, //ok 1
+        Hospital_SurgeryRoom, //ok 2
+        Hospital_Bathrooms, //ok 3
+        Hospital_DiningRoom,//ok 3
+        Hospital_PatientRooms, //ok 1
+     //  Hospital_Pharmacy,
+      //  Hospital_Warehouse,
+        
+     /*  Residential_Bathroom,
+        Residential_Bedroom,
+        Residential_ElevatorIn,
+        Residential_ElevatorOut,
+        Residential_KidBedroom,
+        Residential_Kitchen,
+        Residential_Laundry,
+        Residential_Living,
+        Residential_Lobby,*/
+        
+       /* Office_Lobby,
+        Office_Blocks,
+        Office_Boss,
+        Office_Warehouse,
+        Office_Reception,
+        Office_Bathrooms,
+        
+        StairsDown,
+        StairsUp,*/
+        end,
     }
+    public RoomStyle roomStyle;
 
-    public GameObject GenerateSide(GameObject gameObject, Vector3 spawnPoint)
+    public bool isLobby = false;
+    public bool isStairsEntrace = false;
+    public bool isStairsRoom = false;
+    
+    
+    public void CombineMeshes(bool combine, Transform transform)
     {
-        GameObject end = Instantiate(gameObject, spawnPoint - Vector3.right * 1.45f, Quaternion.Euler(0, 90, 0),transform);
-        if (gameObject.tag == "DoorWall")
+        if (combine)
         {
-            doorWalls.Add(gameObject);
-            switch (_buildingGenerator.buildingStyle)
-            {
-                case BuildingArchitect.BuildingStyle.Hospital:
-                    GameObject instDoor = Instantiate(_buildingGenerator.doorsPrefabList[0],end.transform.position,end.transform.rotation,_buildingGenerator.transform) ;
-                    
-                    break;
-            }
+            MeshFilter meshFilter = transform.gameObject.AddComponent<MeshFilter>();
+            MeshRenderer meshRenderer = transform.gameObject.AddComponent<MeshRenderer>();
+            MeshCombiner meshCombiner = transform.gameObject.AddComponent<MeshCombiner>();
+            meshCombiner.CreateMultiMaterialMesh = true;
+            meshCombiner.CombineInactiveChildren = false;
+            meshCombiner.DeactivateCombinedChildren = false;
+            meshCombiner.DeactivateCombinedChildrenMeshRenderers = true;
+            meshCombiner.GenerateUVMap = false;
+            meshCombiner.DestroyCombinedChildren = false;
+            meshCombiner.CombineMeshes(false);
         }
-        return end;
         
     }
-    
-    public void GenerateBlock(int height, Transform spawnOrigin)
+
+    public void ChangeMaterial(List<GameObject> gameObjects, Material interiorMaterial, Material exteriorMaterial = null)
     {
-        partsSize = _buildingGenerator.partsSize;
-        //Generate Base
-        GameObject instBase = Instantiate(baseGo, spawnOrigin.position, baseGo.transform.rotation, transform);
-
-        //Set BackWall initial point for height at room's base
-        spawnYPoint = instBase.transform.position - (Vector3.back * 1.45f);
-
-        //Generate a BackWall depending Room Height
-        for (int i = 0; i < height; i++)
+        foreach (GameObject gameObject in gameObjects)
         {
-            GameObject instWall = Instantiate(wallGo, spawnYPoint, wallGo.transform.rotation, transform);
-            if (i < 1)
-            {
-                backWalls.Add(instWall);
-            }
-
-            spawnYPoint = instWall.transform.position + (Vector3.up * partsSize);
-
-            if (i >= height - 1)
-            {
-                //Generate Ceiling
-                Vector3 ceilingPos = new Vector3(instBase.transform.position.x, spawnYPoint.y,
-                    instBase.transform.position.z);
-                GameObject instCeiling = Instantiate(baseGo, ceilingPos, baseGo.transform.rotation, transform);
-                instCeiling.name = "Ceiling";
-            }
-        }
-    }
-    
-    //generate back doorWalls
-    public void GenerateBackDoors(bool randomPos, int doorCount = 1, int backDoorPos = 0)
-    {
-        if (randomPos)
-        {
-            backDoorPos = Random.Range(0, backWalls.Count);
-        }
-
-        for (int i = 0; i < doorCount; i++)
-        {
-            GameObject selectedWall = backWalls[backDoorPos];
-            selectedWall.SetActive(false);
-            Quaternion wallDoorRot = Quaternion.Euler(0, selectedWall.transform.rotation.y, 0);
-            GameObject instDoorWall = Instantiate(doorWallGo, selectedWall.transform.position, wallDoorRot,transform);
-            doorWalls.Add(instDoorWall);
-
-            switch (_buildingGenerator.buildingStyle)
-            {
-                case BuildingArchitect.BuildingStyle.Hospital:
-
-                    GameObject instDoor = Instantiate(_buildingGenerator.doorsPrefabList[1],instDoorWall.transform.position,instDoorWall.transform.rotation,_buildingGenerator.transform) ;
-                    
-                    break;
-            }
+            MaterialManager materialManager = gameObject.GetComponent<MaterialManager>();
             
+            materialManager.meshRenderer = gameObject.GetComponent<MeshRenderer>();
+            
+            Material[] materials = materialManager.meshRenderer.materials;
+            materials[materialManager.interiorFaceMaterialIndex] = interiorMaterial;
+            if (exteriorMaterial != null)
+            {
+                materials[materialManager.exteriorFaceMaterialIndex] = exteriorMaterial;
+            }
+            else
+            {
+                materials[materialManager.exteriorFaceMaterialIndex] = interiorMaterial;
+            }
+            materialManager.meshRenderer.materials = materials;
+
         }
-        
         
         
     }
     
+    
+    
 
-    public void CombineMeshes()
-    {
-        _meshCombiner.CreateMultiMaterialMesh = true;
-        _meshCombiner.CombineInactiveChildren = false;
-        _meshCombiner.DeactivateCombinedChildren = false;
-        _meshCombiner.DeactivateCombinedChildrenMeshRenderers = true;
-        _meshCombiner.GenerateUVMap = false;
-        _meshCombiner.DestroyCombinedChildren = false;
-        _meshCombiner.CombineMeshes(false);
-    }
+    
+
+    
+    
+    
+
+   
+    
+    
+
+
+    
+    
 }

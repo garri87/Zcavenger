@@ -44,7 +44,7 @@ public class GameManager : MonoBehaviour
     [Header("In Level Parameters")]
     public Transform startingPosition;
     public Transform endLevelPosition;
-    public PlayerController.PlayLine startingPlayline;
+    public float startingPlayline;
 
     public bool gameOver;
 

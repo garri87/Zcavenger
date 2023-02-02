@@ -341,8 +341,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2.0898118, y: 0.9602738, z: 0.23051073}
-  m_Center: {x: 1.0642011, y: 0.0059620896, z: -0.06525523}
+  m_Size: {x: 2.021948, y: 0.9450817, z: 0.23051073}
+  m_Center: {x: 1.0806593, y: 0.007047813, z: -0.06525523}
 --- !u!1 &8221155662374237611
 GameObject:
   m_ObjectHideFlags: 0
@@ -354,7 +354,6 @@ GameObject:
   - component: {fileID: 8215232296838328863}
   - component: {fileID: 8863455314912487549}
   - component: {fileID: 6598638811868479436}
-  - component: {fileID: 5601576448702142840}
   - component: {fileID: 912315990450992136}
   m_Layer: 0
   m_Name: FireEscape_Door
@@ -391,8 +390,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.923048, y: 1.9971023, z: 8.06566}
-  m_Center: {x: -0.0076952577, y: 1.0986264, z: 0.03283}
+  m_Size: {x: 0.9098438, y: 1.9971023, z: 8.06566}
+  m_Center: {x: 0.0066021085, y: 1.0986264, z: 0.03283024}
 --- !u!114 &6598638811868479436
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -444,25 +443,6 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 6df9ac5da95af864ba179ce19ccacd2b, type: 3}
   - {fileID: 8300000, guid: 7e16955726b184c4f975fb28ad8e112f, type: 3}
   - {fileID: 8300000, guid: eabba26bdf69d72488acdb3f28feaee3, type: 3}
---- !u!205 &5601576448702142840
-LODGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8221155662374237611}
-  serializedVersion: 2
-  m_LocalReferencePoint: {x: -0.005960822, y: 1.0600001, z: -0.06525523}
-  m_Size: 2.120001
-  m_FadeMode: 0
-  m_AnimateCrossFading: 0
-  m_LastLODIsBillboard: 0
-  m_LODs:
-  - screenRelativeHeight: 0.24726088
-    fadeTransitionWidth: 0
-    renderers:
-    - renderer: {fileID: 3679055133380438587}
-  m_Enabled: 1
 --- !u!82 &912315990450992136
 AudioSource:
   m_ObjectHideFlags: 0
