@@ -432,7 +432,7 @@ public class AgentController : MonoBehaviour
                             if (!playerController.alreadyCatched)
                             {
                                 playerCatch = true;
-                                playerController.bitten = true;
+                                playerController.beingBitten = true;
                                 playerController.alreadyCatched = true;
                             }
                             break;
@@ -501,7 +501,7 @@ public class AgentController : MonoBehaviour
 
         playerCatch = false;
         playerController.trapped = false;
-        playerController.bitten = false;
+        playerController.beingBitten = false;
         if (playerController.alreadyCatched)
         {
             playerController.alreadyCatched = false;

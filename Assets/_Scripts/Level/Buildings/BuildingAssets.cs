@@ -21,20 +21,28 @@ public class BuildingAssets : ScriptableObject
     }
     public BuildingStyle buildingStyle;
     
-    public List<GameObject> doorsPrefabsList;
-    public List<GameObject> wallsPrefabsList;
-    public List<GameObject> doorWallsPrefabsList;
-    public List<GameObject> floorBasesPrefabsList;
-    public List<GameObject> exteriorWallsPrefabsList;
-    public List<GameObject> exteriorDoorWallsPrefabsList;
-    public List<GameObject> roofPrefabsList;
-    public List<GameObject> stairsPrefabsList;
-    public List<GameObject> decorPrefabsList;
-    public List<GameObject> roofCornices;
-    public List<GameObject> roofCorniceCorners;
-    public List<GameObject> lightsPrefabsList;
-
+    public List<GameObject> basesPrefabs;
+    public List<GameObject> wallsPrefabs;
+    public List<GameObject> doorWallsPrefabs;
+    
+    
     public List<GameObject> mainDoorPrefabs;
+    public List<GameObject> doorsPrefabs;
+    
+    
+    public List<GameObject> exteriorWallsPrefabs;
+    public List<GameObject> exteriorDoorWallsPrefabs;
+    
+    public List<GameObject> roofPrefabs;
+    public List<GameObject> cornicesPrefabs;
+    public List<GameObject> corniceCornersPrefabs;
+
+    public List<GameObject> stairsPrefabs;
+    public List<GameObject> interiorPrefabs;
+    
+    public List<GameObject> lightsPrefabs;
+
+    
     
     
     public Material[] exteriorMaterials;

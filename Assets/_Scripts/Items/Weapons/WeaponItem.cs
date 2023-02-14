@@ -42,6 +42,7 @@ public class WeaponItem : MonoBehaviour
     public float shotgunMaxFireAngle;
     public float shotgunMinFireAngle;
     public int bulletsPerShot;
+    public bool blockAttacks;
 
     [Header("Weapon Transforms")] 
     public Transform flashLightTransform;
@@ -733,6 +734,7 @@ public class WeaponItem : MonoBehaviour
         bulletsPerShot = weaponScriptableObject.bulletsPerShot;
         fireRate = weaponScriptableObject.fireRate; 
         magazineCap = weaponScriptableObject.magazineCap;
+        blockAttacks = weaponScriptableObject.blockAttacks;
         
         recoilDuration = weaponScriptableObject.recoilDuration; 
         recoilMaxRotation = weaponScriptableObject.recoilMaxRotation;
