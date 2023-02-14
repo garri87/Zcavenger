@@ -15,10 +15,11 @@ public class Inventory : MonoBehaviour
     [HideInInspector] public int totalInventorySlots;
 
     [Header("UI Transforms")] 
-    public UIManager uIManager;
+    [HideInInspector] public UIManager uIManager;
+    private GameManager _gameManager;
     [HideInInspector]public Canvas inventoryUICanvas;
-    public Transform playerWeaponHolderTransform;
-    public Image currentWeaponImage;
+    [HideInInspector]public Transform playerWeaponHolderTransform;
+    [HideInInspector]public Image currentWeaponImage;
     public Sprite emptyWeaponImage;
     [HideInInspector]public TextMeshProUGUI bulletCounterTMPUGUI;
     [HideInInspector]public TextMeshProUGUI capacityText;
@@ -52,19 +53,25 @@ public class Inventory : MonoBehaviour
     }
 
     public SelectedWeapon selectedWeapon;
+    
+    
 
     private void Awake()
     {
+        _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        _playerController = GetComponent<PlayerController>();
+        _animator = GetComponent<Animator>();
+        uIManager = _gameManager.uiManager;
         capacityText = uIManager.capacityPanel.GetComponentInChildren<TextMeshProUGUI>();
+        playerWeaponHolderTransform = _animator.GetBoneTransform(HumanBodyBones.RightHand).Find("WeaponHolder");
     }
 
     void Start()
     {
-        _playerController = GetComponent<PlayerController>();
-        _animator = GetComponentInChildren<Animator>();
+        
         inventoryUICanvas = uIManager.inventoryUI.GetComponent<Canvas>();
         bulletCounterTMPUGUI = uIManager.ammoPanel.Find("AmmoCount").GetComponent<TextMeshProUGUI>();
-
+        currentWeaponImage = uIManager.ammoPanel.Find("CurrentWeaponImage").GetComponent<Image>();
         totalInventorySlots = uIManager.inventorySlotArea.childCount; // get the number of inventory slots
         slotArray = new GameObject[totalInventorySlots];
 
@@ -157,7 +164,7 @@ public class Inventory : MonoBehaviour
             }
         }
 
-        if (_playerController._weaponHolderTransform.childCount == 0)
+        if (_playerController._playerWpnHolderTransform.childCount == 0)
         {
             currentWeaponImage.sprite = emptyWeaponImage;
             bulletCounterTMPUGUI.text = null;

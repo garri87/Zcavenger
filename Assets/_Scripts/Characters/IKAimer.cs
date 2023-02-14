@@ -49,6 +49,7 @@ public class IKAimer : MonoBehaviour
       {
          aimWeights[i] = aimConstraints[i].weight;
       }
+      
    }
 
    private void Update()
@@ -63,8 +64,8 @@ public class IKAimer : MonoBehaviour
    
    private void AimAtTarget()
    {
-      targetDistance = Vector3.Distance(_playerController._weaponHolderTransform.position,
-         _playerController.targetTransform.position);
+      targetDistance = Vector3.Distance(_playerController._playerWpnHolderTransform.position,
+         _playerController.crosshairTransform.position);
     
       if (_playerController.isAiming 
           && targetDistance > minDistance)

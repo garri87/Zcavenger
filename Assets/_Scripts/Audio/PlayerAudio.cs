@@ -9,6 +9,8 @@ using Random = UnityEngine.Random;
 
 public class PlayerAudio : MonoBehaviour
 {
+    public SoundSensor _soundSensor;
+
     private AudioSource playerAudioSource;
 
     public AudioClip[] runStepsClips;
@@ -29,7 +31,11 @@ public class PlayerAudio : MonoBehaviour
     public float normalSoundSensorScale = 2f;
     public float highSoundSensorScale = 5f;
 
-    public SoundSensor _soundSensor;
+
+    private void Awake()
+    {
+        _soundSensor = transform.Find("SoundSensor").GetComponent<SoundSensor>();
+    }
 
     private void Start()
     {

@@ -170,7 +170,7 @@ public class Throwable : MonoBehaviour
             ignitionParticle.SetActive(true);
             _rigidbody.useGravity = true;
             
-            Vector3 throwDirection = _playerController.targetTransform.position - _playerController.transform.position;
+            Vector3 throwDirection = _playerController.crosshairTransform.position - _playerController.transform.position;
             _rigidbody.AddForce(throwDirection * _playerController.throwForce, ForceMode.Impulse);
         }   
         

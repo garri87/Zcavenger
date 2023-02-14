@@ -14,6 +14,7 @@ public class Randomizer : MonoBehaviour
     public bool randomActivation;
     public int activationProbabilty = 2;
     public bool randomMaterial;
+    public int materialIndex = 0;
     public Material[] materials;
     
     
@@ -62,7 +63,10 @@ public class Randomizer : MonoBehaviour
             {
                 if (materials.Length > 0)
                 {
-                    gameObject.GetComponent<MeshRenderer>().material = materials[Random.Range(0, materials.Length)];
+                    MeshRenderer meshRenderer = gameObject.GetComponent<MeshRenderer>();
+                    Material[] meshMaterials = meshRenderer.materials;
+                    meshMaterials[materialIndex] = materials[Random.Range(0, materials.Length)];
+                    meshRenderer.materials = meshMaterials;
                 }
                 else
                 {

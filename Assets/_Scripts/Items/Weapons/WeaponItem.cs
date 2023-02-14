@@ -20,6 +20,8 @@ public class WeaponItem : MonoBehaviour
     }
 
     public WeaponLocation weaponLocation;
+
+    private GameManager _gameManager;
     
     [HideInInspector]public Transform holderTarget;
     
@@ -112,6 +114,7 @@ public class WeaponItem : MonoBehaviour
 
     public float xOffset, yOffset, zOffset;
     
+    
     private void OnValidate()
     {
         if (weaponScriptableObject != null)
@@ -130,7 +133,8 @@ public class WeaponItem : MonoBehaviour
     {
         originalScale = this.transform.localScale;
         originalRot = Quaternion.identity;
-        
+
+        _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         playerTransform = GameObject.Find("Player").GetComponent<Transform>();
         playerAnimator = playerTransform.GetComponent<Animator>();
         playerHealthManager = playerTransform.GetComponent<HealthManager>();
@@ -156,16 +160,16 @@ public class WeaponItem : MonoBehaviour
         switch (weaponItemClass)
         {
             case WeaponScriptableObject.WeaponClass.Primary:
-                holderTarget = playerInventory.uIManager.primaryEquipSlot.Find("WeaponHolder");
+                holderTarget = _gameManager.uiManager.primaryEquipSlot.Find("WeaponHolder");
                 break;
             case WeaponScriptableObject.WeaponClass.Secondary:
-                holderTarget = playerInventory.uIManager.secondaryEquipSlot.Find("WeaponHolder");
+                holderTarget = _gameManager.uiManager.secondaryEquipSlot.Find("WeaponHolder");
                 break;
             case WeaponScriptableObject.WeaponClass.Melee:
-                holderTarget = playerInventory.uIManager.meleeEquipSlot.Find("WeaponHolder");
+                holderTarget = _gameManager.uiManager.meleeEquipSlot.Find("WeaponHolder");
                 break;
             case WeaponScriptableObject.WeaponClass.Throwable:
-                holderTarget = playerInventory.uIManager.throwableEquipSlot.Find("WeaponHolder");
+                holderTarget = _gameManager.uiManager.throwableEquipSlot.Find("WeaponHolder");
                 _throwable = GetComponent<Throwable>();
                 break;
         }

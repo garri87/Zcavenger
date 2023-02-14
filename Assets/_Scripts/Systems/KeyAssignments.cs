@@ -44,7 +44,7 @@ public class KeyAssignments : MonoBehaviour
    
    
    public KeyStr[] keyCodes;
-   public int keyCodesLength;
+   private int keyCodesLength;
    
    private int keybindChildCount;
    private void OnValidate()

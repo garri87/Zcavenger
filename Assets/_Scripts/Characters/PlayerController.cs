@@ -60,10 +60,11 @@ public class PlayerController : MonoBehaviour
     #region Movement Variables
 
     [HideInInspector] public float horizontalInput, verticalInput;
+    
     [HideInInspector] private Vector3 lastPosition;
     public bool ascending;
     public bool descending;
-    public bool jump;
+    [HideInInspector] public bool jump;
     public bool hardLanded;
     private bool walking;
     private bool crouch;
@@ -127,7 +128,6 @@ public class PlayerController : MonoBehaviour
     private Ladder _ladder;
     private Vector3 ladderPosition;
     private Transform ladderTransform;
-    public float ladderOffset;
     public float climbVelocity = 2f;
     public float transitionSpeed;
     public bool nextToLadder;
@@ -139,41 +139,42 @@ public class PlayerController : MonoBehaviour
 
     #region Weapon Handling Variables
 
-    public Transform targetTransform;
-    public Transform _weaponHolderTransform;
+    public Transform crosshairTransform;
+    public Transform _playerWpnHolderTransform;
     public WeaponItem equippedWeaponItem;
     public bool weaponEquipped;
     [HideInInspector] public bool isAiming;
     [HideInInspector] public bool attacking;
     [HideInInspector] public bool reloadingWeapon;
-    private SpriteRenderer crosshair;
+    private SpriteRenderer crosshairSprtRenderer;
     public LayerMask mouseAimMask;
 
     #endregion
 
     #region Components
 
-    public GameManager gameManager;
+    [HideInInspector]public GameManager gameManager;
     [HideInInspector] public HealthManager _healthManager;
     [HideInInspector] public ParticleSystem _particleSystem;
     [HideInInspector] public Rigidbody _rigidbody;
     [HideInInspector] public Animator _animator;
-    public CapsuleCollider _collider;
+    [HideInInspector]public CapsuleCollider _collider;
     [HideInInspector] public CheckGround _checkGround;
     private Camera mainCamera;
     private PlayerAudio _playerAudio;
     private SoundSensor _soundSensor;
     [HideInInspector] public AgentController stompTargetAgentController;
-    public StompDetector _stompDetector;
+    [HideInInspector] public StompDetector _stompDetector;
+
+    
 
     #endregion
 
     #region PlayLine variables
 
     public bool onDoor;
-    [HideInInspector] public bool inBackPlayLine;
 
-    public static float currentPlayLine = 0;
+    public float currentPlayLine = 0;
     public Door doorScript;
     public Transform mouseTargetLayer;
 
@@ -189,14 +190,16 @@ public class PlayerController : MonoBehaviour
     public bool finishedLevel = false;
 
     private Transform leftFoot, rightFoot;
-
-
-
+    
     private void Awake()
     {
         mainCamera = Camera.main;
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         _soundSensor = GetComponent<SoundSensor>();
+        _animator = GetComponent<Animator>();
+        _playerWpnHolderTransform = _animator.GetBoneTransform(HumanBodyBones.RightHand).Find("WeaponHolder");
+
+        _stompDetector = gameObject.transform.Find("StompDetector").GetComponent<StompDetector>();
     }
 
     void Start()
@@ -206,13 +209,13 @@ public class PlayerController : MonoBehaviour
         keyAssignments = gameManager.GetComponent<KeyAssignments>();
         _healthManager = GetComponent<HealthManager>();
         _rigidbody = GetComponent<Rigidbody>();
-        _animator = GetComponent<Animator>();
+        
         _inventory = GetComponent<Inventory>();
         _checkGround = GetComponentInChildren<CheckGround>();
         _playerAudio = GetComponent<PlayerAudio>();
         _climber = GetComponent<Climber>();
         _collider = GetComponent<CapsuleCollider>();
-        crosshair = targetTransform.GetComponent<SpriteRenderer>();
+        crosshairSprtRenderer = crosshairTransform.GetComponent<SpriteRenderer>();
 
         #endregion
 
@@ -225,6 +228,8 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        
+     //   transform.eulerAngles = new Vector3(transform.eulerAngles.x,transform.eulerAngles.y,0); 
         #region axis inputs
 
         horizontalInput = Input.GetAxis("Horizontal");
@@ -241,7 +246,7 @@ public class PlayerController : MonoBehaviour
         #endregion
 
         CheckFallingState();
-
+        
         CheckWeaponEquipped();
 
         #region PlayLine placement
@@ -249,11 +254,15 @@ public class PlayerController : MonoBehaviour
         //Put the mouselayer on the player Z playline
         mouseTargetLayer.transform.position =
             new Vector3(mouseTargetLayer.position.x, transform.position.y, currentPlayLine);
-
+        Vector3 newPosition = new Vector3(transform.position.x, transform.position.y, currentPlayLine);
         if (transform.position.z != currentPlayLine && !climbingLadder)
         {
-            Vector3 newPosition = new Vector3(transform.position.x, transform.position.y, currentPlayLine);
+            
             transform.position = Vector3.Lerp(transform.position, newPosition, Time.deltaTime * transitionSpeed);
+        }
+        else
+        {
+            transform.position = newPosition;
         }
 
         #endregion
@@ -466,7 +475,7 @@ public class PlayerController : MonoBehaviour
         //Determines the horizontal facing direction of the player towards the mouse
 
         _rigidbody.MoveRotation(Quaternion.Euler(new Vector3(0,
-            Mathf.Sign(targetTransform.position.x - transform.position.x) * 90, transform.position.z)));
+          Mathf.Sign(crosshairTransform.position.x - transform.position.x) * 90, transform.rotation.z)));
 
 
         //Set the horizontal keys to move player
@@ -514,9 +523,7 @@ public class PlayerController : MonoBehaviour
         }
 
         #endregion
-
-
-
+        
         #region PLAYER ACTIONS
 
         //MOVEMENT SPEED
@@ -557,11 +564,11 @@ public class PlayerController : MonoBehaviour
 
         if (isAiming)
         {
-            crosshair.enabled = true;
+            crosshairSprtRenderer.enabled = true;
         }
         else
         {
-            crosshair.enabled = false;
+            crosshairSprtRenderer.enabled = false;
         }
 
         if (weaponEquipped)
@@ -1001,12 +1008,12 @@ public class PlayerController : MonoBehaviour
 
     private void CheckWeaponEquipped()
     {
-        if (_weaponHolderTransform.childCount > 0)
+        if (_playerWpnHolderTransform.childCount > 0)
         {
             weaponEquipped = true;
             if (equippedWeaponItem == null)
             {
-                equippedWeaponItem = _weaponHolderTransform.GetComponentInChildren<WeaponItem>(); //TODO: CACHEAR
+                equippedWeaponItem = _playerWpnHolderTransform.GetComponentInChildren<WeaponItem>(); //TODO: CACHEAR
             }
             else
             {
@@ -1168,7 +1175,7 @@ public class PlayerController : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, mouseAimMask.value))
         {
-            targetTransform.position = new Vector3(hit.point.x, hit.point.y, currentPlayLine);
+            crosshairTransform.position = new Vector3(hit.point.x, hit.point.y, currentPlayLine);
         }
     }
 
