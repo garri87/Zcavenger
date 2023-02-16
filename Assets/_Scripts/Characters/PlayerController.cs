@@ -3,6 +3,7 @@ using TMPro;
 using Unity.Mathematics;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class PlayerController : MonoBehaviour
 {
@@ -72,7 +73,7 @@ public class PlayerController : MonoBehaviour
     public bool roll;
     public bool blocking;
     public bool trapped;
-    public bool bitten;
+    public bool beingBitten;
     public bool alreadyCatched;
     public bool onConduct;
     public bool onTransition;
@@ -312,7 +313,7 @@ public class PlayerController : MonoBehaviour
                         !roll ||
                         !blocking ||
                         !trapped ||
-                        !bitten ||
+                        !beingBitten ||
                         !hardLanded ||
                         !blocking ||
                         !finishedLevel)
@@ -322,7 +323,7 @@ public class PlayerController : MonoBehaviour
                 }
             }
 
-            if (hardLanded || blocking || trapped || bitten || finishedLevel)
+            if (hardLanded || blocking || trapped || beingBitten || finishedLevel)
             {
                 controllerType = ControllerType.StandByController;
             }
@@ -577,7 +578,7 @@ public class PlayerController : MonoBehaviour
             {
                 if (equippedWeaponItem.weaponItemClass != WeaponScriptableObject.WeaponClass.Melee)
                 {
-                    if (_checkGround.isGrounded && !_climber.attachedToLedge && !trapped && !bitten && !PlayerBusy())
+                    if (_checkGround.isGrounded && !_climber.attachedToLedge && !trapped && !beingBitten && !PlayerBusy())
                     {
                         playerState = PlayerState.IsAiming;
                         isAiming = true;
@@ -589,7 +590,7 @@ public class PlayerController : MonoBehaviour
                 }
 
                 if (equippedWeaponItem.weaponItemClass == WeaponScriptableObject.WeaponClass.Melee &&
-                    equippedWeaponItem.ID != 1001 && !bitten && !trapped) // 1001: knife
+                    equippedWeaponItem.ID != 1001 && !beingBitten && !trapped) // 1001: knife
                 {
                     if (_healthManager.currentStamina >= _healthManager.blockHitPenalty)
                     {
@@ -726,7 +727,7 @@ public class PlayerController : MonoBehaviour
         }
 
         //STOMP ENEMIES
-        if (canStomp && !bitten && Input.GetKeyDown(keyAssignments.attackKey.keyCode))
+        if (canStomp && !beingBitten && Input.GetKeyDown(keyAssignments.attackKey.keyCode))
         {
             _animator.SetTrigger("Stomp");
         }
@@ -894,7 +895,7 @@ public class PlayerController : MonoBehaviour
         _animator.SetBool("IsDead", _healthManager.IsDead);
         _animator.SetBool("Blocking", blocking);
         _animator.SetBool("Trapped", trapped);
-        _animator.SetBool("Bitten", bitten);
+        _animator.SetBool("Bitten", beingBitten);
         _animator.SetBool("Bandage", bandaging);
         _animator.SetBool("Drink", drinking);
         _animator.SetBool("Eat", eating);
