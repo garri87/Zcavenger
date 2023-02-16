@@ -85,7 +85,15 @@ public class AgentController : MonoBehaviour
     
     private void OnValidate()
     {
-        player = GameObject.Find("Player");
+        try
+        {
+            player = GameObject.Find("Player");
+        }
+        catch 
+        {
+           Debug.LogWarning("No Player Gameobject Found");
+        }
+        
         _animator = GetComponent<Animator>();
         if (enemyScriptableObject!=null)
         {
@@ -110,10 +118,15 @@ public class AgentController : MonoBehaviour
         _capsuleCollider = GetComponent<CapsuleCollider>();
         selectedEnemyType = enemyScriptableObject.enemyType.ToString();
         _animator.SetBool(selectedEnemyType,true);
-        
-        playerController = player.GetComponent<PlayerController>();
-        playerHealtManager = player.GetComponent<HealthManager>();
-        playerAnimator = player.GetComponent<Animator>();
+
+
+        if (player != null)
+        {
+            playerController = player.GetComponent<PlayerController>();
+            playerHealtManager = player.GetComponent<HealthManager>();
+            playerAnimator = player.GetComponent<Animator>();    
+        }
+       
 
         enemyType = enemyScriptableObject.enemyType;
         maxSpeed = enemyScriptableObject.speed;
@@ -122,6 +135,7 @@ public class AgentController : MonoBehaviour
         maxDamage = enemyScriptableObject.maxDamage;
         bleedDamageProbability = enemyScriptableObject.bleedDamageProbability;
         attackDistance = enemyScriptableObject.attackDistance;
+        
         _navMeshAgent.speed = Random.Range(minSpeed,maxSpeed);
         _navMeshAgent.updateRotation = false;
     }
@@ -144,9 +158,6 @@ public class AgentController : MonoBehaviour
         _animator.SetBool("Brute",false);
         _animator.SetBool("Humanoid",false);
         _animator.SetBool(selectedEnemyType,true);
-
-        
-        
         
         if (enemyType == Enemy.EnemyType.Crippled)
         { 
@@ -165,8 +176,12 @@ public class AgentController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        playerPosition = player.transform;
-        playerDirection = (player.transform.position - transform.position).normalized;
+        if (player != null)
+        {
+            playerPosition = player.transform;
+            playerDirection = (player.transform.position - transform.position).normalized;
+        }
+        
         if (_checkGround.isGrounded)
         {
             _navMeshAgent.enabled = true;
