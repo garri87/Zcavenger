@@ -88,7 +88,6 @@ public class BuildingGenerator : MonoBehaviour
     public GameObject[] exteriorDoorWallsPrefabs;
     public GameObject[] interiorPrefabs;
     public GameObject[] lightsPrefabs;
-    public GameObject[] mainDoorPrefabs;
     public GameObject[] cornicesPrefabs;
     public GameObject[] corniceCornersPrefabs;
     public GameObject[] stairsPrefabs;
@@ -168,7 +167,7 @@ public class BuildingGenerator : MonoBehaviour
                     room = SetRoomSeed(spawnOrigin, stairsRoomWidth);
                     blocksLeft = stairsRoomWidth;
                     room.isStairsEntrace = true;
-                    room.BuildRoom(spawnOrigin, doorWallsPrefabs[0], true, exteriorDoorWallsPrefabs[0],
+                    room.BuildRoom(spawnOrigin, doorWallsPrefabs[0], false, exteriorDoorWallsPrefabs[0],
                         true,RoomGenerator.RoomStyle.EmptyRoom,debugConstruction);
                     rooms.Add(room);
                     room.transform.parent = floorGroup.transform;
@@ -178,7 +177,7 @@ public class BuildingGenerator : MonoBehaviour
                 else
                 {
                     //Dividimos las habitaciones en partes iguales segun cantidad de habitaciones por piso
-                    int roomsWidth = maxBldWidth - stairsRoomWidth; 
+                    int roomsWidth = maxBldWidth  - stairsRoomWidth; //14 4
                     roomsWidth = Mathf.RoundToInt(roomsWidth/roomsPerFloor);
                     //BUCLE (Horizontal X): desde 0 hasta la cantidad de habitaciones por piso  
                     blocksLeft = maxBldWidth; 
@@ -186,15 +185,22 @@ public class BuildingGenerator : MonoBehaviour
                     {
                         //colocar un nuevo generador de habitacion y obtener su script
                         RoomGenerator room = SetRoomSeed(spawnOrigin, roomsWidth);
+
+                        var styles = Enum.GetNames(typeof(RoomGenerator.RoomStyle)).ToArray();
+                        string[] queryStyles =
+                            (from style in styles where style.Contains(buildingStyle.ToString()) select style)
+                            .ToArray();
                         RoomGenerator.RoomStyle roomName = (RoomGenerator.RoomStyle)Enum.Parse(
                             typeof(RoomGenerator.RoomStyle),
-                            interiorPrefabs[Random.Range(0, interiorPrefabs.Length)].name);
+                            queryStyles[Random.Range(0,queryStyles.Length)]);
+                        
+                        
                         if (X == 0) // crear una habitacion con pared al comienzo en la primera iteracion 
                         {
                             
                            
                             room.BuildRoom(spawnOrigin,exteriorWallsPrefab[0],
-                                false, doorWallsPrefabs[0],true,roomName,debugConstruction);
+                                false, doorWallsPrefabs[0],false,roomName,debugConstruction);
                             room.transform.parent = floorGroup.transform;
                             rooms.Add(room);
                             blocksLeft -= roomsWidth;
@@ -205,7 +211,7 @@ public class BuildingGenerator : MonoBehaviour
                             
                             room.BuildRoom(spawnOrigin, 
                                 doorWallsPrefabs[0], true,
-                                doorWallsPrefabs[0], true,
+                                doorWallsPrefabs[0], false,
                                 roomName, debugConstruction);
                             rooms.Add(room);
                             room.transform.parent = floorGroup.transform;
@@ -218,7 +224,7 @@ public class BuildingGenerator : MonoBehaviour
                             
                             room.BuildRoom(spawnOrigin, 
                                 doorWallsPrefabs[0], true,
-                                doorWallsPrefabs[0], true,
+                                doorWallsPrefabs[0], false,
                                 roomName, debugConstruction);
                             rooms.Add(room);
                             room.transform.parent = floorGroup.transform;
@@ -237,7 +243,7 @@ public class BuildingGenerator : MonoBehaviour
                     stairsRoom.isStairsEntrace = true;
                     stairsRoom.BuildRoom(spawnOrigin,
                         doorWallsPrefabs[0], true,
-                        doorsPrefabs[0], true,
+                        doorWallsPrefabs[0], true,
                         RoomGenerator.RoomStyle.EmptyRoom, debugConstruction);
                     
                 }
@@ -251,9 +257,14 @@ public class BuildingGenerator : MonoBehaviour
                 }
                 else if (Z != 0)
                 {
+                    var styles = Enum.GetNames(typeof(RoomGenerator.RoomStyle)).ToArray();
+                    string[] queryStyles =
+                        (from style in styles where style.Contains(buildingStyle.ToString()) select style)
+                        .ToArray();
                     RoomGenerator.RoomStyle roomName = (RoomGenerator.RoomStyle)Enum.Parse(
                         typeof(RoomGenerator.RoomStyle),
-                        interiorPrefabs[Random.Range(0, interiorPrefabs.Length)].name);
+                        queryStyles[Random.Range(0,queryStyles.Length)]);
+                    
                     stairsRoom.BuildRoom(spawnOrigin, doorWallsPrefabs[0], true, exteriorWallsPrefab[0],
                         false,roomName, debugConstruction);
                 }
@@ -325,7 +336,10 @@ public class BuildingGenerator : MonoBehaviour
                     }
                     else if (!room.isStairsRoom)
                     {
-                        room.GenerateInterior(interiorPrefabs[Random.Range(0,interiorPrefabs.Length)], room.basesList[i].transform);
+                        GameObject[] interiors = (from interior in interiorPrefabs 
+                            where interior.name.Contains(buildingStyle.ToString()) 
+                            select interior).ToArray();
+                        room.GenerateInterior(interiors[Random.Range(0,interiors.Length)], room.basesList[i].transform);
                     }
                 }
 
@@ -392,7 +406,6 @@ public class BuildingGenerator : MonoBehaviour
 
     public void GetResources()
     {
-        mainDoorPrefabs = buildingScriptableObject.mainDoorPrefabs;
         basesPrefabs = buildingScriptableObject.basesPrefabs;
         wallsPrefabs = buildingScriptableObject.wallsPrefabs;
         doorWallsPrefabs = buildingScriptableObject.doorWallsPrefabs;
@@ -437,7 +450,7 @@ public class BuildingGenerator : MonoBehaviour
         //Renombramos y numeramos la instancia de la habitación
         PlayerPrefs.SetInt("RoomNum", roomNumber + 1);
         roomNumber = PlayerPrefs.GetInt("RoomNum");
-        instRoom.name = "Room N° " + roomNumber;
+        room.name = "Room N° " + roomNumber;
 
         return _roomGen;
     }
