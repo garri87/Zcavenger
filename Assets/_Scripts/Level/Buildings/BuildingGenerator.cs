@@ -1,6 +1,4 @@
-
-
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -60,7 +58,6 @@ public class BuildingGenerator : MonoBehaviour
     #endregion
 
     //Variable de control de espacio libre en el edificio
-    private int blocksLeft;
 
     //Referencia al script del mesh combiner
     private MeshCombiner _meshCombiner;
@@ -144,8 +141,6 @@ public class BuildingGenerator : MonoBehaviour
                 spawnOrigin.position =
                     new Vector3(transform.position.x, spawnOrigin.position.y, spawnOrigin.position.z);
 
-                //inicializamos la cantidad restante de espacios para calcular cuanto falta para llenar el piso
-                blocksLeft = maxBldWidth - stairsRoomWidth;
                 
                 
                 
@@ -166,7 +161,6 @@ public class BuildingGenerator : MonoBehaviour
 
                     //Agregamos al final una habitacion de entrada a escaleras
                     room = SetRoomSeed(spawnOrigin, stairsRoomWidth);
-                    blocksLeft = stairsRoomWidth;
                     room.isStairsEntrace = true;
                     room.BuildRoom(spawnOrigin, doorWallsPrefabs[0], true, exteriorDoorWallsPrefabs[0],
                         true,RoomGenerator.RoomStyle.EmptyRoom,debugConstruction);
@@ -178,30 +172,25 @@ public class BuildingGenerator : MonoBehaviour
                 else
                 {
                     //Dividimos las habitaciones en partes iguales segun cantidad de habitaciones por piso
-                    int roomsWidth = maxBldWidth - stairsRoomWidth; 
-                    roomsWidth = Mathf.RoundToInt(roomsWidth/roomsPerFloor);
+                    int[] roomsWidth = SortRooms(maxBldWidth,roomsPerFloor);                   
                     //BUCLE (Horizontal X): desde 0 hasta la cantidad de habitaciones por piso  
-                    blocksLeft = maxBldWidth; 
-                    for (int X = 0; X < roomsPerFloor; X++)
+                    for (int X = 0; X < roomsWidth.Length; X++)
                     {
                         //colocar un nuevo generador de habitacion y obtener su script
-                        RoomGenerator room = SetRoomSeed(spawnOrigin, roomsWidth);
+                        RoomGenerator room = SetRoomSeed(spawnOrigin, roomsWidth[X]);
                         RoomGenerator.RoomStyle roomName = (RoomGenerator.RoomStyle)Enum.Parse(
                             typeof(RoomGenerator.RoomStyle),
                             interiorPrefabs[Random.Range(0, interiorPrefabs.Length)].name);
                         if (X == 0) // crear una habitacion con pared al comienzo en la primera iteracion 
                         {
-                            
-                           
                             room.BuildRoom(spawnOrigin,exteriorWallsPrefab[0],
                                 false, doorWallsPrefabs[0],true,roomName,debugConstruction);
                             room.transform.parent = floorGroup.transform;
                             rooms.Add(room);
-                            blocksLeft -= roomsWidth;
                         }
                         else if (X > 0 && X < roomsPerFloor) //Rellenar las habitaciones del medio
                         {
-                            room = SetRoomSeed(spawnOrigin, roomsWidth);
+                            room = SetRoomSeed(spawnOrigin, roomsWidth[X]);
                             
                             room.BuildRoom(spawnOrigin, 
                                 doorWallsPrefabs[0], true,
@@ -210,11 +199,10 @@ public class BuildingGenerator : MonoBehaviour
                             rooms.Add(room);
                             room.transform.parent = floorGroup.transform;
                             
-                            blocksLeft -= roomsWidth;
                         }
                         else // crear una habitacion con pared al final en la ultima iteracion
                         {
-                            room = SetRoomSeed(spawnOrigin, blocksLeft);
+                            room = SetRoomSeed(spawnOrigin, stairsRoomWidth);
                             
                             room.BuildRoom(spawnOrigin, 
                                 doorWallsPrefabs[0], true,
@@ -230,7 +218,6 @@ public class BuildingGenerator : MonoBehaviour
                 RoomGenerator stairsRoom = SetRoomSeed(spawnOrigin, stairsRoomWidth);
                 stairsRoom.transform.parent = floorGroup.transform;
                 rooms.Add(stairsRoom);
-                blocksLeft = stairsRoomWidth;
 
                 if (Y != 0 && Z == 0)
                 {
@@ -655,4 +642,18 @@ public class BuildingGenerator : MonoBehaviour
         }
     }
 
+    public int[] SortRooms(int buildingWidth, int rmsPerFloor)
+    {
+        int widthleft = buildingWidth; 
+        int[] sort = new int[rmsPerFloor];
+
+        for (int i = 0; i < sort.Length; i++)
+        {
+            int randomWidth = Random.Range(1, widthleft);
+            sort[i] = randomWidth;
+            widthleft -= randomWidth;
+        }
+
+        return sort;
+    }
 }
