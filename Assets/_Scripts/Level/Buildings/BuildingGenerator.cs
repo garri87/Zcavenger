@@ -172,12 +172,13 @@ public class BuildingGenerator : MonoBehaviour
                 else
                 {
                     //Dividimos las habitaciones en partes iguales segun cantidad de habitaciones por piso
-<<<
+                    int roomsWidth = maxBldWidth - stairsRoomWidth; 
+                    roomsWidth = Mathf.RoundToInt(roomsWidth/roomsPerFloor);
                     //BUCLE (Horizontal X): desde 0 hasta la cantidad de habitaciones por piso  
                     for (int X = 0; X < roomsWidth.Length; X++)
                     {
                         //colocar un nuevo generador de habitacion y obtener su script
-<<<
+                        RoomGenerator room = SetRoomSeed(spawnOrigin, roomsWidth);
                         RoomGenerator.RoomStyle roomName = (RoomGenerator.RoomStyle)Enum.Parse(
                             typeof(RoomGenerator.RoomStyle),
                             interiorPrefabs[Random.Range(0, interiorPrefabs.Length)].name);
