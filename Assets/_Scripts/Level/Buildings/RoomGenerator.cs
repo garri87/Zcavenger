@@ -42,6 +42,7 @@ public class RoomGenerator : MonoBehaviour
     private GameObject[] _exteriorWallsPrefabs;
     private GameObject[] _exteriorDoorWallPrefabs;
     private GameObject[] _lightsPrefabs;
+    private GameObject[] _mainDoorPrefabs;
     private GameObject[] _cornicesPrefabs;
     private GameObject[] _corniceCornersPrefabs;
     private GameObject[] _stairsPrefabs;
@@ -59,6 +60,9 @@ public class RoomGenerator : MonoBehaviour
     public Transform backWallGroup;
     public Transform wallsAndInteriorGroup;
     
+    //Referencia al Generador de edificio padre
+    public BuildingGenerator _buildingGenerator;
+
     public bool combineMeshesAtEnd = false;
 
    /* public string[] roomStyles = new[]
@@ -106,24 +110,26 @@ public class RoomGenerator : MonoBehaviour
       //  Hospital_Pharmacy,
        //  Hospital_Warehouse,
          
-         //Residential_Bathroom,
+      /*  Residential_Bathroom,
          Residential_Bedroom,
-         //Residential_ElevatorIn,
-         //Residential_ElevatorOut,
+         Residential_ElevatorIn,
+         Residential_ElevatorOut,
          Residential_KidBedroom,
          Residential_Kitchen,
-         //Residential_Laundry,
+         Residential_Laundry,
          Residential_Living,
-         Residential_Lobby,
-         
+         Residential_Lobby,*/
+        
        /* Office_Lobby,
         Office_Blocks,
         Office_Boss,
         Office_Warehouse,
         Office_Reception,
         Office_Bathrooms,
-        */
-       end
+        
+        StairsDown,
+        StairsUp,*/
+        end,
     }
     public RoomStyle roomStyle;
 
@@ -213,7 +219,7 @@ public class RoomGenerator : MonoBehaviour
 
         #region Interior Decoration
 
-        if (roomStyle != RoomStyle.EmptyRoom || roomStyle != RoomStyle.Stairs)
+        if (roomStyle != RoomStyle.EmptyRoom)
         {
             selectedInteriors = (from interior in interiorPrefabs
                 where interior.name.Contains(roomStyle.ToString())
@@ -234,15 +240,10 @@ public class RoomGenerator : MonoBehaviour
                 }
                 finally
                 {
-                   
                     GenerateInterior(interiorResult, basesList[i].transform);
                     order++;
                 }
             }
-        }
-        else if (roomStyle == RoomStyle.Stairs)
-        {
-            GenerateStairs(_stairsPrefabs[0]); 
         }
         #endregion
         
@@ -386,7 +387,7 @@ public class RoomGenerator : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("DoorWall " + targetDoorWall.name + " is not Tagged, no door instantiated");
+            Debug.LogWarning("DoorWall is not Tagged, no door instantiated");
         }
 
         if (randomDoor != null)
@@ -400,10 +401,6 @@ public class RoomGenerator : MonoBehaviour
         if (instDoor.TryGetComponent(out Door door))
         {
             door.doorOrientation = Door.DoorOrientation.Side;
-        }
-        else
-        {
-            Debug.Log("No doorscript found on " + instDoor.name);
         }
     }
     public void GenerateBackDoor(GameObject doorWallPrefab, GameObject doorPrefab, bool randomPos = true, int doorPos = 0)
@@ -489,38 +486,36 @@ public class RoomGenerator : MonoBehaviour
 /// <param name="spawnPos"></param>
     public void GenerateInterior(GameObject prefab, Transform spawnPos)
     {
-        if (prefab != null)
+        bool canDecorate = true;
+        RoomInterior roomInterior = prefab.GetComponent<RoomInterior>();
+        //TODO: ver por que no se reconoce el script RoomInterior
+        for (int i = 0; i < backDoorWallsList.Count; i++)
         {
-            bool canDecorate = true;
-            RoomInterior roomInterior = prefab.GetComponent<RoomInterior>();
-            for (int i = 0; i < backDoorWallsList.Count; i++)
+            if (backDoorWallsList[i].transform.position.x == spawnPos.position.x)
             {
-                if (backDoorWallsList[i].transform.position.x == spawnPos.position.x)
+                if (!roomInterior.exitBack)
                 {
-                    if (!roomInterior.exitBack)
-                    {
-                        canDecorate = false;    
-                    }
-                    else
-                    {
-                        canDecorate = true;
-                    }
-                
+                    canDecorate = false;    
                 }
+                else
+                {
+                    canDecorate = true;
+                }
+                
             }
-
-            if (canDecorate)
-            {
-                Instantiate(prefab, spawnPos.position, spawnPos.rotation,
-                    backWallGroup);
-            }              
         }
-        
+
+        if (canDecorate)
+        {
+            Instantiate(prefab, spawnPos.position, spawnPos.rotation,
+                backWallGroup);
+        }
 
     }
 
     public void GetResources(BuildingAssets scriptableObject)
     {
+        _mainDoorPrefabs = scriptableObject.mainDoorPrefabs;
         _basesPrefabs = scriptableObject.basesPrefabs;
         _wallsPrefabs = scriptableObject.wallsPrefabs;
         _doorWallsPrefabs = scriptableObject.doorWallsPrefabs;
@@ -538,17 +533,9 @@ public class RoomGenerator : MonoBehaviour
 
     }
     
-    public void GenerateLights(int lightCount)
+    public void GenerateLights(int lightCount = 3) //of 10 blocks
     {
-        int center = 0; 
-        if (lightCount != 0)
-        {
-            center = Mathf.RoundToInt(ceilingsList.Count / lightCount);
-        }
-        else
-        {
-            center = 1;
-        }
+        int center = Mathf.RoundToInt(ceilingsList.Count / lightCount);
         for (int i = center; i < ceilingsList.Count; i += center)
         {
             GameObject instLight = Instantiate(_lightsPrefabs[0], ceilingsList[i].transform.position,
