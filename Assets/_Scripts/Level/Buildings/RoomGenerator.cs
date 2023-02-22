@@ -13,27 +13,28 @@ public class RoomGenerator : MonoBehaviour
 {
     //Referencia al Constructor de edificio
     public BuildingAssets buildingScriptableObject;
-    
+
     //Dimensiones de la habitación
     public int roomWidth;
     public int roomHeight;
-    
+
     //Dimensiones de las partes
     public int partsWidth = 6;
     public int partsHeight = 3;
     public float partsThickness = 0.1f;
-    
-    
+
+
     //Punto de generación en coordenada Y
     public Vector3 spawnYPoint;
-    
+
     //Listas de gameobjects de las partes
-    public List<GameObject> basesList; 
-    public List<GameObject> ceilingsList; 
-    public List<GameObject> backWallsList; 
+    public List<GameObject> basesList;
+    public List<GameObject> ceilingsList;
+    public List<GameObject> backWallsList;
     public List<GameObject> backDoorWallsList;
     public List<GameObject> doorWallsList;
-    
+    public List<GameObject> interiorsList;
+
     //Listas de prefabs para utilizar en construcción
     private GameObject[] _doorsPrefabs;
     private GameObject[] _wallsPrefabs;
@@ -49,80 +50,83 @@ public class RoomGenerator : MonoBehaviour
     //Lista de prefabs del interior de la habitación
     public GameObject[] interiorPrefabs;
     public GameObject[] selectedInteriors;
-    
+
     //Materiales
     public Material[] exteriorMaterials;
     public Material[] interiorMaterials;
     public Material[] floorBaseMaterials;
-    
+
     //Agrupadores de Gameobjects
     public Transform backWallGroup;
     public Transform wallsAndInteriorGroup;
-    
+
     public bool combineMeshesAtEnd = false;
 
-   /* public string[] roomStyles = new[]
-    {
-        "EmptyRoom",
-        
-        "Hospital_Lobby", //ok 4
-        "Hospital_Reception", //ok 1
-        "Hospital_SurgeryRoom", //ok 2
-        "Hospital_Bathrooms", //ok 3
-        "Hospital_DiningRoom", //ok 3
-        "Hospital_PatientRooms", //ok 1
-        "Hospital_Pharmacy",
-        "Hospital_Warehouse",
-        "Residential_Bathroom",
-        "Residential_Bedroom",
-        "Residential_ElevatorIn",
-        "Residential_ElevatorOut",
-        "Residential_KidBedroom",
-        "Residential_Kitchen",
-        "Residential_Laundry",
-        "Residential_Living",
-        "Residential_Lobby",
-        "Office_Lobby",
-        "Office_Blocks",
-        "Office_Boss",
-        "Office_Warehouse",
-        "Office_Reception",
-        "Office_Bathrooms"
-    };*/
-     
-     //Estilos de habitación
-     public enum RoomStyle
+    /* public string[] roomStyles = new[]
      {
-         EmptyRoom,
-         Stairs,
-         Hospital_Lobby, //ok 4
-         Hospital_Reception, //ok 1
-         Hospital_SurgeryRoom, //ok 2
-         Hospital_Bathrooms, //ok 3
-         Hospital_DiningRoom,//ok 3
-         Hospital_PatientRooms, //ok 1
-      //  Hospital_Pharmacy,
-       //  Hospital_Warehouse,
+         "EmptyRoom",
          
-         //Residential_Bathroom,
-         Residential_Bedroom,
-         //Residential_ElevatorIn,
-         //Residential_ElevatorOut,
-         Residential_KidBedroom,
-         Residential_Kitchen,
-         //Residential_Laundry,
-         Residential_Living,
-         Residential_Lobby,
-         
-       /* Office_Lobby,
-        Office_Blocks,
-        Office_Boss,
-        Office_Warehouse,
-        Office_Reception,
-        Office_Bathrooms,
-        */
-       end
+         "Hospital_Lobby", //ok 4
+         "Hospital_Reception", //ok 1
+         "Hospital_SurgeryRoom", //ok 2
+         "Hospital_Bathrooms", //ok 3
+         "Hospital_DiningRoom", //ok 3
+         "Hospital_PatientRooms", //ok 1
+         "Hospital_Pharmacy",
+         "Hospital_Warehouse",
+         "Residential_Bathroom",
+         "Residential_Bedroom",
+         "Residential_ElevatorIn",
+         "Residential_ElevatorOut",
+         "Residential_KidBedroom",
+         "Residential_Kitchen",
+         "Residential_Laundry",
+         "Residential_Living",
+         "Residential_Lobby",
+         "Office_Lobby",
+         "Office_Blocks",
+         "Office_Boss",
+         "Office_Warehouse",
+         "Office_Reception",
+         "Office_Bathrooms"
+     };*/
+
+    //Estilos de habitación
+    public enum RoomStyle
+    {
+        EmptyRoom,
+        Stairs,
+        Hospital_Lobby, //ok 4
+        Hospital_Reception, //ok 1
+        Hospital_SurgeryRoom, //ok 2
+        Hospital_Bathrooms, //ok 3
+        Hospital_DiningRoom, //ok 3
+        Hospital_PatientRooms, //ok 1
+        //  Hospital_Pharmacy,
+        //  Hospital_Warehouse,
+
+        //Residential_Bathroom,
+        Residential_Bedroom,
+
+        //Residential_ElevatorIn,
+        //Residential_ElevatorOut,
+        Residential_KidBedroom,
+        Residential_Kitchen,
+
+        //Residential_Laundry,
+        Residential_Living,
+        Residential_Lobby,
+
+        /* Office_Lobby,
+         Office_Blocks,
+         Office_Boss,
+         Office_Warehouse,
+         Office_Reception,
+         Office_Bathrooms,
+         */
+        end
     }
+
     public RoomStyle roomStyle;
 
     public bool isLobby = false;
@@ -130,11 +134,11 @@ public class RoomGenerator : MonoBehaviour
     public bool isStairsRoom = false;
 
     public bool debugConstruction;
-    
+
     public void Init(BuildingGenerator buildingGenerator, int roomWidth, int roomHeight)
     {
         buildingScriptableObject = buildingGenerator.buildingScriptableObject;
-        
+
         GetResources(buildingScriptableObject);
 
         this.roomHeight = roomHeight;
@@ -153,29 +157,25 @@ public class RoomGenerator : MonoBehaviour
     /// <param name="debug">Debug the construction?</param>
     public void BuildRoom(
         Transform spawnOrigin,
-        
         GameObject gOInLeft = null,
         bool doorInLeft = false,
-        
         GameObject gOInRight = null,
         bool doorInRight = false,
-        
         RoomStyle roomStyle = RoomStyle.EmptyRoom,
-        
         bool debug = false
-        )
+    )
     {
         if (debug)
         {
             debugConstruction = true;
-            
-            Debug.Log("Generating Room." + 
-                      " gOInLeft = " + gOInLeft + 
-                      ", doorInLeft = " + doorInLeft + 
-                      ", roomWidth = " + roomWidth + 
-                      ", gOInRight = " + gOInRight + 
-                      ", doorInRight = " + doorInRight + 
-                      ", withDecoration= " + roomStyle);  
+
+            Debug.Log("Generating Room." +
+                      " gOInLeft = " + gOInLeft +
+                      ", doorInLeft = " + doorInLeft +
+                      ", roomWidth = " + roomWidth +
+                      ", gOInRight = " + gOInRight +
+                      ", doorInRight = " + doorInRight +
+                      ", withDecoration= " + roomStyle);
         }
         //Definimos el estilo de habitacion
         //roomStyle = (RoomGenerator.RoomStyle) Random.Range(
@@ -183,18 +183,21 @@ public class RoomGenerator : MonoBehaviour
         //    (int) RoomGenerator.RoomStyle.end);
         // Debug.Log("Selected " + roomStyle.ToString());  
 
-       
-        
+        //Si el ancho de la habitación es menor a 1, abortar generación y salir de la función
+        if (roomWidth < 1)
+        {
+            return;
+        }
+
         //Generar extremo izquierdo.
         if (gOInLeft != null)
         {
             GenerateSide(gOInLeft, spawnOrigin.position, doorInLeft, 90);
         }
-        
+
         //BUCLE (relleno X): desde 0 hasta ancho de la habitacion
         for (int xFill = 0; xFill < roomWidth; xFill++)
         {
-
             //Generar una ud. de bloque (base, pared y techo) segun altura de la habitacion. Guardar la pared en una lista
 
             GenerateBlock(spawnOrigin, partsWidth, partsHeight,
@@ -206,18 +209,18 @@ public class RoomGenerator : MonoBehaviour
         //Generar extremo derecho si corresponde.
         if (gOInRight != null)
         {
-            GenerateSide(gOInRight, spawnOrigin.position, doorInRight,-90);
+            GenerateSide(gOInRight, spawnOrigin.position, doorInRight, -90);
         }
 
         #region Interior Decoration
 
-        if (roomStyle != RoomStyle.EmptyRoom || roomStyle != RoomStyle.Stairs)
+        if (roomStyle != RoomStyle.EmptyRoom || !isStairsRoom)
         {
             Debug.Log(roomStyle);
             selectedInteriors = (from interior in interiorPrefabs
                 where interior.name.Contains(roomStyle.ToString())
                 select interior).ToArray();
-            
+
             GameObject interiorResult = null;
             int order = 0;
             for (int i = 0; i < basesList.Count; i++)
@@ -228,25 +231,30 @@ public class RoomGenerator : MonoBehaviour
                 }
                 catch
                 {
-               //     interiorResult = selectedInteriors[0];
+                    //     interiorResult = selectedInteriors[0];
                 }
                 finally
                 {
-                   
                     GenerateInterior(interiorResult, basesList[i].transform);
                     order++;
                 }
             }
         }
-        else if (roomStyle == RoomStyle.Stairs)
+
+        if (roomStyle == RoomStyle.Stairs)
         {
-            GenerateStairs(_stairsPrefabs[0]); 
+            if (debugConstruction)
+            {
+                Debug.Log("Generating stairs");
+            }
+
+            GenerateStairs(_stairsPrefabs[0]);
         }
+
         #endregion
-        
     }
-    
-    
+
+
     public void CombineMeshes(bool combine, Transform transform)
     {
         if (combine)
@@ -262,24 +270,24 @@ public class RoomGenerator : MonoBehaviour
             meshCombiner.DestroyCombinedChildren = false;
             meshCombiner.CombineMeshes(false);
         }
-        
     }
-/// <summary>
-/// Changes the interior an exterior materials of list of gameobjects
-/// The GameObject must have a MaterialManager script attached
-/// </summary>
-/// <param name="gameObjects"></param>
-/// <param name="interiorMaterial"></param>
-/// <param name="exteriorMaterial"></param>
-    public void ChangeMaterial(List<GameObject> gameObjects = null, Material interiorMaterial= null, Material exteriorMaterial = null)
-    {
 
+    /// <summary>
+    /// Changes the interior an exterior materials of list of gameobjects
+    /// The GameObject must have a MaterialManager script attached
+    /// </summary>
+    /// <param name="gameObjects"></param>
+    /// <param name="interiorMaterial"></param>
+    /// <param name="exteriorMaterial"></param>
+    public void ChangeMaterial(List<GameObject> gameObjects = null, Material interiorMaterial = null,
+        Material exteriorMaterial = null)
+    {
         foreach (GameObject gameObject in gameObjects)
         {
             MaterialManager materialManager = gameObject.GetComponent<MaterialManager>();
-            
+
             materialManager.meshRenderer = gameObject.GetComponent<MeshRenderer>();
-           
+
             Material[] materials = materialManager.meshRenderer.materials;
             materials[materialManager.interiorFaceMaterialIndex] = interiorMaterial;
             if (exteriorMaterial != null)
@@ -290,14 +298,11 @@ public class RoomGenerator : MonoBehaviour
             {
                 materials[materialManager.exteriorFaceMaterialIndex] = interiorMaterial;
             }
+
             materialManager.meshRenderer.materials = materials;
-        }    
-        
-        
-        
-        
+        }
     }
-    
+
     /// <summary>
     /// Generates a block of 1 base and n of walls where n is height of the room, places a ceiling at the end
     /// </summary>
@@ -309,11 +314,11 @@ public class RoomGenerator : MonoBehaviour
     /// <param name="height"></param>
     public void GenerateBlock(Transform spawnOrigin,
         int partsWidth,
-        int partsHeight, 
-        GameObject baseGo, 
-        GameObject wallGo, 
+        int partsHeight,
+        GameObject baseGo,
+        GameObject wallGo,
         int height
-        )
+    )
     {
         //Generate Base
         GameObject instBase = Instantiate(baseGo, spawnOrigin.position, baseGo.transform.rotation,
@@ -357,11 +362,11 @@ public class RoomGenerator : MonoBehaviour
 
         GameObject instSide = Instantiate(sideGameObjPrefab, spawnPoint - Vector3.right * partsWidth / 2,
             Quaternion.Euler(0, rotation, 0), wallsAndInteriorGroup);
-        
+
         if (withDoor)
         {
             InstantiateDoor(instSide, _doorsPrefabs);
-            
+
             doorWallsList.Add(instSide);
         }
     }
@@ -372,15 +377,16 @@ public class RoomGenerator : MonoBehaviour
         GameObject instDoor = null;
         if (targetDoorWall.tag == "DoubleDoorWall")
         {
-            GameObject[] doors = (from doorPrefab in doorprefabs where doorPrefab.tag == "DoubleDoor" select doorPrefab).ToArray();
+            GameObject[] doors = (from doorPrefab in doorprefabs where doorPrefab.tag == "DoubleDoor" select doorPrefab)
+                .ToArray();
 
-            randomDoor = doors[Random.Range(0,doors.Length)];
+            randomDoor = doors[Random.Range(0, doors.Length)];
         }
         else if (targetDoorWall.tag == "DoorWall")
         {
-            GameObject[] doors = (from doorPrefab in doorprefabs where doorPrefab.tag == "Door" select doorPrefab).ToArray();
-            randomDoor = doors[Random.Range(0,doors.Length)];
-
+            GameObject[] doors = (from doorPrefab in doorprefabs where doorPrefab.tag == "Door" select doorPrefab)
+                .ToArray();
+            randomDoor = doors[Random.Range(0, doors.Length)];
         }
         else
         {
@@ -392,9 +398,9 @@ public class RoomGenerator : MonoBehaviour
             instDoor = Instantiate(randomDoor,
                 targetDoorWall.transform.position,
                 targetDoorWall.transform.rotation,
-                transform); 
+                transform);
         }
-        
+
         if (instDoor.TryGetComponent(out Door door))
         {
             door.doorOrientation = Door.DoorOrientation.Side;
@@ -404,87 +410,69 @@ public class RoomGenerator : MonoBehaviour
             Debug.Log("No doorscript found on " + instDoor.name);
         }
     }
-    public void GenerateBackDoor(GameObject doorWallPrefab, GameObject doorPrefab, bool randomPos = true, int doorPos = 0)
+
+    /// <summary>
+    /// Replaces a target prefab with a frame with door 
+    /// </summary>
+    /// <param name="targetWall"></param>
+    public void GenerateBackDoor(GameObject targetWall)
     {
-        //Debug.Log("DoorPos is: "+doorPos );
-        int selectedWall = doorPos - 1;
-        if (selectedWall < 0)
+        //Seleccionamos la pared objetivo y la reemplazamos por un marco
+
+        //Desactivar la pared seleccionada y ponerla en un grupo que no sea de las paredes traseras.
+        targetWall.SetActive(false);
+        targetWall.transform.parent = wallsAndInteriorGroup;
+
+        Quaternion wallDoorRot = Quaternion.Euler(0, targetWall.transform.rotation.y, 0);
+
+        //Creamos un marco
+        GameObject instDoorWall = Instantiate(_doorWallsPrefabs[0], targetWall.transform.position,
+            wallDoorRot, backWallGroup);
+        backDoorWallsList.Add(instDoorWall);
+
+        //Creamos una puerta en el marco
+        // Seleccionar puertas acordes a la habitación actual
+        GameObject instDoor = null;
+        if (isStairsEntrace)
         {
-            selectedWall = 0;
+            GameObject[] stairsDoors =
+                (from door in _doorsPrefabs
+                    where door.tag == "StairsDoor"
+                    select door).ToArray();
+            instDoor =
+                Instantiate(stairsDoors[Random.Range(0, stairsDoors.Length)],
+                    instDoorWall.transform.position,
+                    instDoorWall.transform.rotation,
+                    transform);
+        }
+        else if (!isStairsRoom)
+        {
+            GameObject[] normalDoors =
+                (from door in _doorsPrefabs
+                    where door.tag == "Door"
+                    select door).ToArray();
+            instDoor =
+                Instantiate(normalDoors[Random.Range(0, normalDoors.Length)],
+                    instDoorWall.transform.position,
+                    instDoorWall.transform.rotation,
+                    transform);
         }
 
-        if (randomPos)
+        if (instDoor.TryGetComponent(out Door doorScript))
         {
-            selectedWall = Random.Range(0, backWallsList.Count);
+            doorScript.doorOrientation = Door.DoorOrientation.Back;
+            doorScript.outsidePlayLine = transform.position.z;
+            doorScript.insidePlayLine = transform.position.z + partsWidth;
         }
 
-        if (doorPos > backWallsList.Count)
-        {
-            if (debugConstruction)
-            {
-                Debug.Log("doorPos " + doorPos + " is greater than backwalls " +
-                          backWallsList.Count + " in " + gameObject.name);
-            }
-
-        }
-        else
-        {
-            if (backWallsList.Count > 0)
-            {
-                //Seleccionar la pared a reemplazar por un marco
-//                Debug.Log("BackWall Count: " + roomGenerator.backWalls.Count + " " + roomGenerator.gameObject.name);
-                GameObject backWall = backWallsList[selectedWall];
-
-                //Desactivar la pared seleccionada y ponerla en un grupo que no sea de las paredes traseras.
-                backWall.transform.parent = wallsAndInteriorGroup;
-                backWall.SetActive(false);
-
-                //Obtener rotacion de la pared
-                Quaternion wallDoorRot = Quaternion.Euler(0, backWall.transform.rotation.y, 0);
-                //Crear un marco
-                GameObject instDoorWall = Instantiate(doorWallPrefab, backWall.transform.position,
-                    wallDoorRot, backWallGroup);
-                //Agregar el marco a la lista
-                backDoorWallsList.Add(instDoorWall);
-
-                //CREATE A DOOR IN THE SELECTED DOORWALL
-                //TODO: Mejorar
-                GameObject instDoor = null;
-                if (isStairsEntrace)
-                {
-                    //TODO: SELECCIONAR PUERTAS DE TIPO PARA HABITACION DE ESCALERAS
-                    instDoor =
-                        Instantiate(doorPrefab,
-                            instDoorWall.transform.position,
-                            instDoorWall.transform.rotation,
-                            transform);
-                }
-                else
-                {
-                    instDoor =
-                        Instantiate(doorPrefab,
-                            instDoorWall.transform.position,
-                            instDoorWall.transform.rotation,
-                            transform);
-                }
-
-                Door doorScript = instDoor.GetComponent<Door>();
-                doorScript.doorOrientation = Door.DoorOrientation.Back;
-                doorScript.outsidePlayLine = transform.position.z;
-                doorScript.insidePlayLine = transform.position.z + partsWidth;
-
-                //roomGenerator.backWalls.Remove(backWall);
-                //Destroy(backWall);
-            }
-
-        }
+        
     }
 
-/// <summary>
-/// Instantiates a prefab inside a room
-/// </summary>
-/// <param name="prefab"></param>
-/// <param name="spawnPos"></param>
+    /// <summary>
+    /// Instantiates a prefab inside a room
+    /// </summary>
+    /// <param name="prefab"></param>
+    /// <param name="spawnPos"></param>
     public void GenerateInterior(GameObject prefab, Transform spawnPos)
     {
         if (prefab != null)
@@ -497,24 +485,22 @@ public class RoomGenerator : MonoBehaviour
                 {
                     if (!roomInterior.exitBack)
                     {
-                        canDecorate = false;    
+                        canDecorate = false;
                     }
                     else
                     {
                         canDecorate = true;
                     }
-                
                 }
             }
 
             if (canDecorate)
             {
-                Instantiate(prefab, spawnPos.position, spawnPos.rotation,
+               GameObject instInterior = Instantiate(prefab, spawnPos.position, spawnPos.rotation,
                     backWallGroup);
-            }              
+                interiorsList.Add(instInterior);
+            }
         }
-        
-
     }
 
     public void GetResources(BuildingAssets scriptableObject)
@@ -533,12 +519,11 @@ public class RoomGenerator : MonoBehaviour
         interiorMaterials = scriptableObject.interiorMaterials;
         exteriorMaterials = scriptableObject.exteriorMaterials;
         floorBaseMaterials = scriptableObject.floorBaseMaterials;
-
     }
-    
+
     public void GenerateLights(int lightCount)
     {
-        int center = 0; 
+        int center = 0;
         if (lightCount != 0)
         {
             center = Mathf.RoundToInt(ceilingsList.Count / lightCount);
@@ -547,17 +532,17 @@ public class RoomGenerator : MonoBehaviour
         {
             center = 1;
         }
+
         for (int i = center; i < ceilingsList.Count; i += center)
         {
             GameObject instLight = Instantiate(_lightsPrefabs[0], ceilingsList[i].transform.position,
-                    transform.rotation, transform);
+                transform.rotation, transform);
         }
     }
-    
+
     public void GenerateStairs(GameObject stairsPrefab)
     {
         Instantiate(stairsPrefab, transform.position, transform.rotation,
             transform);
     }
-    
 }

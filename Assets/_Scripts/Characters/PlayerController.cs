@@ -406,10 +406,13 @@ public class PlayerController : MonoBehaviour
             ladderTransform = other.GetComponent<Transform>();
         }
 
-        if (other.CompareTag("Door"))
+        if (other.CompareTag("Door") || other.CompareTag("StairsDoor") || other.CompareTag("DoubleDoor"))
         {
-            doorScript = other.GetComponent<Door>();
-            onDoor = true;
+            if (other.TryGetComponent(out Door door))
+            {
+                doorScript = door;
+                onDoor = true;
+            }
         }
 
         if (other.CompareTag("Conduct"))
