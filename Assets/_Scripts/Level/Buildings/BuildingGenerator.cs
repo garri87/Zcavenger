@@ -68,7 +68,7 @@ public class BuildingGenerator : MonoBehaviour
     //variable de control de cantidad de habitaciones
     [SerializeField] private int roomNumber;
 
-    //TODO: Pasar esta variable a RoomGenerator
+    
     private int interiorMat;
 
 
@@ -318,7 +318,6 @@ public class BuildingGenerator : MonoBehaviour
                     
                 }
                 //TODO: quitar interiores con el mismo nombre y dejar uno aleatoriamente
-                var duplicatedInteriors = (room.interiorsList.GroupBy(room => room.name)).ToArray(); 
                 
                 
                 //y seteamos el material de los interiores
@@ -430,7 +429,6 @@ public class BuildingGenerator : MonoBehaviour
 
         _roomGen.Init(this, roomWidht, roomHeight);
 
-        //TODO: Exportar prefabs de interiores y materiales al RoomGenerator
 
         //agregamos la instancia actual de la habitación a la lista de habitaciones general
         rooms.Add(_roomGen);
