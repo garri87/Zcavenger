@@ -317,9 +317,6 @@ public class BuildingGenerator : MonoBehaviour
                     }
                     
                 }
-                //TODO: quitar interiores con el mismo nombre y dejar uno aleatoriamente
-                var duplicatedInteriors = (room.interiorsList.GroupBy(room => room.name)).ToArray(); 
-                
                 
                 //y seteamos el material de los interiores
 
@@ -450,7 +447,7 @@ public class BuildingGenerator : MonoBehaviour
             BoxCollider boxCollider = floorGO.AddComponent<BoxCollider>();
             boxCollider.isTrigger = true;
             float xCenter = (maxBldWidth * partsWidth) - partsWidth;
-
+            float yCenter = (Convert.ToSingle(partsHeight)/2);
             //0z center 4.5
             //0z size 6
             //1z center 3
@@ -461,10 +458,10 @@ public class BuildingGenerator : MonoBehaviour
             hideFrontFace.facesToHide = new List<Transform>();
             if (isRoom)
             {
-                boxCollider.center = new Vector3(xCenter / 2, partsWidth / 2,
+                boxCollider.center = new Vector3(xCenter / 2,  yCenter,
                     (((partsWidth * maxBldDepth) - floorGO.transform.position.z) / 2));
 
-                boxCollider.size = new Vector3(maxBldWidth * partsWidth, partsWidth / 2,
+                boxCollider.size = new Vector3(maxBldWidth * partsWidth, partsHeight,
                     ((maxBldDepth - 1) * partsWidth) - floorGO.transform.position.z);
 
                 //Debug.Log( floorGO.name + " child Count: " + floorGO.transform.childCount);
@@ -486,10 +483,10 @@ public class BuildingGenerator : MonoBehaviour
             }
             else
             {
-                boxCollider.center = new Vector3(xCenter / 2, partsWidth / 2,
+                boxCollider.center = new Vector3( xCenter / 2, yCenter,
                     ((partsWidth * maxBldDepth) - partsWidth - floorGO.transform.position.z) / 2);
 
-                boxCollider.size = new Vector3(maxBldWidth * partsWidth, partsWidth / 2,
+                boxCollider.size = new Vector3(maxBldWidth * partsWidth, partsHeight,
                     (maxBldDepth * partsWidth) - floorGO.transform.position.z);
 
                 hideFrontFace.facesToHide.Add(floorGO.transform);
@@ -506,36 +503,46 @@ public class BuildingGenerator : MonoBehaviour
     /// <param name="height"></param>
     public void GenerateExteriorWalls(Transform spawnOrigin, int width, int height)
     {
+        //Creamos un Gameobject vacio para agrupar las paredes 
         GameObject exteriorGroup = new GameObject("Exterior Walls");
         exteriorGroup.transform.parent = transform;
         exteriorGroup.transform.position = transform.position;
+        
+        //Movemos el puntero de generación en el inicio del edificio
         spawnOrigin.position = transform.position;
         for (int Y = 0; Y < height; Y++)
         {
+            //Creamos otro GameObject hijo vacio para dividir por piso
+            //y lo colocamos a la altura segun que piso correponda 
             GameObject exteriorFloor = new GameObject("Floor " + Y);
             exteriorFloor.transform.parent = exteriorGroup.transform;
-            exteriorFloor.transform.position = new Vector3(transform.position.x, Y * partsWidth, transform.position.z);
+            exteriorFloor.transform.position = new Vector3(transform.position.x, spawnOrigin.position.y, transform.position.z);
 
+            //Movemos el puntero de generación al extremo izquierdo para empezar a generar
             spawnOrigin.position = new Vector3(transform.position.x, spawnOrigin.position.y, transform.position.z);
             for (int X = 0; X < width; X++)
             {
+                //Instanciamos un GameObject del array de paredes exteriores de manera aleatoria
                 GameObject instExtWall = Instantiate(exteriorWallsPrefab[Random.Range(0, exteriorWallsPrefab.Length)],
                     spawnOrigin.position - (Vector3.forward * partsWidth / 2), transform.rotation,
                     exteriorFloor.transform);
 
+                //Movemos el puntero a la siguiente posición en X 
                 spawnOrigin.position += Vector3.right * partsWidth;
             }
-
+            //Agregamos el piso generado a la lista    
             extWallList.Add(exteriorFloor);
 
+            //Movemos el puntero de generación un espacio arriba
             spawnOrigin.position += Vector3.up * (partsHeight + 0.1f);
 
+            //Combinamos los meshes al finalizar el piso
             if (combineMeshesAtEnd)
             {
                 CombineMeshes(exteriorFloor.transform);
             }
         }
-
+        //Agregamos el script de ocultar paredes en cada piso 
         AddHideFrontFace(extWallList, false);
     }
 

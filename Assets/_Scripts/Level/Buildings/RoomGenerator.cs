@@ -228,19 +228,26 @@ public class RoomGenerator : MonoBehaviour
                 try
                 {
                     interiorResult = selectedInteriors[order];
-                }
-                catch
-                {
-                    //     interiorResult = selectedInteriors[0];
-                }
-                finally
-                {
                     GenerateInterior(interiorResult, basesList[i].transform);
                     order++;
                 }
+                catch
+                {
+                    if (selectedInteriors.Length > 0)
+                    {
+                        interiorResult = selectedInteriors[Random.Range(0,selectedInteriors.Length)];
+                        
+                    }
+
+                    order = 0;
+                }
+                finally
+                {
+                    
+                }
             }
         }
-
+        
         if (roomStyle == RoomStyle.Stairs)
         {
             if (debugConstruction)
@@ -251,10 +258,32 @@ public class RoomGenerator : MonoBehaviour
             GenerateStairs(_stairsPrefabs[0]);
         }
 
-        #endregion
+        //TODO: Chequear si hay interiores con el mismo nombre y quitarlos
+            
+            #endregion
     }
 
+    public List<GameObject> CheckInteriorDuplicates()
+    {
+        List<GameObject> duplicatedInteriors = new List<GameObject>();
+        var duplicates = (from interior in interiorsList
+            group interior by interior.name
+            into newGroup
+            orderby newGroup.Key
+            select newGroup).ToList();
+        
+        foreach (var duplicate in duplicates)
+        {
+            foreach (var interior in duplicate)
+            {
+                duplicatedInteriors.Add(interior);
+            }
+            
+        }
 
+        return duplicatedInteriors;
+    }
+        
     public void CombineMeshes(bool combine, Transform transform)
     {
         if (combine)
@@ -361,55 +390,17 @@ public class RoomGenerator : MonoBehaviour
         }
 
         GameObject instSide = Instantiate(sideGameObjPrefab, spawnPoint - Vector3.right * partsWidth / 2,
-            Quaternion.Euler(0, rotation, 0), wallsAndInteriorGroup);
+            Quaternion.Euler(0, rotation, 0), backWallGroup);
 
         if (withDoor)
         {
             InstantiateDoor(instSide, _doorsPrefabs);
-
+            
             doorWallsList.Add(instSide);
+            
         }
     }
 
-    void InstantiateDoor(GameObject targetDoorWall, GameObject[] doorprefabs)
-    {
-        GameObject randomDoor = null;
-        GameObject instDoor = null;
-        if (targetDoorWall.tag == "DoubleDoorWall")
-        {
-            GameObject[] doors = (from doorPrefab in doorprefabs where doorPrefab.tag == "DoubleDoor" select doorPrefab)
-                .ToArray();
-
-            randomDoor = doors[Random.Range(0, doors.Length)];
-        }
-        else if (targetDoorWall.tag == "DoorWall")
-        {
-            GameObject[] doors = (from doorPrefab in doorprefabs where doorPrefab.tag == "Door" select doorPrefab)
-                .ToArray();
-            randomDoor = doors[Random.Range(0, doors.Length)];
-        }
-        else
-        {
-            Debug.LogWarning("DoorWall " + targetDoorWall.name + " is not Tagged, no door instantiated");
-        }
-
-        if (randomDoor != null)
-        {
-            instDoor = Instantiate(randomDoor,
-                targetDoorWall.transform.position,
-                targetDoorWall.transform.rotation,
-                transform);
-        }
-
-        if (instDoor.TryGetComponent(out Door door))
-        {
-            door.doorOrientation = Door.DoorOrientation.Side;
-        }
-        else
-        {
-            Debug.Log("No doorscript found on " + instDoor.name);
-        }
-    }
 
     /// <summary>
     /// Replaces a target prefab with a frame with door 
@@ -498,11 +489,15 @@ public class RoomGenerator : MonoBehaviour
             {
                GameObject instInterior = Instantiate(prefab, spawnPos.position, spawnPos.rotation,
                     backWallGroup);
+               instInterior.name = prefab.name;
                 interiorsList.Add(instInterior);
             }
         }
     }
-
+    /// <summary>
+    /// Gets values from a BuildingAssets Scriptable Object
+    /// </summary>
+    /// <param name="scriptableObject"></param>
     public void GetResources(BuildingAssets scriptableObject)
     {
         _basesPrefabs = scriptableObject.basesPrefabs;
@@ -520,7 +515,7 @@ public class RoomGenerator : MonoBehaviour
         exteriorMaterials = scriptableObject.exteriorMaterials;
         floorBaseMaterials = scriptableObject.floorBaseMaterials;
     }
-
+    
     public void GenerateLights(int lightCount)
     {
         int center = 0;
@@ -545,4 +540,45 @@ public class RoomGenerator : MonoBehaviour
         Instantiate(stairsPrefab, transform.position, transform.rotation,
             transform);
     }
+    
+    public void InstantiateDoor(GameObject targetDoorWall, GameObject[] doorprefabs)
+    {
+        GameObject randomDoor = null;
+        GameObject instDoor = null;
+        if (targetDoorWall.tag == "DoubleDoorWall")
+        {
+            GameObject[] doors = (from doorPrefab in doorprefabs where doorPrefab.tag == "DoubleDoor" select doorPrefab)
+                .ToArray();
+
+            randomDoor = doors[Random.Range(0, doors.Length)];
+        }
+        else if (targetDoorWall.tag == "DoorWall")
+        {
+            GameObject[] doors = (from doorPrefab in doorprefabs where doorPrefab.tag == "Door" select doorPrefab)
+                .ToArray();
+            randomDoor = doors[Random.Range(0, doors.Length)];
+        }
+        else
+        {
+            Debug.LogWarning("DoorWall " + targetDoorWall.name + " is not Tagged, no door instantiated");
+        }
+
+        if (randomDoor != null)
+        {
+            instDoor = Instantiate(randomDoor,
+                targetDoorWall.transform.position,
+                targetDoorWall.transform.rotation,
+                transform);
+        }
+
+        if (instDoor.TryGetComponent(out Door door))
+        {
+            door.doorOrientation = Door.DoorOrientation.Side;
+        }
+        else
+        {
+            Debug.Log("No doorscript found on " + instDoor.name);
+        }
+    }
+
 }
