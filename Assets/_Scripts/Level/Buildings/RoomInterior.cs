@@ -12,5 +12,5 @@ public class RoomInterior : MonoBehaviour
 
     [Header("Item & container spawn Locations")]
     public Transform[] SpawnLocations;
-
+    
 }

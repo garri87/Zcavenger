@@ -434,7 +434,7 @@ public class PlayerController : MonoBehaviour
             transform.position = new Vector3(transform.position.x,other.transform.position.y,transform.position.z);
         }*/
 
-        if (other.CompareTag("Door"))
+        if (other.CompareTag("Door") || other.CompareTag("StairsDoor") || other.CompareTag("DoubleDoor"))
         {
             onDoor = true;
         }
@@ -458,7 +458,7 @@ public class PlayerController : MonoBehaviour
             nextToLadder = false;
         }
 
-        if (other.CompareTag("Door"))
+        if (other.CompareTag("Door") || other.CompareTag("StairsDoor") || other.CompareTag("DoubleDoor"))
         {
             onDoor = false;
         }

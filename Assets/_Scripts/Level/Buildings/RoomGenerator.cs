@@ -96,34 +96,38 @@ public class RoomGenerator : MonoBehaviour
     {
         EmptyRoom,
         Stairs,
-        Hospital_Lobby, //ok 4
-        Hospital_Reception, //ok 1
-        Hospital_SurgeryRoom, //ok 2
-        Hospital_Bathrooms, //ok 3
-        Hospital_DiningRoom, //ok 3
-        Hospital_PatientRooms, //ok 1
+
+        //HOSPITAL ROOMS:
+        Hospital_Lobby, //ok 
+        Hospital_Reception, //ok 
+        Hospital_SurgeryRoom, //ok 
+        Hospital_Bathrooms, //ok 
+        Hospital_DiningRoom, //ok 
+        Hospital_PatientRooms, //ok 
         //  Hospital_Pharmacy,
         //  Hospital_Warehouse,
 
-        //Residential_Bathroom,
+        //RESIDENTIAL ROOMS:
+        Residential_Bathroom,//ok 
         Residential_Bedroom,
 
         //Residential_ElevatorIn,
         //Residential_ElevatorOut,
-        Residential_KidBedroom,
-        Residential_Kitchen,
+        Residential_KidBedroom, //ok
+        Residential_Kitchen, //ok
 
         //Residential_Laundry,
-        Residential_Living,
-        Residential_Lobby,
+        Residential_Living,//ok
+        Residential_Lobby,//ok
 
-        /* Office_Lobby,
-         Office_Blocks,
-         Office_Boss,
-         Office_Warehouse,
-         Office_Reception,
-         Office_Bathrooms,
-         */
+        //OFFICE ROOMS:
+        //Office_Lobby,
+        //Office_Blocks,
+        //Office_Boss,
+        //Office_Warehouse,
+        //Office_Reception,
+        //Office_Bathrooms,
+
         end
     }
 
@@ -235,19 +239,17 @@ public class RoomGenerator : MonoBehaviour
                 {
                     if (selectedInteriors.Length > 0)
                     {
-                        interiorResult = selectedInteriors[Random.Range(0,selectedInteriors.Length)];
-                        
+                        interiorResult = selectedInteriors[Random.Range(0, selectedInteriors.Length)];
                     }
 
                     order = 0;
                 }
                 finally
                 {
-                    
                 }
             }
         }
-        
+
         if (roomStyle == RoomStyle.Stairs)
         {
             if (debugConstruction)
@@ -259,8 +261,8 @@ public class RoomGenerator : MonoBehaviour
         }
 
         //TODO: Chequear si hay interiores con el mismo nombre y quitarlos
-            
-            #endregion
+
+        #endregion
     }
 
     public List<GameObject> CheckInteriorDuplicates()
@@ -271,19 +273,18 @@ public class RoomGenerator : MonoBehaviour
             into newGroup
             orderby newGroup.Key
             select newGroup).ToList();
-        
+
         foreach (var duplicate in duplicates)
         {
             foreach (var interior in duplicate)
             {
                 duplicatedInteriors.Add(interior);
             }
-            
         }
 
         return duplicatedInteriors;
     }
-        
+
     public void CombineMeshes(bool combine, Transform transform)
     {
         if (combine)
@@ -395,9 +396,8 @@ public class RoomGenerator : MonoBehaviour
         if (withDoor)
         {
             InstantiateDoor(instSide, _doorsPrefabs);
-            
+
             doorWallsList.Add(instSide);
-            
         }
     }
 
@@ -455,8 +455,6 @@ public class RoomGenerator : MonoBehaviour
             doorScript.outsidePlayLine = transform.position.z;
             doorScript.insidePlayLine = transform.position.z + partsWidth;
         }
-
-        
     }
 
     /// <summary>
@@ -487,13 +485,14 @@ public class RoomGenerator : MonoBehaviour
 
             if (canDecorate)
             {
-               GameObject instInterior = Instantiate(prefab, spawnPos.position, spawnPos.rotation,
+                GameObject instInterior = Instantiate(prefab, spawnPos.position, spawnPos.rotation,
                     backWallGroup);
-               instInterior.name = prefab.name;
+                instInterior.name = prefab.name;
                 interiorsList.Add(instInterior);
             }
         }
     }
+
     /// <summary>
     /// Gets values from a BuildingAssets Scriptable Object
     /// </summary>
@@ -515,7 +514,7 @@ public class RoomGenerator : MonoBehaviour
         exteriorMaterials = scriptableObject.exteriorMaterials;
         floorBaseMaterials = scriptableObject.floorBaseMaterials;
     }
-    
+
     public void GenerateLights(int lightCount)
     {
         int center = 0;
@@ -538,9 +537,9 @@ public class RoomGenerator : MonoBehaviour
     public void GenerateStairs(GameObject stairsPrefab)
     {
         Instantiate(stairsPrefab, transform.position, transform.rotation,
-            transform);
+            backWallGroup);
     }
-    
+
     public void InstantiateDoor(GameObject targetDoorWall, GameObject[] doorprefabs)
     {
         GameObject randomDoor = null;
@@ -580,5 +579,4 @@ public class RoomGenerator : MonoBehaviour
             Debug.Log("No doorscript found on " + instDoor.name);
         }
     }
-
 }
