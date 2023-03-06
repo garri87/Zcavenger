@@ -585,7 +585,7 @@ GameObject:
   - component: {fileID: 8863455314912487549}
   - component: {fileID: 6598638811868479436}
   - component: {fileID: 912315990450992136}
-  m_Layer: 0
+  m_Layer: 20
   m_Name: FireEscape_Door
   m_TagString: StairsDoor
   m_Icon: {fileID: 0}
@@ -622,8 +622,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.9098438, y: 1.9971023, z: 10}
-  m_Center: {x: 0.0066021085, y: 1.0986264, z: 0.03283024}
+  m_Size: {x: 0.9098438, y: 1.5, z: 10}
+  m_Center: {x: 0, y: 1.0986264, z: 0.03283024}
 --- !u!114 &6598638811868479436
 MonoBehaviour:
   m_ObjectHideFlags: 0
