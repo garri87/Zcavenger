@@ -336,9 +336,10 @@ MonoBehaviour:
   - {fileID: 2177368412329503634}
   - {fileID: 4103753201371344940}
   selectAllChilds: 0
+  activateOne: 0
   randomRotation: 1
   randomActivation: 1
-  activationProbabilty: 1
+  activationProbabilty: 7
   randomMaterial: 0
   materialIndex: 0
   materials: []
@@ -530,7 +531,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6085562215558192123, guid: 034a790e51efb8c42af98f9b7728dfe6, type: 3}
       propertyPath: activationProbabilty
-      value: 2
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 6273954348158240993, guid: 034a790e51efb8c42af98f9b7728dfe6, type: 3}
       propertyPath: m_RootOrder
@@ -813,7 +814,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6085562215558192123, guid: 034a790e51efb8c42af98f9b7728dfe6, type: 3}
       propertyPath: activationProbabilty
-      value: 2
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 6273954348158240993, guid: 034a790e51efb8c42af98f9b7728dfe6, type: 3}
       propertyPath: m_RootOrder

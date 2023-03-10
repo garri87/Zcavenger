@@ -520,6 +520,7 @@ MonoBehaviour:
   - {fileID: 1239938167067765022}
   - {fileID: 1239938168130533989}
   selectAllChilds: 0
+  activateOne: 0
   randomRotation: 0
   randomActivation: 0
   activationProbabilty: 2
@@ -926,9 +927,10 @@ MonoBehaviour:
   - {fileID: 1239938166945624010}
   - {fileID: 1239938168192491295}
   selectAllChilds: 0
+  activateOne: 0
   randomRotation: 0
   randomActivation: 1
-  activationProbabilty: 2
+  activationProbabilty: 7
   randomMaterial: 0
   materialIndex: 0
   materials: []
@@ -1033,6 +1035,7 @@ MonoBehaviour:
   gameObjects:
   - {fileID: 1239938167780815684}
   selectAllChilds: 0
+  activateOne: 0
   randomRotation: 0
   randomActivation: 0
   activationProbabilty: 2
@@ -1139,7 +1142,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1239938167841181608}
-  - component: {fileID: 1239938167841181615}
   m_Layer: 0
   m_Name: cabinet_3 (2)
   m_TagString: Untagged
@@ -1166,28 +1168,6 @@ Transform:
   m_Father: {fileID: 7677092282806760698}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: -90, y: 265.6, z: -165}
---- !u!205 &1239938167841181615
-LODGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1239938167841181609}
-  serializedVersion: 2
-  m_LocalReferencePoint: {x: 0, y: 0.0000008791685, z: 1.0177515}
-  m_Size: 2.0411448
-  m_FadeMode: 0
-  m_AnimateCrossFading: 0
-  m_LastLODIsBillboard: 0
-  m_LODs:
-  - screenRelativeHeight: 0.19779103
-    fadeTransitionWidth: 0
-    renderers:
-    - renderer: {fileID: 1239938167149817435}
-    - renderer: {fileID: 1239938167669142726}
-    - renderer: {fileID: 1239938167336839694}
-    - renderer: {fileID: 1239938168566719382}
-  m_Enabled: 1
 --- !u!1 &1239938167909381641
 GameObject:
   m_ObjectHideFlags: 0
@@ -2345,6 +2325,7 @@ MonoBehaviour:
   gameObjects:
   - {fileID: 8238029472698904655}
   selectAllChilds: 0
+  activateOne: 0
   randomRotation: 0
   randomActivation: 1
   activationProbabilty: 2
@@ -2577,9 +2558,10 @@ MonoBehaviour:
   - {fileID: 1239938167841181609}
   - {fileID: 4178594403089823547}
   selectAllChilds: 0
+  activateOne: 0
   randomRotation: 0
   randomActivation: 1
-  activationProbabilty: 2
+  activationProbabilty: 7
   randomMaterial: 0
   materialIndex: 0
   materials: []
@@ -2685,6 +2667,7 @@ MonoBehaviour:
   gameObjects:
   - {fileID: 7677092283376989416}
   selectAllChilds: 0
+  activateOne: 0
   randomRotation: 0
   randomActivation: 1
   activationProbabilty: 2
@@ -2861,9 +2844,10 @@ MonoBehaviour:
   gameObjects:
   - {fileID: 4178594403089823547}
   selectAllChilds: 0
+  activateOne: 0
   randomRotation: 0
   randomActivation: 0
-  activationProbabilty: 2
+  activationProbabilty: 7
   randomMaterial: 1
   materialIndex: 0
   materials:

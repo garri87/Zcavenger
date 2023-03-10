@@ -880,9 +880,10 @@ MonoBehaviour:
   - {fileID: 3856070351509719096}
   - {fileID: 3856070351585112224}
   selectAllChilds: 0
+  activateOne: 0
   randomRotation: 1
   randomActivation: 0
-  activationProbabilty: 2
+  activationProbabilty: 7
   randomMaterial: 0
   materialIndex: 0
   materials: []
@@ -1472,9 +1473,10 @@ MonoBehaviour:
   - {fileID: 8917030437860222488}
   - {fileID: 8917030438582527060}
   selectAllChilds: 0
+  activateOne: 0
   randomRotation: 0
   randomActivation: 1
-  activationProbabilty: 2
+  activationProbabilty: 7
   randomMaterial: 0
   materialIndex: 0
   materials: []
@@ -1977,6 +1979,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2084023292098158424}
     m_Modifications:
+    - target: {fileID: 6580958836914596346, guid: 4395f26ef4e80f549945e518f61c8c29, type: 3}
+      propertyPath: activationProbabilty
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 6580958836914596347, guid: 4395f26ef4e80f549945e518f61c8c29, type: 3}
       propertyPath: m_Name
       value: Canvas_Painting_01

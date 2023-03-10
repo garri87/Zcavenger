@@ -220,7 +220,11 @@ public class RoomGenerator : MonoBehaviour
 
         if (roomStyle != RoomStyle.EmptyRoom || !isStairsRoom)
         {
-            Debug.Log(roomStyle);
+            if (debugConstruction)
+            {
+                Debug.Log(roomStyle);    
+            }
+            
             selectedInteriors = (from interior in interiorPrefabs
                 where interior.name.Contains(roomStyle.ToString())
                 select interior).ToArray();
@@ -301,38 +305,7 @@ public class RoomGenerator : MonoBehaviour
             meshCombiner.CombineMeshes(false);
         }
     }
-
-    /// <summary>
-    /// Changes the interior an exterior materials of list of gameobjects
-    /// The GameObject must have a MaterialManager script attached
-    /// </summary>
-    /// <param name="gameObjects"></param>
-    /// <param name="interiorMaterial"></param>
-    /// <param name="exteriorMaterial"></param>
-    public void ChangeMaterial(List<GameObject> gameObjects = null, Material interiorMaterial = null,
-        Material exteriorMaterial = null)
-    {
-        foreach (GameObject gameObject in gameObjects)
-        {
-            MaterialManager materialManager = gameObject.GetComponent<MaterialManager>();
-
-            materialManager.meshRenderer = gameObject.GetComponent<MeshRenderer>();
-
-            Material[] materials = materialManager.meshRenderer.materials;
-            materials[materialManager.interiorFaceMaterialIndex] = interiorMaterial;
-            if (exteriorMaterial != null)
-            {
-                materials[materialManager.exteriorFaceMaterialIndex] = exteriorMaterial;
-            }
-            else
-            {
-                materials[materialManager.exteriorFaceMaterialIndex] = interiorMaterial;
-            }
-
-            materialManager.meshRenderer.materials = materials;
-        }
-    }
-
+    
     /// <summary>
     /// Generates a block of 1 base and n of walls where n is height of the room, places a ceiling at the end
     /// </summary>
@@ -517,17 +490,7 @@ public class RoomGenerator : MonoBehaviour
 
     public void GenerateLights(int lightCount)
     {
-        int center = 0;
-        if (lightCount != 0)
-        {
-            center = Mathf.RoundToInt(ceilingsList.Count / lightCount);
-        }
-        else
-        {
-            center = 1;
-        }
-
-        for (int i = center; i < ceilingsList.Count; i += center)
+        for (int i = 0; i < ceilingsList.Count; i += 2)
         {
             GameObject instLight = Instantiate(_lightsPrefabs[0], ceilingsList[i].transform.position,
                 transform.rotation, transform);

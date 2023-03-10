@@ -57,9 +57,10 @@ MonoBehaviour:
   - {fileID: 2809400325469041957}
   - {fileID: 2809906461065561389}
   selectAllChilds: 0
+  activateOne: 0
   randomRotation: 0
   randomActivation: 1
-  activationProbabilty: 2
+  activationProbabilty: 7
   randomMaterial: 0
   materialIndex: 0
   materials: []
@@ -269,6 +270,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7009610315013141091, guid: 5c9889a07401b4949ba13e39cc59f810, type: 3}
+      propertyPath: activationProbabilty
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5c9889a07401b4949ba13e39cc59f810, type: 3}
 --- !u!4 &2804278195025890812 stripped
@@ -360,9 +365,10 @@ MonoBehaviour:
   gameObjects:
   - {fileID: 7684830450997233565}
   selectAllChilds: 0
+  activateOne: 0
   randomRotation: 1
   randomActivation: 0
-  activationProbabilty: 2
+  activationProbabilty: 7
   randomMaterial: 1
   materialIndex: 0
   materials:

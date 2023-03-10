@@ -101,6 +101,7 @@ MonoBehaviour:
   maxRotation: 0
   gameObjects: []
   selectAllChilds: 0
+  activateOne: 0
   randomRotation: 0
   randomActivation: 0
   activationProbabilty: 2
@@ -561,6 +562,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4348655769934119325}
     m_Modifications:
+    - target: {fileID: 6580958836914596346, guid: 4395f26ef4e80f549945e518f61c8c29, type: 3}
+      propertyPath: activationProbabilty
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 6580958836914596347, guid: 4395f26ef4e80f549945e518f61c8c29, type: 3}
       propertyPath: m_Name
       value: Canvas_Painting_01

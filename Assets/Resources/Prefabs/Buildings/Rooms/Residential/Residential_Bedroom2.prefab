@@ -1674,7 +1674,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8481722414205835972}
-  - component: {fileID: 8350567229569455344}
   m_Layer: 0
   m_Name: cabinet_3 (3)
   m_TagString: Untagged
@@ -1701,28 +1700,6 @@ Transform:
   m_Father: {fileID: 2593216218815647789}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: -90, y: 180, z: -289.4}
---- !u!205 &8350567229569455344
-LODGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5172738587908606002}
-  serializedVersion: 2
-  m_LocalReferencePoint: {x: 0, y: 0.0000008791685, z: 1.0177515}
-  m_Size: 2.0411448
-  m_FadeMode: 0
-  m_AnimateCrossFading: 0
-  m_LastLODIsBillboard: 0
-  m_LODs:
-  - screenRelativeHeight: 0.19779103
-    fadeTransitionWidth: 0
-    renderers:
-    - renderer: {fileID: 8633496387606545809}
-    - renderer: {fileID: 3247827178004367849}
-    - renderer: {fileID: 8420605442996637248}
-    - renderer: {fileID: 6381493082976463745}
-  m_Enabled: 1
 --- !u!1 &6126497780688048109
 GameObject:
   m_ObjectHideFlags: 0
@@ -1876,6 +1853,10 @@ PrefabInstance:
     - target: {fileID: 400014, guid: b4bf5e3a00974a94ea1549814fc16ebf, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8739948896065807250, guid: b4bf5e3a00974a94ea1549814fc16ebf, type: 3}
+      propertyPath: activationProbabilty
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6031299440074966781, guid: b4bf5e3a00974a94ea1549814fc16ebf, type: 3}

@@ -10,69 +10,114 @@ public class Randomizer : MonoBehaviour
     public float minRotation, maxRotation;
     public GameObject[] gameObjects;
     public bool selectAllChilds;
+    public bool activateOne;
     public bool randomRotation;
     public bool randomActivation;
-    public int activationProbabilty = 2;
+    [Range(0,10)]
+    public int activationProbabilty = 7;
     public bool randomMaterial;
     public int materialIndex = 0;
     public Material[] materials;
-    
-    
+
+
+    private void OnValidate()
+    {
+        activationProbabilty = 8;
+    }
+
     private void Awake()
     {
         if (selectAllChilds)
         {
-            if (transform.childCount > 0)
-            {
-                gameObjects = new GameObject[transform.childCount];
-                for (int i = 0; i < transform.childCount; i++)
-                {
-                    gameObjects[i] = transform.GetChild(i).gameObject;
-                }
-            }
-            else
-            {
-                Debug.LogWarning("No childs in transform");
-            }
+            SelectAllChilds(gameObjects);
         }
 
-
-
+        if (activateOne)
+        {
+            ActivateOne(gameObjects,Random.Range(0, gameObjects.Length));
+        }
+        
         foreach (GameObject gameObject in gameObjects)
         {
             if (randomActivation)
             {
-                float randomNum = Mathf.RoundToInt(Random.Range(0f, activationProbabilty));
-                if (randomNum == activationProbabilty)
-                {
-                    gameObject.SetActive(true);
-                }
-                else
-                {
-                    gameObject.SetActive(false);
-                }
+                RandomActivation(gameObject);
             }
 
             if (randomRotation)
             {
-                gameObject.transform.eulerAngles = new Vector3(gameObject.transform.eulerAngles.x,
-                    Random.Range(minRotation, maxRotation), gameObject.transform.eulerAngles.z);
+                RandomRotation(gameObject);
             }
 
             if (randomMaterial)
             {
-                if (materials.Length > 0)
+                RandomMaterial(gameObject);
+            }
+        }
+    }
+
+    public void SelectAllChilds(GameObject[] gameObjects)
+    {
+        if (transform.childCount > 0)
+        {
+            gameObjects = new GameObject[transform.childCount];
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                gameObjects[i] = transform.GetChild(i).gameObject;
+            }
+        }
+        else
+        {
+            Debug.LogWarning("No childs in transform");
+        }
+    }
+
+    public void RandomActivation(GameObject gameObject)
+    {
+        float randomNum = Mathf.RoundToInt(Random.Range(0,11));
+        if (randomNum <= activationProbabilty) 
+        {
+            gameObject.SetActive(true);
+        }
+        else
+        {
+            gameObject.SetActive(false);
+        }
+    }
+
+    public void RandomRotation(GameObject gameObject)
+    {
+        gameObject.transform.eulerAngles = new Vector3(gameObject.transform.eulerAngles.x,
+            Random.Range(minRotation, maxRotation), gameObject.transform.eulerAngles.z);
+    }
+
+    public void RandomMaterial(GameObject gameObject)
+    {
+        if (materials.Length > 0)
+        {
+            MeshRenderer meshRenderer = gameObject.GetComponent<MeshRenderer>();
+            Material[] meshMaterials = meshRenderer.materials;
+            meshMaterials[materialIndex] = materials[Random.Range(0, materials.Length)];
+            meshRenderer.materials = meshMaterials;
+        }
+        else
+        {
+            Debug.LogWarning("Warning: No materials in array for random selection");
+        }
+    }
+
+    public void ActivateOne(GameObject[] gameObjects,int order)
+    {
+        if (gameObjects != null)
+        {
+            gameObjects[order].SetActive(true);
+
+            for (int i = 0; i < gameObjects.Length; i++)
+            {
+                if (i != order)
                 {
-                    MeshRenderer meshRenderer = gameObject.GetComponent<MeshRenderer>();
-                    Material[] meshMaterials = meshRenderer.materials;
-                    meshMaterials[materialIndex] = materials[Random.Range(0, materials.Length)];
-                    meshRenderer.materials = meshMaterials;
+                    gameObjects[i].SetActive(false);
                 }
-                else
-                {
-                    Debug.LogWarning("Warning: No materials in array for random selection");
-                }
-                
             }
         }
     }
