@@ -444,7 +444,7 @@ MonoBehaviour:
   roll: 0
   blocking: 0
   trapped: 0
-  bitten: 0
+  beingBitten: 0
   alreadyCatched: 0
   onConduct: 0
   onTransition: 0
@@ -452,6 +452,7 @@ MonoBehaviour:
   drinking: 0
   eating: 0
   grabItem: 0
+  playerBusy: 0
   currentSpeed: 0
   jumpSpeed: 6
   crouchWalkSpeed: 2
@@ -464,15 +465,14 @@ MonoBehaviour:
   canStomp: 0
   stompDamage: 30
   bloodSplatterParticle: {fileID: 4574046231875852703, guid: 0d492ff9a23dd6348aa4d45b85825187, type: 3}
-  ladderOffset: 0
   climbVelocity: 2
   transitionSpeed: 10
   nextToLadder: 0
   climbingLadder: 0
   upLadder: 0
   climbingToTop: 0
-  targetTransform: {fileID: 0}
-  _weaponHolderTransform: {fileID: 702155433607124030}
+  crosshairTransform: {fileID: 0}
+  _playerWpnHolderTransform: {fileID: 0}
   equippedWeaponItem: {fileID: 0}
   weaponEquipped: 0
   isAiming: 0
@@ -490,9 +490,8 @@ MonoBehaviour:
   _checkGround: {fileID: 0}
   stompTargetAgentController: {fileID: 0}
   _stompDetector: {fileID: 3695857575346739187}
-  playLine: 0
   onDoor: 0
-  inBackPlayLine: 0
+  currentPlayLine: 0
   doorScript: {fileID: 0}
   mouseTargetLayer: {fileID: 0}
   _inventory: {fileID: 0}
@@ -519,7 +518,6 @@ MonoBehaviour:
   bulletCounterTMPUGUI: {fileID: 0}
   capacityText: {fileID: 0}
   slotArray: []
-  quickSlotCount: []
   itemList: []
   currentCapacity: 0
   maxCapacity: 0
@@ -803,6 +801,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c97d06bde9b93848b6bff91ece621d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _soundSensor: {fileID: 0}
   runStepsClips:
   - {fileID: 8300000, guid: ecd647025e0a3c04fbd5829fff509e09, type: 3}
   - {fileID: 8300000, guid: 3bd1b93317b7a3a49b13011cdaa64d0b, type: 3}
@@ -842,7 +841,6 @@ MonoBehaviour:
   lowSoundSensorScale: 0.2
   normalSoundSensorScale: 2
   highSoundSensorScale: 5
-  _soundSensor: {fileID: 0}
 --- !u!114 &4870130169611580303
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -855,6 +853,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebd1a9715cd55164eb9b7bdfba16f429, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _soundSensor: {fileID: 0}
   _audioSource: {fileID: 0}
   shotSound: {fileID: 0}
   meleeAttackSound: {fileID: 0}
@@ -864,7 +863,6 @@ MonoBehaviour:
   magazineInSound: {fileID: 8300000, guid: eb5685b26a6494994af389a3293064e8, type: 3}
   reloadEndSound: {fileID: 0}
   drawWeaponSound: {fileID: 8300000, guid: 95d6c402778044a598e0c2fd3fe3cdb7, type: 3}
-  _soundSensor: {fileID: 0}
   lowSoundSensorScale: 20
   normalSoundSensorScale: 200
   highSoundSensorScale: 400

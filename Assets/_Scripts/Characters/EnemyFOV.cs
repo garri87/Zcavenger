@@ -6,8 +6,6 @@ using Random = UnityEngine.Random;
 
 public class EnemyFOV : MonoBehaviour
 {
-    
-    
     public CapsuleCollider FOVObject;
     private HealthManager enemyHealth;
     private AgentController _agentController;
@@ -29,6 +27,7 @@ public class EnemyFOV : MonoBehaviour
     public RaycastHit[] hits;
     public List<GameObject> hitList;
 
+    public PlayerController playerController;
     private Transform playerPosition;
     private Vector3 playerDirection;
     [HideInInspector]public Vector3 playerLastLocation;
@@ -43,6 +42,13 @@ public class EnemyFOV : MonoBehaviour
         groundDistance = Mathf.Infinity;
 
         FOVObject.transform.parent = _agentController._animator.GetBoneTransform(HumanBodyBones.Head);
+
+        if (GameObject.Find("Player").TryGetComponent(out PlayerController playContrller))
+        {
+            playerController = playContrller;
+        }
+        
+        
     }
 
     private void FixedUpdate()
@@ -92,7 +98,7 @@ public class EnemyFOV : MonoBehaviour
             {
                 targetDistance = hits[i].distance;
                 
-                if (targetDistance <= groundDistance && _agentController.currentPlayLine == PlayerController.currentPlayLine)
+                if (targetDistance <= groundDistance && _agentController.currentPlayLine == playerController.currentPlayLine)
                 {
                     playerInSight = true;
                 }

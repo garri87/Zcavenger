@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class WeaponSound : MonoBehaviour
 {
+    public SoundSensor _soundSensor;
+
     public AudioSource _audioSource;
     private WeaponItem _weaponItem;
     private PlayerController _playerController;
@@ -19,7 +21,6 @@ public class WeaponSound : MonoBehaviour
     public AudioClip reloadEndSound;
     public AudioClip drawWeaponSound;
 
-    public SoundSensor _soundSensor;
     
     public float lowSoundSensorScale = 20f;
     public float normalSoundSensorScale = 200f;
@@ -29,6 +30,12 @@ public class WeaponSound : MonoBehaviour
     {
         _playerController = GetComponent<PlayerController>();
         _audioSource = GetComponent<AudioSource>();
+    }
+
+    private void Awake()
+    {
+        _soundSensor = GameObject.Find("Player").transform.Find("SoundSensor").GetComponent<SoundSensor>();
+
     }
 
     public void FireWeaponSound()

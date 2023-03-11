@@ -1,0 +1,75 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af2178f8dd4289a44ae206f8c7d4abfd, type: 3}
+  m_Name: Building_Hospital
+  m_EditorClassIdentifier: 
+  buildingStyle: 3
+  basesPrefabs:
+  - {fileID: 1507712293043771849, guid: 58deeaca7724f594482049ef293b1af5, type: 3}
+  wallsPrefabs:
+  - {fileID: 7381379625401660565, guid: 7b9ef5693e9506149bf1757a683783aa, type: 3}
+  doorWallsPrefabs:
+  - {fileID: 7005457456791289902, guid: 76663ac058d27fc4199cabf7ee00449e, type: 3}
+  doorsPrefabs:
+  - {fileID: 8221155662374237611, guid: f574677fa00d30d41b98372e29534bba, type: 3}
+  - {fileID: 1870367431945600346, guid: 4f286cdbbb1d5544f80d5283e681f35c, type: 3}
+  - {fileID: 4236211815612348176, guid: a3194e2d970e16f44b3867709701791f, type: 3}
+  - {fileID: 654772512631856615, guid: 16b7004490be6a241bd120eb63e916e7, type: 3}
+  - {fileID: 4446631579855398034, guid: 3563b5d98c23a3543bb3c333f6eb159f, type: 3}
+  - {fileID: 4466889636972523376, guid: f959805b17799d8448691e8b301567f2, type: 3}
+  - {fileID: 5237847287048580478, guid: 8647769f967c52044a8394607b7b2f84, type: 3}
+  exteriorWallsPrefabs:
+  - {fileID: 7552461067605726105, guid: d911205ee76d51349a29192e0effb4fc, type: 3}
+  - {fileID: 7238602237233825079, guid: 9f4020401d43a844ca5c94ad22aba063, type: 3}
+  exteriorDoorWallsPrefabs:
+  - {fileID: 5699791798832096957, guid: 68cbf2913748d6b4187c706d688ffe34, type: 3}
+  roofPrefabs: []
+  cornicesPrefabs:
+  - {fileID: 3925909910735618799, guid: ab0a5792e333a8246853ebefb43579df, type: 3}
+  corniceCornersPrefabs:
+  - {fileID: 8584746072988293884, guid: 09c03c35794192340947ee2eb4ec9bab, type: 3}
+  stairsPrefabs:
+  - {fileID: 370098319397508687, guid: 794fef77d744dae4dbcc785f4ea3fb2d, type: 3}
+  interiorPrefabs:
+  - {fileID: 8776074429758878040, guid: f8889987a2888434c87d613cfd2ad070, type: 3}
+  - {fileID: 3279511732269549126, guid: 85952352c4815b040a3628210212a14b, type: 3}
+  - {fileID: 8497078378754291581, guid: 86871e79be0ac9e43915e601528c4a52, type: 3}
+  - {fileID: 6395361566495248222, guid: 669da9ff3c2c14849a8e5e2763bda13e, type: 3}
+  - {fileID: 4217475248901684046, guid: bdb6691543b449842a3b1b7398e21e33, type: 3}
+  - {fileID: 5514172306332961210, guid: a68a41396e5cd624bbe4d0988c04b629, type: 3}
+  - {fileID: 3741684654639350303, guid: c3efa3dec1255c34ca3d20bcdab6179f, type: 3}
+  - {fileID: 7277665343951783625, guid: f88722dff4e053d4e8130f2bcc84ba43, type: 3}
+  - {fileID: 1339096134368962727, guid: c28a957df4a0e914bac0002ab38666b7, type: 3}
+  - {fileID: 4793460118003122189, guid: 81f727857577be2439fedd801afe04e0, type: 3}
+  - {fileID: 6709122848613042247, guid: 2a398b7f4ac5ea941bbb302d27d4a9d5, type: 3}
+  - {fileID: 4665325882452833061, guid: 4674b1bcc36b4e74d928a2c95162407f, type: 3}
+  - {fileID: 4449303437167208726, guid: 3cd7007f9317b614480b5cabe172bd39, type: 3}
+  - {fileID: 6890279964226000793, guid: dec2094c53217c14b85bf187b5a99f3e, type: 3}
+  - {fileID: 5138047460253471168, guid: e2135ad7abb1bad42a0a02613a6cc69f, type: 3}
+  lightsPrefabs:
+  - {fileID: 7981624593094170009, guid: cb2dfc23f162b6c4ca0de58761b77fef, type: 3}
+  exteriorMaterials:
+  - {fileID: 2100000, guid: 5633b4505fc09754189a00a65e55a173, type: 2}
+  interiorMaterials:
+  - {fileID: 2100000, guid: 5732cb0a4c5f8004bac5b536061ebfa0, type: 2}
+  - {fileID: 2100000, guid: 15a31b1a08ec01e48853a8a0ddac732f, type: 2}
+  - {fileID: 2100000, guid: 9b25b78b09b45894f87ff9a225801ea4, type: 2}
+  - {fileID: 2100000, guid: a9bedee644aded54799081b2583ac430, type: 2}
+  - {fileID: 2100000, guid: dfd7a22a04b6f6a47b8239888f6ae2ad, type: 2}
+  - {fileID: 2100000, guid: 39af95726067ea441a29dd0c0f4f27f4, type: 2}
+  - {fileID: 2100000, guid: 6f98857b67bcfda488db82ba00e9f070, type: 2}
+  - {fileID: 2100000, guid: 8a8f76567a5b93d40ba3f8ca8dcc5193, type: 2}
+  - {fileID: 2100000, guid: 0c5ba7a000c5a3d438f463e56fa8675d, type: 2}
+  - {fileID: 2100000, guid: b9035e9a36f1fdd4395b61384d0df2f3, type: 2}
+  - {fileID: 2100000, guid: 73ed901e4819a44478fd7f166023a325, type: 2}
+  floorBaseMaterials:
+  - {fileID: 2100000, guid: f479dc6acd8b5a54e9907e8e5bb275aa, type: 2}

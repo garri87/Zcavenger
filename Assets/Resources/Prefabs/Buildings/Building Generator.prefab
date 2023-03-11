@@ -103,6 +103,37 @@ MonoBehaviour:
   destroyCombinedChildren: 0
   folderPath: Prefabs/CombinedMeshes
   meshFiltersToSkip: []
+--- !u!1 &1572868406192135841
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3585734054929008310}
+  m_Layer: 0
+  m_Name: Lights
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3585734054929008310
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1572868406192135841}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6647963886140235092}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6647963886140235090
 GameObject:
   m_ObjectHideFlags: 0
@@ -135,6 +166,7 @@ Transform:
   - {fileID: 6647963887409707923}
   - {fileID: 6647963886843385218}
   - {fileID: 1752135001}
+  - {fileID: 3585734054929008310}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -151,35 +183,62 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingScriptableObject: {fileID: 11400000, guid: a86379dd759545b409707522ce8833cf, type: 2}
-  buildingStyle: 5
-  partsSize: 3
+  buildingStyle: 3
+  partsWidth: 6
+  partsHeight: 3
   partsThickness: 0.1
-  maxBldWidth: 20
+  maxBldWidth: 14
   maxBldHeight: 7
   maxBldDepth: 4
   roomsPerFloor: 4
   spawnOrigin: {fileID: 6647963887409707923}
+  floorList: []
+  extWallList: []
+  roomSeed: {fileID: 8911910263573839973, guid: 1d018241eceb31c4b85b1ecf223d3b5b, type: 3}
+  roomStyles: []
+  rooms: []
+  roomsTransform: {fileID: 1752135001}
+  lightsTransform: {fileID: 3585734054929008310}
+  stairsRoomWidth: 2
+  roomNumber: 0
   doorsPrefabsList: []
   wallsPrefabsList: []
   doorWallsPrefabsList: []
   floorBasesPrefabsList: []
   exteriorWallsPrefabList: []
   exteriorDoorWallsPrefabList: []
-  decorPrefabsList: []
-  mainDoorPrefab: {fileID: 0}
-  roofCornice: {fileID: 0}
-  roofCorniceCorner: {fileID: 0}
+  lightsPrefabsList: []
+  roomInteriorPrefabs:
+  - {fileID: 3279511732269549126, guid: 85952352c4815b040a3628210212a14b, type: 3}
+  - {fileID: 8497078378754291581, guid: 86871e79be0ac9e43915e601528c4a52, type: 3}
+  - {fileID: 6395361566495248222, guid: 669da9ff3c2c14849a8e5e2763bda13e, type: 3}
+  - {fileID: 4217475248901684046, guid: bdb6691543b449842a3b1b7398e21e33, type: 3}
+  - {fileID: 5514172306332961210, guid: a68a41396e5cd624bbe4d0988c04b629, type: 3}
+  - {fileID: 3741684654639350303, guid: c3efa3dec1255c34ca3d20bcdab6179f, type: 3}
+  - {fileID: 7277665343951783625, guid: f88722dff4e053d4e8130f2bcc84ba43, type: 3}
+  - {fileID: 1339096134368962727, guid: c28a957df4a0e914bac0002ab38666b7, type: 3}
+  - {fileID: 4793460118003122189, guid: 81f727857577be2439fedd801afe04e0, type: 3}
+  - {fileID: 6709122848613042247, guid: 2a398b7f4ac5ea941bbb302d27d4a9d5, type: 3}
+  - {fileID: 4665325882452833061, guid: 4674b1bcc36b4e74d928a2c95162407f, type: 3}
+  - {fileID: 4449303437167208726, guid: 3cd7007f9317b614480b5cabe172bd39, type: 3}
+  - {fileID: 6890279964226000793, guid: dec2094c53217c14b85bf187b5a99f3e, type: 3}
+  - {fileID: 5138047460253471168, guid: e2135ad7abb1bad42a0a02613a6cc69f, type: 3}
+  - {fileID: 7677092282806760696, guid: 2ee8adb682ffda8428d1dddb61f59f6f, type: 3}
+  - {fileID: 4255603994981293635, guid: 469952dcc17be214c9ed82b99cdb0560, type: 3}
+  - {fileID: 9158858616895315636, guid: 98e07288e2cbd6d4390a39030a96416c, type: 3}
+  - {fileID: 2868602084809482675, guid: b60d51c44fa26834cb89cad8143c36bf, type: 3}
+  - {fileID: 1668541401091160921, guid: ff1e0a306b54a204db89f70bcce2d612, type: 3}
+  - {fileID: 7570227595045133798, guid: 46dfe106a4e8ae44b9e78a5ebc89d315, type: 3}
+  - {fileID: 3828325859486593880, guid: ba157286215c8054d91fd9bd73fdaf33, type: 3}
+  - {fileID: 4348655769934119326, guid: e039aaf7b55c067488b836bd1fd29104, type: 3}
+  mainDoorPrefabs: []
+  roofCornices: []
+  roofCorniceCorners: []
   exteriorMaterials: []
   interiorMaterials: []
   floorBaseMaterials: []
-  floorList: []
-  extWallList: []
-  roomSeed: {fileID: 8911910263573839973, guid: 1d018241eceb31c4b85b1ecf223d3b5b, type: 3}
-  rooms: []
-  roomsTransform: {fileID: 1752135001}
-  stairsRoomWidth: 3
   combineMeshesAtEnd: 1
-  roomNumber: 0
+  debugConstruction: 1
 --- !u!1 &6647963886843385217
 GameObject:
   m_ObjectHideFlags: 0

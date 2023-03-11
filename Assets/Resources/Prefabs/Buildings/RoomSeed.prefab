@@ -29,7 +29,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8911910263573839975}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5193714060909618710
 GameObject:
@@ -54,6 +54,37 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5193714060909618710}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8911910263573839975}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6770405182613827426
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6275770589600614031}
+  m_Layer: 0
+  m_Name: BasesGroup
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6275770589600614031
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6770405182613827426}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -91,6 +122,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 6275770589600614031}
   - {fileID: 1476066829940770689}
   - {fileID: 153768276631811988}
   m_Father: {fileID: 0}
@@ -108,20 +140,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b05288b8a0882b48b82cb4b40c9af6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buildingScriptableObject: {fileID: 0}
   roomWidth: 3
   roomHeight: 1
-  partsSize: 3
-  bases: []
-  ceilings: []
-  backWalls: []
-  backDoorWalls: []
-  doorWalls: []
-  decorationSetPrefabs: []
+  partsWidth: 6
+  partsHeight: 3
+  partsThickness: 0.1
   spawnYPoint: {x: 0, y: 0, z: 0}
+  basesList: []
+  ceilingsList: []
+  backWallsList: []
+  backDoorWallsList: []
+  doorWallsList: []
+  interiorsList: []
+  interiorPrefabs: []
+  selectedInteriors: []
+  exteriorMaterials: []
+  interiorMaterials: []
+  floorBaseMaterials: []
+  basesGroup: {fileID: 6275770589600614031}
   backWallGroup: {fileID: 1476066829940770689}
   wallsAndInteriorGroup: {fileID: 153768276631811988}
-  _buildingGenerator: {fileID: 0}
+  combineMeshesAtEnd: 0
   roomStyle: 0
   isLobby: 0
   isStairsEntrace: 0
   isStairsRoom: 0
+  debugConstruction: 0

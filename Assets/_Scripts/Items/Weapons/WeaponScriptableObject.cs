@@ -37,6 +37,7 @@ public class WeaponScriptableObject : ScriptableObject
    public int magazineCap;
    public float recoilDuration;
    public float recoilMaxRotation;
+   public bool blockAttacks = false;
 
    [Header("Throwable Attributes")]
    public float explosionRange;

@@ -100,7 +100,7 @@ public class Bullet : MonoBehaviour
     public void Fire()
     {
         Transform gunMuzzleTransform = playerController.equippedWeaponItem.gunMuzzleTransform;
-        transform.position = new Vector3(gunMuzzleTransform.position.x,gunMuzzleTransform.position.y,PlayerController.currentPlayLine);
+        transform.position = new Vector3(gunMuzzleTransform.position.x,gunMuzzleTransform.position.y,playerController.currentPlayLine);
        
         Vector3 vop = Vector3.ProjectOnPlane(transform.forward, Vector3.forward);
         transform.forward = vop;

@@ -63,13 +63,13 @@ public class HoldPlayer : StateMachineBehaviour
                     break;
                 
                 case Enemy.EnemyType.Walker:
-                    playerController.bitten = true;
+                    playerController.beingBitten = true;
                     break;
                 
             }
             StruggleTimer();
         }
-        if (catchTimer <=0 || !playerController.bitten)
+        if (catchTimer <=0 || !playerController.beingBitten)
         {
             ReleasePlayer();
         }
@@ -105,7 +105,7 @@ public class HoldPlayer : StateMachineBehaviour
                 agentController.playerCatch = false;
                 _navMeshAgent.isStopped = false;
                 playerController.trapped = false;
-                playerController.bitten = false;
+                playerController.beingBitten = false;
                 catchTimer = catchTime;
                 playerController.alreadyCatched = false;
                 playerController.controllerType = PlayerController.ControllerType.DefaultController;
@@ -118,7 +118,7 @@ public class HoldPlayer : StateMachineBehaviour
     {
         agentController.playerCatch = false;
         playerController.trapped = false;
-        playerController.bitten = false;
+        playerController.beingBitten = false;
         playerAlreadyCatched = false;
         playerController.onTransition = false;
 

@@ -1,0 +1,76 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af2178f8dd4289a44ae206f8c7d4abfd, type: 3}
+  m_Name: Building_Residential
+  m_EditorClassIdentifier: 
+  buildingStyle: 0
+  basesPrefabs:
+  - {fileID: 1507712293043771849, guid: 58deeaca7724f594482049ef293b1af5, type: 3}
+  wallsPrefabs:
+  - {fileID: 7381379625401660565, guid: 7b9ef5693e9506149bf1757a683783aa, type: 3}
+  doorWallsPrefabs:
+  - {fileID: 7005457456791289902, guid: 76663ac058d27fc4199cabf7ee00449e, type: 3}
+  doorsPrefabs:
+  - {fileID: 8221155662374237611, guid: f574677fa00d30d41b98372e29534bba, type: 3}
+  - {fileID: 654772512631856615, guid: 16b7004490be6a241bd120eb63e916e7, type: 3}
+  - {fileID: 4446631579855398034, guid: 3563b5d98c23a3543bb3c333f6eb159f, type: 3}
+  - {fileID: 4466889636972523376, guid: f959805b17799d8448691e8b301567f2, type: 3}
+  - {fileID: 7858348585273097980, guid: 802687e987baa254683833c36f7f3160, type: 3}
+  exteriorWallsPrefabs:
+  - {fileID: 6826997513152324952, guid: 6564c197a26ae654483603be87cc02e2, type: 3}
+  - {fileID: 7018715190077305076, guid: eb68612d642fe654fb59c5e34936fd12, type: 3}
+  - {fileID: 7849277774088213480, guid: 3612ff7de23088142bc0f3b58957e759, type: 3}
+  exteriorDoorWallsPrefabs:
+  - {fileID: 2855644169131937256, guid: 4afa30ff60a7db747bd635f75d1c83f9, type: 3}
+  roofPrefabs:
+  - {fileID: 7285609232433873783, guid: f766520cb9b2fec4fa992ff595470983, type: 3}
+  cornicesPrefabs:
+  - {fileID: 3925909910735618799, guid: ab0a5792e333a8246853ebefb43579df, type: 3}
+  corniceCornersPrefabs:
+  - {fileID: 8584746072988293884, guid: 09c03c35794192340947ee2eb4ec9bab, type: 3}
+  stairsPrefabs:
+  - {fileID: 370098319397508687, guid: 794fef77d744dae4dbcc785f4ea3fb2d, type: 3}
+  interiorPrefabs:
+  - {fileID: 8776074429758878040, guid: f8889987a2888434c87d613cfd2ad070, type: 3}
+  - {fileID: 5488653689785173019, guid: 45e89dd570d173b4e8bd3360f3d92b01, type: 3}
+  - {fileID: 9180275666677443593, guid: dcfa1057ef824ec45bd8105b5850f53c, type: 3}
+  - {fileID: 7677092282806760696, guid: 2ee8adb682ffda8428d1dddb61f59f6f, type: 3}
+  - {fileID: 4255603994981293635, guid: 469952dcc17be214c9ed82b99cdb0560, type: 3}
+  - {fileID: 9158858616895315636, guid: 98e07288e2cbd6d4390a39030a96416c, type: 3}
+  - {fileID: 2868602084809482675, guid: b60d51c44fa26834cb89cad8143c36bf, type: 3}
+  - {fileID: 1668541401091160921, guid: ff1e0a306b54a204db89f70bcce2d612, type: 3}
+  - {fileID: 7570227595045133798, guid: 46dfe106a4e8ae44b9e78a5ebc89d315, type: 3}
+  - {fileID: 3828325859486593880, guid: ba157286215c8054d91fd9bd73fdaf33, type: 3}
+  - {fileID: 4348655769934119326, guid: e039aaf7b55c067488b836bd1fd29104, type: 3}
+  - {fileID: 5669011986790320165, guid: 1f5e990a5778b50498c212ffea4e16e2, type: 3}
+  lightsPrefabs:
+  - {fileID: 7981624593094170009, guid: cb2dfc23f162b6c4ca0de58761b77fef, type: 3}
+  exteriorMaterials:
+  - {fileID: 2100000, guid: 92390d459fa36554c90402fd6a7e0905, type: 2}
+  interiorMaterials:
+  - {fileID: 2100000, guid: df5d5389fbf28ed40acd1a97ca89a894, type: 2}
+  - {fileID: 2100000, guid: 8a7f3e3f34602944ca9b0a89e0f7be30, type: 2}
+  - {fileID: 2100000, guid: af4e160415588674ead8d175ab454240, type: 2}
+  - {fileID: 2100000, guid: 77940af741fd94d468c040c2b69521be, type: 2}
+  - {fileID: 2100000, guid: 4bed6dc9d09f49e47897d83779128389, type: 2}
+  - {fileID: 2100000, guid: 81a1a19c4f7904d479b9991891766a5c, type: 2}
+  - {fileID: 2100000, guid: 4895d78f6c42aeb4e915cd065fd0289f, type: 2}
+  - {fileID: 2100000, guid: f8c7ecaa066aa764ca2c83a1e47c12ce, type: 2}
+  - {fileID: 2100000, guid: 6b46b1dee0d95cc43878764d39d342c0, type: 2}
+  floorBaseMaterials:
+  - {fileID: 2100000, guid: 774f4759c762b9e459cf1f282f1ed8b7, type: 2}
+  - {fileID: 2100000, guid: 178a8e4bcdb9efe43ac6494afba23b2d, type: 2}
+  - {fileID: 2100000, guid: ce10802fb73da18439a79c6d38bc6e25, type: 2}
+  - {fileID: 2100000, guid: a886fe82975a1cb46a324d29df942d98, type: 2}
+  - {fileID: 2100000, guid: 26ddf6aca47266840a3711947d9874ce, type: 2}
+  - {fileID: 2100000, guid: a0d5c7684a78cda498d52b19b9701704, type: 2}
+  - {fileID: 2100000, guid: a886fe82975a1cb46a324d29df942d98, type: 2}

@@ -17,13 +17,14 @@ public class ObjectPool : MonoBehaviour
     public static ObjectPool SharedInstance;
     public List<ObjectPoolItem> itemsToPool;
     public List<GameObject> pooledObjects;
-    public Transform ObjectPoolTransform;
+    [HideInInspector]public Transform ObjectPoolTransform;
 
 
 
     void Awake()
     {
         SharedInstance = this;
+        ObjectPoolTransform = GameObject.Find("GameManager").transform.Find("ObjectPool");
     }
 
     private void Start()

@@ -9,9 +9,7 @@ public class BuildingAssets : ScriptableObject
 {
     public enum BuildingStyle
     {
-        Residential1,
-        Residential2,
-        Residential3,
+        Residential, //ok
         ResidentialRuined,
         Office,
         Hospital, //ok
@@ -21,20 +19,25 @@ public class BuildingAssets : ScriptableObject
     }
     public BuildingStyle buildingStyle;
     
-    public List<GameObject> doorsPrefabsList;
-    public List<GameObject> wallsPrefabsList;
-    public List<GameObject> doorWallsPrefabsList;
-    public List<GameObject> floorBasesPrefabsList;
-    public List<GameObject> exteriorWallsPrefabsList;
-    public List<GameObject> exteriorDoorWallsPrefabsList;
-    public List<GameObject> roofPrefabsList;
-    public List<GameObject> stairsPrefabsList;
-    public List<GameObject> decorPrefabsList;
-    public List<GameObject> roofCornices;
-    public List<GameObject> roofCorniceCorners;
-    public List<GameObject> lightsPrefabsList;
+    public GameObject[] basesPrefabs;
+    public GameObject[] wallsPrefabs;
+    public GameObject[] doorWallsPrefabs;
+    
+    public GameObject[] doorsPrefabs;
+    
+    public GameObject[] exteriorWallsPrefabs;
+    public GameObject[] exteriorDoorWallsPrefabs;
+    
+    public GameObject[] roofPrefabs;
+    public GameObject[] cornicesPrefabs;
+    public GameObject[] corniceCornersPrefabs;
 
-    public List<GameObject> mainDoorPrefabs;
+    public GameObject[] stairsPrefabs;
+    public GameObject[] interiorPrefabs;
+    
+    public GameObject[] lightsPrefabs;
+
+    
     
     
     public Material[] exteriorMaterials;

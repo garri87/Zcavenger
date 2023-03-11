@@ -56,7 +56,7 @@ public class CancelMovement : StateMachineBehaviour
         {
             case ObjectType.Player:
                 _playerController.onTransition = false;
-                _playerController.bitten = false;
+                _playerController.beingBitten = false;
                 break;
             
             case ObjectType.AI:
