@@ -12,7 +12,14 @@ public class CheckGround : MonoBehaviour
   
   private void Start()
   {
-    _animator = GetComponentInParent<Animator>();
+    try
+    {
+      _animator = GetComponentInParent<Animator>();
+    }
+    catch 
+    {
+      Debug.LogWarning("No animator component found" );
+    }
   }
 
   private void FixedUpdate()

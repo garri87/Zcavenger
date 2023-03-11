@@ -715,6 +715,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isGrounded: 0
+  distance: 0.2
 --- !u!1 &2771113909611618817
 GameObject:
   m_ObjectHideFlags: 0
@@ -830,6 +831,7 @@ GameObject:
   - component: {fileID: 2971485535890748479}
   - component: {fileID: 1534308091819223796}
   - component: {fileID: 1534308091819223797}
+  - component: {fileID: 934983013102288503}
   m_Layer: 8
   m_Name: Zombie_Default
   m_TagString: Enemy
@@ -896,7 +898,7 @@ MonoBehaviour:
   _navMeshAgent: {fileID: 0}
   _healthManager: {fileID: 0}
   _checkGround: {fileID: 0}
-  enemyFov: {fileID: 0}
+  _enemyFov: {fileID: 0}
   iKManager: {fileID: 0}
   hipsCollider: {fileID: 1534308092073631574}
   agentAlertTime: 5
@@ -915,7 +917,7 @@ MonoBehaviour:
   attackLayerMask:
     serializedVersion: 2
     m_Bits: 64
-  playLine: 0
+  originTransform: {fileID: 0}
   currentPlayLine: 0
   hisHit: 0
 --- !u!114 &2971485535890748475
@@ -1002,6 +1004,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 65
   hitList: []
+  playerController: {fileID: 0}
   playerLastLocation: {x: 0, y: 0, z: 0}
 --- !u!114 &1800327150600901560
 MonoBehaviour:
@@ -1015,22 +1018,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9b43e578e08d9446ad2a93e34a22e2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isIKActive: 1
   playerType: 1
   _animator: {fileID: 2971485535890750401}
-  humanBones:
-  - bone: 10
-    weight: 1
-  - bone: 9
-    weight: 0.8
-  - bone: 54
-    weight: 0.5
-  boneTransforms: []
-  angleLimit: 45
-  distanceLimit: 1.3
   leftHandTarget: {fileID: 0}
   rightHandTarget: {fileID: 0}
   leftElbowTarget: {fileID: 0}
   rightElbowTarget: {fileID: 0}
+  spineTarget: {fileID: 0}
   agentHead: {fileID: 3970088122488422523}
   weaponItem: {fileID: 0}
   targetPosition: {x: 0, y: 0, z: 0}
@@ -1045,7 +1040,6 @@ MonoBehaviour:
   recoilTimer: 0
   distanceToObject: 0
   verticalOffset: 1.56
-  isIKActive: 1
   layer:
     serializedVersion: 2
     m_Bits: 257
@@ -1054,7 +1048,6 @@ MonoBehaviour:
     m_Bits: 947
   weight: 1
   upperBodyLayerWeight: 0
-  distanceToGround: 0.113
 --- !u!54 &2971485535890750400
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1251,6 +1244,31 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &934983013102288503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2971485535890748474}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4aa8019394e2b6d48acfaefc4cfe6421, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minRotation: 0
+  maxRotation: 0
+  gameObjects:
+  - {fileID: 1511720515295303738}
+  - {fileID: 4319708484807936762}
+  selectAllChilds: 0
+  activateOne: 0
+  randomRotation: 0
+  randomActivation: 1
+  activationProbabilty: 8
+  randomMaterial: 0
+  materialIndex: 0
+  materials: []
 --- !u!1 &3090994049891653833
 GameObject:
   m_ObjectHideFlags: 0

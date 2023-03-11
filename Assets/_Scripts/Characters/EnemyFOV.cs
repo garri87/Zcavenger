@@ -2,43 +2,47 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 public class EnemyFOV : MonoBehaviour
 {
     public CapsuleCollider FOVObject;
-    private HealthManager enemyHealth;
+    
+    private HealthManager agentHealthManager;
+    
     private AgentController _agentController;
     
-    public bool playerInRange;//Player is inside the max visual range of the agent
-    public bool playerInSight;//Player is inside visual range and visible by the agent
-    public bool playerAttackable;//Player is in the attackable area of agent
-    private HealthManager playerHealthManager;
+    public bool targetInRange;//target is inside the max visual range of the agent, may not be physically visible
+    
+    public bool targetInSight;//target is inside visual range and visible by the agent
+    
+    public bool targetAttackable;//target  is in the attackable area of agent
+    
+    private HealthManager targetHealthManager;
     
     public float targetDistance;
-    public float playerDistance = 1;
     public float groundDistance = 0;
 
     private float _attackDistance;
 
     public float rayLength = 10f;
-    public LayerMask layer;
+    public LayerMask layersToRaycast;
+    public LayerMask targetLayer;
     public RaycastHit playerHit;
     public RaycastHit[] hits;
     public List<GameObject> hitList;
 
     public PlayerController playerController;
-    private Transform playerPosition;
-    private Vector3 playerDirection;
-    [HideInInspector]public Vector3 playerLastLocation;
+    private Vector3 targetDirection;
+    [HideInInspector]public Vector3 targetLastLocation;
     
     private void Start()
     {
         _agentController = GetComponentInParent<AgentController>();
-        enemyHealth = _agentController._healthManager;
-        playerPosition = _agentController.player.transform;
+        agentHealthManager = _agentController._healthManager;
         _attackDistance = _agentController.enemyScriptableObject.attackDistance;
-        playerLastLocation = transform.position;
+        targetLastLocation = transform.position;
         groundDistance = Mathf.Infinity;
 
         FOVObject.transform.parent = _agentController._animator.GetBoneTransform(HumanBodyBones.Head);
@@ -53,40 +57,29 @@ public class EnemyFOV : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (playerInRange)
+        if (targetInRange)
         {
             RayCastAllObjects();
         }
-        Debug.DrawRay(transform.position + Vector3.up, playerLastLocation - transform.position,Color.yellow, Time.deltaTime, true);
+        Debug.DrawRay(transform.position + Vector3.up, targetLastLocation - transform.position,Color.yellow, Time.deltaTime, true);
 
 
     }
     private void Update()
     {
-        playerDirection = _agentController.playerDirection;
+        targetDirection = _agentController.playerDirection;
         
-        if (enemyHealth.IsDead)
+        if (agentHealthManager.IsDead)
         {
             FOVObject.enabled = false;
         }
     }
-
-    public void GetDistanceToPlayer()
-    {
-        if (Physics.Raycast(transform.position + Vector3.up,playerDirection, out playerHit, Mathf.Infinity,LayerMask.GetMask("Player")))
-        {
-            if (playerHit.collider.CompareTag("Player"))
-            {
-                playerDistance = playerHit.distance;
-            }
-        }
-    }
-
+    
     private void RayCastAllObjects()
     {
-        Ray ray = new Ray(transform.position + Vector3.up, playerDirection);
+        Ray ray = new Ray(transform.position + Vector3.up, targetDirection);
         Debug.DrawRay(ray.origin,ray.direction,Color.green,Time.deltaTime);
-        hits = Physics.RaycastAll(ray, Mathf.Infinity, layer.value);
+        hits = Physics.RaycastAll(ray, Mathf.Infinity, layersToRaycast.value);
         for (int i = 0; i < hits.Length; i++)
         {
             if (hits[i].transform.gameObject.layer == LayerMask.NameToLayer("Default"))
@@ -94,37 +87,37 @@ public class EnemyFOV : MonoBehaviour
                 groundDistance = hits[i].distance;
             }
 
-            if (hits[i].transform.gameObject.layer == LayerMask.NameToLayer("Player"))
+            if (hits[i].transform.gameObject.layer == targetLayer)
             {
                 targetDistance = hits[i].distance;
                 
                 if (targetDistance <= groundDistance && _agentController.currentPlayLine == playerController.currentPlayLine)
                 {
-                    playerInSight = true;
+                    targetInSight = true;
                 }
                 else
                 {
-                    playerInSight = false;
+                    targetInSight = false;
                 }
 
-                if (playerInSight)
+                if (targetInSight)
                 {
-                    playerLastLocation = hits[i].point - Vector3.up;
+                    targetLastLocation = hits[i].point - Vector3.up;
                     groundDistance = Mathf.Infinity;
                 }
                 if (targetDistance <= _attackDistance)
                 {
-                    if (Physics.Raycast(transform.position + Vector3.up, playerDirection * _attackDistance,
+                    if (Physics.Raycast(transform.position + Vector3.up, targetDirection * _attackDistance,
                         out playerHit, Mathf.Infinity, LayerMask.GetMask("Player")))
                     {
                         Debug.DrawRay(ray.origin,ray.direction,Color.red,Time.deltaTime);
 
-                        playerAttackable = true;
+                        targetAttackable = true;
                     }
                 }
                 else
                 {
-                    playerAttackable = false;
+                    targetAttackable = false;
                 }
             }
             
@@ -138,9 +131,9 @@ public class EnemyFOV : MonoBehaviour
         {
             if (other.GetComponent<HealthManager>() !=null)
             {
-                playerHealthManager = other.GetComponent<HealthManager>();
+                targetHealthManager = other.GetComponent<HealthManager>();
             }
-            playerInRange = true;
+            targetInRange = true;
         }
     }
 
@@ -159,10 +152,10 @@ public class EnemyFOV : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            playerLastLocation = Vector3.Slerp(transform.position,playerLastLocation, Random.Range(0f, 1f));
-            playerInRange = false;
-            playerInSight = false;
-            playerAttackable = false;
+            targetLastLocation = Vector3.Slerp(transform.position,targetLastLocation, Random.Range(0f, 1f));
+            targetInRange = false;
+            targetInSight = false;
+            targetAttackable = false;
             hitList.Clear();
         }
     }

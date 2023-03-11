@@ -196,15 +196,7 @@ public class PlayerController : MonoBehaviour
     {
         mainCamera = Camera.main;
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-        _soundSensor = GetComponent<SoundSensor>();
-        _animator = GetComponent<Animator>();
-        _playerWpnHolderTransform = _animator.GetBoneTransform(HumanBodyBones.RightHand).Find("WeaponHolder");
-
-        _stompDetector = gameObject.transform.Find("StompDetector").GetComponent<StompDetector>();
-    }
-
-    void Start()
-    {
+        
         #region GetComponents
 
         keyAssignments = gameManager.GetComponent<KeyAssignments>();
@@ -217,8 +209,19 @@ public class PlayerController : MonoBehaviour
         _climber = GetComponent<Climber>();
         _collider = GetComponent<CapsuleCollider>();
         crosshairSprtRenderer = crosshairTransform.GetComponent<SpriteRenderer>();
-
+        _soundSensor = GetComponent<SoundSensor>();
+        _animator = GetComponent<Animator>();
         #endregion
+        
+        
+        _playerWpnHolderTransform = _animator.GetBoneTransform(HumanBodyBones.RightHand).Find("WeaponHolder");
+
+        _stompDetector = gameObject.transform.Find("StompDetector").GetComponent<StompDetector>();
+    }
+
+    void Start()
+    {
+       
 
 
         currentSpeed = normalSpeed;

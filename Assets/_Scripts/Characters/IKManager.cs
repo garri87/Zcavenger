@@ -130,7 +130,7 @@ public class IKManager : MonoBehaviour
             case PlayerType.Enemy:
                 
                 SetLayerWeight();
-                if (_agentController.enemyFov.playerInSight || _agentController.enemyFov.playerInRange)
+                if (_agentController._enemyFov.targetInSight || _agentController._enemyFov.targetInRange)
                 {
                     agentHead.LookAt(targetPosition+ Vector3.up);
                     weight = 1;
@@ -246,7 +246,7 @@ public class IKManager : MonoBehaviour
 
                 if (_agentController.attacking||
                     _agentController.playerCatch||
-                    _agentController.enemyFov.playerInSight|| _agentController.hisHit)
+                    _agentController._enemyFov.targetInSight|| _agentController.hisHit)
                 {
                     _animator.SetLayerWeight(_animator.GetLayerIndex("UpperBody"), 1);
                 }

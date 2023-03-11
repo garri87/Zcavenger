@@ -7,6 +7,7 @@ public class Enemy : ScriptableObject
     public string enemyName;
     
     public GameObject enemyPrefab;
+    
     public List<GameObject> itemDrop;
     
     public enum EnemyType
