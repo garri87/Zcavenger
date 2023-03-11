@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.ProBuilder;
 using UnityEngine.ProBuilder.MeshOperations;
@@ -57,6 +58,7 @@ public class RoomGenerator : MonoBehaviour
     public Material[] floorBaseMaterials;
 
     //Agrupadores de Gameobjects
+    public Transform basesGroup;
     public Transform backWallGroup;
     public Transform wallsAndInteriorGroup;
 
@@ -209,7 +211,7 @@ public class RoomGenerator : MonoBehaviour
             //Movemos el puntero a la derecha para el bloque siguiente
             spawnOrigin.position += Vector3.right * partsWidth;
         }
-
+        
         //Generar extremo derecho si corresponde.
         if (gOInRight != null)
         {
@@ -325,7 +327,7 @@ public class RoomGenerator : MonoBehaviour
     {
         //Generate Base
         GameObject instBase = Instantiate(baseGo, spawnOrigin.position, baseGo.transform.rotation,
-            wallsAndInteriorGroup);
+            basesGroup);
         basesList.Add(instBase);
         //Set BackWall initial point for height at room's base
         spawnYPoint = instBase.transform.position - (Vector3.back * (partsWidth / 2));

@@ -316,6 +316,7 @@ GameObject:
   - component: {fileID: 7366189221531067546}
   - component: {fileID: 1111787704398837561}
   - component: {fileID: 8939011595149810932}
+  - component: {fileID: 6809820087709633128}
   m_Layer: 0
   m_Name: Interior_Wall1
   m_TagString: Untagged
@@ -413,9 +414,10 @@ MonoBehaviour:
   - {fileID: 7880443447891503796}
   - {fileID: 5736210428113920563}
   selectAllChilds: 0
+  activateOne: 0
   randomRotation: 0
   randomActivation: 1
-  activationProbabilty: 2
+  activationProbabilty: 8
   randomMaterial: 0
   materialIndex: 0
   materials: []
@@ -467,6 +469,22 @@ MonoBehaviour:
   destroyCombinedChildren: 0
   folderPath: Prefabs/CombinedMeshes
   meshFiltersToSkip: []
+--- !u!208 &6809820087709633128
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7381379625401660565}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 3.0000002, y: 1.5000001, z: 0.05}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 1.5000001, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1001 &791086864159896114
 PrefabInstance:
   m_ObjectHideFlags: 0

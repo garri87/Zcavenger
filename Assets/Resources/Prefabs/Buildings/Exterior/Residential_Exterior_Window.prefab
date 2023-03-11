@@ -1796,6 +1796,7 @@ GameObject:
   - component: {fileID: 6356581028305097715}
   - component: {fileID: 3158580051140865086}
   - component: {fileID: 3914484709869274472}
+  - component: {fileID: 3693681625445008947}
   m_Layer: 0
   m_Name: Residential_Exterior_Window
   m_TagString: Untagged
@@ -1911,9 +1912,10 @@ MonoBehaviour:
   gameObjects:
   - {fileID: 7214589107559712302}
   selectAllChilds: 0
+  activateOne: 0
   randomRotation: 0
   randomActivation: 1
-  activationProbabilty: 2
+  activationProbabilty: 8
   randomMaterial: 1
   materialIndex: 0
   materials:
@@ -1947,6 +1949,22 @@ MonoBehaviour:
   meshRenderer: {fileID: 7892189749729543508}
   exteriorFaceMaterialIndex: 1
   interiorFaceMaterialIndex: 4
+--- !u!208 &3693681625445008947
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7018715190077305076}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 3.0000002, y: 1.5000001, z: 0.17600001}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 1.5000001, z: -0.015000001}
+  m_TimeToStationary: 0.5
 --- !u!1 &7214589107559712302
 GameObject:
   m_ObjectHideFlags: 0

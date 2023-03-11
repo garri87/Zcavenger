@@ -3,9 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
+using Unity.AI.Navigation;
 using Unity.Mathematics;
+using UnityEditor.AI;
 using UnityEditor.Timeline;
 using UnityEngine;
+using UnityEngine.AI;
+using NavMeshBuilder = UnityEditor.AI.NavMeshBuilder;
 using Object = System.Object;
 using Random = UnityEngine.Random;
 
@@ -59,7 +63,7 @@ public class BuildingGenerator : MonoBehaviour
     public int stairsRoomWidth = 2;
 
     public int elevatorRoomWidth = 1;
-
+    
     #endregion
 
     //Variable de control de espacio libre en el edificio
@@ -88,6 +92,7 @@ public class BuildingGenerator : MonoBehaviour
     public GameObject[] cornicesPrefabs;
     public GameObject[] corniceCornersPrefabs;
     public GameObject[] stairsPrefabs;
+   
 
     #endregion
 
@@ -101,6 +106,16 @@ public class BuildingGenerator : MonoBehaviour
 
     #endregion
 
+    #region Spawners
+    public GameObject enemySpawner;
+    public GameObject itemSpawner;
+
+    [Range(0, 10)] public int enemySpawnChance = 5;
+    [Range(0, 10)] public int itemSpawnChance = 5;
+    
+    
+    #endregion
+    
     //Referencia al script del mesh combiner
     private MeshCombiner _meshCombiner;
     public bool combineMeshesAtEnd;
@@ -277,13 +292,26 @@ public class BuildingGenerator : MonoBehaviour
             spawnOrigin.position += Vector3.forward * (partsWidth);
         } //FIN bucle Z
 
+        rooms[0].basesList[0].GetComponent<NavMeshSurface>().BuildNavMesh();
+        
         foreach (RoomGenerator room in rooms) // por cada habitación creada
         {
             if (room.roomWidth > 0)
             {
                 //Generamos luces
                 room.GenerateLights(room.ceilingsList.Count / 2);
+                
+                float randomNum = Random.Range(0, 11);
+                if (randomNum < enemySpawnChance)
+                {
+                    GenerateSpawners(enemySpawner,room.basesList[Random.Range(0,room.basesList.Count)].transform);
+                }
 
+                if (randomNum < itemSpawnChance)
+                {
+                    //TODO: GENERAR UN SPAWN DE ITEMS
+                }
+                
                 //Generamos puertas traseras
                 if (room.transform.position.z < transform.position.z + ((maxBldDepth - 1) * partsWidth))
                     //Si la habitación no esta en la ultima profundidad, generar puertas traseras
@@ -474,6 +502,8 @@ public class BuildingGenerator : MonoBehaviour
 
         //Generamos la terraza del edificio
         GenerateRoof(maxBldWidth, spawnOrigin);
+        
+        
     }
     
     /// <summary>
@@ -770,6 +800,12 @@ public class BuildingGenerator : MonoBehaviour
 
         CombineMeshes(roofGroup.transform);
     }
+
+    public void GenerateSpawners(GameObject spawner, Transform targetTransform)
+    {
+        GameObject instSpawn = Instantiate(spawner, targetTransform.position, targetTransform.rotation,
+            targetTransform.parent);
+    }
     
     public void CombineMeshes(Transform parent)
     {
@@ -790,8 +826,9 @@ public class BuildingGenerator : MonoBehaviour
             _meshCombiner.DeactivateCombinedChildrenMeshRenderers = true;
             _meshCombiner.GenerateUVMap = false;
             _meshCombiner.DestroyCombinedChildren = false;
-
+            
             _meshCombiner.CombineMeshes(false);
+            
         }
     }
 

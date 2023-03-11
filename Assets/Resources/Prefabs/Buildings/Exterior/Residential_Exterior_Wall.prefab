@@ -727,6 +727,7 @@ GameObject:
   - component: {fileID: 6698557993523447894}
   - component: {fileID: 2867230623840227325}
   - component: {fileID: 5475482249246597129}
+  - component: {fileID: -3474809446557820720}
   m_Layer: 0
   m_Name: Residential_Exterior_Wall
   m_TagString: Untagged
@@ -850,3 +851,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 6.0001564, y: 3.000002, z: 0.3525387}
   m_Center: {x: 0.00007772446, y: 1.5, z: -0.015138321}
+--- !u!208 &-3474809446557820720
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6826997513152324952}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 3.0000002, y: 1.5000001, z: 0.17600001}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 1.5000001, z: -0.015000001}
+  m_TimeToStationary: 0.5

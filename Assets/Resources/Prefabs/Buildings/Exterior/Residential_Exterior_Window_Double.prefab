@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 4477598683744221075}
   - component: {fileID: 6427401866434722386}
   - component: {fileID: 1838901391858114030}
+  - component: {fileID: 9222119186239595975}
   m_Layer: 0
   m_Name: Residential_Exterior_Window_Double
   m_TagString: Untagged
@@ -139,6 +140,22 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 6.0015335, y: 3.0000005, z: 0.3513437}
   m_Center: {x: 0.0007658005, y: 1.5000002, z: -0.014539205}
+--- !u!208 &9222119186239595975
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7849277774088213480}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 3.0010002, y: 1.5000001, z: 0.17600001}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0.001, y: 1.5000001, z: -0.015000001}
+  m_TimeToStationary: 0.5
 --- !u!1 &8295917366533227878
 GameObject:
   m_ObjectHideFlags: 0
