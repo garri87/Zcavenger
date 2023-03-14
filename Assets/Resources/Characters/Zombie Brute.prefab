@@ -105,6 +105,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isGrounded: 0
+  distance: 0.2
 --- !u!1 &261079905980536862
 GameObject:
   m_ObjectHideFlags: 0
@@ -1318,10 +1319,11 @@ MonoBehaviour:
   _navMeshAgent: {fileID: 0}
   _healthManager: {fileID: 0}
   _checkGround: {fileID: 0}
-  enemyFov: {fileID: 0}
+  _enemyFov: {fileID: 0}
   iKManager: {fileID: 0}
   hipsCollider: {fileID: 6017555447362443340}
   agentAlertTime: 5
+  alertTimer: 0
   agentState: 0
   animationState: 0
   disableTime: 15
@@ -1336,7 +1338,7 @@ MonoBehaviour:
   attackLayerMask:
     serializedVersion: 2
     m_Bits: 64
-  playLine: 0
+  originTransform: {fileID: 0}
   currentPlayLine: 0
   hisHit: 0
 --- !u!114 &1912623284388402896
@@ -1412,18 +1414,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FOVObject: {fileID: 505266235}
-  playerInRange: 0
-  playerInSight: 0
-  playerAttackable: 0
+  targetInRange: 0
+  targetInSight: 0
+  targetAttackable: 0
   targetDistance: 0
-  playerDistance: 1
   groundDistance: 0
-  rayLength: 10
-  layer:
+  layersToRaycast:
     serializedVersion: 2
     m_Bits: 65
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 64
   hitList: []
-  playerLastLocation: {x: 0, y: 0, z: 0}
+  playerController: {fileID: 0}
+  targetLastLocation: {x: 0, y: 0, z: 0}
 --- !u!114 &5489756324993207054
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1436,22 +1440,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9b43e578e08d9446ad2a93e34a22e2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isIKActive: 1
   playerType: 1
   _animator: {fileID: 0}
-  humanBones:
-  - bone: 10
-    weight: 1
-  - bone: 9
-    weight: 0.8
-  - bone: 54
-    weight: 0.5
-  boneTransforms: []
-  angleLimit: 45
-  distanceLimit: 1.3
   leftHandTarget: {fileID: 0}
   rightHandTarget: {fileID: 0}
   leftElbowTarget: {fileID: 0}
   rightElbowTarget: {fileID: 0}
+  spineTarget: {fileID: 0}
   agentHead: {fileID: 1411979463395314998}
   weaponItem: {fileID: 0}
   targetPosition: {x: 0, y: 0, z: 0}
@@ -1466,7 +1462,6 @@ MonoBehaviour:
   recoilTimer: 0
   distanceToObject: 0
   verticalOffset: 1.56
-  isIKActive: 1
   layer:
     serializedVersion: 2
     m_Bits: 257
@@ -1475,7 +1470,6 @@ MonoBehaviour:
     m_Bits: 947
   weight: 0.91
   upperBodyLayerWeight: 0
-  distanceToGround: 0.113
 --- !u!54 &604350201706811414
 Rigidbody:
   m_ObjectHideFlags: 0

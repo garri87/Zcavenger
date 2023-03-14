@@ -7,51 +7,42 @@ using Random = UnityEngine.Random;
 
 public class EnemyFOV : MonoBehaviour
 {
-    public CapsuleCollider FOVObject;
-    
     private HealthManager agentHealthManager;
-    
     private AgentController _agentController;
     
+    public CapsuleCollider FOVObject;
+
+    public float viewRadius = 10f;
+
+    public float viewAngle = 45f;
+
+    public LayerMask targetLayer;
+    public LayerMask obstacleLayers;
+    
     public bool targetInRange;//target is inside the max visual range of the agent, may not be physically visible
-    
     public bool targetInSight;//target is inside visual range and visible by the agent
-    
     public bool targetAttackable;//target  is in the attackable area of agent
     
-    private HealthManager targetHealthManager;
-    
     public float targetDistance;
-    public float groundDistance = 0;
 
     private float _attackDistance;
 
-    public float rayLength = 10f;
-    public LayerMask layersToRaycast;
-    public LayerMask targetLayer;
-    public RaycastHit playerHit;
-    public RaycastHit[] hits;
-    public List<GameObject> hitList;
-
-    public PlayerController playerController;
-    private Vector3 targetDirection;
+    private Transform targetTransform;
     [HideInInspector]public Vector3 targetLastLocation;
-    
-    private void Start()
+
+    private void Awake()
     {
         _agentController = GetComponentInParent<AgentController>();
         agentHealthManager = _agentController._healthManager;
-        _attackDistance = _agentController.enemyScriptableObject.attackDistance;
-        targetLastLocation = transform.position;
-        groundDistance = Mathf.Infinity;
-
         FOVObject.transform.parent = _agentController._animator.GetBoneTransform(HumanBodyBones.Head);
+        _attackDistance = _agentController.enemyScriptableObject.attackDistance;
 
-        if (GameObject.Find("Player").TryGetComponent(out PlayerController playContrller))
-        {
-            playerController = playContrller;
-        }
+    }
+
+    private void Start()
+    {
         
+        targetLastLocation = transform.position;
         
     }
 
@@ -59,15 +50,15 @@ public class EnemyFOV : MonoBehaviour
     {
         if (targetInRange)
         {
-            RayCastAllObjects();
+            RayCastForObjects();
         }
+        
         Debug.DrawRay(transform.position + Vector3.up, targetLastLocation - transform.position,Color.yellow, Time.deltaTime, true);
 
 
     }
     private void Update()
     {
-        targetDirection = _agentController.playerDirection;
         
         if (agentHealthManager.IsDead)
         {
@@ -75,64 +66,40 @@ public class EnemyFOV : MonoBehaviour
         }
     }
     
-    private void RayCastAllObjects()
+    private void RayCastForObjects()
     {
-        Ray ray = new Ray(transform.position + Vector3.up, targetDirection);
-        Debug.DrawRay(ray.origin,ray.direction,Color.green,Time.deltaTime);
-        hits = Physics.RaycastAll(ray, Mathf.Infinity, layersToRaycast.value);
-        for (int i = 0; i < hits.Length; i++)
+        Ray ray = new Ray(transform.position + Vector3.up, targetTransform.position - transform.position);
+        
+        Debug.DrawRay(ray.origin,ray.direction,Color.blue,Time.deltaTime);
+
+        if (Physics.Raycast(ray,(targetTransform.position - transform.position).magnitude,targetLayer) 
+            && !CheckObstacle(targetTransform))
         {
-            if (hits[i].transform.gameObject.layer == LayerMask.NameToLayer("Default"))
-            {
-                groundDistance = hits[i].distance;
-            }
-
-            if (hits[i].transform.gameObject.layer == targetLayer)
-            {
-                targetDistance = hits[i].distance;
-                
-                if (targetDistance <= groundDistance && _agentController.currentPlayLine == playerController.currentPlayLine)
-                {
-                    targetInSight = true;
-                }
-                else
-                {
-                    targetInSight = false;
-                }
-
-                if (targetInSight)
-                {
-                    targetLastLocation = hits[i].point - Vector3.up;
-                    groundDistance = Mathf.Infinity;
-                }
-                if (targetDistance <= _attackDistance)
-                {
-                    if (Physics.Raycast(transform.position + Vector3.up, targetDirection * _attackDistance,
-                        out playerHit, Mathf.Infinity, LayerMask.GetMask("Player")))
-                    {
-                        Debug.DrawRay(ray.origin,ray.direction,Color.red,Time.deltaTime);
-
-                        targetAttackable = true;
-                    }
-                }
-                else
-                {
-                    targetAttackable = false;
-                }
-            }
-            
+           //La Ia puede ver al jugador
+           targetInSight = true;
+        }
+        else
+        {
+            //La IA no puede ver al jugador
+            targetInSight = false;
         }
     }
 
+    private bool CheckObstacle(Transform target)
+    {
+        Vector3 directionToTarget = target.position - transform.position; // Dirección al jugador
+        float distanceToTarget = directionToTarget.magnitude; // Distancia al jugador
+        if (Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstacleLayers)) // Comprueba si hay obstáculos entre la IA y el jugador
+        {
+            return true; // Si hay obstáculos, no puede ver al jugador
+        }
+        return false; // Si no hay obstáculos, puede ver al jugador
+    }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            if (other.GetComponent<HealthManager>() !=null)
-            {
-                targetHealthManager = other.GetComponent<HealthManager>();
-            }
             targetInRange = true;
         }
     }
@@ -156,7 +123,6 @@ public class EnemyFOV : MonoBehaviour
             targetInRange = false;
             targetInSight = false;
             targetAttackable = false;
-            hitList.Clear();
         }
     }
 

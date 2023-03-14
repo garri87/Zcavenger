@@ -2478,19 +2478,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FOVObject: {fileID: 7959694898430943987}
-  playerInRange: 0
-  playerInSight: 0
-  playerAttackable: 0
+  targetInRange: 0
+  targetInSight: 0
+  targetAttackable: 0
   targetDistance: 0
-  playerDistance: 1
   groundDistance: 0
-  rayLength: 10
-  layer:
+  layersToRaycast:
     serializedVersion: 2
     m_Bits: 65
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 64
   hitList: []
   playerController: {fileID: 0}
-  playerLastLocation: {x: 0, y: 0, z: 0}
+  targetLastLocation: {x: 0, y: 0, z: 0}
 --- !u!114 &3298250914564687063
 MonoBehaviour:
   m_ObjectHideFlags: 0
