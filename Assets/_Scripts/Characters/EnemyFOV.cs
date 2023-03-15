@@ -10,7 +10,7 @@ public class EnemyFOV : MonoBehaviour
     private HealthManager agentHealthManager;
     private AgentController _agentController;
     
-    public CapsuleCollider FOVObject;
+    public Collider FOVObject;
 
     public float viewRadius = 10f;
 
@@ -27,14 +27,13 @@ public class EnemyFOV : MonoBehaviour
 
     private float _attackDistance;
 
-    private Transform targetTransform;
+    public Transform targetTransform;
     [HideInInspector]public Vector3 targetLastLocation;
 
     private void Awake()
     {
-        _agentController = GetComponentInParent<AgentController>();
-        agentHealthManager = _agentController._healthManager;
-        FOVObject.transform.parent = _agentController._animator.GetBoneTransform(HumanBodyBones.Head);
+        _agentController = GetComponent<AgentController>();
+        agentHealthManager = GetComponent<HealthManager>();
         _attackDistance = _agentController.enemyScriptableObject.attackDistance;
 
     }
@@ -48,12 +47,37 @@ public class EnemyFOV : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (targetInRange)
+        if (targetInRange) // Si el objetivo esta dentro del campo visual, determinar si este esta directamente visible
         {
-            RayCastForObjects();
+            targetInSight = RayCastForTarget(targetTransform);
         }
-        
-        Debug.DrawRay(transform.position + Vector3.up, targetLastLocation - transform.position,Color.yellow, Time.deltaTime, true);
+        else
+        {
+            targetInSight = false;
+            targetAttackable = false;
+        }
+
+        if (targetInSight)
+        {
+            targetLastLocation = targetTransform.position;
+            if ((targetTransform.position - transform.position).magnitude <= _attackDistance)
+            {
+                targetAttackable = true;
+            }
+            else
+            {
+                targetAttackable = false;
+            }
+            
+            //Debug.DrawRay(transform.position + Vector3.up, targetTransform.position - transform.position,Color.red, Time.deltaTime, true);
+        }
+        else
+        {
+            Vector3 lastLocation = new Vector3(targetLastLocation.x,transform.position.y,targetLastLocation.z);
+            Debug.DrawRay(transform.position + Vector3.up, lastLocation - transform.position,Color.yellow, Time.deltaTime, true);
+        }
+
+
 
 
     }
@@ -66,22 +90,19 @@ public class EnemyFOV : MonoBehaviour
         }
     }
     
-    private void RayCastForObjects()
+    private bool RayCastForTarget(Transform target)
     {
-        Ray ray = new Ray(transform.position + Vector3.up, targetTransform.position - transform.position);
-        
-        Debug.DrawRay(ray.origin,ray.direction,Color.blue,Time.deltaTime);
-
-        if (Physics.Raycast(ray,(targetTransform.position - transform.position).magnitude,targetLayer) 
-            && !CheckObstacle(targetTransform))
+        Ray ray = new Ray(transform.position + Vector3.up, target.position - transform.position);
+        if (Physics.Raycast(ray,(target.position - transform.position).magnitude,targetLayer) 
+            && CheckObstacle(targetTransform)) //Si no hay obstaculos
         {
            //La Ia puede ver al jugador
-           targetInSight = true;
+           return true;
         }
         else
         {
             //La IA no puede ver al jugador
-            targetInSight = false;
+            return false;
         }
     }
 
@@ -89,11 +110,13 @@ public class EnemyFOV : MonoBehaviour
     {
         Vector3 directionToTarget = target.position - transform.position; // Dirección al jugador
         float distanceToTarget = directionToTarget.magnitude; // Distancia al jugador
-        if (Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstacleLayers)) // Comprueba si hay obstáculos entre la IA y el jugador
+        Debug.DrawRay(transform.position + Vector3.up, directionToTarget,Color.blue, Time.deltaTime, true);
+
+        if (Physics.Raycast(transform.position + Vector3.up, directionToTarget, distanceToTarget, obstacleLayers)) // Comprueba si hay obstáculos entre la IA y el jugador
         {
-            return true; // Si hay obstáculos, no puede ver al jugador
+            return false; // Si hay obstáculos, no puede ver al jugador
         }
-        return false; // Si no hay obstáculos, puede ver al jugador
+        return true; // Si no hay obstáculos, puede ver al jugador
     }
 
     private void OnTriggerEnter(Collider other)
@@ -101,6 +124,7 @@ public class EnemyFOV : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             targetInRange = true;
+            targetTransform = other.transform;
         }
     }
 
@@ -119,14 +143,17 @@ public class EnemyFOV : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            targetLastLocation = Vector3.Slerp(transform.position,targetLastLocation, Random.Range(0f, 1f));
+            
+            targetLastLocation = Vector3.Slerp(transform.position,other.transform.position, Random.Range(0.8f, 1f));
             targetInRange = false;
-            targetInSight = false;
-            targetAttackable = false;
         }
     }
 
-    
-    
-
+   /* private void OnDrawGizmosSelected()
+    {
+        
+        Gizmos.color = Color.green;
+        Gizmos.DrawRay(transform.position + Vector3.up, targetTransform.position - transform.position);
+        
+    }*/
 }

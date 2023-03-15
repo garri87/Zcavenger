@@ -34,7 +34,11 @@ public class AgentController : MonoBehaviour
         Dead,
     }
 
-    [Header("AI Behaviour")] public float agentAlertTime = 5;
+    [Header("AI Behaviour")]
+    public float
+        agentAlertTime =
+            5; //Tiempo en segundos que el agente esta en alerta cuando el objetivo sale de su campo de vision
+
     [HideInInspector] public float alertTimer;
 
     public AgentState agentState;
@@ -69,9 +73,11 @@ public class AgentController : MonoBehaviour
 
     #region Attacks Variables
 
+    public float attackRate;
     public bool attacking;
     public bool playerCatch;
     public LayerMask attackLayerMask;
+    private float attackTimer;
 
     #endregion
 
@@ -100,9 +106,8 @@ public class AgentController : MonoBehaviour
 
     private void Awake()
     {
-    
-
         originTransform = this.transform;
+
         _animator = GetComponent<Animator>();
         _navMeshAgent = GetComponent<NavMeshAgent>();
         _checkGround = GetComponentInChildren<CheckGround>();
@@ -112,10 +117,8 @@ public class AgentController : MonoBehaviour
         _capsuleCollider = GetComponent<CapsuleCollider>();
         _animator.SetBool(enemyType.ToString(), true);
 
-      
-
-
         GetEnemyType(enemyScriptableObject);
+
         _navMeshAgent.speed = Random.Range(minSpeed, maxSpeed);
         _navMeshAgent.updateRotation = false;
     }
@@ -124,32 +127,13 @@ public class AgentController : MonoBehaviour
     {
         disableTimer = disableTime;
 
-
         _animator.SetBool(enemyType.ToString(), true);
         _animator.SetInteger("State", animationState);
     }
 
-    private void GetPlayer()
-    {
-        try
-        {
-            player = GameObject.Find("Player");
-        }
-        catch
-        {
-            Debug.LogWarning("No Player Gameobject Found");
-        }
-        if (player != null)
-        {
-            playerController = player.GetComponent<PlayerController>();
-            playerHealthManager = playerController._healthManager;
-            playerAnimator = playerController._animator;
-        }
-    }
 
     void Start()
     {
-        
         GetPlayer();
         _animator.SetBool("Runner", false);
         _animator.SetBool("Walker", false);
@@ -214,30 +198,60 @@ public class AgentController : MonoBehaviour
 
                 if (_navMeshAgent.isOnNavMesh)
                 {
-                    _rigidbody.velocity =
-                        new Vector3(_rigidbody.velocity.x, _rigidbody.velocity.y, _rigidbody.velocity.z);
-                    if (transform.position.z != currentPlayLine)
+                     _rigidbody.velocity =
+                         new Vector3(_rigidbody.velocity.x, _rigidbody.velocity.y, _rigidbody.velocity.z);
+
+                    //Moving Animation if navmeshAgent is moving
+
+                    if (_navMeshAgent. velocity.magnitude < 0.1f || !_navMeshAgent.CalculatePath(playerPosition.position,_navMeshAgent.path))
                     {
-                        transform.position = new Vector3(transform.position.x, transform.position.y, currentPlayLine);
+                        _animator.SetBool("IsMoving", false);
+                        
+                    }
+                    else
+                    {
+                        _animator.SetBool("IsMoving", true);
+                    }
+                    
+                    //Stop the Agent if reach the waypoint
+                    if (_navMeshAgent.remainingDistance < 0.2f)
+                    {
+                        _navMeshAgent.SetDestination(this.transform.position);
                     }
 
+                    if (transform.position.z != currentPlayLine)
+                    {
+                        transform.position = new Vector3(transform.position.x, transform.position.y,Mathf.Lerp(transform.position.z,currentPlayLine,Time.deltaTime));
+                    }
+                    
                     if (_enemyFov.targetInSight)
                     {
                         alertTimer = agentAlertTime;
+                        attackTimer -= Time.deltaTime;
 
                         if (enemyType == Enemy.EnemyType.Crippled)
                         {
-                            _rigidbody.MoveRotation(Quaternion.Euler(new Vector3(0, 0,
-                                90 * Mathf.Sign(playerPosition.position.x - transform.position.x))));
+                                  _rigidbody.MoveRotation(Quaternion.Euler(new Vector3(0, 0,
+                                      90 * Mathf.Sign(playerPosition.position.x - transform.position.x))));
                         }
 
                         if (_navMeshAgent.enabled == true)
                         {
-                            if (_enemyFov.targetAttackable && !playerHealthManager.IsDead && !playerCatch)
+                            //Chase Target
+                            if (!attacking && !_enemyFov.targetAttackable)
                             {
-                                attacking = true;
+                                _navMeshAgent.SetDestination(playerPosition.position);
                             }
 
+                            //Attack Player
+                            if (_enemyFov.targetAttackable && !playerHealthManager.IsDead && !playerCatch)
+                            {
+                                if (attackTimer <= 0)
+                                {
+                                    attacking = true;
+                                    attackTimer = attackRate;
+                                }
+                            }
                             else
                             {
                                 attacking = false;
@@ -248,18 +262,10 @@ public class AgentController : MonoBehaviour
                                 attacking = false;
                             }
 
-
-                            if (!attacking && !_enemyFov.targetAttackable)
-                            {
-                                _navMeshAgent.SetDestination(playerPosition.position);
-                                _animator.SetBool("IsMoving", true);
-                            }
-
                             if (playerHealthManager.IsDead)
                             {
                                 attacking = false;
                                 _navMeshAgent.SetDestination(this.transform.position);
-                                _animator.SetBool("IsMoving", false);
                                 playerCatch = false;
                             }
                         }
@@ -278,15 +284,18 @@ public class AgentController : MonoBehaviour
                             alertTimer -= Time.deltaTime;
                             if (alertTimer <= 0)
                             {
-                                _navMeshAgent.SetDestination(_enemyFov.targetLastLocation);
-                                _animator.SetBool("IsMoving", true);
+                                Vector3 targetLastLocation = new Vector3(_enemyFov.targetLastLocation.x,
+                                    transform.position.y, _enemyFov.targetLastLocation.z);
+                                RaycastHit hit;
+                                Ray ray = new Ray(transform.position + Vector3.up,
+                                    (targetLastLocation - transform.position)+Vector3.up); 
+                                if (Physics.Raycast(ray,out hit,_enemyFov.viewRadius,_enemyFov.obstacleLayers))
+                                {
+                                    targetLastLocation = new Vector3(hit.point.x, transform.position.y, hit.point.z);
+                                }
+                                
+                                _navMeshAgent.SetDestination(targetLastLocation);
                                 growl = false;
-                            }
-
-                            if (_navMeshAgent.remainingDistance < 0.2f)
-                            {
-                                _navMeshAgent.SetDestination(this.transform.position);
-                                _animator.SetBool("IsMoving", false);
                             }
                         }
                     }
@@ -300,9 +309,8 @@ public class AgentController : MonoBehaviour
                 {
                     _navMeshAgent.SetDestination(transform.position);
                 }
-
                 _animator.SetBool("IsMoving", false);
-                _rigidbody.velocity = new Vector3(0, _rigidbody.velocity.y, 0);
+                //_rigidbody.velocity = new Vector3(0, _rigidbody.velocity.y, 0);
 
                 break;
 
@@ -486,7 +494,7 @@ public class AgentController : MonoBehaviour
         {
             int randomValue = Random.Range(1, 2);
             _animator.SetBool("IsDead" + randomValue, true);
-            _rigidbody.velocity = Vector3.zero;
+            // _rigidbody.velocity = Vector3.zero;
         }
         else
         {
@@ -538,6 +546,29 @@ public class AgentController : MonoBehaviour
         Debug.Log("Player Took " + damageGiven + " damage");
     }
 
+
+    /// <summary>
+    /// Search for a Player GameObject and get references to PlayerController, HealthManager & Animator
+    /// </summary>
+    private void GetPlayer()
+    {
+        try
+        {
+            player = GameObject.Find("Player");
+        }
+        catch
+        {
+            Debug.LogWarning("No Player Gameobject Found");
+        }
+
+        if (player != null)
+        {
+            playerController = player.GetComponent<PlayerController>();
+            playerHealthManager = player.GetComponent<HealthManager>();
+            playerAnimator = player.GetComponent<Animator>();
+        }
+    }
+
     private void GetEnemyType(Enemy scriptableObject)
     {
         enemyType = scriptableObject.enemyType;
@@ -546,6 +577,7 @@ public class AgentController : MonoBehaviour
         minDamage = scriptableObject.minDamage;
         maxDamage = scriptableObject.maxDamage;
         bleedDamageProbability = scriptableObject.bleedDamageProbability;
+        attackRate = scriptableObject.attackRate;
         attackDistance = scriptableObject.attackDistance;
     }
 
@@ -553,12 +585,5 @@ public class AgentController : MonoBehaviour
     {
         Gizmos.color = Color.magenta;
         Gizmos.DrawRay(transform.position + Vector3.up, transform.TransformDirection(Vector3.forward) * attackDistance);
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Noise") && !_enemyFov.targetInSight)
-        {
-        }
     }
 }

@@ -246,7 +246,7 @@ public class IKManager : MonoBehaviour
 
                 if (_agentController.attacking||
                     _agentController.playerCatch||
-                    _agentController._enemyFov.targetInSight|| _agentController.hisHit)
+                    /*_agentController._enemyFov.targetInSight||*/ _agentController.hisHit)
                 {
                     _animator.SetLayerWeight(_animator.GetLayerIndex("UpperBody"), 1);
                 }
