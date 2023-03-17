@@ -7,9 +7,9 @@ public class SpawnManager : MonoBehaviour
     
     public Enemy[] enemyType;
     public GameObject[] enemyPrefabs;
-    public float spawnTime = 2f;
-    public float spawnRate = 1f;
     public float spawnCooldown = 30f;
+    
+    [SerializeField]
     private float timer;
     
     [SerializeField] 
@@ -30,7 +30,7 @@ public class SpawnManager : MonoBehaviour
   
     void Update()
     {
-        enemyCount = gameObject.transform.childCount;
+        enemyCount = transform.childCount;
 
         if (Input.GetKeyDown(KeyCode.Q)) 
         {
@@ -42,7 +42,7 @@ public class SpawnManager : MonoBehaviour
             timer -= Time.deltaTime;
         }
 
-        if (enemyCount <=0 && spawnCooldown <= 0)
+        if (enemyCount == 0 && timer < 0)
         {
             SpawnEnemy();
             
@@ -67,6 +67,7 @@ public class SpawnManager : MonoBehaviour
         
             agentController = instantiatedEnemy.GetComponent<AgentController>();
             agentController.enemyScriptableObject = enemyType[order]; 
+            Debug.Log("Enemy "+ instantiatedEnemy.name +" Spawned!");
         }
         
     }

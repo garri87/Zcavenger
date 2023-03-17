@@ -112,9 +112,13 @@ public class EnemyFOV : MonoBehaviour
         float distanceToTarget = directionToTarget.magnitude; // Distancia al jugador
         Debug.DrawRay(transform.position + Vector3.up, directionToTarget,Color.blue, Time.deltaTime, true);
 
-        if (Physics.Raycast(transform.position + Vector3.up, directionToTarget, distanceToTarget, obstacleLayers)) // Comprueba si hay obstáculos entre la IA y el jugador
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position + Vector3.up, directionToTarget, out hit,  distanceToTarget, obstacleLayers)) // Comprueba si hay obstáculos entre la IA y el jugador
         {
-            return false; // Si hay obstáculos, no puede ver al jugador
+            if (!hit.collider.isTrigger)
+            {
+                return false; // Si hay obstáculos, no puede ver al jugador   
+            }
         }
         return true; // Si no hay obstáculos, puede ver al jugador
     }
