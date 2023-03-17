@@ -56,13 +56,15 @@ public class GameManager : MonoBehaviour
 #else
         Debug.unityLogger.logEnabled = false;
 #endif
+        
+        _graphicsManager = GetComponent<GraphicsManager>();
+        _audioManager = GetComponent<AudioManager>();
+        _keyAssignments = GetComponent<KeyAssignments>();
     }
 
     void Start()
     {
-        _graphicsManager = GetComponent<GraphicsManager>();
-        _audioManager = GetComponent<AudioManager>();
-        _keyAssignments = GetComponent<KeyAssignments>();
+        
         switch (sceneType)
         {
             case SceneType.mainTitle:

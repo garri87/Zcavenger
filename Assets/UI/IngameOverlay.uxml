@@ -1,0 +1,15 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/Styles.uss?fileID=7433441132597879392&amp;guid=1859ad832d278e64a88169bbf99fcc0a&amp;type=3#Styles" />
+    <ui:VisualElement name="Container" style="display: flex; visibility: visible; align-items: flex-end; justify-content: flex-start; flex-direction: row; position: relative; height: 100%; width: 100%; top: auto; bottom: auto; background-color: rgba(135, 60, 60, 255); transform-origin: center;">
+        <ui:VisualElement name="PlayerStatus" style="width: 20%; height: 30%; background-color: rgba(8, 226, 0, 255); flex-wrap: nowrap; align-items: stretch; justify-content: flex-start;">
+            <ui:VisualElement name="WaterPanel" style="width: auto; height: 25%; background-color: rgba(59, 118, 200, 255);">
+                <ui:Label text="100 %" display-tooltip-when-elided="true" style="-unity-font: url(&apos;project://database/Assets/Fonts/breakaway.ttf?fileID=12800000&amp;guid=10f87b8f0c2b34446b7cad30ad9cf9bc&amp;type=3#breakaway&apos;); font-size: 70%; -unity-text-align: upper-right; -unity-font-style: bold; white-space: nowrap;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="FoodPanel" style="height: 25%; background-color: rgba(125, 78, 0, 255);" />
+            <ui:VisualElement name="HealthPanel" style="background-color: rgba(255, 0, 0, 255); height: 25%;" />
+            <ui:VisualElement name="StaminaPanel" style="height: 25%; background-color: rgba(255, 243, 0, 255);">
+                <ui:Label text="Label" display-tooltip-when-elided="true" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -82,4 +82,9 @@ public class UIManager : MonoBehaviour
     {
         
     }
+
+    public void CloseAllUI()
+    {
+        
+    }
 }
