@@ -28,6 +28,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0, y: 0.24, z: 18.242}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4603698110121654974}
   m_RootOrder: 0
@@ -83,6 +84,7 @@ Transform:
   m_LocalRotation: {x: 0.062137287, y: 0, z: 0, w: 0.9980677}
   m_LocalPosition: {x: 0, y: 2, z: -4}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1724591637}
   m_Father: {fileID: 0}
@@ -111,8 +113,8 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.1
-  far clip plane: 5000
+  near clip plane: 3
+  far clip plane: 203.6
   field of view: 20
   orthographic: 0
   orthographic size: 5.15

@@ -20,15 +20,23 @@ public class levelTrigger : MonoBehaviour
 
     private void Update()
     {
-        if (bossHealthManager.IsDead)
+        try
         {
-            activateTrigger = true;
-        }
+            if (bossHealthManager.IsDead)
+            {
+                activateTrigger = true;
+            }
 
-        if (activateTrigger)
-        {
-            BossDeath();
+            if (activateTrigger)
+            {
+                BossDeath();
+            }
         }
+        catch 
+        {
+            
+        }
+        
     }
 
 

@@ -32,7 +32,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6647963886140235092}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &6637448762393608932
 MeshFilter:
@@ -132,7 +132,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6647963886140235092}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6647963886140235090
 GameObject:
@@ -143,7 +143,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6647963886140235092}
-  - component: {fileID: 6647963886140235093}
+  - component: {fileID: 5653364797599535375}
+  - component: {fileID: 699999613}
+  - component: {fileID: 699999615}
+  - component: {fileID: 699999616}
   m_Layer: 0
   m_Name: Building Generator
   m_TagString: Untagged
@@ -164,13 +167,12 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6647963887409707923}
-  - {fileID: 6647963886843385218}
   - {fileID: 1752135001}
   - {fileID: 3585734054929008310}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6647963886140235093
+--- !u!114 &5653364797599535375
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -179,97 +181,120 @@ MonoBehaviour:
   m_GameObject: {fileID: 6647963886140235090}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38551f5955a5c08438626e79a9e5c98d, type: 3}
+  m_Script: {fileID: 11500000, guid: 24fb3eb29eeebd04d87475bbfb984a31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buildingScriptableObject: {fileID: 11400000, guid: a86379dd759545b409707522ce8833cf, type: 2}
-  buildingStyle: 3
+  createMultiMaterialMesh: 1
+  combineInactiveChildren: 0
+  deactivateCombinedChildren: 1
+  deactivateCombinedChildrenMeshRenderers: 0
+  generateUVMap: 0
+  destroyCombinedChildren: 0
+  folderPath: Prefabs/CombinedMeshes
+  meshFiltersToSkip: []
+--- !u!114 &699999613
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6647963886140235090}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24142d1e1d58452b84a1bd9ce5f60400, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buildingScriptableObject: {fileID: 11400000, guid: 7806b3fae9e7703468bbc9beac32376e, type: 2}
+  buildingStyle: 0
   partsWidth: 6
   partsHeight: 3
   partsThickness: 0.1
-  maxBldWidth: 14
+  maxBldWidth: 12
   maxBldHeight: 7
-  maxBldDepth: 4
-  roomsPerFloor: 4
-  spawnOrigin: {fileID: 6647963887409707923}
+  maxBldDepth: 3
+  roomsPerFloor: 5
+  entraceSides: 1
+  entraceFront: 1
+  spawnOrigin: {fileID: 0}
   floorList: []
   extWallList: []
   roomSeed: {fileID: 8911910263573839973, guid: 1d018241eceb31c4b85b1ecf223d3b5b, type: 3}
-  roomStyles: []
   rooms: []
-  roomsTransform: {fileID: 1752135001}
-  lightsTransform: {fileID: 3585734054929008310}
+  roomsTransform: {fileID: 0}
   stairsRoomWidth: 2
+  elevatorRoomWidth: 1
   roomNumber: 0
-  doorsPrefabsList: []
-  wallsPrefabsList: []
-  doorWallsPrefabsList: []
-  floorBasesPrefabsList: []
-  exteriorWallsPrefabList: []
-  exteriorDoorWallsPrefabList: []
-  lightsPrefabsList: []
-  roomInteriorPrefabs:
-  - {fileID: 3279511732269549126, guid: 85952352c4815b040a3628210212a14b, type: 3}
-  - {fileID: 8497078378754291581, guid: 86871e79be0ac9e43915e601528c4a52, type: 3}
-  - {fileID: 6395361566495248222, guid: 669da9ff3c2c14849a8e5e2763bda13e, type: 3}
-  - {fileID: 4217475248901684046, guid: bdb6691543b449842a3b1b7398e21e33, type: 3}
-  - {fileID: 5514172306332961210, guid: a68a41396e5cd624bbe4d0988c04b629, type: 3}
-  - {fileID: 3741684654639350303, guid: c3efa3dec1255c34ca3d20bcdab6179f, type: 3}
-  - {fileID: 7277665343951783625, guid: f88722dff4e053d4e8130f2bcc84ba43, type: 3}
-  - {fileID: 1339096134368962727, guid: c28a957df4a0e914bac0002ab38666b7, type: 3}
-  - {fileID: 4793460118003122189, guid: 81f727857577be2439fedd801afe04e0, type: 3}
-  - {fileID: 6709122848613042247, guid: 2a398b7f4ac5ea941bbb302d27d4a9d5, type: 3}
-  - {fileID: 4665325882452833061, guid: 4674b1bcc36b4e74d928a2c95162407f, type: 3}
-  - {fileID: 4449303437167208726, guid: 3cd7007f9317b614480b5cabe172bd39, type: 3}
-  - {fileID: 6890279964226000793, guid: dec2094c53217c14b85bf187b5a99f3e, type: 3}
-  - {fileID: 5138047460253471168, guid: e2135ad7abb1bad42a0a02613a6cc69f, type: 3}
-  - {fileID: 7677092282806760696, guid: 2ee8adb682ffda8428d1dddb61f59f6f, type: 3}
-  - {fileID: 4255603994981293635, guid: 469952dcc17be214c9ed82b99cdb0560, type: 3}
-  - {fileID: 9158858616895315636, guid: 98e07288e2cbd6d4390a39030a96416c, type: 3}
-  - {fileID: 2868602084809482675, guid: b60d51c44fa26834cb89cad8143c36bf, type: 3}
-  - {fileID: 1668541401091160921, guid: ff1e0a306b54a204db89f70bcce2d612, type: 3}
-  - {fileID: 7570227595045133798, guid: 46dfe106a4e8ae44b9e78a5ebc89d315, type: 3}
-  - {fileID: 3828325859486593880, guid: ba157286215c8054d91fd9bd73fdaf33, type: 3}
-  - {fileID: 4348655769934119326, guid: e039aaf7b55c067488b836bd1fd29104, type: 3}
-  mainDoorPrefabs: []
-  roofCornices: []
-  roofCorniceCorners: []
+  doorsPrefabs: []
+  wallsPrefabs: []
+  doorWallsPrefabs: []
+  basesPrefabs: []
+  exteriorWallsPrefab: []
+  exteriorDoorWallsPrefabs: []
+  interiorPrefabs: []
+  lightsPrefabs: []
+  cornicesPrefabs: []
+  corniceCornersPrefabs: []
+  stairsPrefabs: []
   exteriorMaterials: []
   interiorMaterials: []
   floorBaseMaterials: []
+  enemySpawner: {fileID: 4864740036660381345, guid: 19000efd6a070e84db175b7772f3e1d9, type: 3}
+  itemSpawner: {fileID: 0}
+  enemySpawnChance: 5
+  itemSpawnChance: 5
   combineMeshesAtEnd: 1
-  debugConstruction: 1
---- !u!1 &6647963886843385217
-GameObject:
+  debugConstruction: 0
+  previewColor: {r: 1, g: 0.0047169924, b: 0.0047169924, a: 1}
+--- !u!23 &699999615
+MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6647963886843385218}
-  m_Layer: 0
-  m_Name: RightLimit
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6647963886843385218
-Transform:
+  m_GameObject: {fileID: 6647963886140235090}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &699999616
+MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6647963886843385217}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 6647963886140235092}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_GameObject: {fileID: 6647963886140235090}
+  m_Mesh: {fileID: 0}
 --- !u!1 &6647963887409707922
 GameObject:
   m_ObjectHideFlags: 0

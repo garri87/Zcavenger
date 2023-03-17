@@ -30,7 +30,7 @@ public class BuildingGenerator : MonoBehaviour
     [Header("Building Dimensions")] public int maxBldWidth = 1;
     public int maxBldHeight = 1;
     public int maxBldDepth = 1;
-    public int roomsPerFloor = 3;
+    public int roomsPerFloor = 3; 
 
     //Definir Salidas del edificio
     [Header("Entrace doors")] public bool entraceSides;
@@ -573,7 +573,7 @@ public class BuildingGenerator : MonoBehaviour
             colliderGO.transform.parent = floorGO.transform;
             colliderGO.transform.localPosition = Vector3.zero;
             colliderGO.transform.localRotation = Quaternion.identity;
-            colliderGO.layer = LayerMask.NameToLayer("Ignore Raycast"); //This is to avoid AI agents to detect the collider
+            colliderGO.layer = LayerMask.NameToLayer("PlayerDetector"); //This is to avoid AI agents to detect the collider
             
             BoxCollider boxCollider = colliderGO.AddComponent<BoxCollider>();
             boxCollider.isTrigger = true;

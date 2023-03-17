@@ -1626,6 +1626,7 @@ MonoBehaviour:
   enemyType: 3
   distanceToPlayer: 0
   attackDistance: 1
+  attackRate: 0
   attacking: 0
   playerCatch: 0
   attackLayerMask:
@@ -1707,19 +1708,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FOVObject: {fileID: 1971824843}
+  viewRadius: 10
+  viewAngle: 45
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  obstacleLayers:
+    serializedVersion: 2
+    m_Bits: 1
   targetInRange: 0
   targetInSight: 0
   targetAttackable: 0
   targetDistance: 0
-  groundDistance: 0
-  layersToRaycast:
-    serializedVersion: 2
-    m_Bits: 65
-  targetLayer:
-    serializedVersion: 2
-    m_Bits: 64
-  hitList: []
-  playerController: {fileID: 0}
+  targetTransform: {fileID: 0}
   targetLastLocation: {x: 0, y: 0, z: 0}
 --- !u!114 &5229925183207965287
 MonoBehaviour:

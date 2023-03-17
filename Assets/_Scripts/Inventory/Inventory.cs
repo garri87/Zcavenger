@@ -71,7 +71,7 @@ public class Inventory : MonoBehaviour
         
         inventoryUICanvas = uIManager.inventoryUI.GetComponent<Canvas>();
         bulletCounterTMPUGUI = uIManager.ammoPanel.Find("AmmoCount").GetComponent<TextMeshProUGUI>();
-        currentWeaponImage = uIManager.ammoPanel.Find("CurrentWeaponImage").GetComponent<Image>();
+        currentWeaponImage = uIManager.ammoPanel.Find("WeaponImage").GetComponent<Image>();
         totalInventorySlots = uIManager.inventorySlotArea.childCount; // get the number of inventory slots
         slotArray = new GameObject[totalInventorySlots];
 
