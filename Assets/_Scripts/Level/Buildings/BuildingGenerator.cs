@@ -292,6 +292,7 @@ public class BuildingGenerator : MonoBehaviour
             spawnOrigin.position += Vector3.forward * (partsWidth);
         } //FIN bucle Z
 
+        //Build NavMesh
         rooms[0].basesList[0].GetComponent<NavMeshSurface>().BuildNavMesh();
         
         foreach (RoomGenerator room in rooms) // por cada habitación creada
@@ -567,11 +568,17 @@ public class BuildingGenerator : MonoBehaviour
     {
         foreach (GameObject floorGO in list)
         {
-            BoxCollider boxCollider = floorGO.AddComponent<BoxCollider>();
+            GameObject colliderGO = new GameObject();
+            colliderGO.name = "PlayerDetector";
+            colliderGO.transform.parent = floorGO.transform;
+            colliderGO.transform.localPosition = Vector3.zero;
+            colliderGO.transform.localRotation = Quaternion.identity;
+            colliderGO.layer = LayerMask.NameToLayer("Ignore Raycast"); //This is to avoid AI agents to detect the collider
+            
+            BoxCollider boxCollider = colliderGO.AddComponent<BoxCollider>();
             boxCollider.isTrigger = true;
           
-         
-            HideFrontFace hideFrontFace = floorGO.AddComponent<HideFrontFace>();
+            HideFrontFace hideFrontFace = colliderGO.AddComponent<HideFrontFace>();
             hideFrontFace.facesToHide = new List<Transform>();
             
             float xCenter = (maxBldWidth * partsWidth) - partsWidth;
@@ -592,16 +599,8 @@ public class BuildingGenerator : MonoBehaviour
                 {
                     if (floorGO.transform.GetChild(i).TryGetComponent(out RoomGenerator roomgen))
                     {
-                        // Debug.Log("found roomgenerator at " + floorGO.transform.GetChild(i).gameObject.name);
-
-                        // Debug.Log("backWallGroup count " + roomgen.backWallGroup.gameObject);
-                        /*for (int j = 0; j < roomGenerator.backWallGroup.childCount; j++)
-                        {
-                            hideFrontFace.facesToHide.Add(roomGenerator.backWallGroup.GetChild(j));
-                        }*/
                         hideFrontFace.facesToHide.Add(roomgen.backWallGroup);
                     }
-                    //   
                 }
             }
             else
