@@ -134,6 +134,8 @@ public class AgentController : MonoBehaviour
 
     void Start()
     {
+        currentPlayLine = transform.position.z;
+        
         GetPlayer();
         _animator.SetBool("Runner", false);
         _animator.SetBool("Walker", false);
@@ -196,6 +198,10 @@ public class AgentController : MonoBehaviour
         {
             case AgentState.Active:
 
+                if (transform.position.z != currentPlayLine)
+                {
+                    transform.position = new Vector3(transform.position.x, transform.position.y,Mathf.Lerp(transform.position.z,currentPlayLine,Time.deltaTime*4));
+                }
                 if (_navMeshAgent.isOnNavMesh)
                 {
                      _rigidbody.velocity =
@@ -219,10 +225,7 @@ public class AgentController : MonoBehaviour
                         _navMeshAgent.SetDestination(this.transform.position);
                     }
 
-                    if (transform.position.z != currentPlayLine)
-                    {
-                        transform.position = new Vector3(transform.position.x, transform.position.y,Mathf.Lerp(transform.position.z,currentPlayLine,Time.deltaTime));
-                    }
+                    
                     
                     if (_enemyFov.targetInSight)
                     {
