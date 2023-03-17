@@ -1,0 +1,12 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/Styles.uss?fileID=7433441132597879392&amp;guid=1859ad832d278e64a88169bbf99fcc0a&amp;type=3#Styles" />
+    <ui:VisualElement name="Panel" class="Panel" style="width: 30%; height: 70%; align-items: center; position: relative; top: 40px; left: 180px; right: 180px; bottom: 40px; justify-content: center;">
+        <ui:Label text="Pause" display-tooltip-when-elided="true" name="Title" style="width: 100%; height: 30%; -unity-text-align: middle-center; font-size: 40px; -unity-font-definition: none; -unity-font: url(&apos;project://database/Assets/Fonts/DIRTYEGO.TTF?fileID=12800000&amp;guid=d98aae651913f68448572ef397e03837&amp;type=3#DIRTYEGO&apos;); flex-shrink: 1; flex-grow: 1; -unity-text-outline-width: 0.1px; -unity-text-outline-color: rgba(0, 0, 0, 255); color: rgba(255, 255, 255, 255);" />
+        <ui:VisualElement name="MenuButtons" class="PauseMenu" style="flex-grow: 1; width: 90%; height: auto;">
+            <ui:Button text="Resume" display-tooltip-when-elided="true" name="ResumeButton" />
+            <ui:Button text="Options" display-tooltip-when-elided="true" name="OptionsButton" />
+            <ui:Button text="Restart Level" display-tooltip-when-elided="true" name="RestartButton" />
+            <ui:Button text="Exit to main menú" display-tooltip-when-elided="true" name="MainMenuButton" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

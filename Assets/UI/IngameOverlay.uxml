@@ -1,15 +1,41 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/Styles.uss?fileID=7433441132597879392&amp;guid=1859ad832d278e64a88169bbf99fcc0a&amp;type=3#Styles" />
-    <ui:VisualElement name="Container" style="display: flex; visibility: visible; align-items: flex-end; justify-content: flex-start; flex-direction: row; position: relative; height: 100%; width: 100%; top: auto; bottom: auto; background-color: rgba(135, 60, 60, 255); transform-origin: center;">
-        <ui:VisualElement name="PlayerStatus" style="width: 20%; height: 30%; background-color: rgba(8, 226, 0, 255); flex-wrap: nowrap; align-items: stretch; justify-content: flex-start;">
-            <ui:VisualElement name="WaterPanel" style="width: auto; height: 25%; background-color: rgba(59, 118, 200, 255);">
-                <ui:Label text="100 %" display-tooltip-when-elided="true" style="-unity-font: url(&apos;project://database/Assets/Fonts/breakaway.ttf?fileID=12800000&amp;guid=10f87b8f0c2b34446b7cad30ad9cf9bc&amp;type=3#breakaway&apos;); font-size: 70%; -unity-text-align: upper-right; -unity-font-style: bold; white-space: nowrap;" />
+    <ui:VisualElement name="Container" class="InGameOverlayContainer">
+        <ui:VisualElement name="PlayerStatus" class="PlayerStatusPanel">
+            <ui:VisualElement name="WaterPanel" class="StatusItem">
+                <ui:VisualElement name="Image" style="background-image: url(&apos;project://database/Assets/Textures/watericon.png?fileID=2800000&amp;guid=d76f163f70688f7419f3e48704625883&amp;type=3#watericon&apos;); width: 100%; height: 100%; -unity-background-scale-mode: scale-to-fit;" />
+                <ui:Label text="100 %" display-tooltip-when-elided="true" name="Text" style="flex-grow: 1; width: 80%;" />
             </ui:VisualElement>
-            <ui:VisualElement name="FoodPanel" style="height: 25%; background-color: rgba(125, 78, 0, 255);" />
-            <ui:VisualElement name="HealthPanel" style="background-color: rgba(255, 0, 0, 255); height: 25%;" />
-            <ui:VisualElement name="StaminaPanel" style="height: 25%; background-color: rgba(255, 243, 0, 255);">
-                <ui:Label text="Label" display-tooltip-when-elided="true" />
+            <ui:VisualElement name="FoodPanel" class="StatusItem">
+                <ui:VisualElement name="Image" style="background-image: url(&apos;project://database/Assets/Textures/foodIcon.png?fileID=2800000&amp;guid=1dc2ad6fabda69248a4023df808a8d38&amp;type=3#foodIcon&apos;); width: 100%; height: 100%; -unity-background-scale-mode: scale-to-fit;" />
+                <ui:Label text="100 %" display-tooltip-when-elided="true" name="Text" style="flex-grow: 1; width: 80%;" />
             </ui:VisualElement>
+            <ui:VisualElement name="HealthPanel" class="StatusItem">
+                <ui:VisualElement name="Image" style="background-image: url(&apos;project://database/Assets/Textures/Free%20Flat%20Hat%20Solid%20Blank%20Icon.png?fileID=2800000&amp;guid=9a363b86d8dc1f9469388fb98608bb7b&amp;type=3#Free Flat Hat Solid Blank Icon&apos;); width: 100%; height: 100%; -unity-background-scale-mode: scale-to-fit;" />
+                <ui:Label text="100 %" display-tooltip-when-elided="true" name="Text" style="flex-grow: 1; width: 80%;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="StaminaPanel" class="StatusItem">
+                <ui:VisualElement name="Image" style="background-image: url(&apos;project://database/Assets/Textures/stamina%20icon.png?fileID=2800000&amp;guid=5bbf3ac523e57f847a80e8b99bf6b39e&amp;type=3#stamina icon&apos;); width: 100%; height: 100%; -unity-background-scale-mode: scale-to-fit;" />
+                <ui:ProgressBar low-value="0" tabindex="0" focusable="false" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="QuickInventory" class="QuickInventoryPanel">
+            <ui:VisualElement name="Item1">
+                <ui:Label text="1" display-tooltip-when-elided="true" />
+            </ui:VisualElement>
+            <ui:VisualElement name="Item2">
+                <ui:Label text="2" display-tooltip-when-elided="true" />
+            </ui:VisualElement>
+            <ui:VisualElement name="Item3">
+                <ui:Label text="3" display-tooltip-when-elided="true" />
+            </ui:VisualElement>
+            <ui:VisualElement name="Item4">
+                <ui:Label text="4" display-tooltip-when-elided="true" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="WeaponStatus" class="WeaponStatusPanel">
+            <ui:VisualElement name="Image" />
+            <ui:Label text="10/300" display-tooltip-when-elided="true" name="BulletCount" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>
