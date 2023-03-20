@@ -46,13 +46,13 @@
     font-size: 100%;
     -unity-font: url('project://database/Assets/Fonts/SLNTHLN.TTF?fileID=12800000&guid=5cf3402cce034a14191555ea786f9eb1&type=3#SLNTHLN');
     -unity-font-definition: none;
-    -unity-text-outline-color: rgba(0, 0, 0, 255);
+    -unity-text-outline-color: rgb(0, 0, 0);
     justify-content: center;
     align-items: auto;
     -unity-font-style: normal;
     white-space: normal;
     -unity-text-outline-width: 0;
-    color: rgba(255, 255, 255, 255);
+    color: rgb(255, 255, 255);
 }
 
 .StatusItem ProgressBar {
@@ -63,11 +63,11 @@
     -unity-text-align: upper-center;
     justify-content: space-around;
     flex-wrap: nowrap;
-    background-color: rgba(25, 154, 18, 255);
-    border-left-color: rgba(255, 255, 255, 255);
-    border-right-color: rgba(255, 255, 255, 255);
-    border-top-color: rgba(255, 255, 255, 255);
-    border-bottom-color: rgba(255, 255, 255, 255);
+    background-color: rgb(25, 154, 18);
+    border-left-color: rgb(255, 255, 255);
+    border-right-color: rgb(255, 255, 255);
+    border-top-color: rgb(255, 255, 255);
+    border-bottom-color: rgb(255, 255, 255);
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
     border-top-right-radius: 5px;
@@ -96,16 +96,16 @@
     flex-direction: row;
     margin-bottom: 10px;
     width: 30%;
-    -unity-background-image-tint-color: rgba(0, 0, 0, 255);
+    -unity-background-image-tint-color: rgb(0, 0, 0);
     flex-wrap: nowrap;
     margin-top: 10px;
 }
 
 .QuickInventoryPanel VisualElement {
-    border-left-color: rgba(0, 0, 0, 255);
-    border-right-color: rgba(0, 0, 0, 255);
-    border-top-color: rgba(0, 0, 0, 255);
-    border-bottom-color: rgba(0, 0, 0, 255);
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
     border-left-width: 1px;
     border-right-width: 1px;
     border-top-width: 1px;
@@ -160,10 +160,10 @@
     -unity-background-scale-mode: scale-to-fit;
     background-image: url('project://database/Assets/Textures/Assault%20Rifle.png?fileID=2800000&guid=1dfa1190d0e7bb441825774a88501d05&type=3#Assault Rifle');
     justify-content: center;
-    border-left-color: rgba(0, 0, 0, 255);
-    border-right-color: rgba(0, 0, 0, 255);
-    border-top-color: rgba(0, 0, 0, 255);
-    border-bottom-color: rgba(0, 0, 0, 255);
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
     border-left-width: 0.1px;
     border-right-width: 0.1px;
     border-top-width: 0.1px;
@@ -188,10 +188,10 @@
     border-right-width: 0.1px;
     border-top-width: 0.1px;
     border-bottom-width: 0.1px;
-    border-left-color: rgba(0, 0, 0, 255);
-    border-right-color: rgba(0, 0, 0, 255);
-    border-top-color: rgba(0, 0, 0, 255);
-    border-bottom-color: rgba(0, 0, 0, 255);
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
     -unity-font-definition: none;
     -unity-font: url('project://database/Assets/Fonts/veteran%20typewriter.ttf?fileID=12800000&guid=27c45d1dc87496040822597577b56b50&type=3#veteran typewriter');
     -unity-font-style: normal;
@@ -216,7 +216,7 @@
     -unity-font-definition: none;
     -unity-font: url('project://database/Assets/Fonts/breakaway.ttf?fileID=12800000&guid=10f87b8f0c2b34446b7cad30ad9cf9bc&type=3#breakaway');
     font-size: 18px;
-    color: rgba(255, 255, 255, 255);
+    color: rgb(255, 255, 255);
     -unity-text-align: middle-left;
     border-left-color: rgba(0, 0, 0, 0);
     border-right-color: rgba(0, 0, 0, 0);
@@ -245,40 +245,5 @@
     height: 10%;
     margin-right: 5px;
     margin-bottom: 5px;
-    color: rgba(255, 255, 255, 255);
-}
-
-.Panel {
-    background-color: rgba(142, 142, 142, 0.55);
-    border-left-width: 1px;
-    border-right-width: 1px;
-    border-top-width: 1px;
-    border-bottom-width: 1px;
-    border-left-color: rgba(26, 26, 26, 255);
-    border-right-color: rgba(26, 26, 26, 255);
-    border-top-color: rgba(26, 26, 26, 255);
-    border-bottom-color: rgba(26, 26, 26, 255);
-    color: rgba(210, 210, 210, 255);
-}
-
-.PauseMenu {
-    flex-grow: 1;
-    flex-direction: column;
-}
-
-.PauseMenu Button {
-    border-left-color: rgba(0, 0, 0, 0.15);
-    border-right-color: rgba(0, 0, 0, 0.15);
-    border-top-color: rgba(0, 0, 0, 0.15);
-    border-bottom-color: rgba(0, 0, 0, 0.15);
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-    -unity-font-definition: none;
-    -unity-font: url('project://database/Assets/Fonts/DIRTYEGO.TTF?fileID=12800000&guid=d98aae651913f68448572ef397e03837&type=3#DIRTYEGO');
-    font-size: 24px;
-    -unity-text-outline-width: 0.1px;
-    -unity-text-outline-color: rgba(0, 0, 0, 0.63);
-    color: rgba(255, 255, 255, 255);
+    color: rgb(255, 255, 255);
 }
