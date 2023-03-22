@@ -1,14 +1,62 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/Inventory.uss?fileID=7433441132597879392&amp;guid=9e4bdd29bf0962a4dbedea7a78af38e6&amp;type=3#Inventory" />
-    <ui:VisualElement name="RootPanel" style="flex-grow: 1; width: 100%; height: 100%; flex-shrink: 1; flex-wrap: nowrap; flex-basis: auto; align-items: center; justify-content: center; position: relative; background-color: rgba(58, 58, 58, 0.72);">
-        <ui:VisualElement name="MainPanel" style="flex-grow: 0; width: 95%; height: 95%; flex-shrink: 0; justify-content: space-between; background-color: rgba(101, 101, 101, 255);">
-            <ui:VisualElement name="SlotsSection" style="flex-grow: 1; width: 50%; height: 100%; background-color: rgba(111, 64, 64, 255); justify-content: space-between;">
-                <ui:VisualElement name="InventoryHeader" style="width: 100%; height: 20%; flex-direction: row; flex-wrap: wrap; align-items: flex-start; justify-content: space-between;">
+    <ui:VisualElement name="RootPanel" style="flex-grow: 1; width: 100%; height: 100%; flex-shrink: 1; flex-wrap: nowrap; flex-basis: auto; align-items: center; justify-content: center; position: relative; background-color: rgba(58, 58, 58, 0.72); padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;">
+        <ui:VisualElement name="MainPanel" style="flex-grow: 0; width: 95%; height: 95%; flex-shrink: 0; justify-content: space-between; background-color: rgba(0, 0, 0, 0.86); flex-direction: row; flex-wrap: nowrap; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgba(29, 29, 29, 255); border-right-color: rgba(29, 29, 29, 255); border-top-color: rgba(29, 29, 29, 255); border-bottom-color: rgba(29, 29, 29, 255); margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;">
+            <ui:VisualElement name="SlotsSection" style="flex-grow: 1; width: 50%; height: 100%; background-color: rgba(53, 53, 53, 0.63); justify-content: space-between;">
+                <ui:VisualElement name="InventoryHeader" style="width: 100%; height: 10%; flex-direction: row; flex-wrap: wrap; align-items: flex-start; justify-content: space-between;">
                     <ui:Label text="Inventory" display-tooltip-when-elided="true" name="Title" style="-unity-text-align: middle-left; white-space: nowrap;" />
                     <ui:Label text="Cap xx/xx" display-tooltip-when-elided="true" name="Cap" style="font-size: 3px; -unity-text-align: middle-right;" />
                 </ui:VisualElement>
-                <ui:VisualElement name="Slots" style="flex-grow: 1; width: 100%; height: 100%; justify-content: flex-start; flex-direction: row; flex-wrap: wrap;">
+                <ui:VisualElement name="Slots" style="flex-grow: 1; width: 100%; height: 100%; justify-content: center; flex-direction: row; flex-wrap: wrap; align-items: center; flex-shrink: 1; left: auto; margin-top: 0; border-left-width: 0.1px; border-right-width: 0.1px; border-top-width: 0.1px; border-bottom-width: 0.1px; border-left-color: rgb(41, 41, 41); border-right-color: rgb(41, 41, 41); border-top-color: rgb(41, 41, 41); border-bottom-color: rgb(41, 41, 41); margin-left: 0; margin-right: 0; margin-bottom: 0; padding-left: 2px; padding-right: 2px; padding-top: 2px; padding-bottom: 2px;">
                     <ui:VisualElement name="Slot" class="Slot" />
+                    <ui:VisualElement name="Slot" class="Slot" />
+                    <ui:VisualElement name="Slot" class="Slot" />
+                    <ui:VisualElement name="Slot" class="Slot" />
+                    <ui:VisualElement name="Slot" class="Slot" />
+                    <ui:VisualElement name="Slot" class="Slot" />
+                    <ui:VisualElement name="Slot" class="Slot" />
+                    <ui:VisualElement name="Slot" class="Slot" />
+                    <ui:VisualElement name="Slot" class="Slot" />
+                    <ui:VisualElement name="Slot" class="Slot" />
+                    <ui:VisualElement name="Slot" class="Slot" />
+                    <ui:VisualElement name="Slot" class="Slot" />
+                    <ui:VisualElement name="Slot" class="Slot" />
+                    <ui:VisualElement name="Slot" class="Slot" />
+                    <ui:VisualElement name="Slot" class="Slot" />
+                    <ui:VisualElement name="Slot" class="Slot" />
+                    <ui:VisualElement name="Slot" class="Slot" />
+                    <ui:VisualElement name="Slot" class="Slot" />
+                    <ui:VisualElement name="Slot" class="Slot" />
+                    <ui:VisualElement name="Slot" class="Slot" />
+                    <ui:VisualElement name="Slot" class="Slot" />
+                    <ui:VisualElement name="Slot" class="Slot" />
+                    <ui:VisualElement name="Slot" class="Slot" />
+                    <ui:VisualElement name="Slot" class="Slot" />
+                    <ui:VisualElement name="Slot" class="Slot" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="EquipmentSection" style="flex-grow: 1; width: 50%; height: 100%; background-color: rgba(53, 53, 53, 0.63); justify-content: space-between; flex-direction: column; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; flex-wrap: nowrap;">
+                <ui:VisualElement name="Slots" style="width: 100%; height: 85%; flex-wrap: nowrap; flex-direction: row; align-items: center; justify-content: flex-end; flex-grow: 1; margin-top: 3px;">
+                    <ui:VisualElement name="WeaponsSlots" style="flex-grow: 1; width: 100%; height: 100%; justify-content: flex-start; flex-direction: column; flex-wrap: wrap; align-items: flex-start; flex-shrink: 1; left: auto; margin-top: 0; border-left-width: 0.1px; border-right-width: 0.1px; border-top-width: 0.1px; border-bottom-width: 0.1px; border-left-color: rgb(41, 41, 41); border-right-color: rgb(41, 41, 41); border-top-color: rgb(41, 41, 41); border-bottom-color: rgb(41, 41, 41); margin-left: 0; margin-right: 0; margin-bottom: 0; padding-left: 2px; padding-right: 2px; padding-top: 2px; padding-bottom: 2px;">
+                        <ui:VisualElement name="PrimaryWpnSlot" class="Slot" style="width: 100%; height: 20%; align-items: stretch; flex-grow: 1; flex-shrink: 1; max-width: 40%;" />
+                        <ui:VisualElement name="SecondaryWpnSlot" class="Slot" style="width: 100%; height: 20%; max-width: 40%;" />
+                        <ui:VisualElement name="MeleeWpnSlot" class="Slot" style="width: 100%; height: 20%; max-width: 40%;" />
+                        <ui:VisualElement name="ThrowWpnSlot" class="Slot" style="width: 100%; height: 20%; max-width: 40%;" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="EquipmentSlots" style="flex-grow: 1; width: 100%; height: 100%; justify-content: flex-start; flex-direction: column; flex-wrap: wrap-reverse; align-items: center; flex-shrink: 1; left: auto; margin-top: 0; border-left-width: 0.1px; border-right-width: 0.1px; border-top-width: 0.1px; border-bottom-width: 0.1px; border-left-color: rgb(41, 41, 41); border-right-color: rgb(41, 41, 41); border-top-color: rgb(41, 41, 41); border-bottom-color: rgb(41, 41, 41); margin-left: 0; margin-right: 0; margin-bottom: 0; padding-left: 2px; padding-right: 2px; padding-top: 2px; padding-bottom: 2px;">
+                        <ui:VisualElement name="HeadSlot" class="Slot" style="width: 100%; height: 20%; align-items: stretch; flex-grow: 1; flex-shrink: 1; max-width: 40%;" />
+                        <ui:VisualElement name="ChestSlot" class="Slot" style="width: 100%; height: 20%; max-width: 40%;" />
+                        <ui:VisualElement name="LegSlot" class="Slot" style="width: 100%; height: 20%; max-width: 40%;" />
+                        <ui:VisualElement name="FeetSlot" class="Slot" style="width: 100%; height: 20%; max-width: 40%;" />
+                        <ui:VisualElement name="BackPackSlot" class="Slot" style="width: 100%; height: 20%; max-width: 40%; align-items: stretch;" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="backgroundBody" style="position: absolute; flex-grow: 1; width: 60%; height: 80%; left: 12%; top: 4%; background-image: url(&apos;project://database/Assets/Textures/Human_Body_Silhouette.png?fileID=2800000&amp;guid=2c3ff6c246fcf404b824714e5f12033e&amp;type=3#Human_Body_Silhouette&apos;); -unity-background-scale-mode: scale-to-fit;" />
+                <ui:VisualElement name="HealthStatus" style="flex-direction: row; justify-content: flex-start; flex-wrap: nowrap; align-items: center; margin-left: 1px; margin-right: 1px; margin-bottom: 1px;">
+                    <ui:Label text="Status:" display-tooltip-when-elided="true" name="Label" />
+                    <ui:VisualElement name="BleedingIcon" style="height: 100%; width: 20%; border-left-color: rgb(48, 48, 48); border-right-color: rgb(48, 48, 48); border-top-color: rgb(48, 48, 48); border-bottom-color: rgb(48, 48, 48); border-left-width: 0.1px; border-right-width: 0.1px; border-top-width: 0.1px; border-bottom-width: 0.1px; background-image: url(&apos;project://database/Assets/Textures/bleeding_Icon.png?fileID=2800000&amp;guid=456a63ae9fd308e438a6a2d2cfabd7a2&amp;type=3#bleeding_Icon&apos;); -unity-background-scale-mode: scale-to-fit; display: flex;" />
+                    <ui:VisualElement name="SickIcon" style="height: 100%; width: 20%; border-left-color: rgb(48, 48, 48); border-right-color: rgb(48, 48, 48); border-top-color: rgb(48, 48, 48); border-bottom-color: rgb(48, 48, 48); border-left-width: 0.1px; border-right-width: 0.1px; border-top-width: 0.1px; border-bottom-width: 0.1px; background-image: url(&apos;project://database/Assets/Textures/sick_Icon.png?fileID=2800000&amp;guid=7f1fddcd251d10e4ba1487a675a8f9e6&amp;type=3#sick_Icon&apos;); -unity-background-scale-mode: scale-to-fit;" />
+                    <ui:VisualElement name="InjuredIcon" style="height: 100%; width: 20%; border-left-color: rgb(48, 48, 48); border-right-color: rgb(48, 48, 48); border-top-color: rgb(48, 48, 48); border-bottom-color: rgb(48, 48, 48); border-left-width: 0.1px; border-right-width: 0.1px; border-top-width: 0.1px; border-bottom-width: 0.1px; background-image: url(&apos;project://database/Assets/Textures/Injured_Icon.png?fileID=2800000&amp;guid=019c1584b377d564b9c7bce3a5974011&amp;type=3#Injured_Icon&apos;);" />
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>
