@@ -58,12 +58,20 @@ public class Inventory : MonoBehaviour
 
     private void Awake()
     {
-        _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        try
+        {
+            _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+            uIManager = _gameManager.uiManager;
+        }
+        catch
+        {
+            Debug.Log("No GameManager Found in Scene");
+        }
         _playerController = GetComponent<PlayerController>();
         _animator = GetComponent<Animator>();
-        uIManager = _gameManager.uiManager;
+        
         capacityText = uIManager.capacityPanel.GetComponentInChildren<TextMeshProUGUI>();
-        playerWeaponHolderTransform = _animator.GetBoneTransform(HumanBodyBones.RightHand).Find("WeaponHolder");
+        playerWeaponHolderTransform = _playerController._playerWpnHolderTransform;
     }
 
     void Start()
@@ -71,7 +79,7 @@ public class Inventory : MonoBehaviour
         
         inventoryUICanvas = uIManager.inventoryUI.GetComponent<Canvas>();
         bulletCounterTMPUGUI = uIManager.ammoPanel.Find("AmmoCount").GetComponent<TextMeshProUGUI>();
-        currentWeaponImage = uIManager.ammoPanel.Find("WeaponImage").GetComponent<Image>();
+        currentWeaponImage = uIManager.ammoPanel.Find("CurrentWeaponImage").GetComponent<Image>();
         totalInventorySlots = uIManager.inventorySlotArea.childCount; // get the number of inventory slots
         slotArray = new GameObject[totalInventorySlots];
 

@@ -135,7 +135,14 @@ public class WeaponItem : MonoBehaviour
         originalScale = this.transform.localScale;
         originalRot = Quaternion.identity;
 
-        _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        try
+        {
+            _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        }
+        catch
+        {
+            Debug.Log("No GameManager Found in Scene");
+        }
         playerTransform = GameObject.Find("Player").GetComponent<Transform>();
         playerAnimator = playerTransform.GetComponent<Animator>();
         playerHealthManager = playerTransform.GetComponent<HealthManager>();
@@ -157,23 +164,27 @@ public class WeaponItem : MonoBehaviour
                 magGameObject = magHolder.GetChild(0).gameObject;
             }
         }
-        
-        switch (weaponItemClass)
+
+        if (_gameManager)
         {
-            case WeaponScriptableObject.WeaponClass.Primary:
-                holderTarget = _gameManager.uiManager.primaryEquipSlot.Find("WeaponHolder");
-                break;
-            case WeaponScriptableObject.WeaponClass.Secondary:
-                holderTarget = _gameManager.uiManager.secondaryEquipSlot.Find("WeaponHolder");
-                break;
-            case WeaponScriptableObject.WeaponClass.Melee:
-                holderTarget = _gameManager.uiManager.meleeEquipSlot.Find("WeaponHolder");
-                break;
-            case WeaponScriptableObject.WeaponClass.Throwable:
-                holderTarget = _gameManager.uiManager.throwableEquipSlot.Find("WeaponHolder");
-                _throwable = GetComponent<Throwable>();
-                break;
+            switch (weaponItemClass)
+            {
+                case WeaponScriptableObject.WeaponClass.Primary:
+                    holderTarget = _gameManager.uiManager.primaryEquipSlot.Find("WeaponHolder");
+                    break;
+                case WeaponScriptableObject.WeaponClass.Secondary:
+                    holderTarget = _gameManager.uiManager.secondaryEquipSlot.Find("WeaponHolder");
+                    break;
+                case WeaponScriptableObject.WeaponClass.Melee:
+                    holderTarget = _gameManager.uiManager.meleeEquipSlot.Find("WeaponHolder");
+                    break;
+                case WeaponScriptableObject.WeaponClass.Throwable:
+                    holderTarget = _gameManager.uiManager.throwableEquipSlot.Find("WeaponHolder");
+                    _throwable = GetComponent<Throwable>();
+                    break;
+            }   
         }
+        
 
         switch (weaponLocation)
         {

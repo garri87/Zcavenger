@@ -24,7 +24,7 @@ public class ObjectPool : MonoBehaviour
     void Awake()
     {
         SharedInstance = this;
-        ObjectPoolTransform = GameObject.Find("GameManager").transform.Find("ObjectPool");
+        ObjectPoolTransform = this.transform;
     }
 
     private void Start()

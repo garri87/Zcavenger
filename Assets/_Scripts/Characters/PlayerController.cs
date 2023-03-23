@@ -191,49 +191,51 @@ public class PlayerController : MonoBehaviour
     public bool finishedLevel = false;
 
     private Transform leftFoot, rightFoot;
-    
+   
     private void Awake()
     {
-        mainCamera = Camera.main;
-        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        try
+        {
+            mainCamera = Camera.main;
+            gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+            keyAssignments = gameManager.GetComponent<KeyAssignments>();
+            _healthManager = GetComponent<HealthManager>();
+            _rigidbody = GetComponent<Rigidbody>();
+            _inventory = GetComponent<Inventory>();
+            _checkGround = GetComponentInChildren<CheckGround>();
+            _playerAudio = GetComponent<PlayerAudio>();
+            _climber = GetComponent<Climber>();
+            _collider = GetComponent<CapsuleCollider>();
+            crosshairSprtRenderer = crosshairTransform.GetComponent<SpriteRenderer>();
+            _soundSensor = GetComponent<SoundSensor>();
+            _animator = GetComponent<Animator>();
+            _stompDetector = GetComponentInChildren<StompDetector>();
+            
+            crosshairTransform.parent = null;
         
-        #region GetComponents
-
-        keyAssignments = gameManager.GetComponent<KeyAssignments>();
-        _healthManager = GetComponent<HealthManager>();
-        _rigidbody = GetComponent<Rigidbody>();
-        
-        _inventory = GetComponent<Inventory>();
-        _checkGround = GetComponentInChildren<CheckGround>();
-        _playerAudio = GetComponent<PlayerAudio>();
-        _climber = GetComponent<Climber>();
-        _collider = GetComponent<CapsuleCollider>();
-        crosshairSprtRenderer = crosshairTransform.GetComponent<SpriteRenderer>();
-        _soundSensor = GetComponent<SoundSensor>();
-        _animator = GetComponent<Animator>();
-        #endregion
-        
-        
-        _playerWpnHolderTransform = _animator.GetBoneTransform(HumanBodyBones.RightHand).Find("WeaponHolder");
-
-        _stompDetector = gameObject.transform.Find("StompDetector").GetComponent<StompDetector>();
+            _playerWpnHolderTransform.parent = _animator.GetBoneTransform(HumanBodyBones.RightHand);
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e);
+        }
     }
 
     void Start()
     {
-       
-
-
         currentSpeed = normalSpeed;
 
-        transform.position = gameManager.startingPosition.position;
-        SwitchPlayLine(gameManager.startingPlayline);
+        if (gameManager)
+        {
+            transform.position = gameManager.startingPosition.position;
+            SwitchPlayLine(gameManager.startingPlayline);
+        }
+        
     }
 
     void Update()
     {
-        
-     //   transform.eulerAngles = new Vector3(transform.eulerAngles.x,transform.eulerAngles.y,0); 
+        //   transform.eulerAngles = new Vector3(transform.eulerAngles.x,transform.eulerAngles.y,0); 
         #region axis inputs
 
         horizontalInput = Input.GetAxis("Horizontal");
@@ -261,7 +263,6 @@ public class PlayerController : MonoBehaviour
         Vector3 newPosition = new Vector3(transform.position.x, transform.position.y, currentPlayLine);
         if (transform.position.z != currentPlayLine && !climbingLadder)
         {
-            
             transform.position = Vector3.Lerp(transform.position, newPosition, Time.deltaTime * transitionSpeed);
         }
         else
@@ -501,6 +502,8 @@ public class PlayerController : MonoBehaviour
         {
             _animator.SetBool("IsMoving", true);
             playerState = PlayerState.IsMoving;
+            
+            //Gradual moving acceleration
             currentSpeed += Time.deltaTime * acceleration;
             if (currentSpeed > normalSpeed)
             {
@@ -528,17 +531,18 @@ public class PlayerController : MonoBehaviour
             currentSpeed = 0;
             _animator.SetBool("IsMoving", false);
         }
+        
+        //PRONE MOVEMENT SPEED
+        if (prone)
+        {
+            currentSpeed = crouchWalkSpeed / 4;
+        }
 
         #endregion
         
         #region PLAYER ACTIONS
 
-        //MOVEMENT SPEED
-
-        if (prone)
-        {
-            currentSpeed = crouchWalkSpeed / 4;
-        }
+        
 
         //WALKING TOGGLE
         if (Input.GetKey(keyAssignments.walkKey.keyCode) && !crouch && !prone)
@@ -580,6 +584,7 @@ public class PlayerController : MonoBehaviour
 
         if (weaponEquipped)
         {
+            //Aiming toggle
             if (Input.GetKey(keyAssignments.aimBlockKey.keyCode) && !PlayerBusy())
             {
                 if (equippedWeaponItem.weaponItemClass != WeaponScriptableObject.WeaponClass.Melee)
@@ -733,6 +738,8 @@ public class PlayerController : MonoBehaviour
         }
 
         //STOMP ENEMIES
+
+        canStomp = _stompDetector.canStomp;
         if (canStomp && !beingBitten && Input.GetKeyDown(keyAssignments.attackKey.keyCode))
         {
             _animator.SetTrigger("Stomp");
@@ -743,7 +750,6 @@ public class PlayerController : MonoBehaviour
         {
             if (!_inventory.onItem && !_inventory.onWeaponItem)
             {
-
                 if (!doorScript.locked && doorScript.doorOrientation == Door.DoorOrientation.Back)
                 {
                     Debug.Log("doorScript.doorPos.z: " + doorScript.doorPos.z);
@@ -790,6 +796,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnUIController()
     {
+        
         _animator.SetFloat(AnimatorSpeed, 0);
 
         if (Input.GetKeyDown(KeyCode.Escape) || _inventory.showInventory == false)
@@ -1018,9 +1025,10 @@ public class PlayerController : MonoBehaviour
         if (_playerWpnHolderTransform.childCount > 0)
         {
             weaponEquipped = true;
-            if (equippedWeaponItem == null)
+            if (!equippedWeaponItem)
             {
-                equippedWeaponItem = _playerWpnHolderTransform.GetComponentInChildren<WeaponItem>(); //TODO: CACHEAR
+                equippedWeaponItem = _playerWpnHolderTransform.GetComponentInChildren<WeaponItem>(); 
+                //TODO: CACHEAR, LLENAR LA VARIABLE equippedWeaponItem CUANDO APRETAMOS EL BOTON DE SACAR EL ARMA
             }
             else
             {
@@ -1147,16 +1155,17 @@ public class PlayerController : MonoBehaviour
         {
             case "doDamage":
 
-                if (stompTargetAgentController != null)
+                if (_stompDetector.agentController)
                 {
-                    stompTargetAgentController._healthManager.currentHealth -= stompDamage;
-                    stompTargetAgentController._animator.SetTrigger("Hit");
-                    if (stompTargetAgentController._healthManager.currentHealth <= 0)
+                    AgentController agent = _stompDetector.agentController;
+                    agent._healthManager.currentHealth -= stompDamage;
+                    agent._animator.SetTrigger("Hit");
+                    if (agent._healthManager.currentHealth <= 0)
                     {
                         _playerAudio.StompHeadSound();
                         Instantiate(bloodSplatterParticle,
-                            stompTargetAgentController._animator.GetBoneTransform(HumanBodyBones.Head).position,
-                            _animator.GetBoneTransform(HumanBodyBones.RightFoot).rotation);
+                           agent._animator.GetBoneTransform(HumanBodyBones.Head).position,
+                            this._animator.GetBoneTransform(HumanBodyBones.RightFoot).rotation);
                     }
                     else
                     {

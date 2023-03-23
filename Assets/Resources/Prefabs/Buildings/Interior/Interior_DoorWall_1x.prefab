@@ -20,7 +20,7 @@ GameObject:
   m_TagString: DoorWall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &7005457456791289897
 Transform:
@@ -143,10 +143,12 @@ MonoBehaviour:
   - {fileID: 1504611442127816875}
   - {fileID: 194090647636378711}
   selectAllChilds: 0
+  activateOne: 0
   randomRotation: 0
   randomActivation: 1
-  activationProbabilty: 2
+  activationProbabilty: 8
   randomMaterial: 0
+  materialIndex: 0
   materials: []
 --- !u!64 &6515247368096080404
 MeshCollider:
@@ -182,7 +184,7 @@ GameObject:
   m_TagString: DoorWall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 0
 --- !u!4 &1743023301425147861
 Transform:
@@ -296,10 +298,12 @@ MonoBehaviour:
   - {fileID: 1504611442127816875}
   - {fileID: 194090647636378711}
   selectAllChilds: 0
+  activateOne: 0
   randomRotation: 0
   randomActivation: 1
-  activationProbabilty: 2
+  activationProbabilty: 8
   randomMaterial: 0
+  materialIndex: 0
   materials: []
 --- !u!114 &8692716450322223597
 MonoBehaviour:
@@ -1673,6 +1677,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: aec54d7a991d7b644b145d550a4b7831, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: aec54d7a991d7b644b145d550a4b7831, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -1755,6 +1763,10 @@ PrefabInstance:
     - target: {fileID: 100000, guid: cfc7596704bbd7f489156fcd4c05c7e9, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: cfc7596704bbd7f489156fcd4c05c7e9, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: cfc7596704bbd7f489156fcd4c05c7e9, type: 3}
       propertyPath: m_RootOrder

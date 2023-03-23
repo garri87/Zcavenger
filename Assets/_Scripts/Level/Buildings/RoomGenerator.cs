@@ -305,6 +305,7 @@ public class RoomGenerator : MonoBehaviour
             meshCombiner.GenerateUVMap = false;
             meshCombiner.DestroyCombinedChildren = false;
             meshCombiner.CombineMeshes(false);
+            transform.gameObject.isStatic = true;
         }
     }
     

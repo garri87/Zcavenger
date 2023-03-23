@@ -209,7 +209,8 @@ public class AgentController : MonoBehaviour
 
                     //Moving Animation if navmeshAgent is moving
 
-                    if (_navMeshAgent. velocity.magnitude < 0.1f || !_navMeshAgent.CalculatePath(playerPosition.position,_navMeshAgent.path))
+                    if (_navMeshAgent. velocity.magnitude < 0.1f ||
+                        !_navMeshAgent.CalculatePath(playerPosition.position,_navMeshAgent.path))
                     {
                         _animator.SetBool("IsMoving", false);
                         

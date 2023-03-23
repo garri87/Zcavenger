@@ -7,14 +7,12 @@ public class StompDetector : MonoBehaviour
 {
     private RaycastHit hit;
     public float rayOffset;
-    private PlayerController _playerController;
     public bool canStomp;
     public bool onEnemy;
     [HideInInspector]public AgentController agentController;
 
     private void Awake()
     {
-        _playerController = GetComponentInParent<PlayerController>();
     }
 
     private void FixedUpdate()
@@ -42,7 +40,6 @@ public class StompDetector : MonoBehaviour
         {
             canStomp = false;
         }
-        _playerController.canStomp = canStomp;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -60,7 +57,6 @@ public class StompDetector : MonoBehaviour
             
             if (agentController.enemyType == Enemy.EnemyType.Crippled && !agentController._healthManager.IsDead)
             {
-                _playerController.stompTargetAgentController = agentController;
                 onEnemy = true;
             }
             else

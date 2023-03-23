@@ -292,8 +292,7 @@ public class BuildingGenerator : MonoBehaviour
             spawnOrigin.position += Vector3.forward * (partsWidth);
         } //FIN bucle Z
 
-        //Build NavMesh
-        rooms[0].basesList[0].GetComponent<NavMeshSurface>().BuildNavMesh();
+        
         
         foreach (RoomGenerator room in rooms) // por cada habitación creada
         {
@@ -491,6 +490,7 @@ public class BuildingGenerator : MonoBehaviour
 
                 room.CombineMeshes(combineMeshesAtEnd, room.wallsAndInteriorGroup);
                 room.CombineMeshes(combineMeshesAtEnd, room.backWallGroup);
+                
             }
         }
 
@@ -504,7 +504,8 @@ public class BuildingGenerator : MonoBehaviour
         //Generamos la terraza del edificio
         GenerateRoof(maxBldWidth, spawnOrigin);
         
-        
+        //Build NavMesh
+        rooms[0].basesList[0].GetComponent<NavMeshSurface>().BuildNavMesh();
     }
     
     /// <summary>
@@ -827,7 +828,7 @@ public class BuildingGenerator : MonoBehaviour
             _meshCombiner.DestroyCombinedChildren = false;
             
             _meshCombiner.CombineMeshes(false);
-            
+            parent.gameObject.isStatic = true;
         }
     }
 

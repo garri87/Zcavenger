@@ -54,7 +54,7 @@ public class IKManager : MonoBehaviour
     public float distanceToObject;
     public float verticalOffset;
     
-    [HideInInspector] public static bool pushingObject;
+    [HideInInspector] public static bool pushingObject; //TODO: Implementar detección cuando esta empujando un objeto
     
     private RaycastHit frontHit, backHit, leftHit, rightHit;
     
@@ -305,104 +305,7 @@ public class IKManager : MonoBehaviour
         Debug.DrawRay(_animator.GetIKPosition(rightLimb), rayDirection * distanceToGround, Color.green);
     }
     
-    private void CheckSideObject()
-    {
-        if (isIKActive && !_playerController.isAiming)
-        {
-            if (Physics.Raycast(transform.position + Vector3.up * verticalOffset, transform.right, out rightHit,
-                distanceToObject, layer.value))
-            {
-                rightHandTarget.position = rightHit.point - transform.right * 0.1f;
-                rightHandIKWeight = Mathf.Lerp(rightHandIKWeight, 1, Time.fixedDeltaTime * 5);
-                rightHandRotWeight = Mathf.Lerp(rightHandRotWeight, 1, Time.fixedDeltaTime * 5);
-                rightHandTarget.rotation = Quaternion.LookRotation(transform.up + transform.forward, rightHit.normal);
-                rightElbowIKWeight = Mathf.Lerp(rightElbowIKWeight, 1, Time.fixedDeltaTime * 5);
-                rightElbowTarget.position = transform.position + transform.right * -0.5f + transform.up +
-                                            transform.forward * 0.5f;
-            }
-            else
-            {
-                rightHandIKWeight = Mathf.Lerp(rightHandIKWeight, 0, Time.fixedDeltaTime * 5);
-                rightHandRotWeight = Mathf.Lerp(rightHandRotWeight, 0, Time.fixedDeltaTime * 5);
-                rightElbowIKWeight = Mathf.Lerp(rightElbowIKWeight, 0, Time.fixedDeltaTime * 5);
-                ;
-            }
-
-            if (Physics.Raycast(transform.position + Vector3.up * verticalOffset, -transform.right, out leftHit,
-                distanceToObject, layer.value))
-            {
-                leftHandTarget.position = leftHit.point - transform.right * 0.1f;
-                leftHandIKWeight = Mathf.Lerp(leftHandIKWeight, 1, Time.fixedDeltaTime * 5);
-                leftHandRotWeight = Mathf.Lerp(leftHandRotWeight, 1, Time.fixedDeltaTime * 5);
-                leftHandTarget.rotation = Quaternion.LookRotation(transform.up + transform.forward, leftHit.normal);
-                leftElbowIKWeight = Mathf.Lerp(leftElbowIKWeight, 1, Time.fixedDeltaTime * 5);
-                leftElbowTarget.position = transform.position + transform.right * -0.5f + transform.up +
-                                           transform.forward * -0.5f;
-
-
-            }
-            else
-            {
-                leftHandIKWeight = Mathf.Lerp(leftHandIKWeight, 0, Time.fixedDeltaTime * 5);
-                leftHandRotWeight = Mathf.Lerp(leftHandRotWeight, 0, Time.fixedDeltaTime * 5);
-                leftElbowIKWeight = Mathf.Lerp(leftElbowIKWeight, 0, Time.fixedDeltaTime * 5);
-            }
-        }
-    } 
-    private void CheckFrontObject()
-    {
-        if (isIKActive)
-        {
-            if (Physics.Raycast(transform.position + Vector3.up * verticalOffset, transform.forward, out frontHit,
-                distanceToObject, layer.value)) // PUSHING OBJECT FROM THE FRONT FACE
-            {
-                pushingObject = true;
-                rightHandTarget.position = frontHit.point - transform.right * -0.3f;
-                rightHandIKWeight = Mathf.Lerp(rightHandIKWeight, 1, Time.fixedDeltaTime * 5);
-                rightHandRotWeight = Mathf.Lerp(rightHandRotWeight, 1, Time.fixedDeltaTime * 5);
-                rightHandTarget.rotation = Quaternion.LookRotation(transform.up + transform.forward, frontHit.normal);
-                rightElbowIKWeight = Mathf.Lerp(rightElbowIKWeight, 1, Time.fixedDeltaTime * 5);
-                rightElbowTarget.position = transform.position + transform.forward * -0.5f + transform.up + transform.forward * 0.5f;
-
-                leftHandTarget.position = frontHit.point + transform.right * -0.3f;
-                leftHandIKWeight = Mathf.Lerp(leftHandIKWeight, 1, Time.fixedDeltaTime * 5);
-                leftHandRotWeight = Mathf.Lerp(leftHandRotWeight, 1, Time.fixedDeltaTime * 5);
-                leftHandTarget.rotation = Quaternion.LookRotation(transform.up + transform.forward, frontHit.normal);
-                leftElbowIKWeight = Mathf.Lerp(leftElbowIKWeight, 1, Time.fixedDeltaTime * 5);
-                leftElbowTarget.position = transform.position + transform.forward * -0.5f + transform.up + transform.forward * -0.5f;
-            } 
-            else if (Physics.Raycast(transform.position + Vector3.up * verticalOffset, -transform.forward, out backHit,
-                distanceToObject, layer.value))// PUSHING OBJECT FROM THE BACK FACE
-            {
-                pushingObject = true;
-                rightHandTarget.position = frontHit.point + transform.up * -0.3f;
-                rightHandIKWeight = Mathf.Lerp(rightHandIKWeight, 1, Time.fixedDeltaTime * 5);
-                rightHandRotWeight = Mathf.Lerp(rightHandRotWeight, 1, Time.fixedDeltaTime * 5);
-                rightHandTarget.rotation = Quaternion.LookRotation(transform.up - transform.forward, frontHit.normal);
-                rightElbowIKWeight = Mathf.Lerp(rightElbowIKWeight, 1, Time.fixedDeltaTime * 5);
-                rightElbowTarget.position = transform.position - transform.forward * -0.5f + transform.up +
-                                            transform.forward * 0.5f;
-
-                leftHandTarget.position = frontHit.point + transform.up * -0.3f;
-                leftHandIKWeight = Mathf.Lerp(leftHandIKWeight, 1, Time.fixedDeltaTime * 5);
-                leftHandRotWeight = Mathf.Lerp(leftHandRotWeight, 1, Time.fixedDeltaTime * 5);
-                leftHandTarget.rotation = Quaternion.LookRotation(transform.up - transform.forward, frontHit.normal);
-                leftElbowIKWeight = Mathf.Lerp(leftElbowIKWeight, 1, Time.fixedDeltaTime * 5);
-                leftElbowTarget.position = transform.position - transform.forward * -0.5f + transform.up + transform.forward * -0.5f;
-            }
-            else
-            {
-                pushingObject = false;
-                rightHandIKWeight = Mathf.Lerp(rightHandIKWeight, 0, Time.fixedDeltaTime * 5);
-                rightHandRotWeight = Mathf.Lerp(rightHandRotWeight, 0, Time.fixedDeltaTime * 5);
-                rightElbowIKWeight = Mathf.Lerp(rightElbowIKWeight, 0, Time.fixedDeltaTime * 5);
-
-                leftHandIKWeight = Mathf.Lerp(leftHandIKWeight, 0, Time.fixedDeltaTime * 5);
-                leftHandRotWeight = Mathf.Lerp(leftHandRotWeight, 0, Time.fixedDeltaTime * 5);
-                leftElbowIKWeight = Mathf.Lerp(leftElbowIKWeight, 0, Time.fixedDeltaTime * 5);
-            }
-        }
-    }
+    
     
     private void RecoilAnimation()
     {
