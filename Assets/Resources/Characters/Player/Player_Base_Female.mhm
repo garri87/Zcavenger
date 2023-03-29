@@ -1,0 +1,82 @@
+# Written by MakeHuman 1.2.0 final
+version v1.2.0
+name Player_Base_Male
+camera 5.5 3.0 -0.012305791690536855 0.7669502862322165 0.5729688214620499 1.737500000000007
+modifier head/head-angle-in|out -0.352000
+modifier head/head-back-scale-depth-decr|incr -0.014000
+modifier eyes/r-eye-bag-decr|incr -0.339465
+modifier eyes/r-eye-bag-in|out 0.081546
+modifier eyes/r-eye-eyefold-down|up -0.142000
+modifier eyes/r-eye-height1-decr|incr 0.170000
+modifier eyes/r-eye-height2-decr|incr 0.042000
+modifier eyes/r-eye-height3-decr|incr 0.408000
+modifier eyes/l-eye-bag-decr|incr -0.339465
+modifier eyes/l-eye-bag-in|out 0.081546
+modifier eyes/l-eye-bag-height-decr|incr -0.071560
+modifier eyes/l-eye-eyefold-angle-down|up 0.130032
+modifier eyes/l-eye-epicanthus-in|out -0.114878
+modifier eyes/l-eye-eyefold-concave|convex -0.015845
+modifier eyes/l-eye-eyefold-down|up -0.263676
+modifier eyes/l-eye-height1-decr|incr -0.098000
+modifier eyes/l-eye-height2-decr|incr 0.464000
+modifier eyes/l-eye-height3-decr|incr 0.268000
+modifier eyes/l-eye-push1-in|out 0.028668
+modifier eyes/l-eye-push2-in|out 0.163769
+modifier eyes/l-eye-trans-in|out -0.215687
+modifier eyes/l-eye-trans-down|up 0.040025
+modifier eyes/l-eye-scale-decr|incr -0.003487
+modifier eyes/l-eye-corner1-down|up 0.096587
+modifier eyes/l-eye-corner2-down|up 0.024212
+modifier nose/nose-nostrils-width-decr|incr -0.258253
+modifier nose/nose-point-width-decr|incr -0.446912
+modifier nose/nose-base-down|up 0.111524
+modifier nose/nose-width1-decr|incr -0.052216
+modifier nose/nose-width2-decr|incr 0.037369
+modifier nose/nose-width3-decr|incr 0.152469
+modifier nose/nose-point-down|up 0.536000
+modifier mouth/mouth-scale-vert-decr|incr -0.338000
+modifier mouth/mouth-scale-depth-decr|incr -0.310000
+modifier mouth/mouth-lowerlip-height-decr|incr -0.436000
+modifier mouth/mouth-lowerlip-width-decr|incr 0.084000
+modifier mouth/mouth-upperlip-height-decr|incr -0.296000
+modifier mouth/mouth-upperlip-width-decr|incr -0.140000
+modifier mouth/mouth-cupidsbow-width-decr|incr 0.380000
+modifier mouth/mouth-dimples-in|out -0.153455
+modifier mouth/mouth-laugh-lines-in|out 0.115858
+modifier mouth/mouth-lowerlip-ext-down|up 0.062153
+modifier mouth/mouth-angles-down|up -0.140000
+modifier mouth/mouth-lowerlip-middle-down|up 0.014000
+modifier mouth/mouth-lowerlip-volume-decr|incr -0.056000
+modifier mouth/mouth-philtrum-volume-decr|incr 0.522000
+modifier mouth/mouth-upperlip-volume-decr|incr -0.042000
+modifier mouth/mouth-upperlip-ext-down|up 0.140000
+modifier mouth/mouth-upperlip-middle-down|up -0.015472
+modifier mouth/mouth-cupidsbow-decr|incr 0.415087
+modifier buttocks/buttocks-volume-decr|incr 0.450000
+modifier breast/BreastSize 0.669000
+modifier breast/BreastFirmness 0.761000
+modifier breast/breast-dist-decr|incr -0.338000
+modifier macrodetails/Gender 0.000000
+modifier macrodetails/Age 0.627000
+modifier macrodetails/African 0.592000
+modifier macrodetails/Asian 0.091388
+modifier macrodetails/Caucasian 0.316612
+modifier macrodetails-universal/Muscle 0.430000
+modifier macrodetails-universal/Weight 0.651000
+modifier macrodetails-height/Height 0.500000
+modifier macrodetails-proportions/BodyProportions 0.429000
+teeth Teeth_Base 0a5ec82a-0d5f-43ce-a765-8f076f95692d
+hair ponytail01 44e0340e-c7a6-4d22-814c-0632968d2dde
+eyelashes Eyelashes01 d533836f-13ad-4836-8b65-051108253cd2
+skeleton game_engine.mhskel
+eyebrows eyebrow009 55b3b52a-379e-426d-b320-562ed57202b3
+eyes Low-Poly 1cc97a30-85a1-42e6-a9f7-b3e753732baa
+pose tpose.bvh
+clothesHideFaces False
+skinMaterial skins/middleage_caucasian_male/middleage_caucasian_male.mhmat
+material ponytail01 44e0340e-c7a6-4d22-814c-0632968d2dde ponytail01.mhmat
+material Low-Poly 1cc97a30-85a1-42e6-a9f7-b3e753732baa eyes/materials/brown.mhmat
+material eyebrow009 55b3b52a-379e-426d-b320-562ed57202b3 eyebrow009.mhmat
+material Eyelashes01 d533836f-13ad-4836-8b65-051108253cd2 eyelashes01.mhmat
+material Teeth_Base 0a5ec82a-0d5f-43ce-a765-8f076f95692d teeth/materials/teeth.mhmat
+subdivide False

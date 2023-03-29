@@ -1,7 +1,7 @@
 # Written by MakeHuman 1.2.0 final
 version v1.2.0
 name Player_Base_Male
-camera 9.0 19.5 -0.17845811793501773 0.7140940617519435 -0.1897861172852875 1.7125000000000004
+camera 4.5 66.5 0.23095881995244716 0.7817420523788414 0.5287855412816197 2.2
 modifier eyebrows/eyebrows-angle-down|up -0.270000
 modifier eyebrows/eyebrows-trans-down|up -0.572000
 modifier eyes/r-eye-bag-decr|incr -0.339465
@@ -72,12 +72,12 @@ modifier chin/chin-prognathism-decr|incr 0.275045
 modifier breast/BreastSize 0.500000
 modifier breast/BreastFirmness 0.500000
 modifier macrodetails/Gender 1.000000
-modifier macrodetails/Age 0.667000
-modifier macrodetails/African 0.000000
-modifier macrodetails/Asian 0.000000
-modifier macrodetails/Caucasian 1.000000
-modifier macrodetails-universal/Muscle 1.000000
-modifier macrodetails-universal/Weight 0.563000
+modifier macrodetails/Age 0.592000
+modifier macrodetails/African 0.148000
+modifier macrodetails/Asian 0.148000
+modifier macrodetails/Caucasian 0.704000
+modifier macrodetails-universal/Muscle 0.669000
+modifier macrodetails-universal/Weight 0.725000
 modifier macrodetails-height/Height 0.500000
 modifier macrodetails-proportions/BodyProportions 0.500000
 hair short02 c104cd4a-1edc-43f9-8b94-f63345a44638
@@ -85,34 +85,6 @@ skeleton game_engine.mhskel
 eyebrows eyebrow009 55b3b52a-379e-426d-b320-562ed57202b3
 eyes HighPolyEyes 2c12f43b-1303-432c-b7ce-d78346baf2e6
 pose tpose.bvh
-clothes shoes06 35abc230-ebaa-48d4-8ff7-6d84168291a0
-clothes shoes05 8ef14ff4-8547-419c-a495-17bab919568b
-clothes shoes04 0d753f2e-55f9-4d60-9a78-261f42b494fc
-clothes shoes03 ad622a26-da1e-4e3c-9f8e-454edf10d504
-clothes shoes02 8887caca-d6fb-4d73-af10-1d4fb740a936
-clothes shoes01 6e0c552e-e207-44df-8f70-c9bfdeddd8c6
-clothes Full_beard f06387f9-3365-493d-bee6-72bc33013936
-clothes Harvey_Hawk1 32c69810-af33-4aee-ab14-1b522376a51d
-clothes Harvey_fscrubtop2 93977729-e9b6-4629-971e-d88028ab20c6
-clothes Knitted_Hat_01 42dd33a1-a821-4b6b-98a8-eec9ff1c9c06
-clothes Knitted_Sweater_01 487befe5-d566-496b-ace1-25a8456e134e
-clothes Knitted_Sweater_02 810b9ffa-474f-4d16-af01-0de97bb1ac62
-clothes ladieshoodiedown1 5d8b6290-71e2-4c35-a651-0e2e199e208c
-clothes M_Trousers_01 8aea2217-32e9-4a71-a898-20fead85795b
-clothes mens_cargo_short1j 7666198d-ea1c-4dff-8d60-5d0b4ec9135f
-clothes mma_gloves 995c9193-db0b-42ea-83cc-92864ba0916d
-clothes motorcyclejacket c7dbea0e-7493-47af-a2dd-38fea1957c11
-clothes motorcyclepants 5f0b5fef-8d55-45bb-a43a-98dfaae093cf
-clothes Moustache 8dbdff2d-495f-4dd6-8f27-5898ae4a3ad9
-clothes Patrol_Cap 2cd61e52-ee0c-4da0-9d12-90c9dfefcb4a
-clothes rescueteam-jacket-male e14e7038-5971-4667-ac72-12cea94bb43c
-clothes riding_helmet c4585426-aa52-4a3c-b6ed-ed103115bb60
-clothes Rucksack1 e78a9cf4-6b59-4fc5-949e-f252e79dc6b5
-clothes Security_Shirt 949465fb-fdbf-4d89-a317-b869b06755ff
-clothes Shoes_Biker_Boots_male 77e603aa-a077-41c0-830b-850e304f2013
-clothes T-shirt_basic_tucked 8c04c19e-3cb3-4b25-91b7-46935e101a1f
-clothes Tactical_Vest_male 483aa284-01f3-4237-bd2b-b2f95b3bf87a
-clothes Tank_Top_01 1f0d4a7c-303f-451c-8488-67f29e2aead9
 clothesHideFaces False
 skinMaterial skins/middleage_caucasian_male/middleage_caucasian_male.mhmat
 material short02 c104cd4a-1edc-43f9-8b94-f63345a44638 short02.mhmat
