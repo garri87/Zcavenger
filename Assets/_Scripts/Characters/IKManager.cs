@@ -18,6 +18,8 @@ public class IKManager : MonoBehaviour
     public PlayerType playerType;
     
     public Animator _animator;
+
+    public string upperBodyLayerName = "UpperBody";
     
     public Transform leftHandTarget;
     public Transform rightHandTarget;
@@ -148,7 +150,6 @@ public class IKManager : MonoBehaviour
     {
         switch (playerType)
         {
-                
             case PlayerType.Player:
                 if (_playerController.weaponEquipped && _playerController.isAiming)
                 {
@@ -209,7 +210,7 @@ public class IKManager : MonoBehaviour
             case PlayerType.Player:
             
                 if (!_playerController._healthManager.IsDead)
-                { 
+                { //activates the upper boy layer of the animator if one of the actions is being played 
                     if (_inventory.drawWeapon ||
                         _inventory.holsterWeapon ||
                         _playerController.isAiming ||
@@ -218,27 +219,28 @@ public class IKManager : MonoBehaviour
                         _playerController.bandaging||
                         _playerController.drinking||
                         _playerController.eating||
-                        _playerController.grabItem
-                    )
+                        _playerController.grabItem)
                     {
-                        if (!_playerController.climbingLadder || !_playerController.equippedWeaponItem.attacking || !_playerController.blocking)
+                        if (!_playerController.climbingLadder || 
+                            !_playerController.equippedWeaponItem.attacking || 
+                            !_playerController.blocking)
                         {
-                            _animator.SetLayerWeight(_animator.GetLayerIndex("UpperBody"), 1); 
+                            _animator.SetLayerWeight(_animator.GetLayerIndex(upperBodyLayerName), 1); 
                         }
                         else
                         {
-                            _animator.SetLayerWeight(_animator.GetLayerIndex("UpperBody"), 0);
+                            _animator.SetLayerWeight(_animator.GetLayerIndex(upperBodyLayerName), 0);
                         }
                     }
 
                     else
                     {
-                        _animator.SetLayerWeight(_animator.GetLayerIndex("UpperBody"), 0);
+                        _animator.SetLayerWeight(_animator.GetLayerIndex(upperBodyLayerName), 0);
                     }
                 }
                 else
                 {
-                    _animator.SetLayerWeight(_animator.GetLayerIndex("UpperBody"), 0);
+                    _animator.SetLayerWeight(_animator.GetLayerIndex(upperBodyLayerName), 0);
                 }
                 break;
             
@@ -248,11 +250,11 @@ public class IKManager : MonoBehaviour
                     _agentController.playerCatch||
                     /*_agentController._enemyFov.targetInSight||*/ _agentController.hisHit)
                 {
-                    _animator.SetLayerWeight(_animator.GetLayerIndex("UpperBody"), 1);
+                    _animator.SetLayerWeight(_animator.GetLayerIndex(upperBodyLayerName), 1);
                 }
                 else
                 {
-                    _animator.SetLayerWeight(_animator.GetLayerIndex("UpperBody"), 0);
+                    _animator.SetLayerWeight(_animator.GetLayerIndex(upperBodyLayerName), 0);
                 }
                 
                 
