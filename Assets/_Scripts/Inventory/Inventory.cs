@@ -62,16 +62,18 @@ public class Inventory : MonoBehaviour
         _playerController = GetComponent<PlayerController>();
         _animator = GetComponent<Animator>();
         uIManager = _gameManager.uiManager;
+        /*
         capacityText = uIManager.capacityPanel.GetComponentInChildren<TextMeshProUGUI>();
+        */
         playerWeaponHolderTransform = _animator.GetBoneTransform(HumanBodyBones.RightHand).Find("WeaponHolder");
     }
 
     void Start()
     {
         
-        inventoryUICanvas = uIManager.inventoryUI.GetComponent<Canvas>();
+        /*inventoryUICanvas = uIManager.inventoryUI.GetComponent<Canvas>();
         bulletCounterTMPUGUI = uIManager.ammoPanel.Find("AmmoCount").GetComponent<TextMeshProUGUI>();
-        currentWeaponImage = uIManager.ammoPanel.Find("CurrentWeaponImage").GetComponent<Image>();
+        currentWeaponImage = uIManager.ammoPanel.Find("CurrentWeaponImage").GetComponent<Image>();*/
         totalInventorySlots = uIManager.inventorySlotArea.childCount; // get the number of inventory slots
         slotArray = new GameObject[totalInventorySlots];
 
@@ -84,7 +86,7 @@ public class Inventory : MonoBehaviour
     {
         for (int i = 0; i < totalInventorySlots; i++)
         {
-            slotArray[i] = uIManager.inventorySlotArea.GetChild(i).gameObject;
+            /*slotArray[i] = uIManager.inventorySlotArea.GetChild(i).gameObject;*/
             Slot slot = slotArray[i].GetComponent<Slot>();
             slot.CheckSlotContent();
             if (slot.empty)
@@ -133,7 +135,7 @@ public class Inventory : MonoBehaviour
         if (!_playerController.isAiming && !_playerController.climbingLadder &&
             !_playerController.attacking && !_playerController.onTransition)
         {
-            if (!drawWeapon && !holsterWeapon)
+            /*if (!drawWeapon && !holsterWeapon)
             {
                 if (Input.GetKeyDown(_playerController.keyAssignments.primaryKey.keyCode))
                 {
@@ -161,7 +163,7 @@ public class Inventory : MonoBehaviour
                     ChangeWeapon(uIManager.throwableEquipSlot,SelectedWeapon.Throwable);
                 }
                 
-            }
+            }*/
         }
 
         if (_playerController._playerWpnHolderTransform.childCount == 0)
@@ -237,7 +239,7 @@ public class Inventory : MonoBehaviour
 
         if (showInventory == false)
         {
-            uIManager.inspectPanel.gameObject.SetActive(false);
+            /*uIManager.inspectPanel.gameObject.SetActive(false);*/
         }
     }
     
@@ -491,7 +493,7 @@ public class Inventory : MonoBehaviour
         {
             switch (selectedWeapon)
             {
-                case SelectedWeapon.Primary:
+                /*case SelectedWeapon.Primary:
                     uIManager.primaryEquipSlot.Find("WeaponHolder").GetChild(0).parent = playerWeaponHolderTransform;
                     break;
             
@@ -504,7 +506,7 @@ public class Inventory : MonoBehaviour
                     break;
                 case SelectedWeapon.Throwable:
                     uIManager.throwableEquipSlot.Find("WeaponHolder").GetChild(0).parent = playerWeaponHolderTransform;
-                    break;
+                    break;*/
             }
         }
 

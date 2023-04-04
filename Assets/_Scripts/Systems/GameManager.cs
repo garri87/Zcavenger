@@ -68,11 +68,11 @@ public class GameManager : MonoBehaviour
         switch (sceneType)
         {
             case SceneType.mainTitle:
-                uiManager.mainMenu.SetActive(true);
+                /*uiManager.mainMenu.SetActive(true);
                 uiManager.tipsText.alpha = 0;
                 uiManager.loadingScreen.SetActive(false);
                 uiManager.versionText.SetText("version: " + version);
-                uiManager.inventoryUI.gameObject.SetActive(false);
+                uiManager.inventoryUI.gameObject.SetActive(false);*/
                 _graphicsManager.globalVolume.profile = _graphicsManager.mainTitlevolumeProfile;
                 break;
 
@@ -80,9 +80,9 @@ public class GameManager : MonoBehaviour
                 player = GameObject.Find("Player");
                 playerController = player.GetComponent<PlayerController>();
                 playerHealthManager = player.GetComponent<HealthManager>();
-                uiManager.pauseMenuUI.gameObject.SetActive(false);
+                /*uiManager.pauseMenuUI.gameObject.SetActive(false);
                 uiManager.inGameOverlayUI.gameObject.SetActive(true);
-                uiManager.inventoryUI.gameObject.SetActive(true);
+                uiManager.inventoryUI.gameObject.SetActive(true);*/
                 _graphicsManager.globalVolume.profile = _graphicsManager.InGamevolumeProfile;
                 break;
             
@@ -97,7 +97,7 @@ public class GameManager : MonoBehaviour
         {
             case SceneType.mainTitle:
                 
-                uiManager.inventoryUI.gameObject.SetActive(false);
+                /*uiManager.inventoryUI.gameObject.SetActive(false);
                 
                 if (Input.GetKeyDown(KeyCode.Escape) )
                 {
@@ -128,7 +128,7 @@ public class GameManager : MonoBehaviour
                 {
                     uiManager.loadingScrnCanvasGroup.alpha = 0;
                     uiManager.tipsText.alpha = 0;
-                }
+                }*/
                 break;
 
             case SceneType.inLevel:
@@ -149,10 +149,10 @@ public class GameManager : MonoBehaviour
                 
                 if (Input.GetKeyDown(KeyCode.Escape))
                 {
-                    if (!uiManager.optionsMenu.gameObject.activeSelf)
+                    /*if (!uiManager.optionsMenu.gameObject.activeSelf)
                     {
                         PauseGame();
-                    }
+                    }*/
                 }
                 
                 if (gamePaused)
@@ -160,15 +160,15 @@ public class GameManager : MonoBehaviour
             
                     Time.timeScale = 0;
             
-                    uiManager.inventoryUICanvas.enabled = false;
-                    uiManager.pauseMenuUI.gameObject.SetActive(true);
+                    /*uiManager.inventoryUICanvas.enabled = false;
+                    uiManager.pauseMenuUI.gameObject.SetActive(true);*/
                 }
 
                 if (!gamePaused)
                 {
                     Time.timeScale = 1;
-                    uiManager.pauseMenuUI.gameObject.SetActive(false);
-                    uiManager.optionsMenu.gameObject.SetActive(false);
+                    /*uiManager.pauseMenuUI.gameObject.SetActive(false);
+                    uiManager.optionsMenu.gameObject.SetActive(false);*/
                 }
                 
                 break;
@@ -181,15 +181,15 @@ public class GameManager : MonoBehaviour
 
     public void StartGame(int sceneNumber)
     {
-        uiManager.tipsText.alpha = 0;
+        /*uiManager.tipsText.alpha = 0;
         uiManager.loadingScrnCanvasGroup.alpha = 0;
         loadingGame = true;
         uiManager.loadingScreen.SetActive(true);
-        uiManager.mainMenu.SetActive(false);
+        uiManager.mainMenu.SetActive(false);*/
         
        
-        uiManager.tipsText.text = tips[Random.Range(0, tips.Length)];
-        uiManager.progressBar.SetActive(true);
+        /*uiManager.tipsText.text = tips[Random.Range(0, tips.Length)];
+        uiManager.progressBar.SetActive(true);*/
         StartCoroutine(LoadAsync(sceneNumber));
     }
 
@@ -214,7 +214,7 @@ public class GameManager : MonoBehaviour
             Debug.Log("GAME OVER");
         }
         gameOver = true;
-        uiManager.gameOverText.text = gameOverMessage;
+        /*uiManager.gameOverText.text = gameOverMessage;
         uiManager.gameOverCanvas.gameObject.SetActive(true);
         if (uiManager.gameOverCanvasGroup.alpha < 1)
         {
@@ -224,7 +224,7 @@ public class GameManager : MonoBehaviour
         {
             uiManager.gameOverCanvasGroup.alpha = 1;
 
-        }
+        }*/
 
     }
     public void ExitGame()
@@ -239,7 +239,7 @@ public class GameManager : MonoBehaviour
         while (!loadOperation.isDone)
         {
             float progress = Mathf.Clamp01(loadOperation.progress / .9f);
-            uiManager.progressBarSlider.value = progress;
+            /*uiManager.progressBarSlider.value = progress;*/
             Debug.Log("Scene Loading: " + progress);
 
             yield return null;

@@ -161,8 +161,12 @@ public class Throwable : MonoBehaviour
             explosiveArmed = true;
             detonateTimer = detonationTime;
             transform.parent = null;
+            /*
             Slot throwableSlot = _playerController.gameManager.uiManager.throwableEquipSlot.GetComponent<Slot>();
+            */
+            /*
             throwableSlot.UpdateWeaponSlot(null);
+            */
             throwableCollider.enabled = true;
             _weaponItem.weaponEquipped = false;
             _weaponItem.weaponLocation = WeaponItem.WeaponLocation.Throwed;

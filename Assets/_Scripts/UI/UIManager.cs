@@ -5,85 +5,84 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.UIElements;
+using Button = UnityEngine.UI.Button;
+using Slider = UnityEngine.UI.Slider;
 
 public class UIManager : MonoBehaviour
 {
-    [Header("Main Menu")]
-    public GameObject mainMenu;
-    public Canvas mainMenuCanvas;
-    public TextMeshProUGUI versionText;
+    public UIDocument _UIDocument;
+    public VisualTreeAsset currentVisualTreeAsset;
+
+    [Header("Main Menu")] 
+    public VisualTreeAsset mainMenuDocument;
+
+   
     
     [Header("Loading Screen")]
-    public GameObject loadingScreen;
-    public Canvas loadingScreenCanvas;
-    public CanvasGroup loadingScrnCanvasGroup;
-    public GameObject progressBar;
-    public Slider progressBarSlider;
-    public TextMeshProUGUI tipsText;
+    public VisualTreeAsset loadingScreenDocument;
+    
     
     [Header("In Game Overlay")]
-    public Transform inGameOverlayUI;
-    public Canvas inGameOverlayCanvas;
-    public Transform playerStatsPanel;
-    public Transform ammoPanel;
-    public Transform quickInventoryUI;
-    public Canvas quickInventoryCanvas;
-
+    public VisualTreeAsset inGameOverlayUIDocument;
+    
+    
+    
     [Header("Pause Menu, Options Menu & Game Over Panel")]
-    public Transform pauseMenuUI;
-    public Canvas pauseMenuCanvas;
-    private GraphicRaycaster pauseMenuRaycaster;
-    public Canvas gameOverCanvas;
-    public CanvasGroup gameOverCanvasGroup;
-    public TextMeshProUGUI gameOverText;
-    public OptionsMenu optionsMenu;
+    public VisualTreeAsset pauseMenuUIDocument;
+
+    
+ 
+    public VisualTreeAsset optionsMenuUIDocument;
+    public Button displayButton;
+    public Dropdown resolutionDropdown;
+    
+    
+    
+    public VisualTreeAsset gameOverUIDocument;
+    public Label gameOverLabel;
     
     [Header("Inventory Area")]
-    public Transform inventoryUI;
-    public Canvas inventoryUICanvas;
-    private GraphicRaycaster inventoryRaycaster;
-    private CanvasGroup inventoryCanvasGroup;
-    public Transform inventorySlotArea;
-    public Transform capacityPanel;
+    public VisualTreeAsset inventoryUIDocument;
+    public VisualElement inventorySlotArea;
+    public VisualElement capacityPanel;
     public List<Slot> inventorySlotList = new List<Slot>();
     [Space]
-    public Transform primaryEquipSlot;
-    public Transform secondaryEquipSlot;
-    public Transform meleeEquipSlot;
+    public VisualElement primaryEquipSlot;
+    public VisualElement secondaryEquipSlot;
+    public VisualElement meleeEquipSlot;
+    public VisualElement throwableEquipSlot;
     [Space]
-    public Transform headEquipSlot;
-    public Transform vestEquipSlot;
-    public Transform lowerBodyEquipSlot;
-    public Transform throwableEquipSlot;
-    public Transform backpackEquipSlot;
+    public VisualElement headEquipSlot;
+    public VisualElement vestEquipSlot;
+    public VisualElement legsEquipSlot;
+    public VisualElement backpackEquipSlot;
 
     [Header("Inspect & Quick Info Panels")]
-    public InspectPanel inspectPanel;
-    public Transform quickInfoPanelUI;
+    public VisualElement inspectPanel;
 
-    
-    
-
-    private void Awake()
+    private void OnEnable()
     {
-        for (int i = 0; i < inventorySlotArea.childCount; i++)
+        _UIDocument = GetComponent<UIDocument>();
+        
+        
+        
+    }
+
+    public void ToggleUI(VisualTreeAsset visualTreeAsset = null, bool enabled = false)
+    {
+        if (visualTreeAsset != null)
         {
-            inventorySlotList.Add(inventorySlotArea.GetChild(i).GetComponent<Slot>());
+            _UIDocument.visualTreeAsset = visualTreeAsset;
+            _UIDocument.rootVisualElement.visible = enabled;
         }
-        
+        else
+        {
+            _UIDocument.visualTreeAsset = null;
+        }
     }
 
-    private void Start()
-    {
-        
-    }
-
-    private void Update()
-    {
-        
-    }
-
-    public void CloseAllUI()
+    public void ToggleInventory(bool enabled)
     {
         
     }

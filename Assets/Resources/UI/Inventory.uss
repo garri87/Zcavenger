@@ -1,0 +1,159 @@
+Label {
+    font-size: 5px;
+    color: rgb(255, 255, 255);
+}
+
+.Slot {
+    background-image: url('project://database/Assets/Textures/slot_Background.jpg?fileID=2800000&guid=286837fff4b87ee40b28e136a945ac25&type=3#slot_Background');
+    -unity-background-image-tint-color: rgba(255, 255, 255, 0.6);
+    background-color: rgb(70, 70, 70);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+    -unity-background-scale-mode: stretch-to-fill;
+    opacity: 0.7;
+    -unity-font-style: normal;
+    margin-left: 1px;
+    margin-right: 1px;
+    margin-top: 1px;
+    margin-bottom: 1px;
+    max-width: 15%;
+    max-height: 15%;
+    min-height: 15%;
+    min-width: 15%;
+}
+
+.EquipSlot {
+    flex-direction: column;
+    width: 40px;
+    flex-grow: 0;
+    flex-shrink: 0;
+    opacity: 0.7;
+    height: 25%;
+}
+
+.Slot:hover {
+    background-color: rgb(96, 96, 96);
+    opacity: 1;
+}
+
+.Slot Label {
+    -unity-font-definition: resource('Fonts/BebasNeue-Regular SDF');
+    font-size: 8px;
+}
+
+#ContextMenu Button {
+    background-color: rgb(72, 72, 72);
+    -unity-font-definition: resource('Fonts/BebasNeue-Regular SDF');
+    color: rgba(255, 255, 255, 255);
+    font-size: 67%;
+    -unity-font-style: normal;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgba(0, 0, 0, 0.37);
+    border-right-color: rgba(0, 0, 0, 0.37);
+    border-top-color: rgba(0, 0, 0, 0.37);
+    border-bottom-color: rgba(0, 0, 0, 0.37);
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    flex-grow: 1;
+    flex-shrink: 1;
+    -unity-text-align: middle-center;
+    -unity-text-outline-width: 0.2px;
+    -unity-text-outline-color: rgb(0, 0, 0);
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+#SlotQuantity {
+    top: 3px;
+    right: -2px;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    width: 100%;
+    height: auto;
+    -unity-text-align: middle-right;
+    white-space: normal;
+}
+
+.Stat {
+    width: 90%;
+    height: 10%;
+    background-color: rgb(58, 58, 58);
+    flex-grow: 0;
+    overflow: hidden;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgba(79, 79, 79, 255);
+    border-right-color: rgba(79, 79, 79, 255);
+    border-top-color: rgba(79, 79, 79, 255);
+    border-bottom-color: rgba(79, 79, 79, 255);
+    flex-direction: row;
+    align-items: center;
+    -unity-font-definition: resource('Fonts/BebasNeue-Regular SDF');
+}
+
+.StatName {
+    -unity-text-align: middle-center;
+    margin-left: 1px;
+    margin-right: 1px;
+    margin-top: 1px;
+    margin-bottom: 1px;
+    padding-left: 2px;
+    padding-right: 2px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+.BarBackground {
+    background-color: rgba(67, 67, 67, 255);
+    flex-grow: 1;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgba(0, 0, 0, 255);
+    border-right-color: rgba(0, 0, 0, 255);
+    border-top-color: rgba(0, 0, 0, 255);
+    border-bottom-color: rgba(0, 0, 0, 255);
+}
+
+.StatValue {
+    flex-shrink: 1;
+    -unity-text-align: middle-center;
+    margin-left: 1px;
+    margin-right: 1px;
+    margin-top: 1px;
+    margin-bottom: 1px;
+    padding-left: 2px;
+    padding-right: 2px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}

@@ -99,8 +99,9 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, I
 
   private void Start()
   {
-    quickInfoPanelUI = inventory.uIManager.quickInfoPanelUI;
+    /*quickInfoPanelUI = inventory.uIManager.quickInfoPanelUI;
     infoText = inventory.uIManager.quickInfoPanelUI.GetComponentInChildren<TextMeshProUGUI>();
+    */
     
     if (weaponHolderTransform.childCount > 0)
     {

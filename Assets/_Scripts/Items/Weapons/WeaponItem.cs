@@ -158,7 +158,7 @@ public class WeaponItem : MonoBehaviour
             }
         }
         
-        switch (weaponItemClass)
+        /*switch (weaponItemClass)
         {
             case WeaponScriptableObject.WeaponClass.Primary:
                 holderTarget = _gameManager.uiManager.primaryEquipSlot.Find("WeaponHolder");
@@ -173,7 +173,7 @@ public class WeaponItem : MonoBehaviour
                 holderTarget = _gameManager.uiManager.throwableEquipSlot.Find("WeaponHolder");
                 _throwable = GetComponent<Throwable>();
                 break;
-        }
+        }*/
 
         switch (weaponLocation)
         {
