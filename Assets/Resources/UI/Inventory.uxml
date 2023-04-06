@@ -2,182 +2,77 @@
     <Style src="project://database/Assets/Resources/UI/Inventory.uss?fileID=7433441132597879392&amp;guid=9e4bdd29bf0962a4dbedea7a78af38e6&amp;type=3#Inventory" />
     <ui:VisualElement name="MainPanel" style="flex-grow: 0; width: 90%; height: 90%; flex-shrink: 0; justify-content: space-between; background-color: rgba(0, 0, 0, 0.4); flex-direction: row; flex-wrap: nowrap; border-left-width: 0.1px; border-right-width: 0.1px; border-top-width: 0.1px; border-bottom-width: 0.1px; border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; position: relative; left: 5%; top: 5%; right: 5%; bottom: 5%;">
         <ui:VisualElement name="SlotsSection" style="flex-grow: 1; width: 50%; height: 100%; background-color: rgba(53, 53, 53, 0.63); justify-content: space-between; align-items: stretch;">
-            <ui:VisualElement name="InventoryHeader" style="width: 100%; height: 10%; flex-direction: row; flex-wrap: nowrap; align-items: flex-start; justify-content: space-between; flex-shrink: 0;">
-                <ui:Label text="Inventory" display-tooltip-when-elided="true" name="Title" style="-unity-text-align: middle-left; white-space: nowrap; -unity-font-definition: resource(&apos;Fonts/BebasNeue-Regular SDF&apos;); font-size: 23%;" />
-                <ui:Label text="Cap xx/xx" display-tooltip-when-elided="true" name="Cap" style="font-size: 13px; -unity-text-align: middle-right; -unity-font-definition: resource(&apos;Fonts/BebasNeue-Regular SDF&apos;);" />
+            <ui:VisualElement name="InventoryHeader" style="width: 100%; height: 10%; flex-direction: row; flex-wrap: nowrap; align-items: flex-start; justify-content: space-between; flex-shrink: 1; flex-grow: 1; max-width: 100%; max-height: 10%; min-width: 1%; min-height: 1%; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0);">
+                <ui:Label text="Inventory" display-tooltip-when-elided="true" name="Title" class="Title" />
+                <ui:Label text="Weight xx/xx" display-tooltip-when-elided="true" name="Cap" class="Cap" />
             </ui:VisualElement>
-            <ui:VisualElement name="InventorySlots" style="flex-grow: 0; width: 100%; height: 100%; justify-content: flex-start; flex-direction: row; flex-wrap: wrap; align-items: flex-start; flex-shrink: 1; margin-top: 0; border-left-width: 0.1px; border-right-width: 0.1px; border-top-width: 0.1px; border-bottom-width: 0.1px; border-left-color: rgb(41, 41, 41); border-right-color: rgb(41, 41, 41); border-top-color: rgb(41, 41, 41); border-bottom-color: rgb(41, 41, 41); margin-left: 0; margin-right: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;">
-                <ui:VisualElement name="Slot" class="Slot" style="justify-content: flex-end; align-items: flex-end; width: 100%; height: 10%;">
-                    <ui:Label text="9999" display-tooltip-when-elided="true" name="SlotQuantity" />
-                </ui:VisualElement>
-                <ui:VisualElement name="Slot" class="Slot" style="justify-content: flex-end; align-items: flex-end; width: 100%; height: 10%;">
-                    <ui:Label text="9999" display-tooltip-when-elided="true" name="SlotQuantity" />
-                </ui:VisualElement>
-                <ui:VisualElement name="Slot" class="Slot" style="justify-content: flex-end; align-items: flex-end; width: 100%; height: 10%;">
-                    <ui:Label text="9999" display-tooltip-when-elided="true" name="SlotQuantity" />
-                </ui:VisualElement>
-                <ui:VisualElement name="Slot" class="Slot" style="justify-content: flex-end; align-items: flex-end; width: 100%; height: 10%;">
-                    <ui:Label text="9999" display-tooltip-when-elided="true" name="SlotQuantity" />
-                </ui:VisualElement>
-                <ui:VisualElement name="Slot" class="Slot" style="justify-content: flex-end; align-items: flex-end; width: 100%; height: 10%;">
-                    <ui:Label text="9999" display-tooltip-when-elided="true" name="SlotQuantity" />
-                </ui:VisualElement>
-                <ui:VisualElement name="Slot" class="Slot" style="justify-content: flex-end; align-items: flex-end; width: 100%; height: 10%;">
-                    <ui:Label text="9999" display-tooltip-when-elided="true" name="SlotQuantity" />
-                </ui:VisualElement>
-                <ui:VisualElement name="Slot" class="Slot" style="justify-content: flex-end; align-items: flex-end; width: 100%; height: 10%;">
-                    <ui:Label text="9999" display-tooltip-when-elided="true" name="SlotQuantity" />
-                </ui:VisualElement>
-                <ui:VisualElement name="Slot" class="Slot" style="justify-content: flex-end; align-items: flex-end; width: 100%; height: 10%;">
-                    <ui:Label text="9999" display-tooltip-when-elided="true" name="SlotQuantity" />
-                </ui:VisualElement>
-                <ui:VisualElement name="Slot" class="Slot" style="justify-content: flex-end; align-items: flex-end; width: 100%; height: 10%;">
-                    <ui:Label text="9999" display-tooltip-when-elided="true" name="SlotQuantity" />
-                </ui:VisualElement>
-                <ui:VisualElement name="Slot" class="Slot" style="justify-content: flex-end; align-items: flex-end; width: 100%; height: 10%;">
-                    <ui:Label text="9999" display-tooltip-when-elided="true" name="SlotQuantity" />
-                </ui:VisualElement>
-                <ui:VisualElement name="Slot" class="Slot" style="justify-content: flex-end; align-items: flex-end; width: 100%; height: 10%;">
-                    <ui:Label text="9999" display-tooltip-when-elided="true" name="SlotQuantity" />
-                </ui:VisualElement>
-                <ui:VisualElement name="Slot" class="Slot" style="justify-content: flex-end; align-items: flex-end; width: 100%; height: 10%;">
-                    <ui:Label text="9999" display-tooltip-when-elided="true" name="SlotQuantity" />
-                </ui:VisualElement>
-                <ui:VisualElement name="Slot" class="Slot" style="justify-content: flex-end; align-items: flex-end; width: 100%; height: 10%;">
-                    <ui:Label text="9999" display-tooltip-when-elided="true" name="SlotQuantity" />
-                </ui:VisualElement>
-                <ui:VisualElement name="Slot" class="Slot" style="justify-content: flex-end; align-items: flex-end; width: 100%; height: 10%;">
-                    <ui:Label text="9999" display-tooltip-when-elided="true" name="SlotQuantity" />
-                </ui:VisualElement>
-                <ui:VisualElement name="Slot" class="Slot" style="justify-content: flex-end; align-items: flex-end; width: 100%; height: 10%;">
-                    <ui:Label text="9999" display-tooltip-when-elided="true" name="SlotQuantity" />
-                </ui:VisualElement>
-                <ui:VisualElement name="Slot" class="Slot" style="justify-content: flex-end; align-items: flex-end; width: 100%; height: 10%;">
-                    <ui:Label text="9999" display-tooltip-when-elided="true" name="SlotQuantity" />
-                </ui:VisualElement>
-                <ui:VisualElement name="Slot" class="Slot" style="justify-content: flex-end; align-items: flex-end; width: 100%; height: 10%;">
-                    <ui:Label text="9999" display-tooltip-when-elided="true" name="SlotQuantity" />
-                </ui:VisualElement>
-                <ui:VisualElement name="Slot" class="Slot" style="justify-content: flex-end; align-items: flex-end; width: 100%; height: 10%;">
-                    <ui:Label text="9999" display-tooltip-when-elided="true" name="SlotQuantity" />
-                </ui:VisualElement>
-                <ui:VisualElement name="Slot" class="Slot" style="justify-content: flex-end; align-items: flex-end; width: 100%; height: 10%;">
-                    <ui:Label text="9999" display-tooltip-when-elided="true" name="SlotQuantity" />
-                </ui:VisualElement>
-                <ui:VisualElement name="Slot" class="Slot" style="justify-content: flex-end; align-items: flex-end; width: 100%; height: 10%;">
-                    <ui:Label text="9999" display-tooltip-when-elided="true" name="SlotQuantity" />
-                </ui:VisualElement>
-                <ui:VisualElement name="Slot" class="Slot" style="justify-content: flex-end; align-items: flex-end; width: 100%; height: 10%;">
-                    <ui:Label text="9999" display-tooltip-when-elided="true" name="SlotQuantity" />
-                </ui:VisualElement>
-                <ui:VisualElement name="Slot" class="Slot" style="justify-content: flex-end; align-items: flex-end; width: 100%; height: 10%;">
-                    <ui:Label text="9999" display-tooltip-when-elided="true" name="SlotQuantity" />
-                </ui:VisualElement>
-                <ui:VisualElement name="Slot" class="Slot" style="justify-content: flex-end; align-items: flex-end; width: 100%; height: 10%;">
-                    <ui:Label text="9999" display-tooltip-when-elided="true" name="SlotQuantity" />
-                </ui:VisualElement>
-                <ui:VisualElement name="Slot" class="Slot" style="justify-content: flex-end; align-items: flex-end; width: 100%; height: 10%;">
-                    <ui:Label text="9999" display-tooltip-when-elided="true" name="SlotQuantity" />
-                </ui:VisualElement>
-                <ui:VisualElement name="Slot" class="Slot" style="justify-content: flex-end; align-items: flex-end; width: 100%; height: 10%;">
-                    <ui:Label text="9999" display-tooltip-when-elided="true" name="SlotQuantity" />
-                </ui:VisualElement>
-                <ui:VisualElement name="Slot" class="Slot" style="justify-content: flex-end; align-items: flex-end; width: 100%; height: 10%;">
-                    <ui:Label text="9999" display-tooltip-when-elided="true" name="SlotQuantity" />
-                </ui:VisualElement>
-                <ui:VisualElement name="Slot" class="Slot" style="justify-content: flex-end; align-items: flex-end; width: 100%; height: 10%;">
-                    <ui:Label text="9999" display-tooltip-when-elided="true" name="SlotQuantity" />
-                </ui:VisualElement>
-                <ui:VisualElement name="Slot" class="Slot" style="justify-content: flex-end; align-items: flex-end; width: 100%; height: 10%;">
-                    <ui:Label text="9999" display-tooltip-when-elided="true" name="SlotQuantity" />
-                </ui:VisualElement>
-                <ui:VisualElement name="Slot" class="Slot" style="justify-content: flex-end; align-items: flex-end; width: 100%; height: 10%;">
-                    <ui:Label text="9999" display-tooltip-when-elided="true" name="SlotQuantity" />
-                </ui:VisualElement>
-                <ui:VisualElement name="Slot" class="Slot" style="justify-content: flex-end; align-items: flex-end; width: 100%; height: 10%;">
-                    <ui:Label text="9999" display-tooltip-when-elided="true" name="SlotQuantity" />
-                </ui:VisualElement>
-                <ui:VisualElement name="Slot" class="Slot" style="justify-content: flex-end; align-items: flex-end; width: 100%; height: 10%;">
-                    <ui:Label text="9999" display-tooltip-when-elided="true" name="SlotQuantity" />
-                </ui:VisualElement>
-                <ui:VisualElement name="Slot" class="Slot" style="justify-content: flex-end; align-items: flex-end; width: 100%; height: 10%;">
-                    <ui:Label text="9999" display-tooltip-when-elided="true" name="SlotQuantity" />
-                </ui:VisualElement>
-                <ui:VisualElement name="Slot" class="Slot" style="justify-content: flex-end; align-items: flex-end; width: 100%; height: 10%;">
-                    <ui:Label text="9999" display-tooltip-when-elided="true" name="SlotQuantity" />
-                </ui:VisualElement>
-                <ui:VisualElement name="Slot" class="Slot" style="justify-content: flex-end; align-items: flex-end; width: 100%; height: 10%;">
-                    <ui:Label text="9999" display-tooltip-when-elided="true" name="SlotQuantity" />
-                </ui:VisualElement>
-                <ui:VisualElement name="Slot" class="Slot" style="justify-content: flex-end; align-items: flex-end; width: 100%; height: 10%;">
-                    <ui:Label text="9999" display-tooltip-when-elided="true" name="SlotQuantity" />
-                </ui:VisualElement>
-                <ui:VisualElement name="Slot" class="Slot" style="justify-content: flex-end; align-items: flex-end; width: 100%; height: 10%;">
+            <ui:VisualElement name="InventorySlots" style="flex-grow: 1; width: 100%; height: 100%; justify-content: flex-start; flex-direction: row; flex-wrap: wrap; align-items: flex-start; flex-shrink: 1; margin-top: 0; margin-left: 0; margin-right: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0);">
+                <ui:VisualElement name="Slot" class="Slot">
                     <ui:Label text="9999" display-tooltip-when-elided="true" name="SlotQuantity" />
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="EquipmentSection" style="flex-grow: 1; width: 50%; height: 100%; background-color: rgba(53, 53, 53, 0.63); justify-content: space-between; flex-direction: column; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; flex-wrap: nowrap;">
+        <ui:VisualElement name="EquipmentSection" style="flex-grow: 1; width: 50%; height: 100%; background-color: rgba(53, 53, 53, 0.63); justify-content: space-between; flex-direction: column; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; flex-wrap: nowrap; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0);">
             <ui:VisualElement name="EquipmentSlots" style="width: 100%; height: 85%; flex-wrap: nowrap; flex-direction: row; align-items: center; justify-content: center; flex-grow: 0; flex-shrink: 0;">
-                <ui:VisualElement name="WeaponsSlots" style="flex-grow: 0; width: 25%; height: 100%; justify-content: space-around; flex-direction: column; flex-wrap: nowrap; align-items: center; left: auto; border-left-width: 0.1px; border-right-width: 0.1px; border-top-width: 0.1px; border-bottom-width: 0.1px; border-left-color: rgb(41, 41, 41); border-right-color: rgb(41, 41, 41); border-top-color: rgb(41, 41, 41); border-bottom-color: rgb(41, 41, 41); max-width: none; flex-shrink: 0; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;">
-                    <ui:Label text="Weapons" display-tooltip-when-elided="true" name="Title" style="flex-grow: 0; width: 100%; height: 10%; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; -unity-text-align: middle-center; -unity-font-definition: resource(&apos;Fonts/BebasNeue-Regular SDF&apos;); font-size: 11px;" />
-                    <ui:VisualElement name="PrimaryWpnSlot" class="Slot" style="width: 90%; height: 20%; align-items: stretch; flex-grow: 0; max-width: none; justify-content: flex-end; margin-left: 10px; margin-right: 10px; margin-top: 10px; margin-bottom: 10px; max-height: none; flex-shrink: 0;">
-                        <ui:Label text="Primary" display-tooltip-when-elided="true" style="-unity-text-align: middle-center; flex-shrink: 1; flex-grow: 0; width: 100%; height: 20%; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; white-space: nowrap; -unity-font-style: normal; align-items: center; opacity: 0.3; background-color: rgb(0, 0, 0); border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-left-width: 0; border-right-width: 0; border-top-width: 0.1px; border-bottom-width: 0;" />
+                <ui:VisualElement name="WeaponsSlots" style="width: 25%; height: 100%; justify-content: space-around; flex-direction: column; flex-wrap: nowrap; align-items: center; left: auto; max-width: 25%; padding-left: 3px; padding-right: 3px; padding-top: 3px; padding-bottom: 3px; max-height: 100%; min-width: 1%; min-height: 1%;">
+                    <ui:Label text="Weapons" display-tooltip-when-elided="true" name="Title" class="Title" style="flex-shrink: 1; width: 100%; height: 20%; max-width: 100%; max-height: 20%; flex-grow: 1; margin-left: 2px; margin-right: 2px; margin-top: 2px; margin-bottom: 2px; -unity-text-align: middle-center;" />
+                    <ui:VisualElement name="PrimaryWpnSlot" class="WeaponSlot">
+                        <ui:Label text="Primary" display-tooltip-when-elided="true" />
                     </ui:VisualElement>
-                    <ui:VisualElement name="SecondaryWpnSlot" class="Slot" style="width: 90%; height: 20%; align-items: stretch; flex-grow: 0; flex-shrink: 0; max-width: none; justify-content: flex-end; margin-left: 10px; margin-right: 10px; margin-top: 10px; margin-bottom: 10px; max-height: none;">
-                        <ui:Label text="Secondary" display-tooltip-when-elided="true" style="-unity-text-align: middle-center; flex-shrink: 1; flex-grow: 0; width: 100%; height: 20%; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; white-space: nowrap; -unity-font-style: normal; align-items: center; opacity: 0.3; background-color: rgb(0, 0, 0); border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-left-width: 0; border-right-width: 0; border-top-width: 0.1px; border-bottom-width: 0;" />
+                    <ui:VisualElement name="SecondaryWpnSlot" class="WeaponSlot">
+                        <ui:Label text="Secondary" display-tooltip-when-elided="true" />
                     </ui:VisualElement>
-                    <ui:VisualElement name="MeleeWpnSlot" class="Slot" style="width: 90%; height: 20%; align-items: stretch; flex-grow: 0; flex-shrink: 0; max-width: none; justify-content: flex-end; margin-left: 10px; margin-right: 10px; margin-top: 10px; margin-bottom: 10px; max-height: none;">
-                        <ui:Label text="Melee" display-tooltip-when-elided="true" style="-unity-text-align: middle-center; flex-shrink: 1; flex-grow: 0; width: 100%; height: 20%; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; white-space: nowrap; -unity-font-style: normal; align-items: center; opacity: 0.3; background-color: rgb(0, 0, 0); border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-left-width: 0; border-right-width: 0; border-top-width: 0.1px; border-bottom-width: 0;" />
+                    <ui:VisualElement name="MeleeWpnSlot" class="WeaponSlot">
+                        <ui:Label text="Melee" display-tooltip-when-elided="true" />
                     </ui:VisualElement>
-                    <ui:VisualElement name="ThrowableWpnSlot" class="Slot" style="width: 90%; height: 20%; align-items: stretch; flex-grow: 0; flex-shrink: 0; max-width: none; justify-content: flex-end; margin-left: 10px; margin-right: 10px; margin-top: 10px; margin-bottom: 10px; max-height: none;">
-                        <ui:Label text="Throwable" display-tooltip-when-elided="true" style="-unity-text-align: middle-center; flex-shrink: 1; flex-grow: 0; width: 100%; height: 20%; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; white-space: nowrap; -unity-font-style: normal; align-items: center; opacity: 0.3; background-color: rgb(0, 0, 0); border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-left-width: 0; border-right-width: 0; border-top-width: 0.1px; border-bottom-width: 0;" />
+                    <ui:VisualElement name="ThrowableWpnSlot" class="WeaponSlot">
+                        <ui:Label text="Throwable" display-tooltip-when-elided="true" />
                     </ui:VisualElement>
                 </ui:VisualElement>
-                <ui:VisualElement name="ClothingSlots" style="flex-grow: 0; width: 70%; height: 100%; flex-direction: column; flex-wrap: nowrap; flex-shrink: 0; left: auto; margin-top: 0; border-left-width: 0.1px; border-right-width: 0.1px; border-top-width: 0.1px; border-bottom-width: 0.1px; border-left-color: rgb(41, 41, 41); border-right-color: rgb(41, 41, 41); border-top-color: rgb(41, 41, 41); border-bottom-color: rgb(41, 41, 41); margin-left: 0; margin-right: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; align-items: center; justify-content: center;">
+                <ui:VisualElement name="ClothingSlots" style="flex-grow: 0; width: 70%; height: 100%; flex-direction: column; flex-wrap: nowrap; flex-shrink: 0; left: auto; margin-top: 0; margin-left: 0; margin-right: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; align-items: center; justify-content: center;">
                     <ui:VisualElement name="backgroundBody" style="position: relative; flex-grow: 0; width: 100%; height: 100%; left: auto; top: auto; background-image: url(&apos;project://database/Assets/Textures/Human_Body_Silhouette.png?fileID=2800000&amp;guid=2c3ff6c246fcf404b824714e5f12033e&amp;type=3#Human_Body_Silhouette&apos;); -unity-background-scale-mode: scale-to-fit; align-items: center; justify-content: flex-start; flex-wrap: wrap; flex-shrink: 0; flex-direction: column;">
-                        <ui:VisualElement name="HeadEqSlot" class="Slot EquipSlot" style="align-items: stretch; justify-content: flex-end; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; max-width: none; max-height: none;">
-                            <ui:Label text="Head" display-tooltip-when-elided="true" style="-unity-text-align: middle-center; flex-shrink: 1; flex-grow: 0; width: 100%; height: 20%; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; white-space: nowrap; -unity-font-style: normal; align-items: center; opacity: 0.3; background-color: rgb(0, 0, 0); border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-left-width: 0; border-right-width: 0; border-top-width: 0.1px; border-bottom-width: 0;" />
+                        <ui:VisualElement name="HeadEqSlot" class="EquipSlot">
+                            <ui:Label text="Head" display-tooltip-when-elided="true" />
                         </ui:VisualElement>
-                        <ui:VisualElement name="TorsoGroup" style="align-items: center; flex-direction: row; justify-content: space-between; flex-wrap: nowrap; flex-grow: 0; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; transform-origin: center; height: 40px; flex-shrink: 0;">
-                            <ui:VisualElement name="TorsoEqSlot" class="Slot EquipSlot" style="align-items: stretch; justify-content: flex-end; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; flex-shrink: 1; flex-grow: 1; flex-basis: auto; flex-direction: column; max-height: none; max-width: none; min-width: auto; min-height: auto; height: 100%;">
-                                <ui:Label text="Torso" display-tooltip-when-elided="true" style="-unity-text-align: middle-center; flex-shrink: 1; flex-grow: 0; width: 100%; height: 20%; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; white-space: nowrap; -unity-font-style: normal; align-items: center; opacity: 0.3; background-color: rgb(0, 0, 0); border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-left-width: 0; border-right-width: 0; border-top-width: 0.1px; border-bottom-width: 0;" />
+                        <ui:VisualElement name="TorsoGroup" style="align-items: center; flex-direction: row; justify-content: center; flex-wrap: nowrap; flex-grow: 1; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; transform-origin: center; height: 20%; flex-shrink: 1; width: 100%; max-width: 100%; max-height: 20%; min-width: 1%; min-height: 1%;">
+                            <ui:VisualElement name="VestEqSlot" class="EquipSlot" style="height: 135%; display: flex; visibility: visible;">
+                                <ui:Label text="Vest" display-tooltip-when-elided="true" />
                             </ui:VisualElement>
-                            <ui:VisualElement name="VestEqSlot" class="Slot EquipSlot" style="align-items: stretch; justify-content: flex-end; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; flex-shrink: 0; max-width: none; max-height: none; height: 100%;">
-                                <ui:Label text="Vest" display-tooltip-when-elided="true" style="-unity-text-align: middle-center; flex-shrink: 1; flex-grow: 0; width: 100%; height: 20%; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; white-space: nowrap; -unity-font-style: normal; align-items: center; opacity: 0.3; background-color: rgb(0, 0, 0); border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-left-width: 0; border-right-width: 0; border-top-width: 0.1px; border-bottom-width: 0;" />
+                            <ui:VisualElement name="TorsoEqSlot" class="EquipSlot" style="height: 100%;">
+                                <ui:Label text="Torso" display-tooltip-when-elided="true" />
                             </ui:VisualElement>
-                            <ui:VisualElement name="BackPackEqSlot" class="Slot EquipSlot" style="align-items: stretch; flex-grow: 1; flex-shrink: 1; justify-content: flex-end; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; height: 100%; max-width: none; max-height: none; min-width: auto; min-height: auto;">
-                                <ui:Label text="Backpack" display-tooltip-when-elided="true" style="-unity-text-align: middle-center; flex-shrink: 1; flex-grow: 0; width: 100%; height: 20%; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; white-space: nowrap; -unity-font-style: normal; align-items: center; opacity: 0.3; background-color: rgb(0, 0, 0); border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-left-width: 0; border-right-width: 0; border-top-width: 0.1px; border-bottom-width: 0;" />
+                            <ui:VisualElement name="BackPackEqSlot" class="EquipSlot" style="height: 100%;">
+                                <ui:Label text="Backpack" display-tooltip-when-elided="true" />
                             </ui:VisualElement>
                         </ui:VisualElement>
-                        <ui:VisualElement name="LegsEqSlot" class="Slot EquipSlot" style="align-items: stretch; justify-content: flex-end; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; max-width: none; max-height: none;">
-                            <ui:Label text="Legs" display-tooltip-when-elided="true" style="-unity-text-align: middle-center; flex-shrink: 1; flex-grow: 0; width: 100%; height: 20%; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; white-space: nowrap; -unity-font-style: normal; align-items: center; opacity: 0.3; background-color: rgb(0, 0, 0); border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-left-width: 0; border-right-width: 0; border-top-width: 0.1px; border-bottom-width: 0;" />
+                        <ui:VisualElement name="LegsEqSlot" class="EquipSlot">
+                            <ui:Label text="Legs" display-tooltip-when-elided="true" />
                         </ui:VisualElement>
-                        <ui:VisualElement name="FeetEqSlot" class="Slot EquipSlot" style="align-items: stretch; justify-content: flex-end; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; max-width: none; max-height: none;">
-                            <ui:Label text="Feet" display-tooltip-when-elided="true" style="-unity-text-align: middle-center; flex-shrink: 1; flex-grow: 0; width: 100%; height: 20%; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; white-space: nowrap; -unity-font-style: normal; align-items: center; opacity: 0.3; background-color: rgb(0, 0, 0); border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-left-width: 0; border-right-width: 0; border-top-width: 0.1px; border-bottom-width: 0;" />
+                        <ui:VisualElement name="FeetEqSlot" class="EquipSlot">
+                            <ui:Label text="Feet" display-tooltip-when-elided="true" />
                         </ui:VisualElement>
                     </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>
-            <ui:VisualElement name="HealthStatus" style="flex-direction: row; justify-content: flex-start; flex-wrap: nowrap; align-items: center; margin-left: 1px; margin-right: 1px; margin-bottom: 1px;">
-                <ui:Label text="Status:" display-tooltip-when-elided="true" name="Label" />
-                <ui:VisualElement name="BleedingIcon" style="height: 100%; width: 10%; border-left-color: rgb(48, 48, 48); border-right-color: rgb(48, 48, 48); border-top-color: rgb(48, 48, 48); border-bottom-color: rgb(48, 48, 48); border-left-width: 0.1px; border-right-width: 0.1px; border-top-width: 0.1px; border-bottom-width: 0.1px; background-image: url(&apos;project://database/Assets/Textures/bleeding_Icon.png?fileID=2800000&amp;guid=456a63ae9fd308e438a6a2d2cfabd7a2&amp;type=3#bleeding_Icon&apos;); -unity-background-scale-mode: scale-to-fit; display: flex;" />
-                <ui:VisualElement name="SickIcon" style="height: 100%; width: 10%; border-left-color: rgb(48, 48, 48); border-right-color: rgb(48, 48, 48); border-top-color: rgb(48, 48, 48); border-bottom-color: rgb(48, 48, 48); border-left-width: 0.1px; border-right-width: 0.1px; border-top-width: 0.1px; border-bottom-width: 0.1px; background-image: url(&apos;project://database/Assets/Textures/sick_Icon.png?fileID=2800000&amp;guid=7f1fddcd251d10e4ba1487a675a8f9e6&amp;type=3#sick_Icon&apos;); -unity-background-scale-mode: scale-to-fit;" />
-                <ui:VisualElement name="InjuredIcon" style="height: 100%; width: 10%; border-left-color: rgb(48, 48, 48); border-right-color: rgb(48, 48, 48); border-top-color: rgb(48, 48, 48); border-bottom-color: rgb(48, 48, 48); border-left-width: 0.1px; border-right-width: 0.1px; border-top-width: 0.1px; border-bottom-width: 0.1px; background-image: url(&apos;project://database/Assets/Textures/Injured_Icon.png?fileID=2800000&amp;guid=019c1584b377d564b9c7bce3a5974011&amp;type=3#Injured_Icon&apos;);" />
+            <ui:VisualElement name="HealthStatus" style="flex-direction: row; justify-content: flex-start; flex-wrap: nowrap; align-items: center; margin-left: 1px; margin-right: 1px; margin-bottom: 1px; border-left-width: 0; border-right-width: 0; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); width: 100%; height: 9%; max-height: 9%; min-height: 1%; min-width: 1%; max-width: 100%;">
+                <ui:Label text="Status:" display-tooltip-when-elided="true" name="Label" style="-unity-text-align: middle-left;" />
+                <ui:VisualElement name="BleedingIcon" class="StatusIcon" style="background-image: url(&apos;project://database/Assets/Textures/bleeding_Icon.png?fileID=2800000&amp;guid=456a63ae9fd308e438a6a2d2cfabd7a2&amp;type=3#bleeding_Icon&apos;);" />
+                <ui:VisualElement name="SickIcon" class="StatusIcon" style="background-image: url(&apos;project://database/Assets/Textures/sick_Icon.png?fileID=2800000&amp;guid=7f1fddcd251d10e4ba1487a675a8f9e6&amp;type=3#sick_Icon&apos;);" />
+                <ui:VisualElement name="InjuredIcon" class="StatusIcon" style="background-image: url(&apos;project://database/Assets/Textures/Injured_Icon.png?fileID=2800000&amp;guid=019c1584b377d564b9c7bce3a5974011&amp;type=3#Injured_Icon&apos;);" />
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:Button display-tooltip-when-elided="true" name="CloseButton" style="position: absolute; top: 5px; right: 5px; font-size: 5px; background-image: url(&apos;project://database/Assets/Packages/_Heathen%20Engineering/Assets/UX/Icons/Flat%20Icons%20[Free]/Free%20Flat%20Mic%20No%20Cross%20Icon.png?fileID=2800000&amp;guid=d5ad855c08e83c3409a8053c8f886d54&amp;type=3#Free Flat Mic No Cross Icon&apos;); -unity-background-image-tint-color: rgb(255, 255, 255); -unity-background-scale-mode: scale-to-fit; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; width: 15px; height: 15px; background-color: rgb(72, 72, 72); border-left-width: 0.1px; border-right-width: 0.1px; border-top-width: 0.1px; border-bottom-width: 0.1px; border-left-color: rgb(34, 34, 34); border-right-color: rgb(34, 34, 34); border-top-color: rgb(34, 34, 34); border-bottom-color: rgb(34, 34, 34);" />
+        <ui:Button display-tooltip-when-elided="true" name="InventoryCloseButton" class="CloseButton" />
     </ui:VisualElement>
-    <ui:VisualElement name="ContextMenu" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; width: 10%; height: 20%; background-color: rgba(0, 0, 0, 0.37); padding-left: 1px; padding-right: 1px; padding-top: 1px; padding-bottom: 1px; transform-origin: left top; display: none;">
-        <ui:Button text="Use" display-tooltip-when-elided="true" />
-        <ui:Button text="Equip" display-tooltip-when-elided="true" />
-        <ui:Button text="Throw" display-tooltip-when-elided="true" />
-        <ui:Button text="Inspect" display-tooltip-when-elided="true" />
+    <ui:VisualElement name="ContextMenu" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; width: 10%; height: 20%; background-color: rgba(0, 0, 0, 0.37); padding-left: 1px; padding-right: 1px; padding-top: 1px; padding-bottom: 1px; transform-origin: left top; display: flex;">
+        <ui:Button text="Use" display-tooltip-when-elided="true" name="UseButton" />
+        <ui:Button text="Equip" display-tooltip-when-elided="true" name="EquipButton" />
+        <ui:Button text="Throw" display-tooltip-when-elided="true" name="ThrowButton" />
+        <ui:Button text="Inspect" display-tooltip-when-elided="true" name="InspectButton" />
     </ui:VisualElement>
-    <ui:VisualElement name="InspectWindow" style="position: absolute; left: 10%; top: 10%; right: 10%; bottom: 10%; flex-grow: 1; background-color: rgba(0, 0, 0, 0.89); flex-direction: row; width: 80%; height: 80%; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgb(185, 185, 185); border-right-color: rgb(185, 185, 185); border-top-color: rgb(185, 185, 185); border-bottom-color: rgb(185, 185, 185); display: none;">
+    <ui:VisualElement name="InspectWindow" style="position: absolute; left: 10%; top: 10%; right: 10%; bottom: 10%; flex-grow: 1; background-color: rgba(0, 0, 0, 0.89); flex-direction: row; width: 80%; height: 80%; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgb(185, 185, 185); border-right-color: rgb(185, 185, 185); border-top-color: rgb(185, 185, 185); border-bottom-color: rgb(185, 185, 185); display: flex;">
         <ui:VisualElement name="LeftPanel" style="flex-grow: 1; width: 60%; height: 100%; justify-content: flex-start; align-items: stretch; border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-width: 0; border-right-width: 1px; border-top-width: 0; border-bottom-width: 0;">
             <ui:VisualElement name="Image" style="background-image: url(&apos;project://database/Assets/Textures/M4A1%20Rifle%20icon.png?fileID=2800000&amp;guid=aec9ed21126005d40817c1918f9e8a54&amp;type=3#M4A1 Rifle icon&apos;); -unity-background-scale-mode: scale-to-fit; flex-shrink: 1; flex-grow: 1; height: auto; min-height: 30%; width: 100%; align-items: flex-start; background-color: rgb(67, 67, 67);" />
-            <ui:Label text="Lorem Ipsum" display-tooltip-when-elided="true" name="ItemTitle" style="-unity-font-definition: resource(&apos;Fonts/BebasNeue-Regular SDF&apos;); font-size: 15px; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 2px; padding-right: 2px; padding-top: 2px; padding-bottom: 2px; width: 100%; border-left-width: 0; border-right-width: 0; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgba(255, 255, 255, 255); border-right-color: rgba(255, 255, 255, 255); border-top-color: rgba(255, 255, 255, 255); border-bottom-color: rgba(255, 255, 255, 255);" />
+            <ui:Label text="Lorem Ipsum" display-tooltip-when-elided="true" name="ItemTitle" style="-unity-font-definition: resource(&apos;Fonts/BebasNeue-Regular SDF&apos;); font-size: 15px; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 2px; padding-right: 2px; padding-top: 2px; padding-bottom: 2px; width: 100%; border-left-width: 0; border-right-width: 0; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255);" />
             <ui:Label text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc et hendrerit libero. Vestibulum a enim in ipsum pulvinar hendrerit id ac neque. Nunc eget congue nisi. Sed at nibh convallis, tincidunt odio vitae, condimentum dolor. Nam libero eros, aliquam in dui eu, finibus hendrerit purus. Phasellus rutrum eros mauris, et egestas arcu efficitur vel. Maecenas at laoreet lorem, sed scelerisque massa. In consequat felis mollis neque dapibus, sit amet pellentesque dui volutpat.&#10;&#10;Morbi ornare arcu vel odio tincidunt gravida. In eu urna sit amet lorem varius commodo. Integer a feugiat elit, sit amet auctor est. Nunc ornare porta risus sed auctor. Etiam a risus pellentesque risus fringilla interdum. Nulla facilisi. Sed varius odio sed posuere varius. Morbi dolor purus, iaculis sit amet blandit nec, commodo non tortor. Nullam euismod ultrices diam quis tristique. Vestibulum tortor ex, placerat ut lacinia id, mollis in velit. Nullam vitae dignissim nulla, vel laoreet risus. Aliquam dapibus congue quam et porta.&#10;&#10;Pellentesque convallis lectus auctor magna pretium, id congue justo cursus. Curabitur eleifend lobortis libero, id tincidunt neque varius sit amet. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Etiam consectetur quis ipsum a consectetur. Cras ullamcorper posuere volutpat. Praesent quis tellus dictum, varius lectus quis, facilisis ligula. Vestibulum pulvinar massa et turpis cursus iaculis. Vivamus condimentum odio rutrum ex auctor ultricies. Nullam diam purus, ornare eget quam ut, bibendum aliquet nulla. Cras lobortis neque nunc, non maximus felis euismod quis. Cras enim turpis, lacinia eu sollicitudin eu, mattis in sapien. Cras condimentum aliquet turpis, et maximus risus consequat id. Fusce justo lectus, rhoncus quis ante at, ultricies tincidunt felis. END" display-tooltip-when-elided="true" name="ItemInfo" style="flex-grow: 1; flex-shrink: 1; white-space: normal; -unity-font-definition: resource(&apos;Fonts/coolvetica condensed rg SDF&apos;); font-size: 4px; -unity-text-align: upper-left; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 3px; padding-right: 3px; padding-top: 3px; padding-bottom: 3px; width: 100%;" />
         </ui:VisualElement>
         <ui:VisualElement name="RightPanel" style="flex-grow: 1; width: 40%; height: 100%;">
@@ -185,14 +80,15 @@
                 <ui:VisualElement name="Stat" class="Stat">
                     <ui:Label text="Damage" display-tooltip-when-elided="true" name="StatName" class="StatName" />
                     <ui:VisualElement name="BarBackground" class="BarBackground">
-                        <ui:VisualElement name="Foreground" style="background-color: rgba(195, 195, 195, 255); transform-origin: left bottom; flex-grow: 1; width: 54%; border-top-right-radius: 2px; border-bottom-right-radius: 2px;" />
+                        <ui:VisualElement name="StatBar" style="background-color: rgb(195, 195, 195); transform-origin: left bottom; flex-grow: 1; width: 54%; border-top-right-radius: 2px; border-bottom-right-radius: 2px;" />
                     </ui:VisualElement>
                     <ui:Label text="999" display-tooltip-when-elided="true" name="StatValue" class="StatValue" />
                 </ui:VisualElement>
             </ui:VisualElement>
             <ui:VisualElement style="flex-grow: 1; height: auto; width: 100%; justify-content: flex-end; align-items: flex-end;">
-                <ui:Button text="Close" display-tooltip-when-elided="true" style="flex-shrink: 1; flex-grow: 0; height: 20%; width: 30%; font-size: 14px; -unity-font-definition: resource(&apos;Fonts/BebasNeue-Regular SDF&apos;); background-color: rgb(72, 72, 72); color: rgb(255, 255, 255); -unity-text-outline-width: 0.2px; -unity-text-outline-color: rgb(0, 0, 0);" />
+                <ui:Button text="Close" display-tooltip-when-elided="true" name="InspectCloseButton" style="flex-shrink: 1; flex-grow: 0; height: 20%; width: 30%; font-size: 14px; -unity-font-definition: resource(&apos;Fonts/BebasNeue-Regular SDF&apos;); background-color: rgb(72, 72, 72); color: rgb(255, 255, 255); -unity-text-outline-width: 0.2px; -unity-text-outline-color: rgb(0, 0, 0);" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
+    <ui:Label text="Quick info label" display-tooltip-when-elided="true" name="QuickInfoLabel" class="QuickInfo" style="transition-duration: 0.5s; transition-delay: 0.5s; display: none;" />
 </ui:UXML>

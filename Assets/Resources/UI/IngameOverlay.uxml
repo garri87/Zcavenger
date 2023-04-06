@@ -3,16 +3,16 @@
     <ui:VisualElement name="Root" class="InGameOverlayContainer">
         <ui:VisualElement name="PlayerStatus" class="PlayerStatusPanel" style="background-color: rgba(0, 0, 0, 0.37);">
             <ui:VisualElement name="WaterPanel" class="StatusItem">
-                <ui:VisualElement name="Image" class="StatusIcon" style="background-image: url(&apos;project://database/Assets/Textures/watericon.png?fileID=2800000&amp;guid=d76f163f70688f7419f3e48704625883&amp;type=3#watericon&apos;); width: 100%; height: 100%; -unity-background-scale-mode: scale-to-fit;" />
-                <ui:Label text="100 %" display-tooltip-when-elided="true" name="Text" class="DirtyEgo" />
+                <ui:VisualElement name="WaterImage" class="StatusIcon" style="background-image: url(&apos;project://database/Assets/Textures/watericon.png?fileID=2800000&amp;guid=d76f163f70688f7419f3e48704625883&amp;type=3#watericon&apos;); width: 100%; height: 100%; -unity-background-scale-mode: scale-to-fit;" />
+                <ui:Label text="100 %" display-tooltip-when-elided="true" name="WaterLabel" class="DirtyEgo" />
             </ui:VisualElement>
             <ui:VisualElement name="FoodPanel" class="StatusItem">
-                <ui:VisualElement name="Image" class="StatusIcon" style="background-image: url(&apos;project://database/Assets/Textures/foodIcon.png?fileID=2800000&amp;guid=1dc2ad6fabda69248a4023df808a8d38&amp;type=3#foodIcon&apos;); width: 100%; height: 100%; -unity-background-scale-mode: scale-to-fit;" />
-                <ui:Label text="100 %" display-tooltip-when-elided="true" name="Text" class="DirtyEgo" />
+                <ui:VisualElement name="FoodImage" class="StatusIcon" style="background-image: url(&apos;project://database/Assets/Textures/foodIcon.png?fileID=2800000&amp;guid=1dc2ad6fabda69248a4023df808a8d38&amp;type=3#foodIcon&apos;); width: 100%; height: 100%; -unity-background-scale-mode: scale-to-fit;" />
+                <ui:Label text="100 %" display-tooltip-when-elided="true" name="FoodLabel" class="DirtyEgo" />
             </ui:VisualElement>
             <ui:VisualElement name="HealthPanel" class="StatusItem">
                 <ui:VisualElement name="Image" class="StatusIcon" style="background-image: url(&apos;project://database/Assets/Textures/Free%20Flat%20Hat%20Solid%20Blank%20Icon.png?fileID=2800000&amp;guid=9a363b86d8dc1f9469388fb98608bb7b&amp;type=3#Free Flat Hat Solid Blank Icon&apos;); width: 100%; height: 100%; -unity-background-scale-mode: scale-to-fit;" />
-                <ui:Label text="100 %" display-tooltip-when-elided="true" name="Text" class="DirtyEgo" />
+                <ui:Label text="100 %" display-tooltip-when-elided="true" name="HealthLabel" class="DirtyEgo" />
             </ui:VisualElement>
             <ui:VisualElement name="StaminaPanel" class="StatusItem" style="align-items: center; justify-content: space-between;">
                 <ui:VisualElement name="Image" class="StatusIcon" style="background-image: url(&apos;project://database/Assets/Textures/stamina%20icon.png?fileID=2800000&amp;guid=5bbf3ac523e57f847a80e8b99bf6b39e&amp;type=3#stamina icon&apos;); width: 20%; height: 100%; -unity-background-scale-mode: scale-to-fit; flex-shrink: 0;" />
@@ -24,24 +24,24 @@
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="QuickInventory" class="QuickInventoryPanel">
-            <ui:VisualElement name="Item1">
+            <ui:VisualElement name="Item">
                 <ui:Label text="1" display-tooltip-when-elided="true" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0;" />
             </ui:VisualElement>
-            <ui:VisualElement name="Item2">
+            <ui:VisualElement name="Item">
                 <ui:Label text="2" display-tooltip-when-elided="true" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;" />
             </ui:VisualElement>
-            <ui:VisualElement name="Item3">
+            <ui:VisualElement name="Item">
                 <ui:Label text="3" display-tooltip-when-elided="true" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0;" />
             </ui:VisualElement>
-            <ui:VisualElement name="Item4">
+            <ui:VisualElement name="Item">
                 <ui:Label text="4" display-tooltip-when-elided="true" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;" />
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="WeaponStatus" class="WeaponStatusPanel" style="align-items: stretch; justify-content: space-between; margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px; flex-direction: row; flex-wrap: nowrap; background-color: rgba(0, 0, 0, 0.37); width: 25%;">
-            <ui:VisualElement name="WeaponIcon" style="flex-grow: 1; background-color: rgba(31, 31, 31, 0.49); width: 50%; height: 100%; border-top-left-radius: 1px; border-bottom-left-radius: 1px; border-top-right-radius: 1px; border-bottom-right-radius: 1px; border-left-width: 0.1px; border-right-width: 0.1px; border-top-width: 0.1px; border-bottom-width: 0.1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); margin-right: 5px;">
+            <ui:VisualElement name="WeaponIcon" style="flex-grow: 0; background-color: rgba(31, 31, 31, 0.49); width: 50%; height: 100%; border-top-left-radius: 1px; border-bottom-left-radius: 1px; border-top-right-radius: 1px; border-bottom-right-radius: 1px; border-left-width: 0.1px; border-right-width: 0.1px; border-top-width: 0.1px; border-bottom-width: 0.1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); margin-right: 5px;">
                 <ui:VisualElement name="Icon" style="flex-grow: 1; height: auto; width: auto; background-image: url(&apos;project://database/Assets/Textures/AK-74M.png?fileID=2800000&amp;guid=3278d2fa3a22cab41b55db2a2c0be1ba&amp;type=3#AK-74M&apos;); -unity-background-image-tint-color: rgb(255, 255, 255); -unity-background-scale-mode: scale-to-fit; margin-left: 2px; margin-right: 2px; margin-top: 2px; margin-bottom: 2px; align-items: stretch; flex-shrink: 0;" />
             </ui:VisualElement>
-            <ui:Label text="999/999" display-tooltip-when-elided="true" name="BulletCount" enable-rich-text="true" class="DirtyEgo" style="flex-shrink: 1; flex-grow: 1; font-size: 31%; white-space: nowrap; align-items: center; -unity-text-align: middle-center; transform-origin: center; justify-content: center;" />
+            <ui:Label text="999/999" display-tooltip-when-elided="true" name="BulletCount" enable-rich-text="true" class="DirtyEgo" style="flex-shrink: 1; flex-grow: 1; font-size: 14px; white-space: nowrap; align-items: center; -unity-text-align: middle-center; transform-origin: center; justify-content: center; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

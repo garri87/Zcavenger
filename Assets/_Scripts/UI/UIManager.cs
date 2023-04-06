@@ -11,79 +11,47 @@ using Slider = UnityEngine.UI.Slider;
 
 public class UIManager : MonoBehaviour
 {
-    public UIDocument _UIDocument;
-    public VisualTreeAsset currentVisualTreeAsset;
+    public MainMenuUI mainMenuUI;
 
-    [Header("Main Menu")] 
-    public VisualTreeAsset mainMenuDocument;
+    public LoadingScreenUI loadingScreenUI;
 
-   
-    
-    [Header("Loading Screen")]
-    public VisualTreeAsset loadingScreenDocument;
-    
-    
-    [Header("In Game Overlay")]
-    public VisualTreeAsset inGameOverlayUIDocument;
-    
-    
-    
-    [Header("Pause Menu, Options Menu & Game Over Panel")]
-    public VisualTreeAsset pauseMenuUIDocument;
+    public InGameOverlayUI inGameOverlayUI;
 
-    
- 
-    public VisualTreeAsset optionsMenuUIDocument;
-    public Button displayButton;
-    public Dropdown resolutionDropdown;
-    
-    
-    
-    public VisualTreeAsset gameOverUIDocument;
-    public Label gameOverLabel;
-    
-    [Header("Inventory Area")]
-    public VisualTreeAsset inventoryUIDocument;
-    public VisualElement inventorySlotArea;
-    public VisualElement capacityPanel;
-    public List<Slot> inventorySlotList = new List<Slot>();
-    [Space]
-    public VisualElement primaryEquipSlot;
-    public VisualElement secondaryEquipSlot;
-    public VisualElement meleeEquipSlot;
-    public VisualElement throwableEquipSlot;
-    [Space]
-    public VisualElement headEquipSlot;
-    public VisualElement vestEquipSlot;
-    public VisualElement legsEquipSlot;
-    public VisualElement backpackEquipSlot;
+    public InventoryUI inventoryUI;
 
-    [Header("Inspect & Quick Info Panels")]
-    public VisualElement inspectPanel;
+    public PauseMenuUI pauseMenuUI;
+
+    public OptionsMenuUI optionsMenuUI;
+
+    public GameOverScreenUI gameOverScreenUI;
+
+    private GameObject[] uiList;
 
     private void OnEnable()
     {
-        _UIDocument = GetComponent<UIDocument>();
-        
-        
-        
+        uiList = new GameObject[]
+        {
+            mainMenuUI.gameObject,
+            loadingScreenUI.gameObject,
+            inGameOverlayUI.gameObject,
+            inventoryUI.gameObject,
+            pauseMenuUI.gameObject,
+            optionsMenuUI.gameObject,
+            gameOverScreenUI.gameObject
+        };
     }
 
-    public void ToggleUI(VisualTreeAsset visualTreeAsset = null, bool enabled = false)
+
+    public void CloseAllUI()
     {
-        if (visualTreeAsset != null)
+        foreach (GameObject gameObject in uiList)
         {
-            _UIDocument.visualTreeAsset = visualTreeAsset;
-            _UIDocument.rootVisualElement.visible = enabled;
-        }
-        else
-        {
-            _UIDocument.visualTreeAsset = null;
+            gameObject.SetActive(false);
         }
     }
 
-    public void ToggleInventory(bool enabled)
+    public void ToggleUI(GameObject uiGameobject, bool enabled)
     {
-        
+        uiGameobject.SetActive(enabled);
     }
 }
