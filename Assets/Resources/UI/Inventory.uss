@@ -5,6 +5,7 @@ Label {
     -unity-text-outline-width: 0.1px;
     -unity-text-outline-color: rgb(0, 0, 0);
     -unity-font-style: normal;
+    white-space: normal;
 }
 
 .Slot {
@@ -83,10 +84,10 @@ Label {
     border-right-width: 1px;
     border-top-width: 1px;
     border-bottom-width: 1px;
-    border-left-color: rgba(0, 0, 0, 255);
-    border-right-color: rgba(0, 0, 0, 255);
-    border-top-color: rgba(0, 0, 0, 255);
-    border-bottom-color: rgba(0, 0, 0, 255);
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
     transition-duration: 0.3s;
 }
 
@@ -305,10 +306,10 @@ Label {
     width: 10%;
     max-width: 12%;
     min-width: 1%;
-    border-left-color: rgba(26, 26, 26, 255);
-    border-right-color: rgba(26, 26, 26, 255);
-    border-top-color: rgba(26, 26, 26, 255);
-    border-bottom-color: rgba(26, 26, 26, 255);
+    border-left-color: rgb(26, 26, 26);
+    border-right-color: rgb(26, 26, 26);
+    border-top-color: rgb(26, 26, 26);
+    border-bottom-color: rgb(26, 26, 26);
     border-left-width: 1px;
     border-right-width: 1px;
     border-top-width: 1px;
@@ -364,11 +365,11 @@ Label {
 
 .QuickInfo {
     position: absolute;
-    background-color: rgba(58, 57, 57, 255);
-    border-left-color: rgba(0, 0, 0, 255);
-    border-right-color: rgba(0, 0, 0, 255);
-    border-top-color: rgba(0, 0, 0, 255);
-    border-bottom-color: rgba(0, 0, 0, 255);
+    background-color: rgb(58, 57, 57);
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
     border-left-width: 1px;
     border-right-width: 1px;
     border-top-width: 1px;
@@ -420,4 +421,36 @@ Label {
     align-items: center;
     justify-content: center;
     opacity: 0;
+}
+
+.ItemInfo {
+    flex-grow: 1;
+    flex-shrink: 1;
+    white-space: normal;
+    -unity-font-definition: resource('Fonts/coolvetica condensed rg SDF');
+    -unity-text-align: upper-left;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 3px;
+    padding-right: 3px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    width: 100%;
+    height: 60%;
+    min-width: 1%;
+    min-height: 1%;
+    max-width: 100%;
+    max-height: 60%;
+    font-size: 10px;
+}
+
+.StatBar {
+    background-color: rgb(195, 195, 195);
+    transform-origin: left bottom;
+    flex-grow: 1;
+    width: 54%;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
 }

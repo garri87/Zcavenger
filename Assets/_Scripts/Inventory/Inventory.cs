@@ -4,36 +4,28 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
+using UnityEngine.Serialization;
 using UnityEngine.UIElements;
 using Debug = UnityEngine.Debug;
 using Image = UnityEngine.UI.Image;
+using Object = UnityEngine.Object;
 
 public class Inventory : MonoBehaviour
 {
     public bool showInventory;
-
-    [HideInInspector] public int totalInventorySlots;
-
-    [Header("UI Transforms")] 
-    [HideInInspector] public UIManager uIManager;
-    private GameManager _gameManager;
-    [HideInInspector]public Canvas inventoryUICanvas;
-    [HideInInspector]public Transform playerWeaponHolderTransform;
-    [HideInInspector]public Image currentWeaponImage;
-    public Sprite emptyWeaponImage;
-    [HideInInspector]public TextMeshProUGUI bulletCounterTMPUGUI;
-    [HideInInspector]public TextMeshProUGUI capacityText;
-        
-    [HideInInspector]public GameObject[] slotArray;
-    public List<GameObject> itemList = new List<GameObject>();
-
-    private int activeSlots;
     
-    private PlayerController _playerController;
-    private Animator _animator;
+    public UIManager uIManager;
+    public InventoryUI inventoryUI;
+    public PlayerController _playerController;
+    [HideInInspector]public Transform playerWeaponHolder;
+    private Animator _playerAnimator;
+    
+    public List<Item> itemsList;
     
     [HideInInspector]public int currentCapacity;
-    [HideInInspector]public int maxCapacity;
+    [HideInInspector]public int maxCapacity = 10;
+    [HideInInspector]public int defaultMaxCapacity = 10;
+    
     public bool inventoryFull;
 
     [HideInInspector] public bool onItem;
@@ -51,49 +43,26 @@ public class Inventory : MonoBehaviour
         Melee,
         Throwable,
     }
-
     public SelectedWeapon selectedWeapon;
-    
-    
 
+    public WeaponItem primaryWeapon;
+    public WeaponItem secondaryWeapon;
+    public WeaponItem meleeWeapon;
+    public WeaponItem throwableWeapon;
+    
     private void Awake()
     {
-        _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-        _playerController = GetComponent<PlayerController>();
-        _animator = GetComponent<Animator>();
-        uIManager = _gameManager.uiManager;
-        /*
-        capacityText = uIManager.capacityPanel.GetComponentInChildren<TextMeshProUGUI>();
-        */
-        playerWeaponHolderTransform = _animator.GetBoneTransform(HumanBodyBones.RightHand).Find("WeaponHolder");
+        uIManager = GameManager.Instance.uiManager;
+        inventoryUI = uIManager.inventoryUI;
+        _playerAnimator = GetComponent<Animator>();
+        playerWeaponHolder = _playerAnimator.GetBoneTransform(HumanBodyBones.RightHand).Find("WeaponHolder");
     }
 
     void Start()
     {
-        
-        /*inventoryUICanvas = uIManager.inventoryUI.GetComponent<Canvas>();
-        bulletCounterTMPUGUI = uIManager.ammoPanel.Find("AmmoCount").GetComponent<TextMeshProUGUI>();
-        currentWeaponImage = uIManager.ammoPanel.Find("CurrentWeaponImage").GetComponent<Image>();*/
-        totalInventorySlots = uIManager.inventorySlotArea.childCount; // get the number of inventory slots
-        slotArray = new GameObject[totalInventorySlots];
+        inventoryUI.FillInventoryWithSlots(maxCapacity);
 
-        CheckInventorySlots();
-        
-        
-        
-    }
-    public void CheckInventorySlots()
-    {
-        for (int i = 0; i < totalInventorySlots; i++)
-        {
-            /*slotArray[i] = uIManager.inventorySlotArea.GetChild(i).gameObject;*/
-            Slot slot = slotArray[i].GetComponent<Slot>();
-            slot.CheckSlotContent();
-            if (slot.empty)
-            {
-                inventoryFull = false;
-            }
-        }
+        RefreshInventoryToUI();
     }
     
     private void FixedUpdate()
@@ -103,14 +72,37 @@ public class Inventory : MonoBehaviour
 
     void Update()
     {
+
+        currentCapacity = itemsList.Count;
+
+        if (currentCapacity >= maxCapacity)
+        {
+            inventoryFull = true;
+        }
+        else
+        {
+            inventoryFull = false;
+        }
+        
+        try
+        {
+            maxCapacity = 0;
+        }
+        catch
+        {
+            maxCapacity = defaultMaxCapacity;
+        }
+        inventoryUI.capacityLabel.text = "Capacity: " + currentCapacity + "/" + maxCapacity;
+        
         InventoryToggle();
+        
         if (!inventoryFull)
         {
             if (onItem && Input.GetKeyDown(_playerController.keyAssignments.useKey.keyCode))
             {
                 if (targetItem != null)
                 {
-                    AddItemToInventory(targetItem);
+                 //   AddItemToInventory(targetItem);
                     _playerController.grabItem = true;
                     onItem = false;
                 }
@@ -121,15 +113,15 @@ public class Inventory : MonoBehaviour
             {
                 if (targetWeapon != null)
                 {
-                    AddWeaponToInventory(targetWeapon);
+                   // AddWeaponToInventory(targetWeapon);
                     _playerController.grabItem = true;
                     onWeaponItem = false;
                 }
             }
         }
         
-        _animator.SetBool("DrawWeapon",drawWeapon);
-        _animator.SetBool("HolsterWeapon", holsterWeapon);
+        _playerAnimator.SetBool("DrawWeapon",drawWeapon);
+        _playerAnimator.SetBool("HolsterWeapon", holsterWeapon);
         #region Weapon Switching
         
         if (!_playerController.isAiming && !_playerController.climbingLadder &&
@@ -168,14 +160,29 @@ public class Inventory : MonoBehaviour
 
         if (_playerController._playerWpnHolderTransform.childCount == 0)
         {
-            currentWeaponImage.sprite = emptyWeaponImage;
-            bulletCounterTMPUGUI.text = null;
+            /*currentWeaponImage.sprite = emptyWeaponImage;
+            bulletCounterTMPUGUI.text = null;*/
         }
 
         
     }
     #endregion
-    
+    public void RefreshInventoryToUI()
+    {
+        if (itemsList.Count > 0)
+        {
+            for (int i = 0; i < itemsList.Count; i++)
+            {
+                inventoryUI.inventorySlotList[i].name = "Slot" + i;
+                IStyle style = inventoryUI.inventorySlotList[i].style;
+                Label quantity = inventoryUI.inventorySlotList[i].Q<Label>("SlotQuantity");
+                Item item = itemsList[i];
+                style.backgroundImage = new StyleBackground(item.itemIcon);
+                quantity.text = item.quantity.ToString();
+            }
+        }
+        
+    }
     private void OnTriggerEnter(Collider other)
     {
         if (!inventoryFull)
@@ -212,35 +219,28 @@ public class Inventory : MonoBehaviour
 
     public void InventoryToggle()
     {
-        inventoryUICanvas.enabled = showInventory;
+        bool enabled = false;
         
-
-        if (Input.GetKeyDown(_playerController.keyAssignments.inventoryKey.keyCode))
+        if (Input.GetKeyDown(KeyAssignments.Instance.inventoryKey.keyCode))
         {
-            showInventory = !showInventory;
-            if (showInventory == true)
-            {
-                CheckInventorySlots();
-            }
+            enabled = !enabled;
         }
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            showInventory = false;
+            enabled = false;
         }
 
-        if (showInventory == true)
+        if (enabled == true)
         {
-            _playerController.OnUIController();
-            currentCapacity = itemList.Count;
-            maxCapacity = totalInventorySlots;
-            capacityText.SetText(currentCapacity + " / " + maxCapacity);
+            RefreshInventoryToUI();
         }
 
-        if (showInventory == false)
+        if (enabled == false)
         {
-            /*uIManager.inspectPanel.gameObject.SetActive(false);*/
+            
         }
+        inventoryUI.gameObject.SetActive(enabled);
     }
     
     
@@ -252,13 +252,38 @@ public class Inventory : MonoBehaviour
     /// <param name="itemTransform"> Item Component</param>
     /// <param name="itemScriptableObject"> ScriptableObject Component </param>
     /// <param name="itemQuantity"> amount to add </param>
-    public void AddItemToInventory(Transform itemTransform)
+   public void AddItemToInventory(Transform itemTransform)
     {
-        CheckInventorySlots(); // refresh the inventory
+        RefreshInventoryToUI(); // refresh the inventory
+        Item newItem = itemTransform.GetComponent<Item>();
+
+        itemsList.Add(newItem);
+
+        if (newItem.isStackable)
+        {
+            for (int i = 0; i < itemsList.Count; i++)
+            {
+                if (itemsList[i].ID == newItem.ID && newItem.itemClass == Item.ItemClass.Item)
+                // if item already exists in inventory, stack quantities
+                {
+                    itemsList[i].quantity += newItem.quantity;
+                    CheckStackableItems(newItem, i);
+                }
+                else
+                {
+
+                }
+            }
+
+        }
+
+
+        
+
         for (int i = 0; i < totalInventorySlots; i++) // checks every slot in inventory
         {
             Slot slotIndex = slotArray[i].GetComponent<Slot>();
-            Item itemComponent = itemTransform.GetComponent<Item>();
+           
 
             if (slotIndex.empty == true) // if the slot is empty, store the picked item
             {
@@ -267,12 +292,12 @@ public class Inventory : MonoBehaviour
                 Debug.Log("the slot in order " + i + " was filled by " + itemComponent.itemName +
                           " with a amount of " + itemComponent.quantity);
                 Debug.Log("slotIndex.UpdateItemSlot(itemComponent.itemScriptableObject)");
-                itemComponent.itemPicked = true;
+                itemComponent.itemPickedUp = true;
                 itemComponent.itemLocation = Item.ItemLocation.Inventory;
                 itemList.Add(slotArray[i].GetComponent<GameObject>());
                 slotIndex.empty = false;
                 CheckSlotQuantity(itemComponent, i); // check if the slot exceed the stacking limit
-                CheckInventorySlots(); // refresh the inventory again
+                RefreshInventoryToUI(); // refresh the inventory again
                 return;
             }
 
@@ -303,81 +328,62 @@ public class Inventory : MonoBehaviour
         }
     }
     
-    public void CheckSlotQuantity(Item item, int slotOrder)
+   public void CheckStackableItems()
     {
-        for (int i = slotOrder; i < totalInventorySlots; i++)
+        for (int i = 0; i < itemsList.Count; i++)
         {
-            Slot slotIndex = slotArray[i].GetComponent<Slot>();
+            if (itemsList[i].isStackable)
 
-            if (slotIndex.isStackable && slotIndex.quantity > slotIndex.maxStack)
+                if (itemsList[i].quantity > itemsList[i].maxStack)
                 // if the quantity surpasses the max stack capacity, transfer leftover units to the next slot
-            {
-                Debug.Log("The slot " + i + " has reached max stackable capacity of " + slotIndex.maxStack + " for " +
-                          item.itemName);//example = current> 150/100 <max
-                int leftOver = slotIndex.quantity - slotIndex.maxStack;//150-100
-                Debug.Log("remaining units: " + leftOver);//50
-                
-                if (i + 1 < totalInventorySlots)
-                {
-                    for (int j = i+1; j < totalInventorySlots; j++)
-                    {
-                        Slot nextSlot = slotArray[j].GetComponent<Slot>();
-                        if (nextSlot.empty)
-                        {
-                            item.quantity = 0;
-                            nextSlot._item = slotIndex._item; // copy the information to the next slot
-                            nextSlot.UpdateItemSlot(slotIndex._item); //update the next slot information
-                            Debug.Log("Updated next Slot Information");
-                            slotIndex.UpdateItemSlot(item); //update the current slot information
-                            Debug.Log("Updated original Slot information");
-                            Debug.Log("the next slot in order " + (i + 1) + " was filled by " + item.itemName);
-                            nextSlot.quantity = leftOver; // transfer the units to next slot
-                            Debug.Log("the amount of next slot " + (i + 1) + " is " + nextSlot.quantity);
-                            slotIndex.quantity -= leftOver; // substract the surplus to match the max stack capacity
-                            Debug.Log(" slotIndex.quantity: " + slotIndex.quantity);
 
-                            nextSlot.empty = false; // tell the next slot is not empty
-                            Debug.Log(" nextSlot.empty: " + nextSlot.empty);
-                            Debug.Log("transferred " + leftOver + " units to the next slot");
-                            itemList.Add(slotArray[i + 1].GetComponent<GameObject>());
-                            CheckSlotQuantity(item,slotOrder+1);
-                            return;
-                        }
-                    }
-                    
-                    
-                }
-                else
                 {
+                    Debug.Log("The slot " + i + " has reached max stackable capacity of " 
+                        + itemsList[i].maxStack + " for " + item.itemName);//example = current> 150/100 <max
+
+                    int leftOver = itemsList[i].quantity - itemsList[i].maxStack;//get the leftover units 150-100
+                    Debug.Log("remaining units: " + leftOver);//50
+
                     item.quantity = leftOver;
-                    item.itemLocation = Item.ItemLocation.World;
-                    item.itemPicked = false;
-                    inventoryFull = true;
-                    CheckInventorySlots();
-                    slotIndex.quantity = slotIndex.maxStack;
-                    //slotIndex.UpdateItemSlot(item);
-                    Debug.Log("Inventory is Full");
-                    return;
+
+                    if (i + 1 < itemsList.Count)
+                    {
+                        itemsList.Add(item);
+
+                    }
+                    else
+                    {
+                        item.quantity = leftOver;
+                        item.itemLocation = Item.ItemLocation.World;
+                        item.itemPickedUp = false;
+                        inventoryFull = true;
+                        RefreshInventoryToUI();
+                        slotIndex.quantity = slotIndex.maxStack;
+                        //slotIndex.UpdateItemSlot(item);
+                        Debug.Log("Inventory is Full");
+                        return;
+                    }
+                           
                 }
 
-            }
+            
             else
             {
                 item.quantity = 0;
                 item.itemLocation = Item.ItemLocation.Inventory;
                 item.itemTransform = slotIndex.itemHolderTransform;
-                item.itemPicked = true;
+                item.itemPickedUp = true;
                 return;
             }
         }
-    }
+    }*/
 
     
     /// <summary>
     /// Store a picked weapon item in the inventory
     /// </summary>
     /// <param name="weaponItem">weaponObject component of the picked item</param>
-    public void AddWeaponToInventory(Transform targetTransform)
+    /*public void AddWeaponToInventory(Transform targetTransform)
     {
         for (int i = 0; i < totalInventorySlots; i++)
         {
@@ -392,11 +398,12 @@ public class Inventory : MonoBehaviour
                 Debug.Log("the slot in order " + i + " was filled by " + targetWeaponItem.weaponName);
                 slotIndex.empty = false;
                 itemList.Add(targetTransform.gameObject);
-                CheckInventorySlots();
+                RefreshInventoryToUI();
                 return;
             }
         }
     }
+    */
     
 
     /// <summary>
@@ -404,7 +411,7 @@ public class Inventory : MonoBehaviour
     /// </summary>
     /// <param name="equipTransform"></param>
     /// <param name="weaponClass"></param>
-    public void ChangeWeapon(Transform equipTransform, SelectedWeapon selectedWeapon)
+    /*public void ChangeWeapon(Transform equipTransform, SelectedWeapon selectedWeapon)
     {
         Slot equipSlot = equipTransform.GetComponent<Slot>();
         Transform slotWeaponHolder = equipTransform.Find("WeaponHolder");
@@ -432,9 +439,9 @@ public class Inventory : MonoBehaviour
                     Debug.Log("Swapping Weapons...");
                     holsterWeapon = true;
                     drawWeapon = true;
-                    _animator.SetBool("RifleEquip",false);
-                    _animator.SetBool("PistolEquip",false);
-                    _animator.SetBool("MeleeEquip",false);
+                    _playerAnimator.SetBool("RifleEquip",false);
+                    _playerAnimator.SetBool("PistolEquip",false);
+                    _playerAnimator.SetBool("MeleeEquip",false);
                 }
             }
         }
@@ -459,35 +466,35 @@ public class Inventory : MonoBehaviour
             switch (selectedWeapon)
             {
                 case SelectedWeapon.Primary:
-                    if (drawWeapon) _animator.SetBool("RifleEquip", true);
-                    else _animator.SetBool("RifleEquip", false);
+                    if (drawWeapon) _playerAnimator.SetBool("RifleEquip", true);
+                    else _playerAnimator.SetBool("RifleEquip", false);
                     break;
 
                 case SelectedWeapon.Secondary:
-                    if (drawWeapon) _animator.SetBool("PistolEquip", true);
-                    else _animator.SetBool("PistolEquip", false);
+                    if (drawWeapon) _playerAnimator.SetBool("PistolEquip", true);
+                    else _playerAnimator.SetBool("PistolEquip", false);
                     break;
 
                 case SelectedWeapon.Melee:
-                    if (drawWeapon) _animator.SetBool("MeleeEquip", true);
-                    else _animator.SetBool("MeleeEquip", false);
+                    if (drawWeapon) _playerAnimator.SetBool("MeleeEquip", true);
+                    else _playerAnimator.SetBool("MeleeEquip", false);
                     break;
                 
                 case SelectedWeapon.Throwable:
-                    if (drawWeapon) _animator.SetBool("ThrowableEquip", true);
-                    else _animator.SetBool("ThrowableEquip", false);
+                    if (drawWeapon) _playerAnimator.SetBool("ThrowableEquip", true);
+                    else _playerAnimator.SetBool("ThrowableEquip", false);
                     break;
             }
         }
         
-    }
+    }*/
 
     
     /// <summary>
     /// Parent weaponToDraw transform to player Hand Holder transform (if empty)
     /// </summary>
     /// <param name="weaponToDraw"></param>
-    public void DrawWeapon(SelectedWeapon selectedWeapon)
+    /*public void DrawWeapon(SelectedWeapon selectedWeapon)
     {
         if (playerWeaponHolderTransform.childCount <=0)
         {
@@ -506,7 +513,7 @@ public class Inventory : MonoBehaviour
                     break;
                 case SelectedWeapon.Throwable:
                     uIManager.throwableEquipSlot.Find("WeaponHolder").GetChild(0).parent = playerWeaponHolderTransform;
-                    break;*/
+                    break;#1#
             }
         }
 
@@ -517,13 +524,13 @@ public class Inventory : MonoBehaviour
             playerWeaponItem.weaponLocation = WeaponItem.WeaponLocation.Player;
         }
         playerWeaponHolderTransform.GetChild(0).gameObject.SetActive(true);
-    }
+    }*/
 
     /// <summary>
     /// Holster the current weapon in player hands to the corresponding parent
     /// </summary>
     /// <param name="weaponToHolster"></param>
-    public void HolsterWeaponTo(Transform holderTransform)
+    /*public void HolsterWeaponTo(Transform holderTransform)
     {
         if (playerWeaponHolderTransform.childCount > 0)
         {
@@ -555,27 +562,27 @@ public class Inventory : MonoBehaviour
                 switch (weaponToHolsterWeaponItem.weaponItemClass)
                 {
                     case WeaponScriptableObject.WeaponClass.Primary:
-                        _animator.SetBool("RifleEquip", false);
+                        _playerAnimator.SetBool("RifleEquip", false);
                         break;
                 
                     case WeaponScriptableObject.WeaponClass.Secondary:
-                        _animator.SetBool("PistolEquip", false);
+                        _playerAnimator.SetBool("PistolEquip", false);
                         break;
                 
                     case WeaponScriptableObject.WeaponClass.Melee:
-                        _animator.SetBool("MeleeEquip", false);
-                        if (_animator.GetBool("BatEquip") == true)
+                        _playerAnimator.SetBool("MeleeEquip", false);
+                        if (_playerAnimator.GetBool("BatEquip") == true)
                         { 
-                            _animator.SetBool("BatEquip", false);
+                            _playerAnimator.SetBool("BatEquip", false);
                         }
-                        if (_animator.GetBool("KnifeEquip") == true)
+                        if (_playerAnimator.GetBool("KnifeEquip") == true)
                         { 
-                            _animator.SetBool("KnifeEquip", false);
+                            _playerAnimator.SetBool("KnifeEquip", false);
                         }
 
                         break;
                     case WeaponScriptableObject.WeaponClass.Throwable:
-                        _animator.SetBool("ThrowableEquip", false);
+                        _playerAnimator.SetBool("ThrowableEquip", false);
                         break;
                 }
             }
@@ -594,8 +601,8 @@ public class Inventory : MonoBehaviour
         {
             Debug.Log("No weapon to holster in player hands");
         }
-    }
-    public void DrawWeaponAnim(string command) // function is triggered while "drawWeapon" is true
+    }*/
+    /*public void DrawWeaponAnim(string command) // function is triggered while "drawWeapon" is true
     {
         switch (command)
         {
@@ -630,47 +637,51 @@ public class Inventory : MonoBehaviour
                 holsterWeapon = false;
                 break;
         }
-    }
+    }*/
     
-    public int CheckItemsLeft(int id, int total)
+    public int CheckItemsLeft(int id, int counter)
     {                    
         //Debug.Log("seeking inventory for ID " + id);
 
-        total = 0;
-        for (int i = 0; i < totalInventorySlots; i++)
+        int total = 0;
+        for (int i = 0; i < itemsList.Count; i++)
         {
-            Slot slotIndex = slotArray[i].GetComponent<Slot>();
-            if (!slotIndex.empty && slotIndex.itemScriptableObject != null)
+            if (itemsList[i].ID == id)
             {
-                if (slotIndex.itemScriptableObject.ID == id)
-                {
-                    // Debug.Log("Found " + slotIndex.quantity + " units of ID" + id);
-                    total += slotIndex.quantity;
-                }
+                total += itemsList[i].quantity;
             }
         }
+
+        counter = total;
         //Debug.Log("return" + counter);
         return total;
     }
-    public void UpdateBulletCounter(WeaponItem playerWeaponItem)
+    
+    
+    /// <summary>
+    /// Updates the bullet counter in the in-game overlay UI
+    /// </summary>
+    /// <param name="item"></param>
+    public void UpdateBulletCounter(Item item)
     {
+        Label bulletCounter = uIManager.inGameOverlayUI.bulletCountLabel;
         if (selectedWeapon == SelectedWeapon.Melee 
             || selectedWeapon == SelectedWeapon.Throwable)
         {
-            bulletCounterTMPUGUI.SetText("-/-");
+            bulletCounter.text = "-/-";
         }
         else
         {
-            bulletCounterTMPUGUI.SetText(playerWeaponItem.bulletsInMag  + "/" + playerWeaponItem.totalBullets);  
+            bulletCounter.text = item.bulletsInMag  + "/" + item.totalBullets;  
         }
         
-        if (playerWeaponItem.bulletsInMag < 5)
+        if (item.bulletsInMag < 5)
         {
-            bulletCounterTMPUGUI.color = Color.red;
+            bulletCounter.style.color = Color.red;
         }
         else
         {
-            bulletCounterTMPUGUI.color = Color.white;
+            bulletCounter.style.color = Color.white;
         }    
     }
     

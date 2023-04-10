@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement name="Stat" class="Stat">
+        <ui:Label text="Damage" display-tooltip-when-elided="true" name="StatName" class="StatName" />
+        <ui:VisualElement name="BarBackground" class="BarBackground">
+            <ui:VisualElement name="StatBar" style="background-color: rgb(195, 195, 195); transform-origin: left bottom; flex-grow: 1; width: 54%; border-top-right-radius: 2px; border-bottom-right-radius: 2px;" />
+        </ui:VisualElement>
+        <ui:Label text="999" display-tooltip-when-elided="true" name="StatValue" class="StatValue" />
+    </ui:VisualElement>
+</ui:UXML>

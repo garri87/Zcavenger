@@ -8,20 +8,7 @@ using UnityEngine.UIElements;
 public class WeaponItem : MonoBehaviour
 {
     [Header("Weapon ID")]
-   [HideInInspector]public WeaponScriptableObject.WeaponClass weaponItemClass;
-
-    public enum WeaponLocation
-    {
-        World,
-        Container,
-        Player,
-        Inventory,
-        Throwed,
-    }
-
-    public WeaponLocation weaponLocation;
-
-    private GameManager _gameManager;
+    [HideInInspector]public WeaponScriptableObject.WeaponClass weaponItemClass;
     
     [HideInInspector]public Transform holderTarget;
     
@@ -39,8 +26,8 @@ public class WeaponItem : MonoBehaviour
     public int bulletsInMag;
     public float recoilDuration;
     public float recoilMaxRotation;
-    public float shotgunMaxFireAngle;
-    public float shotgunMinFireAngle;
+    public float MaxFireAngle;
+    public float MinFireAngle;
     public int bulletsPerShot;
     public bool blockAttacks;
 
@@ -158,7 +145,7 @@ public class WeaponItem : MonoBehaviour
             }
         }
         
-        /*switch (weaponItemClass)
+        switch (weaponItemClass)
         {
             case WeaponScriptableObject.WeaponClass.Primary:
                 holderTarget = _gameManager.uiManager.primaryEquipSlot.Find("WeaponHolder");
@@ -173,7 +160,7 @@ public class WeaponItem : MonoBehaviour
                 holderTarget = _gameManager.uiManager.throwableEquipSlot.Find("WeaponHolder");
                 _throwable = GetComponent<Throwable>();
                 break;
-        }*/
+        }#1#
 
         switch (weaponLocation)
         {
@@ -459,12 +446,12 @@ public class WeaponItem : MonoBehaviour
                                 }
                             }
 
-                           /* if (!attacking || weaponItemClass != WeaponScriptableObject.WeaponClass.Throwable)
+                           if (!attacking || weaponItemClass != WeaponScriptableObject.WeaponClass.Throwable)
                             {
                                 playerAnimator.SetBool("MeleeAttack1", false);
                                 playerAnimator.SetBool("MeleeAttack2", false);
                                 playerAnimator.SetBool("MeleeAttack3", false);
-                            }*/
+                            }#1#
                             
                             if (Input.GetKeyDown(KeyAssignments.SharedInstance.reloadKey.keyCode) && bulletsInMag < magazineCap) 
                             {
@@ -542,7 +529,7 @@ public class WeaponItem : MonoBehaviour
 
     public void GetBulletFromPool()
     {
-        if (ID == 5004)
+        if (ID == 5004) //Shotgun
         {
             float shootAngle = shotgunMinFireAngle;
             float nextAngle =  (shotgunMinFireAngle*-1 + shotgunMaxFireAngle)/bulletsPerShot;
@@ -599,7 +586,6 @@ public class WeaponItem : MonoBehaviour
             Debug.Log("Magazine is empty! Reload!");
         }
     }
-    
     public void DealDamage()
     {
         RaycastHit meleeHit;
@@ -637,7 +623,6 @@ public class WeaponItem : MonoBehaviour
             }
         }
     }
-    
     public void ReloadMagazine()
     {
         totalBullets= playerInventory.CheckItemsLeft(bulletID, totalBullets);
@@ -697,7 +682,6 @@ public class WeaponItem : MonoBehaviour
         }
        
     }
-    
     public void MeleeAttackAnim(string command)
     {
         switch (command)

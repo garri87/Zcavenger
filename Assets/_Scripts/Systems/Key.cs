@@ -63,7 +63,7 @@ public class Key : MonoBehaviour
             if (newKeyCode != KeyCode.Escape)
             {
                currentKeyCode = newKeyCode;
-               KeyAssignments.SharedInstance.UpdateKeyBinding(currentKeyName);
+               KeyAssignments.Instance.UpdateKeyBinding(currentKeyName);
                timer = cancelTime; 
                waitForKey = false;
             }

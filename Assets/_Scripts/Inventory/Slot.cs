@@ -9,9 +9,9 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class Slot : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
+public class Slot : MonoBehaviour
 {
-  #region Slot UI Elements references
+  /*#region Slot UI Elements references
   public enum SlotType
   {
     inventorySlot,
@@ -101,7 +101,7 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, I
   {
     /*quickInfoPanelUI = inventory.uIManager.quickInfoPanelUI;
     infoText = inventory.uIManager.quickInfoPanelUI.GetComponentInChildren<TextMeshProUGUI>();
-    */
+    #1#
     
     if (weaponHolderTransform.childCount > 0)
     {
@@ -288,7 +288,7 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, I
               
               /*WeaponItem playerWeaponItem = inventory.playerHandHolderTransform.GetChild(0).GetComponent<WeaponItem>();
               if (holderWeaponItem.ID != playerWeaponItem.ID)
-              {*/
+              {#1#
                 inventory.AddWeaponToInventory(weaponHolderTransform.GetChild(0));
               //} 
             }
@@ -602,5 +602,5 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, I
     empty = true;
     slotImage.enabled = false;
     quantity = 0;
-  }
+  }*/
 }

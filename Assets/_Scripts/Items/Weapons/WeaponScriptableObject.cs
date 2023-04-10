@@ -8,6 +8,7 @@ using UnityEngine.UI;
 [CreateAssetMenu(fileName = "New_Weapon", menuName = "Items/New Weapon")]
 public class WeaponScriptableObject : ScriptableObject
 {
+   
    public enum WeaponClass
    {
       None,
@@ -16,8 +17,6 @@ public class WeaponScriptableObject : ScriptableObject
       Melee,
       Throwable,
    }
- 
-   [Header("Weapon ID")]
    public  WeaponClass weaponClass;
    public int ID;
    public Sprite weaponIcon;
@@ -35,6 +34,8 @@ public class WeaponScriptableObject : ScriptableObject
    public float fireRate;
    public int bulletsPerShot;
    public int magazineCap;
+   public float minFireAngle;
+   public float maxFireAngle;
    public float recoilDuration;
    public float recoilMaxRotation;
    public bool blockAttacks = false;

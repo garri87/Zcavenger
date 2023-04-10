@@ -131,7 +131,7 @@ public class SlotContextMenu : MonoBehaviour
             inspectPanel.gameObject.SetActive(true);
         }
         slot.showSlotMenu = false;
-    }
+    }*/
 
 }
 
