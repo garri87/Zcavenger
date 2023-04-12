@@ -13,19 +13,21 @@ using Object = UnityEngine.Object;
 public class Inventory : MonoBehaviour
 {
     public bool showInventory;
-    
+
     public UIManager uIManager;
     public InventoryUI inventoryUI;
     public PlayerController _playerController;
-    [HideInInspector]public Transform playerWeaponHolder;
+    [HideInInspector] public Transform playerWeaponHolder;
     private Animator _playerAnimator;
-    
+
     public List<Item> itemsList;
-    
-    [HideInInspector]public int currentCapacity;
-    [HideInInspector]public int maxCapacity = 10;
-    [HideInInspector]public int defaultMaxCapacity = 10;
-    
+    public Dictionary<VisualElement, Item> equipmentItems = new Dictionary<VisualElement, Item>();
+
+
+    [HideInInspector] public int currentCapacity;
+    [HideInInspector] public int maxCapacity = 10;
+    [HideInInspector] public int defaultMaxCapacity = 10;
+
     public bool inventoryFull;
 
     [HideInInspector] public bool onItem;
@@ -35,7 +37,7 @@ public class Inventory : MonoBehaviour
 
     public bool drawWeapon;
     public bool holsterWeapon;
-    
+
     public enum SelectedWeapon
     {
         Primary,
@@ -44,12 +46,16 @@ public class Inventory : MonoBehaviour
         Throwable,
     }
     public SelectedWeapon selectedWeapon;
-
-    public WeaponItem primaryWeapon;
-    public WeaponItem secondaryWeapon;
-    public WeaponItem meleeWeapon;
-    public WeaponItem throwableWeapon;
-    
+    public Item primaryWeapon;
+    public Item secondaryWeapon;
+    public Item meleeWeapon;
+    public Item throwableWeapon;
+    public Item headEquip;
+    public Item vestEquip;
+    public Item torsoEquip;
+    public Item legsEquip;
+    public Item feetEquip;
+    public Item backpackEquip;
     private void Awake()
     {
         uIManager = GameManager.Instance.uiManager;
@@ -60,14 +66,16 @@ public class Inventory : MonoBehaviour
 
     void Start()
     {
+
+
         inventoryUI.FillInventoryWithSlots(maxCapacity);
 
         RefreshInventoryToUI();
     }
-    
+
     private void FixedUpdate()
     {
-        
+
     }
 
     void Update()
@@ -83,7 +91,7 @@ public class Inventory : MonoBehaviour
         {
             inventoryFull = false;
         }
-        
+
         try
         {
             maxCapacity = 0;
@@ -93,37 +101,37 @@ public class Inventory : MonoBehaviour
             maxCapacity = defaultMaxCapacity;
         }
         inventoryUI.capacityLabel.text = "Capacity: " + currentCapacity + "/" + maxCapacity;
-        
+
         InventoryToggle();
-        
+
         if (!inventoryFull)
         {
             if (onItem && Input.GetKeyDown(_playerController.keyAssignments.useKey.keyCode))
             {
                 if (targetItem != null)
                 {
-                 //   AddItemToInventory(targetItem);
+                    //   AddItemToInventory(targetItem);
                     _playerController.grabItem = true;
                     onItem = false;
                 }
-                
+
             }
 
             if (onWeaponItem && Input.GetKeyDown(_playerController.keyAssignments.useKey.keyCode))
             {
                 if (targetWeapon != null)
                 {
-                   // AddWeaponToInventory(targetWeapon);
+                    // AddWeaponToInventory(targetWeapon);
                     _playerController.grabItem = true;
                     onWeaponItem = false;
                 }
             }
         }
-        
-        _playerAnimator.SetBool("DrawWeapon",drawWeapon);
+
+        _playerAnimator.SetBool("DrawWeapon", drawWeapon);
         _playerAnimator.SetBool("HolsterWeapon", holsterWeapon);
         #region Weapon Switching
-        
+
         if (!_playerController.isAiming && !_playerController.climbingLadder &&
             !_playerController.attacking && !_playerController.onTransition)
         {
@@ -164,24 +172,37 @@ public class Inventory : MonoBehaviour
             bulletCounterTMPUGUI.text = null;*/
         }
 
-        
+
     }
     #endregion
+
+    /// <summary>
+    /// Shows inventory current information to UI
+    /// </summary>
     public void RefreshInventoryToUI()
     {
         if (itemsList.Count > 0)
         {
             for (int i = 0; i < itemsList.Count; i++)
             {
-                inventoryUI.inventorySlotList[i].name = "Slot" + i;
-                IStyle style = inventoryUI.inventorySlotList[i].style;
-                Label quantity = inventoryUI.inventorySlotList[i].Q<Label>("SlotQuantity");
+                Label quantity = inventoryUI.inventorySlotList[i].Q<Label>("SlotQuantity");//Get Quantity Label
                 Item item = itemsList[i];
-                style.backgroundImage = new StyleBackground(item.itemIcon);
-                quantity.text = item.quantity.ToString();
+                IStyle style = inventoryUI.inventorySlotList[i].style; // Get the style of the slot
+                style.backgroundImage = new StyleBackground(item.itemIcon);//Set the icon image
+                quantity.text = item.quantity.ToString();//Set the quantity label
             }
         }
-        
+
+        if(primaryWeapon)inventoryUI.primaryWeaponSlot.style.backgroundImage = new StyleBackground(primaryWeapon.itemIcon);
+        if(secondaryWeapon)inventoryUI.secondaryWeaponSlot.style.backgroundImage = new StyleBackground(secondaryWeapon.itemIcon);
+        if(meleeWeapon)inventoryUI.meleeWeaponSlot.style.backgroundImage = new StyleBackground(meleeWeapon.itemIcon);
+        if(throwableWeapon)inventoryUI.throwableWeaponSlot.style.backgroundImage = new StyleBackground(throwableWeapon.itemIcon);
+        if(headEquip)inventoryUI.headEquipSlot.style.backgroundImage = new StyleBackground(headEquip.itemIcon);
+        if(vestEquip)inventoryUI.vestEquipSlot.style.backgroundImage = new StyleBackground(vestEquip.itemIcon);
+        if(torsoEquip)inventoryUI.torsoEquipSlot.style.backgroundImage = new StyleBackground(torsoEquip.itemIcon);
+        if(legsEquip)inventoryUI.legsEquipSlot.style.backgroundImage = new StyleBackground(legsEquip.itemIcon);
+        if(feetEquip)inventoryUI.feetEquipSlot.style.backgroundImage = new StyleBackground(feetEquip.itemIcon);
+        if(backpackEquip)inventoryUI.backpackEquipSlot.style.backgroundImage = new StyleBackground(backpackEquip.itemIcon);
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -191,7 +212,7 @@ public class Inventory : MonoBehaviour
             {
                 targetItem = other.transform;
                 onItem = true;
-                
+
             }
 
             if (other.CompareTag("Weapon"))
@@ -220,7 +241,7 @@ public class Inventory : MonoBehaviour
     public void InventoryToggle()
     {
         bool enabled = false;
-        
+
         if (Input.GetKeyDown(KeyAssignments.Instance.inventoryKey.keyCode))
         {
             enabled = !enabled;
@@ -238,26 +259,20 @@ public class Inventory : MonoBehaviour
 
         if (enabled == false)
         {
-            
+
         }
         inventoryUI.gameObject.SetActive(enabled);
     }
-    
-    
-    
-    
+
     /// <summary>
-    /// Store a picked item in the inventory
+    /// Store a item into the inventory
     /// </summary>
     /// <param name="itemTransform"> Item Component</param>
-    /// <param name="itemScriptableObject"> ScriptableObject Component </param>
-    /// <param name="itemQuantity"> amount to add </param>
-   public void AddItemToInventory(Transform itemTransform)
+    public void AddItemToInventory(Transform itemTransform)
     {
-        RefreshInventoryToUI(); // refresh the inventory
         Item newItem = itemTransform.GetComponent<Item>();
 
-        itemsList.Add(newItem);
+        newItem.itemLocation = Item.ItemLocation.Inventory;
 
         if (newItem.isStackable)
         {
@@ -267,151 +282,62 @@ public class Inventory : MonoBehaviour
                 // if item already exists in inventory, stack quantities
                 {
                     itemsList[i].quantity += newItem.quantity;
-                    CheckStackableItems(newItem, i);
+                    CheckStackableItem(itemsList[i]);
+                    Destroy(itemTransform.gameObject);
+                    return;
+                }
+            }
+            itemsList.Add(newItem);
+            Destroy(itemTransform.gameObject);
+        }
+
+    }
+
+
+    /// <summary>
+    /// Controls that the item does not exceed the maximum stacking amount
+    /// </summary>
+    /// <param name="item"></param>
+    public void CheckStackableItem(Item item)
+    {
+        if (item.isStackable)
+
+            if (item.quantity > item.maxStack)
+            // if the quantity surpasses the max stack capacity, transfer leftover units to the next slot
+            {
+                Debug.Log("The slot " + " has reached max stackable capacity of "
+                    + item.maxStack + " for " + item.itemName);//example = current> 150/100 <max
+
+                int leftOver = item.quantity - item.maxStack;//get the leftover units 150-100
+                Debug.Log("remaining units: " + leftOver);//50
+
+                item.quantity = item.maxStack;
+
+                //Create a new item with the remainging quantities
+                Item newItem = item;
+                newItem.quantity = leftOver;
+                if (itemsList.Count < maxCapacity)
+                {
+                    itemsList.Add(newItem);
                 }
                 else
                 {
-
+                    GameObject newItemGO = new GameObject(item.name);
+                    Item newItemComp = newItemGO.AddComponent<Item>();
+                    newItemComp = newItem;
+                    newItemComp.itemLocation = Item.ItemLocation.World;
+                    Instantiate(newItemGO, transform.position, transform.rotation);
                 }
             }
-
-        }
-
-
-        
-
-        for (int i = 0; i < totalInventorySlots; i++) // checks every slot in inventory
-        {
-            Slot slotIndex = slotArray[i].GetComponent<Slot>();
-           
-
-            if (slotIndex.empty == true) // if the slot is empty, store the picked item
-            {
-                slotIndex.UpdateItemSlot(itemComponent); // update the slot information
-                slotIndex.quantity = itemComponent.quantity;
-                Debug.Log("the slot in order " + i + " was filled by " + itemComponent.itemName +
-                          " with a amount of " + itemComponent.quantity);
-                Debug.Log("slotIndex.UpdateItemSlot(itemComponent.itemScriptableObject)");
-                itemComponent.itemPickedUp = true;
-                itemComponent.itemLocation = Item.ItemLocation.Inventory;
-                itemList.Add(slotArray[i].GetComponent<GameObject>());
-                slotIndex.empty = false;
-                CheckSlotQuantity(itemComponent, i); // check if the slot exceed the stacking limit
-                RefreshInventoryToUI(); // refresh the inventory again
-                return;
-            }
-
-            if (slotIndex.empty == false && slotIndex.weaponItem == null)
-            {
-                if (slotIndex._item.itemName == itemComponent.itemName)
-                {
-                    Debug.Log("an existing " + itemComponent.itemName + " was found in slot: " + i);
-                    
-                    if (slotIndex.quantity < slotIndex.maxStack)
-                    {
-                        slotIndex.quantity += itemComponent.quantity;
-                        Debug.Log("added " + itemComponent.quantity + " units to slot " + i);
-                        Debug.Log("slotIndex.UpdateItemSlot()");
-                        itemComponent.itemLocation = Item.ItemLocation.Inventory;
-                        slotIndex.UpdateItemSlot(itemComponent); // update the slot information
-                        CheckSlotQuantity(itemComponent, i); // check the quantity of the slot to determine if the item is picked or not
-                        Debug.Log("added " + itemComponent.quantity + " " + itemComponent.itemName + " in the slot " + i);
-                        return;
-                    }
-                    else
-                    {
-                        Debug.Log("The slot in index " + i + " is full");
-                    }
-                }
-            }
-            
-        }
     }
-    
-   public void CheckStackableItems()
-    {
-        for (int i = 0; i < itemsList.Count; i++)
-        {
-            if (itemsList[i].isStackable)
 
-                if (itemsList[i].quantity > itemsList[i].maxStack)
-                // if the quantity surpasses the max stack capacity, transfer leftover units to the next slot
-
-                {
-                    Debug.Log("The slot " + i + " has reached max stackable capacity of " 
-                        + itemsList[i].maxStack + " for " + item.itemName);//example = current> 150/100 <max
-
-                    int leftOver = itemsList[i].quantity - itemsList[i].maxStack;//get the leftover units 150-100
-                    Debug.Log("remaining units: " + leftOver);//50
-
-                    item.quantity = leftOver;
-
-                    if (i + 1 < itemsList.Count)
-                    {
-                        itemsList.Add(item);
-
-                    }
-                    else
-                    {
-                        item.quantity = leftOver;
-                        item.itemLocation = Item.ItemLocation.World;
-                        item.itemPickedUp = false;
-                        inventoryFull = true;
-                        RefreshInventoryToUI();
-                        slotIndex.quantity = slotIndex.maxStack;
-                        //slotIndex.UpdateItemSlot(item);
-                        Debug.Log("Inventory is Full");
-                        return;
-                    }
-                           
-                }
-
-            
-            else
-            {
-                item.quantity = 0;
-                item.itemLocation = Item.ItemLocation.Inventory;
-                item.itemTransform = slotIndex.itemHolderTransform;
-                item.itemPickedUp = true;
-                return;
-            }
-        }
-    }*/
-
-    
-    /// <summary>
-    /// Store a picked weapon item in the inventory
-    /// </summary>
-    /// <param name="weaponItem">weaponObject component of the picked item</param>
-    /*public void AddWeaponToInventory(Transform targetTransform)
-    {
-        for (int i = 0; i < totalInventorySlots; i++)
-        {
-            Slot slotIndex = slotArray[i].GetComponent<Slot>();
-            WeaponItem targetWeaponItem = targetTransform.GetComponent<WeaponItem>();
-            if (slotIndex.empty)
-            {
-                targetTransform.parent = slotIndex.weaponHolderTransform;
-                targetWeaponItem.weaponPicked = true;
-                slotIndex.UpdateWeaponSlot(targetWeaponItem);
-                targetWeaponItem.weaponLocation = WeaponItem.WeaponLocation.Inventory;
-                Debug.Log("the slot in order " + i + " was filled by " + targetWeaponItem.weaponName);
-                slotIndex.empty = false;
-                itemList.Add(targetTransform.gameObject);
-                RefreshInventoryToUI();
-                return;
-            }
-        }
-    }
-    */
-    
 
     /// <summary>
     /// Weapon Equipment Management
     /// </summary>
     /// <param name="equipTransform"></param>
     /// <param name="weaponClass"></param>
-    /*public void ChangeWeapon(Transform equipTransform, SelectedWeapon selectedWeapon)
+    public void ChangeWeapon(Transform equipTransform, SelectedWeapon selectedWeapon)
     {
         Slot equipSlot = equipTransform.GetComponent<Slot>();
         Transform slotWeaponHolder = equipTransform.Find("WeaponHolder");
@@ -419,13 +345,13 @@ public class Inventory : MonoBehaviour
         {
             WeaponItem equipWeaponItem = equipSlot.weaponItem;
             _playerController.equippedWeaponItem = equipWeaponItem;
-            if (playerWeaponHolderTransform.childCount <=0) 
+            if (playerWeaponHolderTransform.childCount <= 0)
             {
                 slotWeaponHolder.GetChild(0).parent = playerWeaponHolderTransform;
                 drawWeapon = true;
                 Debug.Log("Changing weapon to " + equipWeaponItem.weaponName + " as " + selectedWeapon);
             }
-            else if (playerWeaponHolderTransform.childCount >0)
+            else if (playerWeaponHolderTransform.childCount > 0)
             {
                 WeaponItem playerWeaponItem = playerWeaponHolderTransform.GetChild(0).GetComponent<WeaponItem>();
                 if (equipWeaponItem.ID == playerWeaponItem.ID)
@@ -439,9 +365,9 @@ public class Inventory : MonoBehaviour
                     Debug.Log("Swapping Weapons...");
                     holsterWeapon = true;
                     drawWeapon = true;
-                    _playerAnimator.SetBool("RifleEquip",false);
-                    _playerAnimator.SetBool("PistolEquip",false);
-                    _playerAnimator.SetBool("MeleeEquip",false);
+                    _playerAnimator.SetBool("RifleEquip", false);
+                    _playerAnimator.SetBool("PistolEquip", false);
+                    _playerAnimator.SetBool("MeleeEquip", false);
                 }
             }
         }
@@ -479,17 +405,17 @@ public class Inventory : MonoBehaviour
                     if (drawWeapon) _playerAnimator.SetBool("MeleeEquip", true);
                     else _playerAnimator.SetBool("MeleeEquip", false);
                     break;
-                
+
                 case SelectedWeapon.Throwable:
                     if (drawWeapon) _playerAnimator.SetBool("ThrowableEquip", true);
                     else _playerAnimator.SetBool("ThrowableEquip", false);
                     break;
             }
         }
-        
-    }*/
 
-    
+    }
+
+
     /// <summary>
     /// Parent weaponToDraw transform to player Hand Holder transform (if empty)
     /// </summary>
@@ -503,11 +429,11 @@ public class Inventory : MonoBehaviour
                 /*case SelectedWeapon.Primary:
                     uIManager.primaryEquipSlot.Find("WeaponHolder").GetChild(0).parent = playerWeaponHolderTransform;
                     break;
-            
+
                 case SelectedWeapon.Secondary:
                    uIManager.secondaryEquipSlot.Find("WeaponHolder").GetChild(0).parent = playerWeaponHolderTransform;
                     break;
-            
+
                 case SelectedWeapon.Melee:
                     uIManager.meleeEquipSlot.Find("WeaponHolder").GetChild(0).parent = playerWeaponHolderTransform;
                     break;
@@ -536,7 +462,7 @@ public class Inventory : MonoBehaviour
         {
             Transform weaponToHolster = playerWeaponHolderTransform.GetChild(0);
             WeaponItem weaponToHolsterWeaponItem = weaponToHolster.GetComponent<WeaponItem>();
-            
+
             if (holderTransform.childCount > 0)
             {
                 if (!inventoryFull)
@@ -550,13 +476,13 @@ public class Inventory : MonoBehaviour
                     weaponToHolsterWeaponItem.weaponLocation = WeaponItem.WeaponLocation.World;
                 }
             }
-            
+
             if (holderTransform.childCount <= 0)
             {
                 weaponToHolster.parent = holderTransform;
                 weaponToHolsterWeaponItem.weaponLocation = WeaponItem.WeaponLocation.Inventory;
             }
-            
+
             if (!drawWeapon)
             {
                 switch (weaponToHolsterWeaponItem.weaponItemClass)
@@ -564,11 +490,11 @@ public class Inventory : MonoBehaviour
                     case WeaponScriptableObject.WeaponClass.Primary:
                         _playerAnimator.SetBool("RifleEquip", false);
                         break;
-                
+
                     case WeaponScriptableObject.WeaponClass.Secondary:
                         _playerAnimator.SetBool("PistolEquip", false);
                         break;
-                
+
                     case WeaponScriptableObject.WeaponClass.Melee:
                         _playerAnimator.SetBool("MeleeEquip", false);
                         if (_playerAnimator.GetBool("BatEquip") == true)
@@ -595,7 +521,7 @@ public class Inventory : MonoBehaviour
                     playerWeaponHolderTransform.GetChild(0).gameObject.SetActive(false);
                 }
             }
-                
+
         }
         else
         {
@@ -612,9 +538,9 @@ public class Inventory : MonoBehaviour
                 {
                     DrawWeapon(selectedWeapon);
                 }
-                
+
                 break;
-            
+
             case "WeaponHolster":
 
                 if (holsterWeapon)
@@ -625,22 +551,22 @@ public class Inventory : MonoBehaviour
                         HolsterWeaponTo(playerWeaponItem.holderTarget);
                     }
                 }
-                
+
                 break;
-            
+
             case "DrawEnd":
                 drawWeapon = false;
                 holsterWeapon = false;
                 break;
-            
+
             case "HolsterEnd":
                 holsterWeapon = false;
                 break;
         }
     }*/
-    
+
     public int CheckItemsLeft(int id, int counter)
-    {                    
+    {
         //Debug.Log("seeking inventory for ID " + id);
 
         int total = 0;
@@ -656,8 +582,8 @@ public class Inventory : MonoBehaviour
         //Debug.Log("return" + counter);
         return total;
     }
-    
-    
+
+
     /// <summary>
     /// Updates the bullet counter in the in-game overlay UI
     /// </summary>
@@ -665,16 +591,16 @@ public class Inventory : MonoBehaviour
     public void UpdateBulletCounter(Item item)
     {
         Label bulletCounter = uIManager.inGameOverlayUI.bulletCountLabel;
-        if (selectedWeapon == SelectedWeapon.Melee 
+        if (selectedWeapon == SelectedWeapon.Melee
             || selectedWeapon == SelectedWeapon.Throwable)
         {
             bulletCounter.text = "-/-";
         }
         else
         {
-            bulletCounter.text = item.bulletsInMag  + "/" + item.totalBullets;  
+            bulletCounter.text = item.bulletsInMag + "/" + item.totalBullets;
         }
-        
+
         if (item.bulletsInMag < 5)
         {
             bulletCounter.style.color = Color.red;
@@ -682,10 +608,11 @@ public class Inventory : MonoBehaviour
         else
         {
             bulletCounter.style.color = Color.white;
-        }    
+        }
     }
-    
-    
-    
+
+
+
 }
-    
+
+

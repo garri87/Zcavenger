@@ -58,6 +58,7 @@ public class InventoryUI : MonoBehaviour
     
     private void OnEnable()
     {
+       
         playerInventory = GameObject.Find("Player").GetComponent<Inventory>();
         
         inventory = GetComponent<UIDocument>();
@@ -210,9 +211,11 @@ public class InventoryUI : MonoBehaviour
         }
 
         inventorySlotList = inventorySlotArea.Query<VisualElement>("Slot").ToList();
-        foreach (VisualElement slot in inventorySlotList)
+
+        for (int i = 0; i < inventorySlotList.Count; i++)
         {
-            slot.RegisterCallback<ClickEvent>(SlotClickEvent);
+          inventorySlotList[i].RegisterCallback<ClickEvent>(SlotClickEvent);
+          inventorySlotList[i].name = "Slot_" + i;
         }
     }
 
