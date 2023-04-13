@@ -68,7 +68,7 @@ public class ItemContainer : MonoBehaviour
     private void Start()
     {
        // InstantiateItems();
-        worldUITMP.text = "Open [ " + KeyAssignments.SharedInstance.useKey.keyCode.ToString().ToUpper() + " ]";
+        worldUITMP.text = "Open [ " + KeyAssignments.Instance.useKey.keyCode.ToString().ToUpper() + " ]";
     }
     
     private void Update()
@@ -79,7 +79,7 @@ public class ItemContainer : MonoBehaviour
         {
             worldUIText.SetActive(true);
 
-            if (Input.GetKeyDown(KeyAssignments.SharedInstance.useKey.keyCode))
+            if (Input.GetKeyDown(KeyAssignments.Instance.useKey.keyCode))
             {
                 ToggleContainerUI();
             }
@@ -95,7 +95,7 @@ public class ItemContainer : MonoBehaviour
             worldUIText.SetActive(false);
             containerUIWindow.SetActive(true);
             playerController.controllerType = PlayerController.ControllerType.StandByController;
-            if (Input.GetKeyDown(KeyAssignments.SharedInstance.inventoryKey.keyCode) || Input.GetKeyDown(KeyCode.Escape))
+            if (Input.GetKeyDown(KeyAssignments.Instance.inventoryKey.keyCode) || Input.GetKeyDown(KeyCode.Escape))
             {
                 containerUIWindow.SetActive(false);
                 containerOpen = false;
@@ -161,11 +161,11 @@ public class ItemContainer : MonoBehaviour
                         selectedWeapon = i;
                     }
 
-                    instantiatedWeapon = Instantiate(weaponPrefabs[selectedWeapon], slotIndex.weaponHolderTransform);
-                    WeaponItem weaponItem = instantiatedWeapon.GetComponent<WeaponItem>();
-                    slotIndex.weaponItem = weaponItem;
-                    weaponItem.weaponLocation = WeaponItem.WeaponLocation.Container;
-                    slotIndex.UpdateWeaponSlot(weaponItem);
+                    //instantiatedWeapon = Instantiate(weaponPrefabs[selectedWeapon], slotIndex.weaponHolderTransform);
+                    //WeaponItem weaponItem = instantiatedWeapon.GetComponent<WeaponItem>();
+                    //slotIndex.weaponItem = weaponItem;
+                    //weaponItem.weaponLocation = WeaponItem.WeaponLocation.Container;
+                    //slotIndex.UpdateWeaponSlot(weaponItem);
                 }
             }
         }
@@ -182,9 +182,9 @@ public class ItemContainer : MonoBehaviour
                 {
                     Slot slotIndex = containerSlotsTransform.GetChild(i + weaponPrefabs.Count).GetComponent<Slot>();
                     
-                    GameObject instantiatedTemplate = Instantiate(itemTemplate, slotIndex.itemHolderTransform);
-                    instantiatedTemplate.SetActive(false);
-                    Item templateItem = instantiatedTemplate.GetComponent<Item>();
+                    //GameObject instantiatedTemplate = Instantiate(itemTemplate, slotIndex.itemHolderTransform);
+                    //instantiatedTemplate.SetActive(false);
+                   // Item templateItem = instantiatedTemplate.GetComponent<Item>();
 
                     if (randomItems)
                     {
@@ -196,12 +196,12 @@ public class ItemContainer : MonoBehaviour
                         selectedItem = i;
                         quantity = orderedQuantity[i] * lootMultiplier;
                     }
-                    templateItem.itemScriptableObject = itemScriptableObjects[selectedItem];
-                    templateItem.quantity = quantity;
-                    templateItem.GetItemScriptableObject(templateItem.itemScriptableObject);
-                    templateItem.itemLocation = Item.ItemLocation.Container;
-                    slotIndex._item = templateItem;
-                    slotIndex.quantity = templateItem.quantity;
+                    //templateItem.itemScriptableObject = itemScriptableObjects[selectedItem];
+                    //templateItem.quantity = quantity;
+                    //templateItem.GetItemScriptableObject(templateItem.itemScriptableObject);
+                    //templateItem.itemLocation = Item.ItemLocation.Container;
+                    //slotIndex._item = templateItem;
+                    //slotIndex.quantity = templateItem.quantity;
                 }
             }
         }
@@ -228,7 +228,7 @@ public class ItemContainer : MonoBehaviour
     
     public void TakeAll()
     {
-        for (int i = 0; i < containerSize; i++)
+       /* for (int i = 0; i < containerSize; i++)
         {
             if (!inventory.inventoryFull)
             {
@@ -249,6 +249,6 @@ public class ItemContainer : MonoBehaviour
                     Debug.Log("The container is empty!");
                 }
             }
-        }
+        }*/
     }
 }

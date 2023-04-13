@@ -223,20 +223,21 @@ public class InventoryUI : MonoBehaviour
     public void SlotClickEvent(ClickEvent evt)
     {
         var target = evt.target as VisualElement;
-        string slotNumber = target.name.Split("t").Last(); 
-        selectedSlot = Int32.Parse(slotNumber);
+        var slotNumber = target.name.Split("_"); 
+        selectedSlot = Int32.Parse(slotNumber[1]);
         
         if (evt.button == (int)MouseButton.LeftMouse)
         {
             //TODO: USE ITEM EVENT
-            contextMenu.visible = false;
+            if (contextMenu.visible)
+            {
+               contextMenu.visible = false; 
+            }
         }
         if (evt.button == (int)MouseButton.RightMouse)
         {
-            //TODO: TOGGLE CONTEXTUAL MENU
-            contextMenu.transform.position = target.transform.position;
+            contextMenu.transform.position = target.transform.position; //Set the menu transform to the slot
             contextMenu.visible = !contextMenu.visible;
-           
         }
         
     }
@@ -248,7 +249,7 @@ public class InventoryUI : MonoBehaviour
         switch (item.itemClass)
         {
             case Item.ItemClass.Item:
-                
+                playerInventory.UseItem(playerInventory.itemsList[selectedSlot]);
                 break;
             
             case Item.ItemClass.Weapon:
@@ -264,39 +265,18 @@ public class InventoryUI : MonoBehaviour
     {
         contextMenu.visible = false;
         Item item = playerInventory.itemsList[selectedSlot];
-        switch (item.itemClass)
+        
+        if(item.itemClass == Item.ItemClass.Weapon || item.itemClass == Item.ItemClass.Outfit)
         {
-            case Item.ItemClass.Item:
-                
-                break;
-            
-            case Item.ItemClass.Weapon: 
-                playerInventory.ChangeEquipment(item);
-                break;
-            
-            case Item.ItemClass.Outfit:
-                
-                break;
+            playerInventory.ChangeEquipment(item);
         }
     }
     public void DropItem(ClickEvent evt)
     {
         contextMenu.visible = false;
         Item item = playerInventory.itemsList[selectedSlot];
-        switch (item.itemClass)
-        {
-            case Item.ItemClass.Item:
-                
-                break;
-            
-            case Item.ItemClass.Weapon:
-                
-                break;
-            
-            case Item.ItemClass.Outfit:
-                
-                break;
-        }
+        playerInventory.DropItem(item);
+
     }
     public void InspectItem(ClickEvent evt)
     {

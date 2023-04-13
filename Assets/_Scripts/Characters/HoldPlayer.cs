@@ -96,7 +96,7 @@ public class HoldPlayer : StateMachineBehaviour
         {
             catchTimer = catchTime;
         }
-        if (Input.GetKeyDown(KeyAssignments.SharedInstance.jumpKey.keyCode))
+        if (Input.GetKeyDown(KeyAssignments.Instance.jumpKey.keyCode))
         {
             catchTimer -= struggleForce;
             if (catchTimer <=0)

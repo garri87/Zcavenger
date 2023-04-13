@@ -8,7 +8,7 @@ public class IKAimer : MonoBehaviour
 {
    private Animator _animator;
    private PlayerController _playerController;
-   private WeaponItem _weaponItem;
+   private Item _weaponItem;
    
    private IKManager _ikManager;
    
@@ -70,7 +70,7 @@ public class IKAimer : MonoBehaviour
       if (_playerController.isAiming 
           && targetDistance > minDistance)
       {
-         if (_weaponItem.weaponItemClass != WeaponScriptableObject.WeaponClass.Throwable)
+         if (_weaponItem.weaponClass != WeaponScriptableObject.WeaponClass.Throwable)
          {
             for (int i = 0; i < aimConstraints.Count; i++) 
             { 
@@ -115,7 +115,7 @@ public class IKAimer : MonoBehaviour
    {
       if (_playerController.weaponEquipped && !_playerController._healthManager.isBleeding || _playerController.isAiming)
       {
-         if (_weaponItem.weaponItemClass == WeaponScriptableObject.WeaponClass.Primary && !_playerController.reloadingWeapon)
+         if (_weaponItem.weaponClass == WeaponScriptableObject.WeaponClass.Primary && !_playerController.reloadingWeapon)
          {
             IncreaseConstraintWeight(leftHandConstraint);
          }

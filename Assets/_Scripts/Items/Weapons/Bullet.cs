@@ -15,7 +15,7 @@ public class Bullet : MonoBehaviour
     public PlayerController playerController;
     public CrashObject crashObject;
     public Transform objectPoolTransform;
-    public WeaponItem weaponItem;
+    public Item weaponItem;
     private TrailRenderer _trailRenderer;
 
     #region Shooting

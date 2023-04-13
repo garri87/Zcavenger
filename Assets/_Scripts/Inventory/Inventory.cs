@@ -26,8 +26,8 @@ public class Inventory : MonoBehaviour
 
     [HideInInspector] public bool onItem;
     [HideInInspector] public bool onWeaponItem;
-    private Transform targetItem;
-    private Transform targetWeapon;
+    private Transform dropLocationItem;
+    private Transform dropLocationWeapon;
 
     public bool drawWeapon;
     public bool holsterWeapon;
@@ -100,9 +100,9 @@ public class Inventory : MonoBehaviour
         {
             if (onItem && Input.GetKeyDown(_playerController.keyAssignments.useKey.keyCode))
             {
-                if (targetItem != null)
+                if (dropLocationItem != null)
                 {
-                    AddItemToInventory(targetItem.GetComponent<Item>());
+                    AddItemToInventory(dropLocationItem.GetComponent<Item>());
                     _playerController.grabItem = true;
                     onItem = false;
                 }
@@ -150,14 +150,14 @@ public class Inventory : MonoBehaviour
         {
             if (other.CompareTag("Item"))
             {
-                targetItem = other.transform;
+                dropLocationItem = other.transform;
                 onItem = true;
 
             }
 
             if (other.CompareTag("Weapon"))
             {
-                targetWeapon = other.transform;
+                dropLocationWeapon = other.transform;
                 onWeaponItem = true;
             }
         }
@@ -167,14 +167,14 @@ public class Inventory : MonoBehaviour
     {
         if (other.CompareTag("Item"))
         {
-            targetItem = null;
+            dropLocationItem = null;
             onItem = false;
         }
 
         if (other.CompareTag("Weapon"))
         {
             onWeaponItem = false;
-            targetWeapon = null;
+            dropLocationWeapon = null;
         }
     }
 
@@ -267,32 +267,37 @@ public class Inventory : MonoBehaviour
             }
     }
 
-    public void GenerateItemObject(Item item, Transform target)
+/// <summary>
+/// Generates a new item and instantiates in world
+/// </summary>
+/// <param name="item"></param>
+/// <param name="dropLocation"></param>
+    public void GenerateItemObject(Item item, Transform dropLocation)
     {
         GameObject newItemGO = new GameObject(item.name);
         Item newItemComp = newItemGO.AddComponent<Item>();
         newItemComp = item;
         newItemComp.itemLocation = Item.ItemLocation.World;
-        Instantiate(newItemGO, target.position, target.rotation);
+        Instantiate(newItemGO, dropLocation.position, dropLocation.rotation);
 
     }
 
-    public void ReplaceItem(Item itemToReplace, Item targetEquipment)
+    public void ReplaceItem(Item itemToReplace, Item dropLocationEquipment)
     {
-        if (!targetEquipment)//if no item is present in the selected target, assign the item
+        if (!dropLocationEquipment)//if no item is present in the selected dropLocation, assign the item
         {
-            targetEquipment = itemToReplace;
+            dropLocationEquipment = itemToReplace;
         }
         else
         {//Otherwise store old weapon in inventory
             if (!inventoryFull)
             {
-                AddItemToInventory(targetEquipment);
-                targetEquipment = itemToReplace;
+                AddItemToInventory(dropLocationEquipment);
+                dropLocationEquipment = itemToReplace;
             }
             else //if inventory full, drop the item in world
             {
-                GenerateItemObject(targetEquipment, transform);
+                GenerateItemObject(dropLocationEquipment, transform);
             }
         }
     }
@@ -385,6 +390,31 @@ public class Inventory : MonoBehaviour
         //Debug.Log("return" + counter);
         return total;
     }
+
+
+    public void UseItem(Item item){
+
+        if(item.itemClass == ItemClass.Item)
+        {
+            switch(item.ID)
+                {
+                    case 1000: //TODO: CREAR BIBLIOTECA DE EFECTOS DE ITEMS
+                    break;    
+                }
+
+        }
+        
+        RefreshInventoryToUI();
+    }
+
+    public void DropItem(Item item){
+       
+        GenerateItemObject(item,transform);
+        itemsList.Remove(item);
+        RefreshInventoryToUI();
+
+    }
+
 
 
     /// <summary>

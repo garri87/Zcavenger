@@ -432,7 +432,7 @@ public class Item : MonoBehaviour
         switch (command)
         {
             case "MeleeStart":
-                playerController.controllerType = PlayerController.ControllerType.StandByController;
+               // playerController.controllerType = PlayerController.ControllerType.StandByController;
                 break;
 
             case "DoDamage":
@@ -444,7 +444,7 @@ public class Item : MonoBehaviour
                 playerAnimator.SetBool("MeleeAttack1", attacking);
                 playerAnimator.SetBool("MeleeAttack2", attacking);
                 playerAnimator.SetBool("MeleeAttack3", attacking);
-                playerController.controllerType = PlayerController.ControllerType.DefaultController;
+               // playerController.controllerType = PlayerController.ControllerType.DefaultController;
 
                 break;
         }
@@ -466,9 +466,9 @@ public class Item : MonoBehaviour
 
         if (weaponClass == WeaponScriptableObject.WeaponClass.Throwable)
         {
-            if (other.CompareTag("Ground") && throwableActive)
+            /*if (other.CompareTag("Ground") && throwableActive)
             {
-            }
+            }*/
         }
     }
 

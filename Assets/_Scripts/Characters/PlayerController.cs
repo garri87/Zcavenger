@@ -145,7 +145,7 @@ public class PlayerController : MonoBehaviour
 
     public Transform crosshairTransform;
     public Transform _WeaponHolder;
-    public WeaponItem equippedWeaponItem;
+    public Item equippedWeaponItem;
     public bool weaponEquipped;
     [HideInInspector] public bool isAiming;
     [HideInInspector] public bool attacking;
@@ -754,7 +754,7 @@ public class PlayerController : MonoBehaviour
         {
             if (Input.GetKey(keyAssignments.aimBlockKey.keyCode) && !PlayerBusy())
             {
-                if (equippedWeaponItem.weaponItemClass != WeaponScriptableObject.WeaponClass.Melee)
+                if (equippedWeaponItem.weaponClass != WeaponScriptableObject.WeaponClass.Melee)
                 {
                     if (_checkGround.isGrounded && !_climber.attachedToLedge && !trapped && !beingBitten && !PlayerBusy())
                     {
@@ -767,7 +767,7 @@ public class PlayerController : MonoBehaviour
                     }
                 }
 
-                if (equippedWeaponItem.weaponItemClass == WeaponScriptableObject.WeaponClass.Melee &&
+                if (equippedWeaponItem.weaponClass == WeaponScriptableObject.WeaponClass.Melee &&
                     equippedWeaponItem.ID != 1001 && !beingBitten && !trapped) // 1001: knife
                 {
                     if (_healthManager.currentStamina >= _healthManager.blockHitPenalty)
@@ -1192,7 +1192,7 @@ public class PlayerController : MonoBehaviour
             weaponEquipped = true;
             if (equippedWeaponItem == null)
             {
-                equippedWeaponItem = _WeaponHolder.GetComponentInChildren<WeaponItem>(); //TODO: CACHEAR
+                equippedWeaponItem = _WeaponHolder.GetComponentInChildren<Item>(); //TODO: CACHEAR
             }
             else
             {
@@ -1298,7 +1298,7 @@ public class PlayerController : MonoBehaviour
                 break;
 
             case "Throw":
-                equippedWeaponItem._throwable.ThrowObject(enabled);
+                //equippedWeaponItem._throwable.ThrowObject(enabled);
                 break;
         }
     }
