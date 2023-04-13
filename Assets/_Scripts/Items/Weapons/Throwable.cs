@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Throwable : MonoBehaviour
 {
-    public WeaponItem _weaponItem;
+    public Item _weaponItem;
     public GameObject _explosionParticle;
     public GameObject ignitionParticle;
     public MeshRenderer objectRenderer;
@@ -25,7 +25,7 @@ public class Throwable : MonoBehaviour
 
     private void Awake()
     {
-        _weaponItem = GetComponent<WeaponItem>();
+        _weaponItem = GetComponent<Item>();
         _rigidbody = GetComponent<Rigidbody>();
         ignitionParticle.SetActive(false);
     }
@@ -38,7 +38,7 @@ public class Throwable : MonoBehaviour
         _weaponSound = GetComponent<WeaponSound>();
         exploded = false;
 
-        switch (_weaponItem.weaponLocation)
+       /* switch (_weaponItem.weaponLocation)
         {
             case WeaponItem.WeaponLocation.World:
                 _rigidbody.constraints = RigidbodyConstraints.FreezeAll;
@@ -48,7 +48,7 @@ public class Throwable : MonoBehaviour
                 objectRenderer.enabled = true;
                 _rigidbody.constraints = RigidbodyConstraints.FreezePositionZ;
                 break;
-        }
+        }*/
     }
 
     private void Start()
@@ -161,11 +161,15 @@ public class Throwable : MonoBehaviour
             explosiveArmed = true;
             detonateTimer = detonationTime;
             transform.parent = null;
+            /*
             Slot throwableSlot = _playerController.gameManager.uiManager.throwableEquipSlot.GetComponent<Slot>();
+            */
+            /*
             throwableSlot.UpdateWeaponSlot(null);
+            */
             throwableCollider.enabled = true;
             _weaponItem.weaponEquipped = false;
-            _weaponItem.weaponLocation = WeaponItem.WeaponLocation.Throwed;
+           // _weaponItem.weaponLocation = WeaponItem.WeaponLocation.Throwed;
             throwableCollider.isTrigger = false;
             ignitionParticle.SetActive(true);
             _rigidbody.useGravity = true;

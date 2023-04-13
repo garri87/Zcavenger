@@ -8,7 +8,7 @@ public class WeaponSound : MonoBehaviour
     public SoundSensor _soundSensor;
 
     public AudioSource _audioSource;
-    private WeaponItem _weaponItem;
+    private Item _weaponItem;
     private PlayerController _playerController;
 
     [Header("Audio Clips")]

@@ -5,81 +5,53 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.UIElements;
+using Button = UnityEngine.UI.Button;
+using Slider = UnityEngine.UI.Slider;
 
 public class UIManager : MonoBehaviour
 {
-    [Header("Main Menu")]
-    public GameObject mainMenu;
-    public Canvas mainMenuCanvas;
-    public TextMeshProUGUI versionText;
-    
-    [Header("Loading Screen")]
-    public GameObject loadingScreen;
-    public Canvas loadingScreenCanvas;
-    public CanvasGroup loadingScrnCanvasGroup;
-    public GameObject progressBar;
-    public Slider progressBarSlider;
-    public TextMeshProUGUI tipsText;
-    
-    [Header("In Game Overlay")]
-    public Transform inGameOverlayUI;
-    public Canvas inGameOverlayCanvas;
-    public Transform playerStatsPanel;
-    public Transform ammoPanel;
-    public Transform quickInventoryUI;
-    public Canvas quickInventoryCanvas;
+    public MainMenuUI mainMenuUI;
 
-    [Header("Pause Menu, Options Menu & Game Over Panel")]
-    public Transform pauseMenuUI;
-    public Canvas pauseMenuCanvas;
-    private GraphicRaycaster pauseMenuRaycaster;
-    public Canvas gameOverCanvas;
-    public CanvasGroup gameOverCanvasGroup;
-    public TextMeshProUGUI gameOverText;
-    public OptionsMenu optionsMenu;
-    
-    [Header("Inventory Area")]
-    public Transform inventoryUI;
-    public Canvas inventoryUICanvas;
-    private GraphicRaycaster inventoryRaycaster;
-    private CanvasGroup inventoryCanvasGroup;
-    public Transform inventorySlotArea;
-    public Transform capacityPanel;
-    public List<Slot> inventorySlotList = new List<Slot>();
-    [Space]
-    public Transform primaryEquipSlot;
-    public Transform secondaryEquipSlot;
-    public Transform meleeEquipSlot;
-    [Space]
-    public Transform headEquipSlot;
-    public Transform vestEquipSlot;
-    public Transform lowerBodyEquipSlot;
-    public Transform throwableEquipSlot;
-    public Transform backpackEquipSlot;
+    public LoadingScreenUI loadingScreenUI;
 
-    [Header("Inspect & Quick Info Panels")]
-    public InspectPanel inspectPanel;
-    public Transform quickInfoPanelUI;
+    public InGameOverlayUI inGameOverlayUI;
 
-    
-    
+    public InventoryUI inventoryUI;
 
-    private void Awake()
+    public PauseMenuUI pauseMenuUI;
+
+    public OptionsMenuUI optionsMenuUI;
+
+    public GameOverScreenUI gameOverScreenUI;
+
+    private GameObject[] uiList;
+
+    private void OnEnable()
     {
-        for (int i = 0; i < inventorySlotArea.childCount; i++)
+        uiList = new GameObject[]
         {
-            inventorySlotList.Add(inventorySlotArea.GetChild(i).GetComponent<Slot>());
+            mainMenuUI.gameObject,
+            loadingScreenUI.gameObject,
+            inGameOverlayUI.gameObject,
+            inventoryUI.gameObject,
+            pauseMenuUI.gameObject,
+            optionsMenuUI.gameObject,
+            gameOverScreenUI.gameObject
+        };
+    }
+
+
+    public void CloseAllUI()
+    {
+        foreach (GameObject gameObject in uiList)
+        {
+            gameObject.SetActive(false);
         }
-        
     }
 
-    private void Start()
+    public void ToggleUI(GameObject uiGameobject, bool enabled)
     {
-        
-    }
-
-    private void Update()
-    {
-        
+        uiGameobject.SetActive(enabled);
     }
 }

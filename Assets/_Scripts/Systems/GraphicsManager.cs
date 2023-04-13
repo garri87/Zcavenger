@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.PostProcessing;
@@ -41,10 +43,12 @@ public class GraphicsManager : MonoBehaviour
     
     public OptionsMenu optionsMenu;
     private GameManager _gameManager;
+    private Resolution[] resolutions;
     
     private void OnValidate()
     {
         _gameManager = GetComponent<GameManager>();
+        //Switch postprocessing settings 
         switch (_gameManager.sceneType)
         {
             case GameManager.SceneType.inLevel:
@@ -63,17 +67,32 @@ public class GraphicsManager : MonoBehaviour
         
     }
 
-    public void getVolumeProfileOverrides(VolumeProfile profile)
-    {
-        profile.TryGet<Bloom>(out _bloom);
-        profile.TryGet<DepthOfField>(out _dof);
-        profile.TryGet<FilmGrain>(out _grain);
-        profile.TryGet<Vignette>(out _vignette);
-        profile.TryGet<ChromaticAberration>(out _chrAberr);
-        profile.TryGet<LiftGammaGain>(out _liftGammaGain);
-    }
+    
     void Awake()
     {
+        // Obtener resoluciones de pantalla soportadas
+        resolutions = Screen.resolutions;
+
+        // Limpiar opciones del dropdown de resoluciones
+        optionsMenu.screenResDropdown.ClearOptions();
+
+        // Agregar cada resolución como opción en el dropdown
+        foreach (Resolution resolution in resolutions)
+        {
+            string option = resolution.width + "x" + resolution.height;
+            optionsMenu.screenResDropdown.options.Add(new TMP_Dropdown.OptionData(option));
+        }
+        
+        // Establecer resolución actual como opción seleccionada en el dropdown
+        int currentResolutionIndex = GetCurrentResolutionIndex();
+        optionsMenu.screenResDropdown.value = currentResolutionIndex;
+        optionsMenu.screenResDropdown.RefreshShownValue();
+        
+        // Establecer estado actual de pantalla completa en el toggle
+        bool isFullscreen = Screen.fullScreen;
+        optionsMenu.fullscreenToggle.isOn = isFullscreen;
+        
+        
         optionsMenu.screenResDropdown.value = PlayerPrefs.GetInt("userResolution");
         optionsMenu.displayModeDropdown.value = PlayerPrefs.GetInt("userDisplayMode");
         
@@ -109,6 +128,22 @@ public class GraphicsManager : MonoBehaviour
         //currentRenderPipelineAsset = GraphicsSettings.renderPipelineAsset;
     }
 
+    
+    /// <summary>
+    /// Gets the postprocess effects of profile
+    /// </summary>
+    /// <param name="profile"></param>
+    public void getVolumeProfileOverrides(VolumeProfile profile)
+    {
+        profile.TryGet<Bloom>(out _bloom);
+        profile.TryGet<DepthOfField>(out _dof);
+        profile.TryGet<FilmGrain>(out _grain);
+        profile.TryGet<Vignette>(out _vignette);
+        profile.TryGet<ChromaticAberration>(out _chrAberr);
+        profile.TryGet<LiftGammaGain>(out _liftGammaGain);
+    }
+    
+    
     #region Graphics Settings
 
     public void ChangeQualitySettings(int value)
@@ -458,6 +493,19 @@ public class GraphicsManager : MonoBehaviour
     
     #endregion
 
+    private int GetCurrentResolutionIndex()
+    {
+        Resolution currentResolution = Screen.currentResolution;
+        for (int i = 0; i < resolutions.Length; i++)
+        {
+            if (resolutions[i].width == currentResolution.width && resolutions[i].height == currentResolution.height)
+            {
+                return i;
+            }
+        }
+        return 0;
+    }
+    
     
 
 }

@@ -3,7 +3,10 @@ using TMPro;
 using Unity.Mathematics;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Purchasing;
 using UnityEngine.Serialization;
+using static Inventory;
+using static Item;
 
 public class PlayerController : MonoBehaviour
 {
@@ -61,7 +64,7 @@ public class PlayerController : MonoBehaviour
     #region Movement Variables
 
     [HideInInspector] public float horizontalInput, verticalInput;
-    
+
     [HideInInspector] private Vector3 lastPosition;
     public bool ascending;
     public bool descending;
@@ -141,25 +144,26 @@ public class PlayerController : MonoBehaviour
     #region Weapon Handling Variables
 
     public Transform crosshairTransform;
-    public Transform _playerWpnHolderTransform;
-    public WeaponItem equippedWeaponItem;
+    public Transform _WeaponHolder;
+    public Item equippedWeaponItem;
     public bool weaponEquipped;
     [HideInInspector] public bool isAiming;
     [HideInInspector] public bool attacking;
     [HideInInspector] public bool reloadingWeapon;
     private SpriteRenderer crosshairSprtRenderer;
     public LayerMask mouseAimMask;
+    private bool drawWeapon, holsterWeapon;
 
     #endregion
 
     #region Components
 
-    [HideInInspector]public GameManager gameManager;
+    [HideInInspector] public GameManager gameManager;
     [HideInInspector] public HealthManager _healthManager;
     [HideInInspector] public ParticleSystem _particleSystem;
     [HideInInspector] public Rigidbody _rigidbody;
     [HideInInspector] public Animator _animator;
-    [HideInInspector]public CapsuleCollider _collider;
+    [HideInInspector] public CapsuleCollider _collider;
     [HideInInspector] public CheckGround _checkGround;
     private Camera mainCamera;
     private PlayerAudio _playerAudio;
@@ -167,7 +171,7 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] public AgentController stompTargetAgentController;
     [HideInInspector] public StompDetector _stompDetector;
 
-    
+
 
     #endregion
 
@@ -191,38 +195,39 @@ public class PlayerController : MonoBehaviour
     public bool finishedLevel = false;
 
     private Transform leftFoot, rightFoot;
-   
+
     private void Awake()
     {
-        try
-        {
-            mainCamera = Camera.main;
-            gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-            keyAssignments = gameManager.GetComponent<KeyAssignments>();
-            _healthManager = GetComponent<HealthManager>();
-            _rigidbody = GetComponent<Rigidbody>();
-            _inventory = GetComponent<Inventory>();
-            _checkGround = GetComponentInChildren<CheckGround>();
-            _playerAudio = GetComponent<PlayerAudio>();
-            _climber = GetComponent<Climber>();
-            _collider = GetComponent<CapsuleCollider>();
-            crosshairSprtRenderer = crosshairTransform.GetComponent<SpriteRenderer>();
-            _soundSensor = GetComponent<SoundSensor>();
-            _animator = GetComponent<Animator>();
-            _stompDetector = GetComponentInChildren<StompDetector>();
-            
-            crosshairTransform.parent = null;
-        
-            _playerWpnHolderTransform.parent = _animator.GetBoneTransform(HumanBodyBones.RightHand);
-        }
-        catch (Exception e)
-        {
-            Debug.Log(e);
-        }
+        mainCamera = Camera.main;
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+
+        #region GetComponents
+
+        keyAssignments = gameManager.GetComponent<KeyAssignments>();
+        _healthManager = GetComponent<HealthManager>();
+        _rigidbody = GetComponent<Rigidbody>();
+
+        _inventory = GetComponent<Inventory>();
+        _checkGround = GetComponentInChildren<CheckGround>();
+        _playerAudio = GetComponent<PlayerAudio>();
+        _climber = GetComponent<Climber>();
+        _collider = GetComponent<CapsuleCollider>();
+        crosshairSprtRenderer = crosshairTransform.GetComponent<SpriteRenderer>();
+        _soundSensor = GetComponent<SoundSensor>();
+        _animator = GetComponent<Animator>();
+        #endregion
+
+
+        _WeaponHolder = _animator.GetBoneTransform(HumanBodyBones.RightHand).Find("WeaponHolder");
+
+        _stompDetector = gameObject.transform.Find("StompDetector").GetComponent<StompDetector>();
     }
 
     void Start()
     {
+
+
+
         currentSpeed = normalSpeed;
 
         if (gameManager)
@@ -252,7 +257,7 @@ public class PlayerController : MonoBehaviour
         #endregion
 
         CheckFallingState();
-        
+
         CheckWeaponEquipped();
 
         #region PlayLine placement
@@ -472,8 +477,176 @@ public class PlayerController : MonoBehaviour
 
     #region Controllers Functions
 
+    private void WeaponSelectionController()
+    {
+
+        if (Input.GetKeyDown(KeyAssignments.Instance.primaryKey.keyCode))
+        {
+            if (_inventory.selectedWeapon != Inventory.SelectedWeapon.Primary)
+            {
+                drawWeapon = true;
+                DrawWeapon(WeaponScriptableObject.WeaponClass.Primary, true);
+            }
+            else
+            {
+                holsterWeapon = true;
+                DrawWeapon(WeaponScriptableObject.WeaponClass.Primary, false);
+            }
+        }
+
+        if (Input.GetKeyDown(KeyAssignments.Instance.secondaryKey.keyCode))
+        {
+            if (_inventory.selectedWeapon != Inventory.SelectedWeapon.Secondary)
+            {
+                drawWeapon = true;
+
+                DrawWeapon(WeaponScriptableObject.WeaponClass.Secondary, true);
+            }
+            else
+            {
+                holsterWeapon = true;
+                DrawWeapon(WeaponScriptableObject.WeaponClass.Secondary, false);
+            }
+        }
+
+        if (Input.GetKeyDown(KeyAssignments.Instance.meleeKey.keyCode))
+        {
+            if (_inventory.selectedWeapon != Inventory.SelectedWeapon.Melee)
+            {
+                drawWeapon = true;
+                DrawWeapon(WeaponScriptableObject.WeaponClass.Melee, true);
+            }
+            else
+            {
+                holsterWeapon = true;
+                DrawWeapon(WeaponScriptableObject.WeaponClass.Melee, false);
+            }
+        }
+
+        if (Input.GetKeyDown(KeyAssignments.Instance.throwableKey.keyCode))
+        {
+            if (_inventory.selectedWeapon != Inventory.SelectedWeapon.Throwable)
+            {
+                drawWeapon = true;
+                DrawWeapon(WeaponScriptableObject.WeaponClass.Throwable, true);
+            }
+            else
+            {
+                holsterWeapon = true;
+                DrawWeapon(WeaponScriptableObject.WeaponClass.Throwable, false);
+            }
+        }
+    }
+
+
+    /// <summary>
+    /// Triggers draw weapon animation
+    /// </summary>
+    /// <param name="weaponClass"></param>
+    /// <param name="draw"></param>
+    public void DrawWeapon(WeaponScriptableObject.WeaponClass weaponClass, bool draw)
+    {
+        Item selectedItem = null;
+
+        switch (weaponClass)
+        {
+            case WeaponScriptableObject.WeaponClass.None:
+                break;
+
+            case WeaponScriptableObject.WeaponClass.Primary:
+                _animator.SetBool("RifleEquip", draw);
+                _animator.SetBool("PistolEquip", false);
+                _animator.SetBool("MeleeEquip", false);
+                _animator.SetBool("ThrowableEquip", false);
+                _inventory.selectedWeapon = SelectedWeapon.Primary;
+                selectedItem = _inventory.primaryWeapon;
+
+                break;
+
+            case WeaponScriptableObject.WeaponClass.Secondary:
+                _animator.SetBool("RifleEquip", false);
+                _animator.SetBool("PistolEquip", draw);
+                _animator.SetBool("MeleeEquip", false);
+                _animator.SetBool("ThrowableEquip", false);
+                _inventory.selectedWeapon = SelectedWeapon.Secondary;
+                selectedItem = _inventory.secondaryWeapon;
+
+                break;
+
+            case WeaponScriptableObject.WeaponClass.Melee:
+                _animator.SetBool("RifleEquip", false);
+                _animator.SetBool("PistolEquip", false);
+                _animator.SetBool("MeleeEquip", draw);
+                _animator.SetBool("ThrowableEquip", false);
+                _inventory.selectedWeapon = SelectedWeapon.Melee;
+                selectedItem = _inventory.meleeWeapon;
+
+                break;
+
+            case WeaponScriptableObject.WeaponClass.Throwable:
+                _animator.SetBool("RifleEquip", false);
+                _animator.SetBool("PistolEquip", false);
+                _animator.SetBool("MeleeEquip", false);
+                _animator.SetBool("ThrowableEquip", draw);
+                _inventory.selectedWeapon = SelectedWeapon.Throwable;
+                selectedItem = _inventory.throwableWeapon;
+
+                break;
+        }
+
+        if (draw)
+        {
+            GameObject weapon = new GameObject();
+            Item weaponItem = weapon.AddComponent<Item>();
+            weaponItem = selectedItem;
+            weaponItem.itemLocation = ItemLocation.Player;
+            Instantiate(weapon, _WeaponHolder.position, _WeaponHolder.rotation, _WeaponHolder);
+
+        }
+        else
+        {
+            if (_WeaponHolder.childCount > 0)
+            {
+                GameObject weapon = _WeaponHolder.GetChild(0).gameObject;
+                Item weaponItem = weapon.GetComponent<Item>();
+
+                switch (weaponItem.weaponClass)
+                {
+                    case WeaponScriptableObject.WeaponClass.None:
+                        break;
+                    case WeaponScriptableObject.WeaponClass.Primary:
+                        _inventory.primaryWeapon = weaponItem;
+                        break;
+                    case WeaponScriptableObject.WeaponClass.Secondary:
+                        _inventory.secondaryWeapon = weaponItem;
+                        break;
+                    case WeaponScriptableObject.WeaponClass.Melee:
+                        _inventory.meleeWeapon = weaponItem;
+                        break;
+                    case WeaponScriptableObject.WeaponClass.Throwable:
+                        _inventory.throwableWeapon = weaponItem;
+                        break;
+                    default:
+
+                        break;
+                }
+                Destroy(weapon);
+            }
+        }
+
+
+    }
+
+
     public void DefaultController()
     {
+
+        if (!isAiming && !climbingLadder &&
+                    !attacking && !onTransition)
+        {
+            WeaponSelectionController();//Allow weapon change
+        }
+
         _animator.applyRootMotion = false;
         _rigidbody.useGravity = true;
         _collider.isTrigger = false;
@@ -539,7 +712,7 @@ public class PlayerController : MonoBehaviour
         }
 
         #endregion
-        
+
         #region PLAYER ACTIONS
 
         
@@ -587,7 +760,7 @@ public class PlayerController : MonoBehaviour
             //Aiming toggle
             if (Input.GetKey(keyAssignments.aimBlockKey.keyCode) && !PlayerBusy())
             {
-                if (equippedWeaponItem.weaponItemClass != WeaponScriptableObject.WeaponClass.Melee)
+                if (equippedWeaponItem.weaponClass != WeaponScriptableObject.WeaponClass.Melee)
                 {
                     if (_checkGround.isGrounded && !_climber.attachedToLedge && !trapped && !beingBitten && !PlayerBusy())
                     {
@@ -600,7 +773,7 @@ public class PlayerController : MonoBehaviour
                     }
                 }
 
-                if (equippedWeaponItem.weaponItemClass == WeaponScriptableObject.WeaponClass.Melee &&
+                if (equippedWeaponItem.weaponClass == WeaponScriptableObject.WeaponClass.Melee &&
                     equippedWeaponItem.ID != 1001 && !beingBitten && !trapped) // 1001: knife
                 {
                     if (_healthManager.currentStamina >= _healthManager.blockHitPenalty)
@@ -1022,13 +1195,12 @@ public class PlayerController : MonoBehaviour
 
     private void CheckWeaponEquipped()
     {
-        if (_playerWpnHolderTransform.childCount > 0)
+        if (_WeaponHolder.childCount > 0)
         {
             weaponEquipped = true;
             if (!equippedWeaponItem)
             {
-                equippedWeaponItem = _playerWpnHolderTransform.GetComponentInChildren<WeaponItem>(); 
-                //TODO: CACHEAR, LLENAR LA VARIABLE equippedWeaponItem CUANDO APRETAMOS EL BOTON DE SACAR EL ARMA
+                equippedWeaponItem = _WeaponHolder.GetComponentInChildren<Item>(); //TODO: CACHEAR
             }
             else
             {
@@ -1134,7 +1306,7 @@ public class PlayerController : MonoBehaviour
                 break;
 
             case "Throw":
-                equippedWeaponItem._throwable.ThrowObject(enabled);
+                //equippedWeaponItem._throwable.ThrowObject(enabled);
                 break;
         }
     }

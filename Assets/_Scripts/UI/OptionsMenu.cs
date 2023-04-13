@@ -27,6 +27,7 @@ public class OptionsMenu : MonoBehaviour
     public TMP_Dropdown screenResDropdown;
     public TMP_Dropdown displayModeDropdown;
     public Toggle vSyncToggle;
+    public Toggle fullscreenToggle;
     public Slider gammaSlider;
     
 
@@ -94,7 +95,6 @@ public class OptionsMenu : MonoBehaviour
     graphicsCanvas.enabled = false;
     audioCanvas.enabled = false;
     inputCanvas.enabled = false;
-    
     }
 
     public void SetGraphicsRaycaster(bool enabled)

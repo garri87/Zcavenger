@@ -18,7 +18,24 @@ public class KeyStr
 
 public class KeyAssignments : MonoBehaviour
 {
-   public static KeyAssignments SharedInstance;
+   private static KeyAssignments _instance;
+   public static KeyAssignments Instance
+   {
+      get
+      {
+         if (_instance == null)
+         {
+            _instance = FindObjectOfType<KeyAssignments>();
+            if (_instance == null)
+            {
+               GameObject go = new GameObject("GameManager");
+               _instance = go.AddComponent<KeyAssignments>();
+            }   
+         }
+         return _instance;
+      }
+   }
+   
    public Transform keyAssignTransform;
 
    
@@ -74,7 +91,6 @@ public class KeyAssignments : MonoBehaviour
 
    private void Awake()
    {    
-      SharedInstance = this;
       InitInputOptionsKeys();
    }
 

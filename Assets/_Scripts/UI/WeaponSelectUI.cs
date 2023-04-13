@@ -18,14 +18,14 @@ public class WeaponSelectUI : MonoBehaviour
    public void UpdateImages()
    {
       i = 0;
-      foreach (Slot slot in equipmentSlots)
+      /*foreach (Slot slot in equipmentSlots)
       {
          if (slot.slotImage.sprite != null)
          {
             images[i].sprite = slot.slotImage.sprite;
          }
          i++;
-      }
+      }*/
    }
    
 }

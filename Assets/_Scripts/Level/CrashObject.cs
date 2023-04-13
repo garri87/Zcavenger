@@ -46,8 +46,8 @@ public class CrashObject : MonoBehaviour
         {
             GameObject instantiatedWeapon = Instantiate(insideWeapon, weaponHolder.position + (Vector3.up/2), weaponHolder.rotation);
             instantiatedWeapon.transform.parent = weaponHolder.transform;
-            WeaponItem weaponItem = instantiatedWeapon.GetComponent<WeaponItem>();
-            weaponItem.weaponLocation = WeaponItem.WeaponLocation.World;
+            Item weaponItem = instantiatedWeapon.GetComponent<Item>();
+            weaponItem.itemLocation = Item.ItemLocation.World;
             instantiatedWeapon.transform.rotation = Quaternion.Euler(0,90,0);
         }
     }
@@ -75,7 +75,7 @@ public class CrashObject : MonoBehaviour
         if (insideItem != null)
         {
             //_item.InstantiateItem(_item.itemPrefab);
-            _item.prefabHolder.gameObject.SetActive(true);
+           // _item.prefabHolder.gameObject.SetActive(true);
             itemHolder.gameObject.SetActive(true);
         }
 

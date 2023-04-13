@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/Resources/UI/WorldText.uss?fileID=7433441132597879392&amp;guid=e71fa44bc550f55479cbd782dab1a9ef&amp;type=3#WorldText" />
+    <ui:VisualElement name="Frame" style="position: absolute; flex-grow: 1; width: 10%; height: 10%; align-items: center; justify-content: center;">
+        <ui:Label text="Sample text Sample text" display-tooltip-when-elided="true" name="Text" />
+    </ui:VisualElement>
+</ui:UXML>

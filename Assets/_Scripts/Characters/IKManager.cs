@@ -33,7 +33,7 @@ public class IKManager : MonoBehaviour
     private PlayerController _playerController;
     private AgentController _agentController;
     private Inventory _inventory;
-    public WeaponItem weaponItem;
+    public Item weaponItem;
     
     private Transform muzzleTransform;
 

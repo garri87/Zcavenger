@@ -1,0 +1,456 @@
+Label {
+    color: rgb(255, 255, 255);
+    font-size: 100%;
+    -unity-font-definition: resource('Fonts/BebasNeue-Regular SDF');
+    -unity-text-outline-width: 0.1px;
+    -unity-text-outline-color: rgb(0, 0, 0);
+    -unity-font-style: normal;
+    white-space: normal;
+}
+
+.Slot {
+    background-image: url('project://database/Assets/Textures/slot_Background.jpg?fileID=2800000&guid=286837fff4b87ee40b28e136a945ac25&type=3#slot_Background');
+    -unity-background-image-tint-color: rgba(255, 255, 255, 0.6);
+    background-color: rgb(70, 70, 70);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+    -unity-background-scale-mode: stretch-to-fill;
+    opacity: 0.7;
+    margin-left: 1px;
+    margin-right: 1px;
+    margin-top: 1px;
+    margin-bottom: 1px;
+    flex-grow: 0;
+    transition-duration: 0.3s;
+    width: 15%;
+    height: 15%;
+    max-width: 15%;
+    max-height: 15%;
+    min-width: 1%;
+    min-height: 1%;
+    align-items: stretch;
+    justify-content: flex-end;
+}
+
+.Slot:hover {
+    background-color: rgb(96, 96, 96);
+    opacity: 1;
+    transition-duration: 0.3s;
+    transition-property: all;
+    transition-timing-function: ease;
+}
+
+.Slot Label {
+    -unity-font-definition: resource('Fonts/BebasNeue-Regular SDF');
+    font-size: 100%;
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    min-height: 1%;
+    min-width: 1%;
+}
+
+.EquipSlot {
+    flex-direction: column;
+    width: 30%;
+    flex-grow: 1;
+    flex-shrink: 1;
+    opacity: 0.5;
+    height: 25%;
+    min-width: 1%;
+    min-height: 1%;
+    max-width: 30%;
+    max-height: 100%;
+    justify-content: flex-end;
+    align-items: center;
+    overflow: hidden;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    background-image: url('project://database/Assets/Textures/slot_Background.jpg?fileID=2800000&guid=286837fff4b87ee40b28e136a945ac25&type=3#slot_Background');
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+    transition-duration: 0.3s;
+}
+
+.EquipSlot Label {
+    flex-grow: 1;
+    height: 20%;
+    -unity-text-align: middle-center;
+    background-color: rgb(58, 57, 57);
+    max-height: 20%;
+    min-height: 1%;
+    min-width: 1%;
+    max-width: 100%;
+    width: 120%;
+    font-size: 73%;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    flex-shrink: 1;
+    white-space: normal;
+    background-image: url('project://database/Assets/Textures/slot_Background.jpg?fileID=2800000&guid=286837fff4b87ee40b28e136a945ac25&type=3#slot_Background');
+    -unity-font-definition: resource('Fonts/BebasNeue-Regular SDF');
+}
+
+.WeaponSlot {
+    width: 100%;
+    height: 100%;
+    justify-content: flex-end;
+    background-color: rgb(55, 55, 55);
+    background-image: url('project://database/Assets/Textures/slot_Background.jpg?fileID=2800000&guid=286837fff4b87ee40b28e136a945ac25&type=3#slot_Background');
+    margin-left: 1px;
+    margin-right: 1px;
+    margin-top: 1px;
+    margin-bottom: 1px;
+    opacity: 0.5;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    overflow: hidden;
+    transition-duration: 0.3s;
+}
+
+#ContextMenu Button {
+    background-color: rgb(72, 72, 72);
+    -unity-font-definition: resource('Fonts/BebasNeue-Regular SDF');
+    color: rgb(255, 255, 255);
+    font-size: 67%;
+    -unity-font-style: normal;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgba(0, 0, 0, 0.37);
+    border-right-color: rgba(0, 0, 0, 0.37);
+    border-top-color: rgba(0, 0, 0, 0.37);
+    border-bottom-color: rgba(0, 0, 0, 0.37);
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    flex-grow: 1;
+    flex-shrink: 1;
+    -unity-text-align: middle-center;
+    -unity-text-outline-width: 0.2px;
+    -unity-text-outline-color: rgb(0, 0, 0);
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+#SlotQuantity {
+    top: 3px;
+    right: -2px;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    width: 100%;
+    height: auto;
+    -unity-text-align: middle-right;
+    white-space: normal;
+}
+
+.Stat {
+    width: 90%;
+    height: 10%;
+    background-color: rgb(58, 58, 58);
+    flex-grow: 0;
+    overflow: hidden;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgb(79, 79, 79);
+    border-right-color: rgb(79, 79, 79);
+    border-top-color: rgb(79, 79, 79);
+    border-bottom-color: rgb(79, 79, 79);
+    flex-direction: row;
+    align-items: center;
+    -unity-font-definition: resource('Fonts/BebasNeue-Regular SDF');
+}
+
+.StatName {
+    -unity-text-align: middle-center;
+    margin-left: 1px;
+    margin-right: 1px;
+    margin-top: 1px;
+    margin-bottom: 1px;
+    padding-left: 2px;
+    padding-right: 2px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+.BarBackground {
+    background-color: rgb(67, 67, 67);
+    flex-grow: 1;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+}
+
+.StatValue {
+    flex-shrink: 1;
+    -unity-text-align: middle-center;
+    margin-left: 1px;
+    margin-right: 1px;
+    margin-top: 1px;
+    margin-bottom: 1px;
+    padding-left: 2px;
+    padding-right: 2px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+.Title {
+    width: 50%;
+    height: 100%;
+    max-width: 50%;
+    max-height: 100%;
+    min-width: 1%;
+    min-height: 1%;
+    margin-left: 5px;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    -unity-text-align: middle-left;
+    -unity-font-definition: resource('Fonts/BebasNeue-Regular SDF');
+    font-size: 100%;
+}
+
+.Cap {
+    font-size: 100%;
+    -unity-text-align: middle-right;
+    -unity-font-definition: resource('Fonts/BebasNeue-Regular SDF');
+    flex-grow: 1;
+    flex-shrink: 1;
+    -unity-text-outline-width: 0.1px;
+    -unity-text-outline-color: rgb(0, 0, 0);
+}
+
+.WeaponSlot Label {
+    -unity-font-definition: resource('Fonts/BebasNeue-Regular SDF');
+    font-size: 66%;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    -unity-text-align: middle-center;
+    background-color: rgb(58, 57, 57);
+    background-image: url('project://database/Assets/Textures/slot_Background.jpg?fileID=2800000&guid=286837fff4b87ee40b28e136a945ac25&type=3#slot_Background');
+    -unity-background-image-tint-color: rgb(195, 195, 195);
+}
+
+.EquipSlot:hover {
+    opacity: 1;
+    transition-duration: 0.3s;
+}
+
+.WeaponSlot:hover {
+    opacity: 1;
+    transition-duration: 0.3s;
+}
+
+.StatusIcon {
+    height: 100%;
+    max-height: 100%;
+    min-height: 1%;
+    width: 10%;
+    max-width: 12%;
+    min-width: 1%;
+    border-left-color: rgb(26, 26, 26);
+    border-right-color: rgb(26, 26, 26);
+    border-top-color: rgb(26, 26, 26);
+    border-bottom-color: rgb(26, 26, 26);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    margin-left: 1px;
+    margin-right: 1px;
+    margin-top: 1px;
+    margin-bottom: 1px;
+}
+
+.CloseButton {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-size: 5px;
+    background-image: url('project://database/Assets/Packages/_Heathen%20Engineering/Assets/UX/Icons/Flat%20Icons%20[Free]/Free%20Flat%20Mic%20No%20Cross%20Icon.png?fileID=2800000&guid=d5ad855c08e83c3409a8053c8f886d54&type=3#Free Flat Mic No Cross Icon');
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+    -unity-background-scale-mode: scale-to-fit;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    width: 5%;
+    height: 7%;
+    background-color: rgb(72, 72, 72);
+    border-left-width: 0.1px;
+    border-right-width: 0.1px;
+    border-top-width: 0.1px;
+    border-bottom-width: 0.1px;
+    border-left-color: rgb(34, 34, 34);
+    border-right-color: rgb(34, 34, 34);
+    border-top-color: rgb(34, 34, 34);
+    border-bottom-color: rgb(34, 34, 34);
+    max-height: 7%;
+    max-width: 5%;
+    min-width: 1%;
+    min-height: 1%;
+    transition-duration: 0.3s;
+}
+
+.CloseButton:hover {
+    background-color: rgb(142, 142, 142);
+    transition-duration: 0.3s;
+}
+
+.QuickInfo {
+    position: absolute;
+    background-color: rgb(58, 57, 57);
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    -unity-text-align: upper-left;
+    padding-left: 4px;
+    padding-right: 4px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    font-size: 100%;
+    white-space: normal;
+    flex-grow: 1;
+    width: 15%;
+    height: 15%;
+    max-width: 30%;
+    max-height: 20%;
+    min-width: 10%;
+    min-height: 10%;
+    align-items: center;
+    justify-content: center;
+    transform-origin: left top;
+}
+
+.QuickInfoOff {
+    position: absolute;
+    background-color: rgb(58, 57, 57);
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    -unity-text-align: upper-left;
+    padding-left: 4px;
+    padding-right: 4px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    font-size: 100%;
+    white-space: normal;
+    flex-grow: 1;
+    width: 15%;
+    height: 15%;
+    max-width: 30%;
+    max-height: 20%;
+    min-width: 10%;
+    min-height: 10%;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+}
+
+.ItemInfo {
+    flex-grow: 1;
+    flex-shrink: 1;
+    white-space: normal;
+    -unity-font-definition: resource('Fonts/coolvetica condensed rg SDF');
+    -unity-text-align: upper-left;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 3px;
+    padding-right: 3px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    width: 100%;
+    height: 60%;
+    min-width: 1%;
+    min-height: 1%;
+    max-width: 100%;
+    max-height: 60%;
+    font-size: 10px;
+}
+
+.StatBar {
+    background-color: rgb(195, 195, 195);
+    transform-origin: left bottom;
+    flex-grow: 1;
+    width: 54%;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+}

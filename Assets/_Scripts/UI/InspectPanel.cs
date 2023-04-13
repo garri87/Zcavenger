@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class InspectPanel : MonoBehaviour
 {
     public ItemScriptableObject itemScriptableObject;
-    public WeaponItem weaponItem;
+    public Item weaponItem;
     
     public Transform itemAttribPanelTransform;
     private ItemAttributeField _itemAttributeField;

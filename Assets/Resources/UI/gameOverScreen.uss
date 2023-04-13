@@ -1,0 +1,21 @@
+Label {
+    flex-shrink: 1;
+    flex-grow: 1;
+    -unity-text-align: middle-center;
+    -unity-font-definition: resource('Fonts/DIRTYEGO SDF');
+    color: rgba(255, 0, 0, 255);
+    font-size: 21px;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    transition-duration: 3s;
+}
+
+.LabelOff {
+    opacity: 0;
+}

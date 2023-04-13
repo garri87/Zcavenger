@@ -11,7 +11,7 @@ public class FlashLight : MonoBehaviour
     void Start()
     {
         _light = GetComponent<Light>();
-        _keyAssignments = KeyAssignments.SharedInstance;
+        _keyAssignments = KeyAssignments.Instance;
     }
 
     void Update()
