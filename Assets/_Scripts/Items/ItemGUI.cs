@@ -129,7 +129,7 @@ public class ItemGUI : Editor
                 EditorGUILayout.PropertyField(_weaponScriptableObject);
                 break;
 
-            case (int)Item.ItemClass.Equipment:
+            case (int)Item.ItemClass.Outfit:
                 break;
         }
         EditorGUILayout.PropertyField(_ID);
@@ -176,7 +176,7 @@ public class ItemGUI : Editor
                 EditorGUILayout.PropertyField(_blockAttacks);
                 break;
 
-            case (int)Item.ItemClass.Equipment:
+            case (int)Item.ItemClass.Outfit:
                 EditorGUILayout.PropertyField(_defense);
                 EditorGUILayout.PropertyField(_targetBone);
                 break;

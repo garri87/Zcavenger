@@ -16,7 +16,7 @@ public class InventoryUI : MonoBehaviour
     public VisualElement inventorySlot;
     public List<VisualElement> inventorySlotList;
 
-    public VisualElement equipmentSlotsArea;
+    public VisualElement outfitSlotsArea;
     public VisualElement primaryWeaponSlot;
     public VisualElement secondaryWeaponSlot;
     public VisualElement meleeWeaponSlot;
@@ -29,7 +29,8 @@ public class InventoryUI : MonoBehaviour
     public VisualElement feetEquipSlot;
     public VisualElement backpackEquipSlot;
 
-    [Header("Context Menu")] public VisualElement contextMenu;
+    [Header("Context Menu")] 
+    public VisualElement contextMenu;
     public Button useButton;
     public Button equipButton;
     public Button inspectButton;
@@ -77,18 +78,18 @@ public class InventoryUI : MonoBehaviour
 
         #region Weapons and Equipment Area
 
-        equipmentSlotsArea = root.Q<VisualElement>("EquipmentSlots");
-        primaryWeaponSlot = equipmentSlotsArea.Q<VisualElement>("PrimaryWpnSlot");
-        secondaryWeaponSlot = equipmentSlotsArea.Q<VisualElement>("SecondayWpnSlot");
-        meleeWeaponSlot = equipmentSlotsArea.Q<VisualElement>("MeleeWpnSlot");
-        throwableWeaponSlot = equipmentSlotsArea.Q<VisualElement>("ThrowableWpnSlot");
+        outfitSlotsArea = root.Q<VisualElement>("EquipmentSlots");
+        primaryWeaponSlot = outfitSlotsArea.Q<VisualElement>("PrimaryWpnSlot");
+        secondaryWeaponSlot = outfitSlotsArea.Q<VisualElement>("SecondayWpnSlot");
+        meleeWeaponSlot = outfitSlotsArea.Q<VisualElement>("MeleeWpnSlot");
+        throwableWeaponSlot = outfitSlotsArea.Q<VisualElement>("ThrowableWpnSlot");
 
-        headEquipSlot = equipmentSlotsArea.Q<VisualElement>("HeadEqSlot");
-        vestEquipSlot = equipmentSlotsArea.Q<VisualElement>("VestEqSlot");
-        torsoEquipSlot = equipmentSlotsArea.Q<VisualElement>("TorsoEqSlot");
-        legsEquipSlot = equipmentSlotsArea.Q<VisualElement>("LegsEqSlot");
-        feetEquipSlot = equipmentSlotsArea.Q<VisualElement>("FeetEqSlot");
-        backpackEquipSlot = equipmentSlotsArea.Q<VisualElement>("BackPackEqSlot");
+        headEquipSlot = outfitSlotsArea.Q<VisualElement>("HeadEqSlot");
+        vestEquipSlot = outfitSlotsArea.Q<VisualElement>("VestEqSlot");
+        torsoEquipSlot = outfitSlotsArea.Q<VisualElement>("TorsoEqSlot");
+        legsEquipSlot = outfitSlotsArea.Q<VisualElement>("LegsEqSlot");
+        feetEquipSlot = outfitSlotsArea.Q<VisualElement>("FeetEqSlot");
+        backpackEquipSlot = outfitSlotsArea.Q<VisualElement>("BackPackEqSlot");
 
         List<VisualElement> equipSlotList = new List<VisualElement>()
         {
@@ -196,7 +197,7 @@ public class InventoryUI : MonoBehaviour
             itemStats = inspectItemPanel.Query<VisualElement>("Stat").ToList();
         }
 
-        if (item.itemClass == Item.ItemClass.Equipment)
+        if (item.itemClass == Item.ItemClass.Outfit)
         {
             CreateStatBar(0,"Defense", item.defense);
             itemStats = inspectItemPanel.Query<VisualElement>("Stat").ToList();
@@ -254,7 +255,7 @@ public class InventoryUI : MonoBehaviour
                 
                 break;
             
-            case Item.ItemClass.Equipment:
+            case Item.ItemClass.Outfit:
                 
                 break;
         }
@@ -269,11 +270,11 @@ public class InventoryUI : MonoBehaviour
                 
                 break;
             
-            case Item.ItemClass.Weapon:
-                
+            case Item.ItemClass.Weapon: 
+                playerInventory.ChangeEquipment(item);
                 break;
             
-            case Item.ItemClass.Equipment:
+            case Item.ItemClass.Outfit:
                 
                 break;
         }
@@ -292,7 +293,7 @@ public class InventoryUI : MonoBehaviour
                 
                 break;
             
-            case Item.ItemClass.Equipment:
+            case Item.ItemClass.Outfit:
                 
                 break;
         }

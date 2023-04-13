@@ -1,14 +1,8 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
-using UnityEngine.Serialization;
 using UnityEngine.UIElements;
+using static Item;
 using Debug = UnityEngine.Debug;
-using Image = UnityEngine.UI.Image;
-using Object = UnityEngine.Object;
 
 public class Inventory : MonoBehaviour
 {
@@ -66,11 +60,9 @@ public class Inventory : MonoBehaviour
 
     void Start()
     {
+        inventoryUI.FillInventoryWithSlots(maxCapacity); //Setup the inventory slots in UI
 
-
-        inventoryUI.FillInventoryWithSlots(maxCapacity);
-
-        RefreshInventoryToUI();
+        RefreshInventoryToUI();//Refresh the inventory UI information
     }
 
     private void FixedUpdate()
@@ -94,7 +86,7 @@ public class Inventory : MonoBehaviour
 
         try
         {
-            maxCapacity = 0;
+            maxCapacity = backpackEquip.backpackCapacity; //if a backpack is equipped, set its max capacity, else set to default
         }
         catch
         {
@@ -110,71 +102,19 @@ public class Inventory : MonoBehaviour
             {
                 if (targetItem != null)
                 {
-                    //   AddItemToInventory(targetItem);
+                    AddItemToInventory(targetItem.GetComponent<Item>());
                     _playerController.grabItem = true;
                     onItem = false;
                 }
 
             }
-
-            if (onWeaponItem && Input.GetKeyDown(_playerController.keyAssignments.useKey.keyCode))
-            {
-                if (targetWeapon != null)
-                {
-                    // AddWeaponToInventory(targetWeapon);
-                    _playerController.grabItem = true;
-                    onWeaponItem = false;
-                }
-            }
         }
 
         _playerAnimator.SetBool("DrawWeapon", drawWeapon);
         _playerAnimator.SetBool("HolsterWeapon", holsterWeapon);
-        #region Weapon Switching
-
-        if (!_playerController.isAiming && !_playerController.climbingLadder &&
-            !_playerController.attacking && !_playerController.onTransition)
-        {
-            /*if (!drawWeapon && !holsterWeapon)
-            {
-                if (Input.GetKeyDown(_playerController.keyAssignments.primaryKey.keyCode))
-                {
-                    selectedWeapon = SelectedWeapon.Primary;
-                    ChangeWeapon(uIManager.primaryEquipSlot,SelectedWeapon.Primary);
-                }
-
-                if (Input.GetKeyDown(_playerController.keyAssignments.secondaryKey.keyCode))
-                {
-                    selectedWeapon = SelectedWeapon.Secondary;
-
-                    ChangeWeapon(uIManager.secondaryEquipSlot,SelectedWeapon.Secondary);
-                }
-
-                if (Input.GetKeyDown(_playerController.keyAssignments.meleeKey.keyCode))
-                {
-                    selectedWeapon = SelectedWeapon.Melee;
-
-                    ChangeWeapon(uIManager.meleeEquipSlot,SelectedWeapon.Melee);
-                }
-                if (Input.GetKeyDown(_playerController.keyAssignments.throwableKey.keyCode))
-                {
-                    selectedWeapon = SelectedWeapon.Throwable;
-
-                    ChangeWeapon(uIManager.throwableEquipSlot,SelectedWeapon.Throwable);
-                }
-                
-            }*/
-        }
-
-        if (_playerController._playerWpnHolderTransform.childCount == 0)
-        {
-            /*currentWeaponImage.sprite = emptyWeaponImage;
-            bulletCounterTMPUGUI.text = null;*/
-        }
-
 
     }
-    #endregion
+
 
     /// <summary>
     /// Shows inventory current information to UI
@@ -193,16 +133,16 @@ public class Inventory : MonoBehaviour
             }
         }
 
-        if(primaryWeapon)inventoryUI.primaryWeaponSlot.style.backgroundImage = new StyleBackground(primaryWeapon.itemIcon);
-        if(secondaryWeapon)inventoryUI.secondaryWeaponSlot.style.backgroundImage = new StyleBackground(secondaryWeapon.itemIcon);
-        if(meleeWeapon)inventoryUI.meleeWeaponSlot.style.backgroundImage = new StyleBackground(meleeWeapon.itemIcon);
-        if(throwableWeapon)inventoryUI.throwableWeaponSlot.style.backgroundImage = new StyleBackground(throwableWeapon.itemIcon);
-        if(headEquip)inventoryUI.headEquipSlot.style.backgroundImage = new StyleBackground(headEquip.itemIcon);
-        if(vestEquip)inventoryUI.vestEquipSlot.style.backgroundImage = new StyleBackground(vestEquip.itemIcon);
-        if(torsoEquip)inventoryUI.torsoEquipSlot.style.backgroundImage = new StyleBackground(torsoEquip.itemIcon);
-        if(legsEquip)inventoryUI.legsEquipSlot.style.backgroundImage = new StyleBackground(legsEquip.itemIcon);
-        if(feetEquip)inventoryUI.feetEquipSlot.style.backgroundImage = new StyleBackground(feetEquip.itemIcon);
-        if(backpackEquip)inventoryUI.backpackEquipSlot.style.backgroundImage = new StyleBackground(backpackEquip.itemIcon);
+        if (primaryWeapon) inventoryUI.primaryWeaponSlot.style.backgroundImage = new StyleBackground(primaryWeapon.itemIcon);
+        if (secondaryWeapon) inventoryUI.secondaryWeaponSlot.style.backgroundImage = new StyleBackground(secondaryWeapon.itemIcon);
+        if (meleeWeapon) inventoryUI.meleeWeaponSlot.style.backgroundImage = new StyleBackground(meleeWeapon.itemIcon);
+        if (throwableWeapon) inventoryUI.throwableWeaponSlot.style.backgroundImage = new StyleBackground(throwableWeapon.itemIcon);
+        if (headEquip) inventoryUI.headEquipSlot.style.backgroundImage = new StyleBackground(headEquip.itemIcon);
+        if (vestEquip) inventoryUI.vestEquipSlot.style.backgroundImage = new StyleBackground(vestEquip.itemIcon);
+        if (torsoEquip) inventoryUI.torsoEquipSlot.style.backgroundImage = new StyleBackground(torsoEquip.itemIcon);
+        if (legsEquip) inventoryUI.legsEquipSlot.style.backgroundImage = new StyleBackground(legsEquip.itemIcon);
+        if (feetEquip) inventoryUI.feetEquipSlot.style.backgroundImage = new StyleBackground(feetEquip.itemIcon);
+        if (backpackEquip) inventoryUI.backpackEquipSlot.style.backgroundImage = new StyleBackground(backpackEquip.itemIcon);
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -268,10 +208,8 @@ public class Inventory : MonoBehaviour
     /// Store a item into the inventory
     /// </summary>
     /// <param name="itemTransform"> Item Component</param>
-    public void AddItemToInventory(Transform itemTransform)
+    public void AddItemToInventory(Item newItem)
     {
-        Item newItem = itemTransform.GetComponent<Item>();
-
         newItem.itemLocation = Item.ItemLocation.Inventory;
 
         if (newItem.isStackable)
@@ -281,16 +219,18 @@ public class Inventory : MonoBehaviour
                 if (itemsList[i].ID == newItem.ID && newItem.itemClass == Item.ItemClass.Item)
                 // if item already exists in inventory, stack quantities
                 {
-                    itemsList[i].quantity += newItem.quantity;
-                    CheckStackableItem(itemsList[i]);
-                    Destroy(itemTransform.gameObject);
-                    return;
+                    if (itemsList[i].quantity < itemsList[i].maxStack)
+                    {
+                        itemsList[i].quantity += newItem.quantity;
+                        CheckStackableItem(itemsList[i]);
+                        Destroy(newItem.gameObject);
+                        return;
+                    }
                 }
             }
-            itemsList.Add(newItem);
-            Destroy(itemTransform.gameObject);
         }
-
+        itemsList.Add(newItem);
+        Destroy(newItem.gameObject);
     }
 
 
@@ -321,249 +261,112 @@ public class Inventory : MonoBehaviour
                     itemsList.Add(newItem);
                 }
                 else
-                {
-                    GameObject newItemGO = new GameObject(item.name);
-                    Item newItemComp = newItemGO.AddComponent<Item>();
-                    newItemComp = newItem;
-                    newItemComp.itemLocation = Item.ItemLocation.World;
-                    Instantiate(newItemGO, transform.position, transform.rotation);
+                {//drop item to world
+                    GenerateItemObject(newItem, transform);
                 }
             }
     }
 
-
-    /// <summary>
-    /// Weapon Equipment Management
-    /// </summary>
-    /// <param name="equipTransform"></param>
-    /// <param name="weaponClass"></param>
-    public void ChangeWeapon(Transform equipTransform, SelectedWeapon selectedWeapon)
+    public void GenerateItemObject(Item item, Transform target)
     {
-        Slot equipSlot = equipTransform.GetComponent<Slot>();
-        Transform slotWeaponHolder = equipTransform.Find("WeaponHolder");
-        if (slotWeaponHolder.childCount > 0)
-        {
-            WeaponItem equipWeaponItem = equipSlot.weaponItem;
-            _playerController.equippedWeaponItem = equipWeaponItem;
-            if (playerWeaponHolderTransform.childCount <= 0)
-            {
-                slotWeaponHolder.GetChild(0).parent = playerWeaponHolderTransform;
-                drawWeapon = true;
-                Debug.Log("Changing weapon to " + equipWeaponItem.weaponName + " as " + selectedWeapon);
-            }
-            else if (playerWeaponHolderTransform.childCount > 0)
-            {
-                WeaponItem playerWeaponItem = playerWeaponHolderTransform.GetChild(0).GetComponent<WeaponItem>();
-                if (equipWeaponItem.ID == playerWeaponItem.ID)
-                {
-                    Debug.Log("Holstering Weapon...");
-                    holsterWeapon = true;
-                    drawWeapon = false;
-                }
-                else
-                {
-                    Debug.Log("Swapping Weapons...");
-                    holsterWeapon = true;
-                    drawWeapon = true;
-                    _playerAnimator.SetBool("RifleEquip", false);
-                    _playerAnimator.SetBool("PistolEquip", false);
-                    _playerAnimator.SetBool("MeleeEquip", false);
-                }
-            }
-        }
-        else if (slotWeaponHolder.childCount <= 0)
-        {
-            if (equipSlot.empty)
-            {
-                Debug.Log("No Weapon Equipped on " + selectedWeapon);
-            }
-            if (!equipSlot.empty)
-            {
-                if (playerWeaponHolderTransform.childCount > 0)
-                {
-                    holsterWeapon = true;
-                    drawWeapon = false;
-                }
-            }
-        }
-
-        if (drawWeapon)
-        {
-            switch (selectedWeapon)
-            {
-                case SelectedWeapon.Primary:
-                    if (drawWeapon) _playerAnimator.SetBool("RifleEquip", true);
-                    else _playerAnimator.SetBool("RifleEquip", false);
-                    break;
-
-                case SelectedWeapon.Secondary:
-                    if (drawWeapon) _playerAnimator.SetBool("PistolEquip", true);
-                    else _playerAnimator.SetBool("PistolEquip", false);
-                    break;
-
-                case SelectedWeapon.Melee:
-                    if (drawWeapon) _playerAnimator.SetBool("MeleeEquip", true);
-                    else _playerAnimator.SetBool("MeleeEquip", false);
-                    break;
-
-                case SelectedWeapon.Throwable:
-                    if (drawWeapon) _playerAnimator.SetBool("ThrowableEquip", true);
-                    else _playerAnimator.SetBool("ThrowableEquip", false);
-                    break;
-            }
-        }
+        GameObject newItemGO = new GameObject(item.name);
+        Item newItemComp = newItemGO.AddComponent<Item>();
+        newItemComp = item;
+        newItemComp.itemLocation = Item.ItemLocation.World;
+        Instantiate(newItemGO, target.position, target.rotation);
 
     }
 
-
-    /// <summary>
-    /// Parent weaponToDraw transform to player Hand Holder transform (if empty)
-    /// </summary>
-    /// <param name="weaponToDraw"></param>
-    /*public void DrawWeapon(SelectedWeapon selectedWeapon)
+    public void ReplaceItem(Item itemToReplace, Item targetEquipment)
     {
-        if (playerWeaponHolderTransform.childCount <=0)
+        if (!targetEquipment)//if no item is present in the selected target, assign the item
         {
-            switch (selectedWeapon)
-            {
-                /*case SelectedWeapon.Primary:
-                    uIManager.primaryEquipSlot.Find("WeaponHolder").GetChild(0).parent = playerWeaponHolderTransform;
-                    break;
-
-                case SelectedWeapon.Secondary:
-                   uIManager.secondaryEquipSlot.Find("WeaponHolder").GetChild(0).parent = playerWeaponHolderTransform;
-                    break;
-
-                case SelectedWeapon.Melee:
-                    uIManager.meleeEquipSlot.Find("WeaponHolder").GetChild(0).parent = playerWeaponHolderTransform;
-                    break;
-                case SelectedWeapon.Throwable:
-                    uIManager.throwableEquipSlot.Find("WeaponHolder").GetChild(0).parent = playerWeaponHolderTransform;
-                    break;#1#
-            }
-        }
-
-        if (playerWeaponHolderTransform.childCount > 0)
-        {
-            WeaponItem playerWeaponItem = playerWeaponHolderTransform.GetChild(0).GetComponent<WeaponItem>();
-            playerWeaponItem.holderTarget.GetComponentInParent<Slot>().UpdateWeaponSlot(playerWeaponItem);
-            playerWeaponItem.weaponLocation = WeaponItem.WeaponLocation.Player;
-        }
-        playerWeaponHolderTransform.GetChild(0).gameObject.SetActive(true);
-    }*/
-
-    /// <summary>
-    /// Holster the current weapon in player hands to the corresponding parent
-    /// </summary>
-    /// <param name="weaponToHolster"></param>
-    /*public void HolsterWeaponTo(Transform holderTransform)
-    {
-        if (playerWeaponHolderTransform.childCount > 0)
-        {
-            Transform weaponToHolster = playerWeaponHolderTransform.GetChild(0);
-            WeaponItem weaponToHolsterWeaponItem = weaponToHolster.GetComponent<WeaponItem>();
-
-            if (holderTransform.childCount > 0)
-            {
-                if (!inventoryFull)
-                {
-                    AddWeaponToInventory(weaponToHolster);
-                    weaponToHolsterWeaponItem.weaponLocation = WeaponItem.WeaponLocation.Inventory;
-                }
-                else
-                {
-                    weaponToHolster.parent = null;
-                    weaponToHolsterWeaponItem.weaponLocation = WeaponItem.WeaponLocation.World;
-                }
-            }
-
-            if (holderTransform.childCount <= 0)
-            {
-                weaponToHolster.parent = holderTransform;
-                weaponToHolsterWeaponItem.weaponLocation = WeaponItem.WeaponLocation.Inventory;
-            }
-
-            if (!drawWeapon)
-            {
-                switch (weaponToHolsterWeaponItem.weaponItemClass)
-                {
-                    case WeaponScriptableObject.WeaponClass.Primary:
-                        _playerAnimator.SetBool("RifleEquip", false);
-                        break;
-
-                    case WeaponScriptableObject.WeaponClass.Secondary:
-                        _playerAnimator.SetBool("PistolEquip", false);
-                        break;
-
-                    case WeaponScriptableObject.WeaponClass.Melee:
-                        _playerAnimator.SetBool("MeleeEquip", false);
-                        if (_playerAnimator.GetBool("BatEquip") == true)
-                        { 
-                            _playerAnimator.SetBool("BatEquip", false);
-                        }
-                        if (_playerAnimator.GetBool("KnifeEquip") == true)
-                        { 
-                            _playerAnimator.SetBool("KnifeEquip", false);
-                        }
-
-                        break;
-                    case WeaponScriptableObject.WeaponClass.Throwable:
-                        _playerAnimator.SetBool("ThrowableEquip", false);
-                        break;
-                }
-            }
-
-            if (drawWeapon)
-            {
-                DrawWeapon(selectedWeapon);
-                if (playerWeaponHolderTransform.childCount > 0)
-                {
-                    playerWeaponHolderTransform.GetChild(0).gameObject.SetActive(false);
-                }
-            }
-
+            targetEquipment = itemToReplace;
         }
         else
-        {
-            Debug.Log("No weapon to holster in player hands");
+        {//Otherwise store old weapon in inventory
+            if (!inventoryFull)
+            {
+                AddItemToInventory(targetEquipment);
+                targetEquipment = itemToReplace;
+            }
+            else //if inventory full, drop the item in world
+            {
+                GenerateItemObject(targetEquipment, transform);
+            }
         }
-    }*/
-    /*public void DrawWeaponAnim(string command) // function is triggered while "drawWeapon" is true
+    }
+
+    
+
+    /// <summary>
+    /// Replaces a clothing or weapon slot in the player equipment
+    /// </summary>
+    /// <param name="newItem"></param>
+    public void ChangeEquipment(Item newItem)
     {
-        switch (command)
+        switch (newItem.itemClass)
         {
-            case "WeaponDraw":
-
-                if (drawWeapon)
+            case Item.ItemClass.Weapon:
+                switch (newItem.weaponClass)
                 {
-                    DrawWeapon(selectedWeapon);
+                    case WeaponScriptableObject.WeaponClass.None:
+                        break;
+                    case WeaponScriptableObject.WeaponClass.Primary:
+                        ReplaceItem(newItem, primaryWeapon);
+
+                        break;
+                    case WeaponScriptableObject.WeaponClass.Secondary:
+                        ReplaceItem(newItem, secondaryWeapon);
+                        break;
+                    case WeaponScriptableObject.WeaponClass.Melee:
+                        ReplaceItem(newItem, meleeWeapon);
+                        ;
+                        break;
+                    case WeaponScriptableObject.WeaponClass.Throwable:
+                        ReplaceItem(newItem, throwableWeapon);
+                        break;
+                    default:
+                        // Invalid Weapon Class
+                        break;
+
+                }
+                break;
+
+            case Item.ItemClass.Outfit:
+
+                switch (newItem.outfitBodyPart)
+                {
+                    case OutfitScriptableObject.OutfitBodyPart.Head:
+                        ReplaceItem(newItem, headEquip);
+                        break;
+                    case OutfitScriptableObject.OutfitBodyPart.Vest:
+                        ReplaceItem(newItem, vestEquip);
+                        break;
+                    case OutfitScriptableObject.OutfitBodyPart.Torso:
+                        ReplaceItem(newItem, torsoEquip);
+                        break;
+                    case OutfitScriptableObject.OutfitBodyPart.Legs:
+                        ReplaceItem(newItem, legsEquip);
+                        break;
+                    case OutfitScriptableObject.OutfitBodyPart.Feet:
+                        ReplaceItem(newItem, feetEquip);
+                        break;
+                    case OutfitScriptableObject.OutfitBodyPart.Backpack:
+                        ReplaceItem(newItem, backpackEquip);
+                        break;
+                    default:
+
+                        break;
                 }
 
-                break;
-
-            case "WeaponHolster":
-
-                if (holsterWeapon)
-                {
-                    if (playerWeaponHolderTransform.childCount > 0)
-                    {
-                        WeaponItem playerWeaponItem = playerWeaponHolderTransform.GetChild(0).GetComponent<WeaponItem>();
-                        HolsterWeaponTo(playerWeaponItem.holderTarget);
-                    }
-                }
-
-                break;
-
-            case "DrawEnd":
-                drawWeapon = false;
-                holsterWeapon = false;
-                break;
-
-            case "HolsterEnd":
-                holsterWeapon = false;
                 break;
         }
-    }*/
+
+    }
+
+
+
 
     public int CheckItemsLeft(int id, int counter)
     {

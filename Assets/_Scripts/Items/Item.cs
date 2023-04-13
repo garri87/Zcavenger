@@ -18,7 +18,7 @@ public class Item : MonoBehaviour
     {
         Item,
         Weapon,
-        Equipment
+        Outfit
     }
 
     public ItemClass itemClass;
@@ -63,7 +63,9 @@ public class Item : MonoBehaviour
     public int maxStack;
 
     [Header("Weapon Attributes")] public WeaponScriptableObject weaponScriptableObject;
+    
     public WeaponScriptableObject.WeaponClass weaponClass;
+
     [HideInInspector] public int bulletID;
     public int damage;
     public float fireRate;
@@ -106,9 +108,16 @@ public class Item : MonoBehaviour
     public WeaponSound _weaponSound;
     private WeaponSound playerWeaponSound;
 
-    [Header("Equipment Attributes")] 
+    [Header("Equipment Attributes")]
+    public OutfitScriptableObject outfitScriptableObject;
+    public OutfitScriptableObject.OutfitBodyPart outfitBodyPart;
     public int defense;
+    public int backpackCapacity;
+    public GameObject equipmentPrefab;
     public HumanBodyBones targetBone;
+   
+
+
 
     private Transform playerTransform;
     private IKManager playerIKManager;
@@ -137,7 +146,9 @@ public class Item : MonoBehaviour
                     GetWeaponScriptableObject(weaponScriptableObject);
                     break;
 
-                case ItemClass.Equipment:
+                case ItemClass.Outfit:
+                    GetOutfitScriptableObject(outfitScriptableObject);
+
                     break;
             }
 
@@ -233,6 +244,7 @@ public class Item : MonoBehaviour
         itemIcon = weaponScriptableObject.weaponIcon;
         itemName = weaponScriptableObject.weaponName;
         description = weaponScriptableObject.description;
+        
         bulletID = weaponScriptableObject.bulletID;
 
         damage = weaponScriptableObject.damage;
@@ -247,6 +259,22 @@ public class Item : MonoBehaviour
         bulletImpactPrefab = weaponScriptableObject.bulletImpactPrefab;
         enemyImpactPrefab = weaponScriptableObject.enemyImpactPrefab;
         muzzleFlashPrefab = weaponScriptableObject.muzzleFlashPrefab;
+    }
+
+    public void GetOutfitScriptableObject(OutfitScriptableObject outfitScriptableObject)
+    {
+        ID = outfitScriptableObject.ID;
+        name = outfitScriptableObject.itemName;
+        description = outfitScriptableObject.description;   
+        itemIcon = outfitScriptableObject.itemIcon;
+
+        itemPrefab = outfitScriptableObject.outfitPrefab;
+
+        outfitBodyPart = outfitScriptableObject.outfitBodyPart;
+
+        defense = outfitScriptableObject.defense;  
+
+        backpackCapacity = outfitScriptableObject.backpackCapacity; 
     }
 
     public void GetBulletFromPool()

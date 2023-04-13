@@ -64,7 +64,7 @@ public class IKAimer : MonoBehaviour
    
    private void AimAtTarget()
    {
-      targetDistance = Vector3.Distance(_playerController._playerWpnHolderTransform.position,
+      targetDistance = Vector3.Distance(_playerController._WeaponHolder.position,
          _playerController.crosshairTransform.position);
     
       if (_playerController.isAiming 
