@@ -42,14 +42,7 @@ public class Key : MonoBehaviour
    {
       if (waitForKey)
       {
-         timer -= Time.deltaTime;
-         if (timer <= 0)
-         {
-            titleTextTMP.text = currentKeyName;
-            keyButtonText.text = currentKeyCode.ToString();
-            timer = cancelTime;
-            waitForKey = false;
-         }
+         
       }
    }
 
@@ -58,20 +51,9 @@ public class Key : MonoBehaviour
       if (waitForKey)
       {
          if (Event.current.isKey) 
-         { 
-            KeyCode newKeyCode = Event.current.keyCode;
-            if (newKeyCode != KeyCode.Escape)
-            {
-               currentKeyCode = newKeyCode;
-               KeyAssignments.Instance.UpdateKeyBinding(currentKeyName);
-               timer = cancelTime; 
-               waitForKey = false;
-            }
-            else
-            {
-               timer = cancelTime; 
-               waitForKey = false; 
-            }
+         {
+                ListenForKeyCode();
+            
          }
       }
      else
@@ -80,9 +62,25 @@ public class Key : MonoBehaviour
         keyButtonText.text = currentKeyCode.ToString();
      }
    }
-   
-   
-   public void SetKeyAssignment()
+
+    private void ListenForKeyCode()
+    {
+        KeyCode newKeyCode = Event.current.keyCode;
+        if (newKeyCode != KeyCode.Escape)
+        {
+            currentKeyCode = newKeyCode;
+            KeyAssignments.Instance.UpdateKeyBinding(currentKeyName);
+            timer = cancelTime;
+            waitForKey = false;
+        }
+        else
+        {
+            timer = cancelTime;
+            waitForKey = false;
+        }
+    }
+
+    public void SetKeyAssignment()
    {
       keyButtonText.text = "Press a Key";
       waitForKey = true;

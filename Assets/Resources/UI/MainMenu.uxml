@@ -4,9 +4,9 @@
         <ui:VisualElement name="MainMenu" class="MainMenu">
             <ui:VisualElement name="Title" class="Title" />
             <ui:VisualElement name="Buttons" style="justify-content: center; align-items: stretch;">
-                <ui:Button text="Start Game" display-tooltip-when-elided="true" />
-                <ui:Button text="Options" display-tooltip-when-elided="true" />
-                <ui:Button text="Exit Game" display-tooltip-when-elided="true" />
+                <ui:Button text="Start Game" display-tooltip-when-elided="true" name="StarGameButton" />
+                <ui:Button text="Options" display-tooltip-when-elided="true" name="OptionsButton" />
+                <ui:Button text="Exit Game" display-tooltip-when-elided="true" name="ExitButton" />
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:Label text="V0.4 Alpha" display-tooltip-when-elided="true" name="Version" class="Version" />

@@ -10,6 +10,7 @@ public class Inventory : MonoBehaviour
 
     public UIManager uIManager;
     public InventoryUI inventoryUI;
+    public InGameOverlayUI inGameOverlayUI;
     public PlayerController _playerController;
     [HideInInspector] public Transform playerWeaponHolder;
     private Animator _playerAnimator;
@@ -53,7 +54,8 @@ public class Inventory : MonoBehaviour
     private void Awake()
     {
         uIManager = GameManager.Instance.uiManager;
-        inventoryUI = uIManager.inventoryUI;
+        inventoryUI = uIManager.inventoryUI.GetComponent<InventoryUI>();
+        inGameOverlayUI = uIManager.inGameOverlayUI.GetComponent<InGameOverlayUI>();
         _playerAnimator = GetComponent<Animator>();
         playerWeaponHolder = _playerAnimator.GetBoneTransform(HumanBodyBones.RightHand).Find("WeaponHolder");
     }
@@ -423,7 +425,7 @@ public class Inventory : MonoBehaviour
     /// <param name="item"></param>
     public void UpdateBulletCounter(Item item)
     {
-        Label bulletCounter = uIManager.inGameOverlayUI.bulletCountLabel;
+        Label bulletCounter = inGameOverlayUI.bulletCountLabel;
         if (selectedWeapon == SelectedWeapon.Melee
             || selectedWeapon == SelectedWeapon.Throwable)
         {

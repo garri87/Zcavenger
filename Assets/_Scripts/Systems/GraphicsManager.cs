@@ -3,11 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using UnityEditor.PackageManager.UI;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 using Bloom = UnityEngine.Rendering.Universal.Bloom;
 using ChromaticAberration = UnityEngine.Rendering.Universal.ChromaticAberration;
 using DepthOfField = UnityEngine.Rendering.Universal.DepthOfField;
@@ -41,13 +43,13 @@ public class GraphicsManager : MonoBehaviour
 
     #endregion
     
-    public OptionsMenu optionsMenu;
+    public OptionsMenuUI optionsMenuUI;
     private GameManager _gameManager;
     private Resolution[] resolutions;
     
     private void OnValidate()
     {
-        _gameManager = GetComponent<GameManager>();
+        _gameManager = GameManager.Instance;
         //Switch postprocessing settings 
         switch (_gameManager.sceneType)
         {
@@ -61,73 +63,27 @@ public class GraphicsManager : MonoBehaviour
                 getVolumeProfileOverrides(mainTitlevolumeProfile);
                 break;
         }
-        
-        optionsMenu.qualityDropdown.value = QualitySettings.GetQualityLevel();
+       
+
         currentRenderPipelineAsset = QualitySettings.renderPipeline;
         
     }
 
     
     void Awake()
-    {
-        // Obtener resoluciones de pantalla soportadas
-        resolutions = Screen.resolutions;
-
-        // Limpiar opciones del dropdown de resoluciones
-        optionsMenu.screenResDropdown.ClearOptions();
-
-        // Agregar cada resolución como opción en el dropdown
-        foreach (Resolution resolution in resolutions)
-        {
-            string option = resolution.width + "x" + resolution.height;
-            optionsMenu.screenResDropdown.options.Add(new TMP_Dropdown.OptionData(option));
-        }
-        
-        // Establecer resolución actual como opción seleccionada en el dropdown
-        int currentResolutionIndex = GetCurrentResolutionIndex();
-        optionsMenu.screenResDropdown.value = currentResolutionIndex;
-        optionsMenu.screenResDropdown.RefreshShownValue();
-        
-        // Establecer estado actual de pantalla completa en el toggle
-        bool isFullscreen = Screen.fullScreen;
-        optionsMenu.fullscreenToggle.isOn = isFullscreen;
-        
-        
-        optionsMenu.screenResDropdown.value = PlayerPrefs.GetInt("userResolution");
-        optionsMenu.displayModeDropdown.value = PlayerPrefs.GetInt("userDisplayMode");
-        
-        optionsMenu.qualityDropdown.value = PlayerPrefs.GetInt("userQualitySettings");
-        
-        optionsMenu.texturesDropdown.value = PlayerPrefs.GetInt("userTextureQuality");
-        optionsMenu.antiAliasDropdown.value = PlayerPrefs.GetInt("userAntiAlias");
-        optionsMenu.hdrToggle.isOn = Convert.ToBoolean(PlayerPrefs.GetInt("userHDR"));
-        
-
+    {        
         if (globalVolume != null)
-        {
-            _bloom.active = Convert.ToBoolean(PlayerPrefs.GetInt("userBloom"));
-            _dof.active = Convert.ToBoolean(PlayerPrefs.GetInt("userDof"));
-            _grain.active = Convert.ToBoolean(PlayerPrefs.GetInt("userGrain"));
-            _vignette.active = Convert.ToBoolean(PlayerPrefs.GetInt("userVignette"));
-            _chrAberr.active = Convert.ToBoolean(PlayerPrefs.GetInt("userChrAberr"));
-            optionsMenu.gammaSlider.value = PlayerPrefs.GetFloat("userGamma");
-
-            _liftGammaGain.gamma.overrideState = true;
-            optionsMenu.bloomToggle.isOn = _bloom.active;
-            optionsMenu.dOFToggle.isOn = _dof.active;
-            optionsMenu.filmGrainToggle.isOn = _grain.active;
-            optionsMenu.vignetteToggle.isOn = _vignette.active;
-            optionsMenu.chromaAberrToggle.isOn = _chrAberr.active;
+        {            
 
         }
     }
 
-    // Update is called once per frame
+    
+
     void Update()
     {
-        //currentRenderPipelineAsset = GraphicsSettings.renderPipelineAsset;
+       
     }
-
     
     /// <summary>
     /// Gets the postprocess effects of profile
@@ -152,15 +108,15 @@ public class GraphicsManager : MonoBehaviour
         switch (value)
         {
             case 0://very low
-                //QualitySettings.renderPipeline = veryLowSettingsURPAsset;
+                QualitySettings.renderPipeline = veryLowSettingsURPAsset;
                 //textures
-                optionsMenu.texturesDropdown.value = 0;
+                optionsMenuUI.textureDropdown.index = 0;
                 //shadows
-                optionsMenu.shadowsDropdown.value = 0;
+                optionsMenuUI.shadowsDropdown.index = 0;
                 //AA
-                optionsMenu.antiAliasDropdown.value = 0;
+                optionsMenuUI.antiAliasDropdown.index = 0;
                 //HDR
-                optionsMenu.hdrToggle.isOn = false;
+                optionsMenuUI.hdrToggle.value = false;
                 PlayerPrefs.SetInt("userTextureQuality", 0);
                 PlayerPrefs.SetInt("userShadowQuality", 0);
                 PlayerPrefs.SetInt("userAntiAlias", 0);
@@ -171,13 +127,13 @@ public class GraphicsManager : MonoBehaviour
             case 1://low
                 //QualitySettings.renderPipeline = lowSettingsURPAsset;
                 //textures
-                optionsMenu.texturesDropdown.value = 1;
+                optionsMenuUI.textureDropdown.index = 1;
                 //shadows
-                optionsMenu.shadowsDropdown.value = 1;
+                optionsMenuUI.shadowsDropdown.index = 1;
                 //AA
-                optionsMenu.antiAliasDropdown.value = 1;
+                optionsMenuUI.antiAliasDropdown.index = 1;
                 //HDR
-                optionsMenu.hdrToggle.isOn = false;
+                optionsMenuUI.hdrToggle.value = false;
                 PlayerPrefs.SetInt("userTextureQuality", 1);
                 PlayerPrefs.SetInt("userShadowQuality", 1);
                 PlayerPrefs.SetInt("userAntiAlias", 1);
@@ -188,13 +144,13 @@ public class GraphicsManager : MonoBehaviour
             case 2://medium
                // QualitySettings.renderPipeline = mediumSettingsURPAsset;
                 //textures
-                optionsMenu.texturesDropdown.value = 2;
+                optionsMenuUI.textureDropdown.index = 2;
                 //shadows
-                optionsMenu.shadowsDropdown.value = 2;
+                optionsMenuUI.shadowsDropdown.index = 2;
                 //AA
-                optionsMenu.antiAliasDropdown.value = 2;
+                optionsMenuUI.antiAliasDropdown.index = 2;
                 //HDR
-                optionsMenu.hdrToggle.isOn = true;
+                optionsMenuUI.hdrToggle.value = true;
                PlayerPrefs.SetInt("userTextureQuality", 2);
                PlayerPrefs.SetInt("userShadowQuality", 2);
                PlayerPrefs.SetInt("userAntiAlias", 2);
@@ -206,13 +162,13 @@ public class GraphicsManager : MonoBehaviour
             case 3://high
                // QualitySettings.renderPipeline = highSettingsURPAsset;
                 //textures
-                optionsMenu.texturesDropdown.value = 3;
+                optionsMenuUI.textureDropdown.index = 3;
                 //shadows
-                optionsMenu.shadowsDropdown.value = 3;
+                optionsMenuUI.shadowsDropdown.index = 3;
                 //AA
-                optionsMenu.antiAliasDropdown.value = 2;
+                optionsMenuUI.antiAliasDropdown.index = 2;
                 //HDR
-                optionsMenu.hdrToggle.isOn = true;
+                optionsMenuUI.hdrToggle.value = true;
                PlayerPrefs.SetInt("userTextureQuality", 3);
                PlayerPrefs.SetInt("userShadowQuality", 3);
                PlayerPrefs.SetInt("userAntiAlias", 2);
@@ -221,33 +177,16 @@ public class GraphicsManager : MonoBehaviour
                 Debug.Log("changed to high Settings");
                 break;
             
-            case 4://Very High
-              //  QualitySettings.renderPipeline = ultraSettingsURPAsset;
-                //textures
-                optionsMenu.texturesDropdown.value = 4;
-                //shadows
-                optionsMenu.shadowsDropdown.value = 4;
-                //AA
-                optionsMenu.antiAliasDropdown.value = 3;
-                //HDR
-                optionsMenu.hdrToggle.isOn = true;
-              PlayerPrefs.SetInt("userTextureQuality", 4);
-              PlayerPrefs.SetInt("userShadowQuality", 4);
-              PlayerPrefs.SetInt("userAntiAlias", 3);
-              PlayerPrefs.SetInt("userHDR",1);
-                Debug.Log("changed to Ultra Settings");
-                break;
-            
-            case 5://ultra
+            case 4://ultra
                // QualitySettings.renderPipeline = ultraSettingsURPAsset;
                 //textures
-                optionsMenu.texturesDropdown.value = 4;
+                optionsMenuUI.textureDropdown.value = 4;
                 //shadows
-                optionsMenu.shadowsDropdown.value = 4;
+                optionsMenuUI.shadowsDropdown.value = 4;
                 //AA
-                optionsMenu.antiAliasDropdown.value = 3;
+                optionsMenuUI.antiAliasDropdown.value = 3;
                 //HDR
-                optionsMenu.hdrToggle.isOn = true;
+                optionsMenuUI.hdrToggle.value = true;
                PlayerPrefs.SetInt("userTextureQuality", 4);
                PlayerPrefs.SetInt("userShadowQuality", 4);
                PlayerPrefs.SetInt("userAntiAlias", 3);
@@ -255,25 +194,25 @@ public class GraphicsManager : MonoBehaviour
                 Debug.Log("changed to Ultra Settings");
                 break;
             
-            case 6://custom
+            case 5://custom
                // QualitySettings.renderPipeline = customSettingsURPAsset;
-                optionsMenu.texturesDropdown.value = PlayerPrefs.GetInt("userTextureQuality");
-                optionsMenu.shadowsDropdown.value = PlayerPrefs.GetInt("userShadowQuality");
-                optionsMenu.antiAliasDropdown.value = PlayerPrefs.GetInt("userAntiAlias");
-                optionsMenu.hdrToggle.isOn = Convert.ToBoolean(PlayerPrefs.GetInt("userHDR"));
+                optionsMenuUI.textureDropdown.value = PlayerPrefs.GetInt("userTextureQuality");
+                optionsMenuUI.shadowsDropdown.value = PlayerPrefs.GetInt("userShadowQuality");
+                optionsMenuUI.antiAliasDropdown.value = PlayerPrefs.GetInt("userAntiAlias");
+                optionsMenuUI.hdrToggle.value = Convert.ToBoolean(PlayerPrefs.GetInt("userHDR"));
                 
                 Debug.Log("changed to custom Settings");
                 break;
         }
         QualitySettings.SetQualityLevel(value);
-        optionsMenu.qualityDropdown.value = value;
+        //optionsMenuUI.qualityDropdown.value = value.ToString();
         PlayerPrefs.SetInt("userQualitySettings", value);
     }
 
     public void ChangeTextureSettings(int value)
     {
         
-        QualitySettings.SetQualityLevel(6);
+        QualitySettings.SetQualityLevel(5);
 
         switch (value)
         {
@@ -302,7 +241,7 @@ public class GraphicsManager : MonoBehaviour
 
     public void ChangeShadowSettings(int value)
     {
-        QualitySettings.SetQualityLevel(6);
+        QualitySettings.SetQualityLevel(5);
 
         switch (value)
         {
@@ -341,7 +280,7 @@ public class GraphicsManager : MonoBehaviour
     
     public void ChangeAntiAliasSettings(int value)
     {
-        QualitySettings.SetQualityLevel(6);
+        QualitySettings.SetQualityLevel(5);
 
         switch (value)
         {
@@ -367,7 +306,7 @@ public class GraphicsManager : MonoBehaviour
     }
     public void ToggleHDR(bool enabled)
     {
-        QualitySettings.SetQualityLevel(6);
+        QualitySettings.SetQualityLevel(5);
         customSettingsURPAsset.supportsHDR = enabled;
         PlayerPrefs.SetInt("userHDR",Convert.ToInt32(enabled));
        // optionsMenu.qualityDropdown.value = 6;
@@ -414,69 +353,25 @@ public class GraphicsManager : MonoBehaviour
     #endregion
 
     #region Display Settings
+       
 
-    public void SetScreenSize(int value)
+    private int GetCurrentScreenModeIndex()
     {
-        switch (value)
+        FullScreenMode currentMode = Screen.fullScreenMode;
+        if (currentMode == FullScreenMode.FullScreenWindow)
         {
-            case 0:
-                Screen.SetResolution(640,480,Screen.fullScreen);
-                break;
-            case 1:
-                Screen.SetResolution(800,600,Screen.fullScreen);
-                break;
-            case 2:
-                Screen.SetResolution(1024,768,Screen.fullScreen);
-                break;
-            case 3:
-                Screen.SetResolution(1280,720,Screen.fullScreen);
-                break;
-            case 4:
-                Screen.SetResolution(1366,768,Screen.fullScreen);
-                break;
-            case 5:
-                Screen.SetResolution(1600,900,Screen.fullScreen);
-                break;
-            case 6:
-                Screen.SetResolution(1920,1080,Screen.fullScreen);
-                break;
-            case 7:
-                Screen.SetResolution(1920,1200,Screen.fullScreen);
-                break;
-            case 8:
-                Screen.SetResolution(2560,1440,Screen.fullScreen);
-                break;
-            case 9:
-                Screen.SetResolution(2560,1600,Screen.fullScreen);
-                break;
-            case 10:
-                Screen.SetResolution(3840,2160,Screen.fullScreen);
-                break;
+            return 0;
         }
-        PlayerPrefs.SetInt("userResolution", value);
-        Debug.Log("userResolution: " +  PlayerPrefs.GetInt("userResolution"));
-        Debug.Log("Changing resolution to: " + Screen.currentResolution);
-    }
-
-    public void SetDisplayMode(int value)
-    {
-        switch (value)
+        else if (currentMode == FullScreenMode.Windowed)
         {
-            case 0://fullscreen
-                Screen.fullScreenMode = FullScreenMode.ExclusiveFullScreen;
-                break;
-            case 1: //windowed
-                Screen.fullScreenMode = FullScreenMode.Windowed;
-                break;
-            
-            case 2://borderless
-                Screen.fullScreenMode = FullScreenMode.FullScreenWindow;
-                break;
+            return 1;
         }
-        PlayerPrefs.SetInt("userDisplayMode", value);
-        Debug.Log("Setting display mode to: " + Screen.fullScreenMode);
+        else if (currentMode == FullScreenMode.MaximizedWindow)
+        {
+            return 2;
+        }
+        return -1;
     }
-
     public void SetGammaValue(float value)
     {
         _liftGammaGain.gamma.Override(new Vector4(value, value, value, value)); 
@@ -493,18 +388,7 @@ public class GraphicsManager : MonoBehaviour
     
     #endregion
 
-    private int GetCurrentResolutionIndex()
-    {
-        Resolution currentResolution = Screen.currentResolution;
-        for (int i = 0; i < resolutions.Length; i++)
-        {
-            if (resolutions[i].width == currentResolution.width && resolutions[i].height == currentResolution.height)
-            {
-                return i;
-            }
-        }
-        return 0;
-    }
+   
     
     
 

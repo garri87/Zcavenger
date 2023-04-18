@@ -199,7 +199,8 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         mainCamera = Camera.main;
-        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        gameManager = GameManager.Instance;
+        keyAssignments = KeyAssignments.Instance;
 
         #region GetComponents
 

@@ -152,7 +152,7 @@ public class InventoryUI : MonoBehaviour
 
     public void CreateStatBar(int order, string name, int value)
     {
-        VisualElement newStat = statTemplate.Instantiate();
+        VisualElement newStat = statTemplate.Instantiate().Q<VisualElement>("Stat");
         newStat.name = "Stat" + order;
         statsPanel.Add(newStat);
         VisualElement stat = statsPanel.Q<VisualElement>("Stat" + order);

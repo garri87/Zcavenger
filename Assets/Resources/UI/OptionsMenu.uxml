@@ -10,13 +10,11 @@
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="Panels" style="flex-grow: 0; width: 100%; align-items: center; justify-content: flex-end; height: 70%; flex-shrink: 0;">
-            <ui:VisualElement name="DisplayPanel" class="Tab" style="align-items: center; justify-content: flex-start; flex-shrink: 1; flex-grow: 1; display: none; overflow: visible; visibility: visible; flex-direction: column; flex-wrap: nowrap;">
-                <ui:VisualElement name="Panel" style="width: 99%; height: 80%; align-items: flex-start; justify-content: flex-start; flex-direction: row; flex-wrap: wrap; flex-shrink: 1;">
-                    <ui:DropdownField label="Resolution" index="-1" choices="System.Collections.Generic.List`1[System.String]" name="ResolutionDropdown" class="Item Dropdown" />
-                    <ui:DropdownField label="Display Mode" index="-1" choices="System.Collections.Generic.List`1[System.String]" name="ModeDropdown" class="Item Dropdown" style="justify-content: flex-start;" />
-                    <ui:Toggle label="Vsync" name="VsyncToggle" value="false" class="Item Toggle" />
-                    <ui:Slider picking-mode="Ignore" label="Gamma" value="50" high-value="100" name="GammaSlider" class="Item" style="align-items: stretch;" />
-                </ui:VisualElement>
+            <ui:VisualElement name="DisplayPanel" class="Tab" style="align-items: center; justify-content: flex-start; flex-shrink: 1; flex-grow: 1; display: flex; overflow: visible; visibility: visible; flex-direction: column; flex-wrap: nowrap;">
+                <ui:DropdownField label="Display Mode" index="-1" choices="System.Collections.Generic.List`1[System.String]" name="ModeDropdown" class="Item Dropdown" style="justify-content: flex-start;" />
+                <ui:Toggle label="Vsync" name="VsyncToggle" value="false" class="Item Toggle" />
+                <ui:Slider picking-mode="Ignore" label="Gamma" value="50" high-value="100" name="GammaSlider" class="Item" style="align-items: stretch;" />
+                <ui:DropdownField label="Resolution" index="-1" choices="System.Collections.Generic.List`1[System.String]" name="ResolutionDropdown" class="Item Dropdown" />
             </ui:VisualElement>
             <ui:VisualElement name="GraphicsPanel" class="Tab" style="display: none; flex-direction: row; flex-shrink: 1; flex-grow: 1; overflow: visible; visibility: visible;">
                 <ui:VisualElement name="LeftPanel" style="flex-grow: 1; flex-direction: column; justify-content: space-around; align-items: center; max-width: 50%;">
@@ -34,25 +32,10 @@
                     <ui:Toggle label="Chromatic Aberration" name="ChrAbrrToggle" value="false" class="Item" />
                 </ui:VisualElement>
             </ui:VisualElement>
-            <ui:VisualElement name="InputPanel" class="Tab" style="display: none; justify-content: flex-start;">
-                <ui:VisualElement name="Panel" style="width: auto; height: 95%; align-items: stretch; justify-content: flex-start; flex-direction: column; flex-wrap: wrap; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; flex-grow: 0; flex-shrink: 1; overflow: visible;">
-                    <ui:TextField picking-mode="Ignore" label="Move Left" value="A" text="A" name="KeyAssign" readonly="false" is-delayed="false" multiline="false" password="false" class="KeyAssign" />
-                    <ui:TextField picking-mode="Ignore" label="Move Left" value="filler text" text="A" name="KeyAssign" readonly="false" is-delayed="false" multiline="false" class="KeyAssign" />
-                    <ui:TextField picking-mode="Ignore" label="Move Left" value="filler text" text="A" name="KeyAssign" readonly="false" is-delayed="false" multiline="false" class="KeyAssign" />
-                    <ui:TextField picking-mode="Ignore" label="Move Left" value="filler text" text="A" name="KeyAssign" readonly="false" is-delayed="false" multiline="false" class="KeyAssign" />
-                    <ui:TextField picking-mode="Ignore" label="Move Left" value="filler text" text="A" name="KeyAssign" readonly="false" is-delayed="false" multiline="false" class="KeyAssign" />
-                    <ui:TextField picking-mode="Ignore" label="Move Left" value="filler text" text="A" name="KeyAssign" readonly="false" is-delayed="false" multiline="false" class="KeyAssign" />
-                    <ui:TextField picking-mode="Ignore" label="Move Left" value="filler text" text="A" name="KeyAssign" readonly="false" is-delayed="false" multiline="false" class="KeyAssign" />
-                    <ui:TextField picking-mode="Ignore" label="Move Left" value="filler text" text="A" name="KeyAssign" readonly="false" is-delayed="false" multiline="false" class="KeyAssign" />
-                    <ui:TextField picking-mode="Ignore" label="Move Left" value="filler text" text="A" name="KeyAssign" readonly="false" is-delayed="false" multiline="false" class="KeyAssign" />
-                    <ui:TextField picking-mode="Ignore" label="Move Left" value="filler text" text="A" name="KeyAssign" readonly="false" is-delayed="false" multiline="false" class="KeyAssign" />
-                    <ui:TextField picking-mode="Ignore" label="Move Left" value="filler text" text="A" name="KeyAssign" readonly="false" is-delayed="false" multiline="false" class="KeyAssign" />
-                    <ui:TextField picking-mode="Ignore" label="Move Left" value="filler text" text="A" name="KeyAssign" readonly="false" is-delayed="false" multiline="false" class="KeyAssign" />
-                    <ui:TextField picking-mode="Ignore" label="Move Left" value="filler text" text="A" name="KeyAssign" readonly="false" is-delayed="false" multiline="false" class="KeyAssign" />
-                    <ui:TextField picking-mode="Ignore" label="Move Left" value="filler text" text="A" name="KeyAssign" readonly="false" is-delayed="false" multiline="false" class="KeyAssign" />
-                </ui:VisualElement>
+            <ui:VisualElement name="InputPanel" class="Tab" style="display: flex; justify-content: flex-start;">
+                <ui:VisualElement name="KeyAssignPanel" style="width: auto; height: 95%; align-items: stretch; justify-content: flex-start; flex-direction: column; flex-wrap: wrap; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; flex-grow: 0; flex-shrink: 1; overflow: visible;" />
             </ui:VisualElement>
-            <ui:VisualElement name="AudioPanel" class="Tab" style="flex-grow: 0; width: 100%;">
+            <ui:VisualElement name="AudioPanel" class="Tab" style="flex-grow: 0; width: 100%; display: none;">
                 <ui:VisualElement name="Panel" style="width: 100%; flex-grow: 1; flex-shrink: 1; flex-direction: row; flex-wrap: wrap;">
                     <ui:Slider picking-mode="Ignore" label="Master Volume" value="50" high-value="100" name="MasterSlider" class="Item" />
                     <ui:Slider picking-mode="Ignore" label="Ambience Volume" value="50" high-value="100" name="AmbienceSlider" class="Item" />

@@ -8,6 +8,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
@@ -46,6 +47,8 @@ public class GameManager : MonoBehaviour
     #endregion
 
     public UIManager uiManager;
+    private LoadingScreenUI loadingScreenUI;
+
     [HideInInspector] public GraphicsManager _graphicsManager;
     [HideInInspector] public AudioManager _audioManager;
     [HideInInspector] public KeyAssignments _keyAssignments;
@@ -76,23 +79,25 @@ public class GameManager : MonoBehaviour
 #else
         Debug.unityLogger.logEnabled = false;
 #endif
-        
+        uiManager = GetComponent<UIManager>();
+        loadingScreenUI = uiManager.loadingScreenUI.GetComponent<LoadingScreenUI>();
+
         _graphicsManager = GetComponent<GraphicsManager>();
         _audioManager = GetComponent<AudioManager>();
         _keyAssignments = GetComponent<KeyAssignments>();
+        uiManager.CloseAllUI();
     }
 
     void Start()
     {
-        
+        loadingGame = false;
         switch (sceneType)
         {
             case SceneType.mainTitle:
-                /*uiManager.mainMenu.SetActive(true);
-                uiManager.tipsText.alpha = 0;
-                uiManager.loadingScreen.SetActive(false);
-                uiManager.versionText.SetText("version: " + version);
-                uiManager.inventoryUI.gameObject.SetActive(false);*/
+                uiManager.CloseAllUI();
+                uiManager.ToggleUI(uiManager.mainMenuUI,true);
+                MainMenuUI mainMenuUI = uiManager.mainMenuUI.GetComponent<MainMenuUI>();
+              
                 _graphicsManager.globalVolume.profile = _graphicsManager.mainTitlevolumeProfile;
                 break;
 
@@ -100,9 +105,9 @@ public class GameManager : MonoBehaviour
                 player = GameObject.Find("Player");
                 playerController = player.GetComponent<PlayerController>();
                 playerHealthManager = player.GetComponent<HealthManager>();
-                /*uiManager.pauseMenuUI.gameObject.SetActive(false);
-                uiManager.inGameOverlayUI.gameObject.SetActive(true);
-                uiManager.inventoryUI.gameObject.SetActive(true);*/
+
+                uiManager.ToggleUI(uiManager.inGameOverlayUI, true);
+
                 _graphicsManager.globalVolume.profile = _graphicsManager.InGamevolumeProfile;
                 break;
             
@@ -116,47 +121,24 @@ public class GameManager : MonoBehaviour
         switch (sceneType)
         {
             case SceneType.mainTitle:
-                
-                /*uiManager.inventoryUI.gameObject.SetActive(false);
-                
+                                               
                 if (Input.GetKeyDown(KeyCode.Escape) )
                 {
-                    uiManager.optionsMenu.gameObject.SetActive(false);
+                    uiManager.ToggleUI(uiManager.optionsMenuUI,false);
                     if (!loadingGame)
                     {
-                        uiManager.mainMenu.SetActive(true);
-                        if (uiManager.optionsMenu.gameObject.activeSelf == true)
-                        {
-                            uiManager.optionsMenu.gameObject.SetActive(false);
-                        }
+                        uiManager.ToggleUI(uiManager.mainMenuUI,true);
                     }
                 }
 
                 if (loadingGame)
                 {
-                    if (uiManager.loadingScrnCanvasGroup.alpha < 1)
-                    {
-                        uiManager.loadingScrnCanvasGroup.alpha += Time.deltaTime * transitionSpeed;
-                    }
-                    
-                    if (uiManager.tipsText.alpha < 255)
-                    {
-                        uiManager.tipsText.alpha += Time.deltaTime * transitionSpeed;  
-                    }
+                    uiManager.ToggleUI(uiManager.loadingScreenUI, true);
                 }
-                else
-                {
-                    uiManager.loadingScrnCanvasGroup.alpha = 0;
-                    uiManager.tipsText.alpha = 0;
-                }*/
                 break;
 
             case SceneType.inLevel:
-
-                loadingGame = false;
-                //uiManager.mainMenu.SetActive(false);
-                //uiManager.loadingScreen.SetActive(false);
-                //uiManager.inventoryUI.gameObject.SetActive(true);
+                
                 if (playerHealthManager.IsDead)
                 {
                     GameOver("YOU ARE DEAD");
@@ -169,28 +151,10 @@ public class GameManager : MonoBehaviour
                 
                 if (Input.GetKeyDown(KeyCode.Escape))
                 {
-                    /*if (!uiManager.optionsMenu.gameObject.activeSelf)
-                    {
-                        PauseGame();
-                    }*/
+                    PauseGame();
                 }
                 
-                if (gamePaused)
-                {
-            
-                    Time.timeScale = 0;
-            
-                    /*uiManager.inventoryUICanvas.enabled = false;
-                    uiManager.pauseMenuUI.gameObject.SetActive(true);*/
-                }
-
-                if (!gamePaused)
-                {
-                    Time.timeScale = 1;
-                    /*uiManager.pauseMenuUI.gameObject.SetActive(false);
-                    uiManager.optionsMenu.gameObject.SetActive(false);*/
-                }
-                
+                     
                 break;
             
            
@@ -199,29 +163,36 @@ public class GameManager : MonoBehaviour
     }
     
 
-    public void StartGame(int sceneNumber)
+    public void StartGame()
     {
-        /*uiManager.tipsText.alpha = 0;
-        uiManager.loadingScrnCanvasGroup.alpha = 0;
+        uiManager.CloseAllUI();
+        uiManager.ToggleUI(uiManager.loadingScreenUI, true);
+        loadingScreenUI.hintsLabel.text = tips[Random.Range(0, tips.Length)];
         loadingGame = true;
-        uiManager.loadingScreen.SetActive(true);
-        uiManager.mainMenu.SetActive(false);*/
-        
-       
-        /*uiManager.tipsText.text = tips[Random.Range(0, tips.Length)];
-        uiManager.progressBar.SetActive(true);*/
-        StartCoroutine(LoadAsync(sceneNumber));
+              
+        StartCoroutine(LoadAsync());
     }
 
     public void PauseGame()
     {
         gamePaused = !gamePaused;
+
+        if (gamePaused)
+        {
+            uiManager.ToggleUI(uiManager.pauseMenuUI, true);
+            Time.timeScale = 0;
+        }
+        else
+        {
+            uiManager.ToggleUI(uiManager.pauseMenuUI, false);
+            uiManager.ToggleUI(uiManager.optionsMenuUI, false);
+            Time.timeScale = 1;
+        }
     }
     
     public void RestartLevel()
     {
         Scene scene = SceneManager.GetActiveScene();
-        uiManager.gameObject.SetActive(false);
         gamePaused = false;
         Time.timeScale = 1;
         SceneManager.LoadScene(scene.name);
@@ -234,17 +205,7 @@ public class GameManager : MonoBehaviour
             Debug.Log("GAME OVER");
         }
         gameOver = true;
-        /*uiManager.gameOverText.text = gameOverMessage;
-        uiManager.gameOverCanvas.gameObject.SetActive(true);
-        if (uiManager.gameOverCanvasGroup.alpha < 1)
-        {
-            uiManager.gameOverCanvasGroup.alpha += Time.deltaTime/4;
-        }
-        else
-        {
-            uiManager.gameOverCanvasGroup.alpha = 1;
-
-        }*/
+        uiManager.ToggleUI(uiManager.gameOverScreenUI, true);
 
     }
     public void ExitGame()
@@ -253,14 +214,14 @@ public class GameManager : MonoBehaviour
         Application.Quit();
     }
     
-    IEnumerator LoadAsync(int sceneNumber)
+    IEnumerator LoadAsync()
     {
         yield return new WaitForSeconds(1);
         AsyncOperation loadOperation = SceneManager.LoadSceneAsync(1);
         while (!loadOperation.isDone)
         {
             float progress = Mathf.Clamp01(loadOperation.progress / .9f);
-            /*uiManager.progressBarSlider.value = progress;*/
+            loadingScreenUI.progressBar.style.width = progress;
             Debug.Log("Scene Loading: " + progress);
 
             yield return null;

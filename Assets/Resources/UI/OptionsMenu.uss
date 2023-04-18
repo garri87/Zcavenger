@@ -73,7 +73,7 @@
 }
 
 .Dropdown > VisualElement {
-    background-color: rgba(79, 79, 79, 255);
+    background-color: rgb(79, 79, 79);
     margin-left: 0;
     margin-right: 0;
     margin-top: 0;
@@ -106,11 +106,11 @@
 
 .KeyAssign {
     width: 25%;
-    height: 11%;
+    height: 15%;
     align-items: stretch;
     justify-content: flex-start;
     -unity-text-align: middle-center;
-    color: rgba(255, 255, 255, 255);
+    color: rgb(255, 255, 255);
     flex-grow: 0;
     font-size: 100%;
     background-color: rgb(72, 72, 72);
@@ -119,41 +119,10 @@
     border-right-width: 1px;
     border-top-width: 1px;
     border-bottom-width: 1px;
-    border-left-color: rgba(118, 118, 118, 255);
-    border-right-color: rgba(118, 118, 118, 255);
-    border-top-color: rgba(118, 118, 118, 255);
-    border-bottom-color: rgba(118, 118, 118, 255);
-    margin-left: 5px;
-    margin-right: 5px;
-    margin-top: 5px;
-    margin-bottom: 5px;
-}
-
-.KeyAssign #unity-text-input {
-    color: rgba(255, 255, 255, 255);
-    background-color: rgba(65, 65, 65, 255);
-    border-left-width: 1px;
-    border-right-width: 1px;
-    border-top-width: 1px;
-    border-bottom-width: 1px;
-    border-left-color: rgb(255, 255, 255);
-    border-right-color: rgb(255, 255, 255);
-    border-top-color: rgb(255, 255, 255);
-    border-bottom-color: rgb(255, 255, 255);
-    -unity-text-align: middle-center;
-    -unity-font-style: normal;
-    font-size: 100%;
-    padding-left: 0;
-    padding-right: 0;
-    padding-top: 0;
-    padding-bottom: 0;
-    margin-left: 0;
-    margin-right: 0;
-    margin-top: 0;
-    margin-bottom: 0;
-    flex-grow: 1;
-    white-space: normal;
-    justify-content: center;
+    border-left-color: rgb(118, 118, 118);
+    border-right-color: rgb(118, 118, 118);
+    border-top-color: rgb(118, 118, 118);
+    border-bottom-color: rgb(118, 118, 118);
 }
 
 .KeyAssign Label {
@@ -170,8 +139,29 @@
     padding-top: 0;
     padding-bottom: 0;
     -unity-font-definition: resource('Fonts/coolvetica condensed rg SDF');
+    -unity-text-align: middle-center;
+    font-size: 100%;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgba(168, 168, 168, 255);
+    border-right-color: rgba(168, 168, 168, 255);
+    border-top-color: rgba(168, 168, 168, 255);
+    border-bottom-color: rgba(168, 168, 168, 255);
+    -unity-text-outline-width: 0.1px;
+    -unity-text-outline-color: rgb(0, 0, 0);
 }
 
 Button:hover {
     background-color: rgb(125, 125, 125);
+}
+
+Label {
+    font-size: 100%;
+    -unity-font-definition: resource('Fonts/BebasNeue-Regular SDF');
+}
+
+.KeyValue:hover {
+    background-color: rgb(72, 72, 72);
 }
