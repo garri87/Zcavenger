@@ -8,13 +8,12 @@ using Button = UnityEngine.UIElements.Button;
 using Slider = UnityEngine.UIElements.Slider;
 using Toggle = UnityEngine.UIElements.Toggle;
 using DropdownField = UnityEngine.UIElements.DropdownField;
-
+using UnityEngine.Audio;
 
 
 public class OptionsMenuUI : MonoBehaviour
 {
     public UIDocument optionsMenu;
-
     public VisualElement root;
 
     //Display Tab
@@ -68,6 +67,8 @@ public class OptionsMenuUI : MonoBehaviour
     public KeyCode currentKeyCode;
     private KeyAssignments keyAssignments;
     private KeyStr selectedKey;
+    private Label activeLabel;
+    private string activeLabelValue;
 
     private List<String> qualitiyChoices = new List<string>
         {
@@ -87,7 +88,17 @@ public class OptionsMenuUI : MonoBehaviour
         };
     private List<string> textureChoices = new List<string>
         {
-         "Quarter","Half","Total"
+         "Quarter",
+         "Half",
+         "Total"
+        };
+
+    private List<string> audioModeChoices = new List<string>
+        {
+         "Stereo",
+         "Mono",
+         "5.1",
+         "7.1"
         };
 
     private void OnEnable()
@@ -97,7 +108,7 @@ public class OptionsMenuUI : MonoBehaviour
 
         gameManager = GameManager.Instance;
         graphicsManager = gameManager._graphicsManager;
-        KeyAssignments = KeyAssignments.Instance;
+        KeyAssignments keyAssignments= KeyAssignments.Instance;
 
         //Display Tab
         displayButton = root.Q<Button>("DisplayButton");
@@ -145,7 +156,7 @@ public class OptionsMenuUI : MonoBehaviour
 
 
         antiAliasDropdown = graphicsTab.Q<DropdownField>("AntiAliasDropDown");
-        antiAliasDropdown.choices = ;
+        antiAliasDropdown.choices = antiAliasChoices;
         antiAliasDropdown.RegisterValueChangedCallback(ChangeAntiAliasQuality);
 
         hdrToggle = graphicsTab.Q<Toggle>("HDRToggle");
@@ -172,6 +183,7 @@ public class OptionsMenuUI : MonoBehaviour
         //Input Tab
         inputButton = root.Q<Button>("InputButton");
         inputButton.RegisterCallback<ClickEvent, VisualElement>(OpenTab, inputTab);
+        inputButton.RegisterCallback<ClickEvent, VisualElement>(RefreshKeyCodes, keyAssignPanel);
         inputTab = root.Q<VisualElement>("InputPanel");
 
         keyAssignPanel = root.Q<VisualElement>("KeyAssignPanel");
@@ -188,21 +200,36 @@ public class OptionsMenuUI : MonoBehaviour
         effectsVolSlider = root.Q<Slider>("EffectsSlider");
         weaponsVolSlider = root.Q<Slider>("WeaponsSlider");
         audioModeDropdown = root.Q<DropdownField>("AudioModeDropDown");
+        audioModeDropdown.choices = audioModeChoices;
+        audioModeDropdown.RegisterValueChangedCallback(ChangeAudioMode);
+
+        AudioMixer mixer = gameManager._audioManager.audioMixer;
+
+        string masterChannelName = "Master";
+        string ambienceChannelName = "Ambience"; 
+        string effectsChannelName = "Effects"; 
+        string weaponsChannelName = "Weapons"; 
+
+        masterVolSlider.RegisterCallback<ChangeEvent<float>>(evt => ChangeVolume(masterVolSlider, mixer, masterChannelName));
+        ambienceVolSlider.RegisterCallback<ChangeEvent<float>>(evt => ChangeVolume(ambienceVolSlider, mixer, ambienceChannelName));
+        effectsVolSlider.RegisterCallback<ChangeEvent<float>>(evt => ChangeVolume(effectsVolSlider, mixer, effectsChannelName));
+        weaponsVolSlider.RegisterCallback<ChangeEvent<float>>(evt => ChangeVolume(weaponsVolSlider, mixer, weaponsChannelName));
+
 
         //General
         closeButton = root.Q<Button>("CloseButton");
         closeButton.RegisterCallback<ClickEvent>(CloseOptions);
     }
 
-
+    
 
     private void Start()
     {
         //Input Tab
-        GetKeyAssigns();
+        RefreshKeyCodes(targetPanel: keyAssignPanel);
     }
 
-    private void OnGUI()
+    private void Update()
     {
         if (waitForKey)
         {
@@ -211,74 +238,97 @@ public class OptionsMenuUI : MonoBehaviour
             {                               
                 timer = keyWaitTime;
                 waitForKey = false;
+                activeLabel.text = activeLabelValue;
             }
-            if (Event.current.isKey)
+
+            if (Input.anyKeyDown)
             {
-                ListenForKeyCode();
+                foreach (KeyCode keyCode in Enum.GetValues(typeof(KeyCode)))
+                {
+                    if (Input.GetKeyDown(keyCode))
+                    {
+                        ChangeKeyCode(selectedKey,keyCode);
+                    }
+                }
             }
         }
 
     }
 
-    private void ListenForKeyCode()
-    {
-        KeyCode newKeyCode = Event.current.keyCode;
-        if (newKeyCode != KeyCode.Escape)
-        {
-            currentKeyCode = newKeyCode;
-            KeyAssignments.UpdateKeyBinding(currentKeyName);
-            timer = cancelTime;
-            waitForKey = false;
-        }
-        else
-        {
-            timer = cancelTime;
-            waitForKey = false;
-        }
-    }
+    #region Input Tab
 
     /// <summary>
     /// Populates the ui with key assigns boxes from KeyCode List
     /// </summary>
-    public void GetKeyAssigns()
+    public void GetKeyAssigns(VisualElement targetPanel)
     {
-        for (int i = 0; i < keyAssignments.keyCodes.Length; i++)
+        for (int i = 0; i < keyAssignments.keys.Length; i++)
         {
             VisualElement keyAssign = keyAssignTemplate.Instantiate().Q<VisualElement>("KeyAssign");
-            keyAssign.name = "KeyAssign_" + i;
+            keyAssign.name = "KeyAssign";
 
             Label keyValue = keyAssign.Q<Label>("KeyValue");
             Label keyName = keyAssign.Q<Label>("KeyName");
-            keyName.text = keyAssignments.keyCodes[i].keyName;
+            keyName.text = keyAssignments.keys[i].keyName;
 
-            keyValue.text = keyAssignments.keyCodes[i].keyCode.ToString();
+            keyValue.text = keyAssignments.keys[i].keyCode.ToString();
+            keyValue.focusable = true;            
+            keyValue.RegisterCallback<ClickEvent, KeyStr>(ListenForKeyCode, keyAssignments.keys[i]);
             
-            keyValue.RegisterCallback<ClickEvent, string, Label>(UpdateKeycode, keyAssignments.keyCodes[i].keyName, keyValue);
-            
-            keyAssignPanel.Add(keyAssign);
+            targetPanel.Add(keyAssign);
             keyAssignList.Add(keyAssign);
 
         }
     }
 
-    private void UpdateKeycode(ClickEvent evt, string keyName, Label label)
+    private void ListenForKeyCode(ClickEvent evt, KeyStr key)
     {
         if (evt.button == (int)MouseButton.LeftMouse)
         {
-            label.text = "Press any key";
-            waitForKey = true;
-            selectedKey = key;
+            if(!waitForKey)
+            {
+                activeLabelValue = activeLabel.text;    
+                activeLabel = evt.target as Label;
+                activeLabel.text = "Press Any Key";
+                waitForKey = true;
+                selectedKey = key;
+            }
+           
         }     
     }
 
-   
+   private void ChangeKeyCode(KeyStr key, KeyCode newKeyCode)
+    {
+        if (newKeyCode != KeyCode.Escape)
+        {
+            keyAssignments.UpdateKeyBinding(key,newKeyCode);
+            activeLabel.text = newKeyCode.ToString();
+            timer = keyWaitTime;
+            waitForKey = false;
+        }
+        else
+        {
+            timer = keyWaitTime;
+            waitForKey = false;
+        }
+    }
+
+    private void RefreshKeyCodes(ClickEvent evt = null, VisualElement targetPanel = null)
+    {        
+       targetPanel.Clear();
+       GetKeyAssigns(targetPanel);
+    }
 
 
     public void CloseOptions(ClickEvent evt)
     {
         root.visible = false;
     }
+    #endregion
 
+    #region Tab Management
+        
+    
     public void CloseAllTabs()
     {
         displayTab.visible = false;
@@ -293,7 +343,10 @@ public class OptionsMenuUI : MonoBehaviour
         tab.visible = true;
     }
 
-    public void GetResolutions(DropdownField dropdown)
+    #endregion
+        
+    #region Display & Graphics Tabs
+        public void GetResolutions(DropdownField dropdown)
     {
         // Obtener resoluciones de pantalla soportadas
         Resolution[] resolutions = Screen.resolutions;
@@ -301,14 +354,14 @@ public class OptionsMenuUI : MonoBehaviour
         // Limpiar opciones del dropdown de resoluciones
         dropdown.choices.Clear();
 
-        // Agregar cada resolución como opción en el dropdown
+        // Agregar cada resoluciï¿½n como opciï¿½n en el dropdown
 
         foreach (Resolution resolution in resolutions)
         {
             dropdown.choices.Add(resolution.width.ToString() + "X" + resolution.height.ToString());
         }
 
-        // Establecer resolución actual como opción seleccionada en el dropdown
+        // Establecer resoluciï¿½n actual como opciï¿½n seleccionada en el dropdown
         int currentResolutionIndex = GetCurrentResolution();
         dropdown.index = currentResolutionIndex;
 
@@ -324,10 +377,7 @@ public class OptionsMenuUI : MonoBehaviour
             }
             return 0;
         }
-
-
     }
-
 
     public void ChangeResolution(ChangeEvent<string> evt)
     {
@@ -502,6 +552,20 @@ public class OptionsMenuUI : MonoBehaviour
         graphicsManager.ToggleHDR(evt.newValue);
 
     }
+    #endregion
+    
+    #region Audio Tab
+    void ChangeVolume(Slider slider, AudioMixer mixer, string channelName)
+    {
+        float volume = slider.value;
+        mixer.SetFloat(channelName, Mathf.Log10(volume) * 20);
+    }
 
+    private void ChangeAudioMode(ChangeEvent<string> evt)
+    {
+        gameManager._audioManager.SelectAudioMode(evt.newValue);
+    }
+
+    #endregion
 
 }

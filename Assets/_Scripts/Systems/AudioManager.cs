@@ -3,35 +3,40 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.UI;
 
 public class AudioManager : MonoBehaviour
 {
-   public TMP_Dropdown audioModeDropDown;
+   public AudioMixer audioMixer;
    
-   public void SelectAudioMode(int value)
+   public void SelectAudioMode(string value)
    {
-      switch (audioModeDropDown.value)
+      switch (value)
       {
-         case 0:
+         case "Stereo":
             AudioSettings.speakerMode = AudioSpeakerMode.Stereo;
             break;
          
-         case 1:
+         case "Mono":
             AudioSettings.speakerMode = AudioSpeakerMode.Mono;
 
             break;
          
-         case 2:
+         case "Surround":
             AudioSettings.speakerMode = AudioSpeakerMode.Surround;
             break;
          
-         case 3:
+         case "5.1":
             AudioSettings.speakerMode = AudioSpeakerMode.Mode5point1;
             break;
          
-         case 4:
+         case "7.1":
             AudioSettings.speakerMode = AudioSpeakerMode.Mode7point1;
+            break;
+
+            default:
+            Debug.Log("Invalid Audio Mode: " + value);
             break;
       }
       Debug.Log("AudioMode: " + AudioSettings.speakerMode);

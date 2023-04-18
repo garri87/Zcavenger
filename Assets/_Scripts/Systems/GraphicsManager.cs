@@ -180,11 +180,11 @@ public class GraphicsManager : MonoBehaviour
             case 4://ultra
                // QualitySettings.renderPipeline = ultraSettingsURPAsset;
                 //textures
-                optionsMenuUI.textureDropdown.value = 4;
+                optionsMenuUI.textureDropdown.index = 4;
                 //shadows
-                optionsMenuUI.shadowsDropdown.value = 4;
+                optionsMenuUI.shadowsDropdown.index = 4;
                 //AA
-                optionsMenuUI.antiAliasDropdown.value = 3;
+                optionsMenuUI.antiAliasDropdown.index = 3;
                 //HDR
                 optionsMenuUI.hdrToggle.value = true;
                PlayerPrefs.SetInt("userTextureQuality", 4);
@@ -196,9 +196,9 @@ public class GraphicsManager : MonoBehaviour
             
             case 5://custom
                // QualitySettings.renderPipeline = customSettingsURPAsset;
-                optionsMenuUI.textureDropdown.value = PlayerPrefs.GetInt("userTextureQuality");
-                optionsMenuUI.shadowsDropdown.value = PlayerPrefs.GetInt("userShadowQuality");
-                optionsMenuUI.antiAliasDropdown.value = PlayerPrefs.GetInt("userAntiAlias");
+                optionsMenuUI.textureDropdown.value = PlayerPrefs.GetString("userTextureQuality");
+                optionsMenuUI.shadowsDropdown.value = PlayerPrefs.GetString("userShadowQuality");
+                optionsMenuUI.antiAliasDropdown.value = PlayerPrefs.GetString("userAntiAlias");
                 optionsMenuUI.hdrToggle.value = Convert.ToBoolean(PlayerPrefs.GetInt("userHDR"));
                 
                 Debug.Log("changed to custom Settings");

@@ -35,8 +35,6 @@ public class KeyAssignments : MonoBehaviour
             return _instance;
         }
     }
-
-    public Transform keyAssignTransform;
     
     public KeyStr leftKey = new KeyStr          (KeyCode.A, "left");
     public KeyStr rightKey = new KeyStr         (KeyCode.D, "right");
@@ -59,32 +57,30 @@ public class KeyAssignments : MonoBehaviour
     public KeyStr throwableKey = new KeyStr     (KeyCode.Alpha4, "draw throwable");
 
 
-    public KeyStr[] keyCodes;
+    public KeyStr[] keys;
     private int keyCodesLength;
 
     private int keybindChildCount;
     private void OnValidate()
     {
-        keyCodes = new KeyStr[]
+     keys = new KeyStr[]
         {
-         jumpKey,
-         walkKey,
-         crouchKey,
-         proneKey,
-         attackKey,
-         aimBlockKey,
-         useKey,
-         reloadKey,
-         flashLightKey,
-         inventoryKey,
-         primaryKey,
-         secondaryKey,
-         meleeKey,
-         throwableKey,
+            jumpKey,
+            walkKey,
+            crouchKey,
+            proneKey,
+            attackKey,
+            aimBlockKey,
+            useKey,
+            reloadKey,
+            flashLightKey,
+            inventoryKey,
+            primaryKey,
+            secondaryKey,
+            meleeKey,
+            throwableKey,
         };
-        keyCodesLength = keyCodes.Length;
-        keybindChildCount = keyAssignTransform.childCount;
-        InitInputOptionsKeys();
+        keyCodesLength = keys.Length;
 
     }
 
@@ -92,7 +88,7 @@ public class KeyAssignments : MonoBehaviour
     {
         try
         {
-            foreach (var key in keyCodes)
+            foreach (var key in keys)
             {
                 key.keyCode = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString(nameof(key)));
             } 
@@ -100,53 +96,29 @@ public class KeyAssignments : MonoBehaviour
         }
         catch
         {
-            foreach (var key in keyCodes)
+            foreach (var key in keys)
             {
                 PlayerPrefs.SetString(nameof(key), key.keyCode.ToString());
             }
         }
 
-       
-
-
-        InitInputOptionsKeys();
+    
     }
 
-    public void InitInputOptionsKeys()
-    {
-        if (keybindChildCount == keyCodes.Length)
-        {
-            for (int i = 0; i < keybindChildCount; i++)
-            {
-                Key keyIndex = keyAssignTransform.GetChild(i).GetComponent<Key>();
-                keyIndex.currentKeyCode = keyCodes[i].keyCode;
-                keyIndex.currentKeyName = keyCodes[i].keyName;
-            }
-        }
-        else if (keybindChildCount > keyCodes.Length)
-        {
-            Debug.Log("The Keybindings group is greater than bindable keys");
-        }
-        else if (keybindChildCount < keyCodes.Length)
-        {
-            Debug.Log("The Keybindings group is smaller than bindable keys");
-        }
-    }
+
 
     /// <summary>
     /// Update the key assignment for a given key name
     /// </summary>
     /// <param name="keyCodeName"></param>
-    public void UpdateKeyBinding(string keyCodeName)
+    public void UpdateKeyBinding(KeyStr key, KeyCode newKeyCode)
     {
-        for (int i = 0; i < keybindChildCount; i++)
+        for (int i = 0; i < keys.Length; i++)
         {
-            Key keyIndex = keyAssignTransform.GetChild(i).GetComponent<Key>();
-            if (keyCodes[i].keyName == keyCodeName)
+            if (keys[i] == key)
             {
-                keyCodes[i].keyCode = keyIndex.currentKeyCode;
-                keyCodes[i].keyName = keyIndex.currentKeyName;
-                Debug.Log("The " + keyCodes[i].keyName + " key was successfully rebinded to" + keyCodes[i].keyCode.ToString());
+             keys[i].keyCode = newKeyCode;
+                Debug.Log("The " + keys[i].keyName + " key was successfully rebinded to" + keys[i].keyCode.ToString());
             }
 
         }

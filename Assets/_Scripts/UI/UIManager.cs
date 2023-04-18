@@ -42,6 +42,7 @@ public class UIManager : MonoBehaviour
     {
         foreach (GameObject uIObject in uiList)
         {
+            
             uIObject.GetComponent<UIDocument>().rootVisualElement.visible = false;
         }
     }
