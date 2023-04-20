@@ -1,0 +1,39 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Resources/UI/ItemContainer.uss?fileID=7433441132597879392&amp;guid=b81eae7a6ed32f243a656d066332fa08&amp;type=3#ItemContainer" />
+    <Style src="project://database/Assets/Resources/UI/Inventory.uss?fileID=7433441132597879392&amp;guid=9e4bdd29bf0962a4dbedea7a78af38e6&amp;type=3#Inventory" />
+    <ui:VisualElement name="RootPanel" class="RootPanel">
+        <ui:Label text="CONTAINER NAME" display-tooltip-when-elided="true" name="ContainerName" class="ContainerName" />
+        <ui:VisualElement name="SlotsPanel" class="SlotsPanel">
+            <ui:VisualElement name="Slot" focusable="true" class="Slot">
+                <ui:Label text="9999" display-tooltip-when-elided="true" name="Quantity" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:VisualElement name="ContextMenu" class="ContextMenu" style="display: none;">
+        <ui:Button text="Use" display-tooltip-when-elided="true" name="UseButton" />
+        <ui:Button text="Equip" display-tooltip-when-elided="true" name="EquipButton" />
+        <ui:Button text="Throw" display-tooltip-when-elided="true" name="ThrowButton" />
+        <ui:Button text="Inspect" display-tooltip-when-elided="true" name="InspectButton" />
+    </ui:VisualElement>
+    <ui:VisualElement name="InspectWindow" style="position: absolute; left: 10%; top: 10%; right: 10%; bottom: 10%; flex-grow: 1; background-color: rgba(0, 0, 0, 0.89); flex-direction: row; width: 80%; height: 80%; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgb(185, 185, 185); border-right-color: rgb(185, 185, 185); border-top-color: rgb(185, 185, 185); border-bottom-color: rgb(185, 185, 185); display: flex;">
+        <ui:VisualElement name="LeftPanel" style="flex-grow: 1; width: 60%; height: 100%; justify-content: flex-start; align-items: stretch; border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-width: 0; border-right-width: 1px; border-top-width: 0; border-bottom-width: 0;">
+            <ui:VisualElement name="Image" style="background-image: url(&apos;project://database/Assets/Textures/M4A1%20Rifle%20icon.png?fileID=2800000&amp;guid=aec9ed21126005d40817c1918f9e8a54&amp;type=3#M4A1 Rifle icon&apos;); -unity-background-scale-mode: scale-to-fit; flex-shrink: 1; flex-grow: 1; height: auto; min-height: 30%; width: 100%; align-items: flex-start; background-color: rgb(67, 67, 67);" />
+            <ui:Label text="Lorem Ipsum" display-tooltip-when-elided="true" name="ItemTitle" style="-unity-font-definition: resource(&apos;Fonts/BebasNeue-Regular SDF&apos;); font-size: 15px; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 2px; padding-right: 2px; padding-top: 2px; padding-bottom: 2px; width: 100%; border-left-width: 0; border-right-width: 0; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255);" />
+            <ui:Label text="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" display-tooltip-when-elided="true" name="ItemInfo" class="ItemInfo" />
+        </ui:VisualElement>
+        <ui:VisualElement name="RightPanel" style="flex-grow: 1; width: 40%; height: 100%;">
+            <ui:VisualElement name="StatsPanel" style="flex-grow: 1; height: 90%; width: 100%; align-items: flex-start; flex-direction: column; flex-wrap: wrap;">
+                <ui:VisualElement name="Stat" class="Stat">
+                    <ui:Label text="Damage" display-tooltip-when-elided="true" name="StatName" class="StatName" />
+                    <ui:VisualElement name="BarBackground" class="BarBackground">
+                        <ui:VisualElement name="StatBar" style="background-color: rgb(195, 195, 195); transform-origin: left bottom; flex-grow: 1; width: 54%; border-top-right-radius: 2px; border-bottom-right-radius: 2px;" />
+                    </ui:VisualElement>
+                    <ui:Label text="999" display-tooltip-when-elided="true" name="StatValue" class="StatValue" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement style="flex-grow: 1; height: auto; width: 100%; justify-content: flex-end; align-items: flex-end;">
+                <ui:Button text="Close" display-tooltip-when-elided="true" name="InspectCloseButton" style="flex-shrink: 1; flex-grow: 0; height: 20%; width: 30%; font-size: 14px; -unity-font-definition: resource(&apos;Fonts/BebasNeue-Regular SDF&apos;); background-color: rgb(72, 72, 72); color: rgb(255, 255, 255); -unity-text-outline-width: 0.2px; -unity-text-outline-color: rgb(0, 0, 0);" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

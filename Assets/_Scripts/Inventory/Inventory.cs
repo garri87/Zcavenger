@@ -132,6 +132,8 @@ public class Inventory : MonoBehaviour
                 IStyle style = inventoryUI.inventorySlotList[i].style; // Get the style of the slot
                 style.backgroundImage = new StyleBackground(item.itemIcon);//Set the icon image
                 quantity.text = item.quantity.ToString();//Set the quantity label
+                inventoryUI.inventorySlotList[i].UnregisterCallback<ClickEvent, int>(inventoryUI.SlotClickEvent,TrickleDown.NoTrickleDown);
+                inventoryUI.inventorySlotList[i].RegisterCallback<ClickEvent, int>(inventoryUI.SlotClickEvent, i);
             }
         }
 

@@ -38,7 +38,7 @@ Label {
     max-height: 15%;
     min-width: 1%;
     min-height: 1%;
-    align-items: stretch;
+    align-items: center;
     justify-content: flex-end;
 }
 
@@ -59,6 +59,17 @@ Label {
     max-height: 100%;
     min-height: 1%;
     min-width: 1%;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    -unity-text-align: lower-right;
+    top: 5px;
+    left: 5px;
 }
 
 .EquipSlot {
@@ -135,7 +146,7 @@ Label {
     transition-duration: 0.3s;
 }
 
-#ContextMenu Button {
+.ContextMenu Button {
     background-color: rgb(72, 72, 72);
     -unity-font-definition: resource('Fonts/BebasNeue-Regular SDF');
     color: rgb(255, 255, 255);
@@ -453,4 +464,21 @@ Label {
     width: 54%;
     border-top-right-radius: 2px;
     border-bottom-right-radius: 2px;
+}
+
+.ContextMenu {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 10%;
+    height: 20%;
+    background-color: rgba(0, 0, 0, 0.37);
+    padding-left: 1px;
+    padding-right: 1px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    transform-origin: left top;
+    display: none;
 }

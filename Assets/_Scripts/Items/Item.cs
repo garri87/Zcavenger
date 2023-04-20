@@ -223,6 +223,7 @@ public class Item : MonoBehaviour
 
     public void GetItemScriptableObject(ItemScriptableObject itemScriptableObject)
     {
+        this.itemScriptableObject = itemScriptableObject; 
         ID = itemScriptableObject.ID;
         itemName = itemScriptableObject.itemName;
         description = itemScriptableObject.description;
@@ -239,6 +240,7 @@ public class Item : MonoBehaviour
 
     public void GetWeaponScriptableObject(WeaponScriptableObject weaponScriptableObject)
     {
+        this.weaponScriptableObject = weaponScriptableObject;
         weaponClass = weaponScriptableObject.weaponClass;
         ID = weaponScriptableObject.ID;
         itemIcon = weaponScriptableObject.weaponIcon;
@@ -263,6 +265,7 @@ public class Item : MonoBehaviour
 
     public void GetOutfitScriptableObject(OutfitScriptableObject outfitScriptableObject)
     {
+        this.outfitScriptableObject = outfitScriptableObject;
         ID = outfitScriptableObject.ID;
         name = outfitScriptableObject.itemName;
         description = outfitScriptableObject.description;   

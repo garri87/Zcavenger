@@ -21,6 +21,8 @@ public class UIManager : MonoBehaviour
 
     public GameObject gameOverScreenUI;
 
+    public GameObject itemContainerUI;
+
     private GameObject[] uiList;
 
     private void OnEnable()
@@ -33,7 +35,8 @@ public class UIManager : MonoBehaviour
             inventoryUI,
             pauseMenuUI,
             optionsMenuUI,
-            gameOverScreenUI
+            gameOverScreenUI,
+            itemContainerUI
         };
     }
 

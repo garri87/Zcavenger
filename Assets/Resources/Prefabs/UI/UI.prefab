@@ -79,7 +79,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &826691261628665601
 Transform:
   m_ObjectHideFlags: 0
@@ -187,18 +187,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   optionsMenu: {fileID: 0}
-  resolutionDropdown: {fileID: 0}
-  displayModeDropdown: {fileID: 0}
-  gammaSlider: {fileID: 0}
-  qualityDropdown: {fileID: 0}
-  textureDropdown: {fileID: 0}
-  shadowsDropdown: {fileID: 0}
-  antiAliasDropdown: {fileID: 0}
-  masterVolSlider: {fileID: 0}
-  ambienceVolSlider: {fileID: 0}
-  effectsVolSlider: {fileID: 0}
-  weaponsVolSlider: {fileID: 0}
-  audioModeDropdown: {fileID: 0}
+  keyAssignTemplate: {fileID: 0}
+  currentKeyCode: 0
 --- !u!1 &826691262030177953
 GameObject:
   m_ObjectHideFlags: 0
@@ -247,7 +237,7 @@ MonoBehaviour:
   m_PanelSettings: {fileID: 11400000, guid: 39c88d5e18d92dc4ea53f642f4d7c1ae, type: 2}
   m_ParentUI: {fileID: 0}
   sourceAsset: {fileID: 9197481963319205126, guid: e8e9a6827ad372d4589a5b78f27972a1, type: 3}
-  m_SortingOrder: 2
+  m_SortingOrder: 3
 --- !u!114 &6435149705770462513
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -297,6 +287,7 @@ Transform:
   - {fileID: 826691261628665601}
   - {fileID: 826691262030177954}
   - {fileID: 826691263393008944}
+  - {fileID: 7684031972636871865}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -312,13 +303,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca6be35f48a2ea6479d86c4066ca1b45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainMenuUI: {fileID: 2920981915339112397}
-  loadingScreenUI: {fileID: 4504557545874749938}
-  inGameOverlayUI: {fileID: 1770783797886246703}
-  inventoryUI: {fileID: 5339526777229204232}
-  pauseMenuUI: {fileID: 6435149705770462513}
-  optionsMenuUI: {fileID: 1195721175249275134}
-  gameOverScreenUI: {fileID: 328552985843362865}
+  mainMenuUI: {fileID: 826691262703568022}
+  loadingScreenUI: {fileID: 826691263196827834}
+  inGameOverlayUI: {fileID: 826691261578130839}
+  inventoryUI: {fileID: 826691261628665600}
+  pauseMenuUI: {fileID: 826691262030177953}
+  optionsMenuUI: {fileID: 826691261969983245}
+  gameOverScreenUI: {fileID: 826691263393008951}
 --- !u!1 &826691262703568022
 GameObject:
   m_ObjectHideFlags: 0
@@ -381,9 +372,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainMenu: {fileID: 0}
-  startGameButton: {fileID: 0}
-  optionsButton: {fileID: 0}
-  exitButton: {fileID: 0}
 --- !u!1 &826691263196827834
 GameObject:
   m_ObjectHideFlags: 0
@@ -495,7 +483,7 @@ MonoBehaviour:
   m_PanelSettings: {fileID: 11400000, guid: 39c88d5e18d92dc4ea53f642f4d7c1ae, type: 2}
   m_ParentUI: {fileID: 0}
   sourceAsset: {fileID: 9197481963319205126, guid: c69029dcb49b6e24689fb7c31cb5144f, type: 3}
-  m_SortingOrder: 0
+  m_SortingOrder: 2
 --- !u!114 &328552985843362865
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -510,3 +498,51 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameOverScreen: {fileID: 0}
   gameOverText: YOU ARE DEAD
+--- !u!1 &7232663360945069450
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7684031972636871865}
+  - component: {fileID: 1381663204955658751}
+  m_Layer: 0
+  m_Name: ItemContainerUI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &7684031972636871865
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7232663360945069450}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 826691262636882833}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1381663204955658751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7232663360945069450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_PanelSettings: {fileID: 11400000, guid: 39c88d5e18d92dc4ea53f642f4d7c1ae, type: 2}
+  m_ParentUI: {fileID: 0}
+  sourceAsset: {fileID: 9197481963319205126, guid: d7086b1accd47d247a487c45e2b64564, type: 3}
+  m_SortingOrder: 2

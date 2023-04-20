@@ -5,59 +5,82 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SocialPlatforms;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 using Random = UnityEngine.Random;
+using Unity.Mathematics;
+
 
 public class ItemContainer : MonoBehaviour
 {
+
     [Range(1,15)] public int containerSize;
     private int minSize = 1;
     private int maxSize = 15;
+    public bool randomSize;
 
     public int lootMultiplier = 1;
     
-    public bool randomSize;
-    public bool randomWeapons;
     public bool randomItems;
-    
-    
-    
-    [SerializeField]private bool interactable;
-    [SerializeField]private bool containerOpen;
-    public bool containerFilled;
 
     [Header("#Drop loot here#")]
-    public List<GameObject> weaponPrefabs = new List<GameObject>();
+    public List<WeaponScriptableObject> weaponScriptableObjects = new List<WeaponScriptableObject>();
     public List<ItemScriptableObject> itemScriptableObjects = new List<ItemScriptableObject>();
+    public List<OutfitScriptableObject> outfitScriptableObjects = new List<OutfitScriptableObject>();
+
+    [HideInInspector]
+    public List<Item> itemList;
+
+    /// <summary>
+    /// List of item quantities in order
+    /// </summary>
     public int[] orderedQuantity;
 
-    private Inventory inventory;
+    [SerializeField] private bool interactable;
+    [SerializeField] private bool containerOpen;
+
     private UIManager _uiManager;
     
-    public GameObject containerUIWindow;
-    public GameObject worldUIText;
-    public TextMeshPro worldUITMP;
+    public ItemContainerUI itemContainerUI;
+    public TextMeshPro worldUIText;
     public Outline meshOutline;
     private PlayerController playerController;
-    public GameObject itemTemplate;
-    public Transform containerSlotsTransform;
+    private Inventory playerInventory;
+
+
+    public bool containerFilled;
+
+    private VisualElement slotTemplate;
+
 
     private void OnValidate()
     {
-        if (orderedQuantity.Length != itemScriptableObjects.Count)
+        int itemCount = itemScriptableObjects.Count + 
+                        weaponScriptableObjects.Count + 
+                        outfitScriptableObjects.Count;
+
+        if (orderedQuantity.Length != itemCount)
         {
-            orderedQuantity = new int[itemScriptableObjects.Count];
+            orderedQuantity = new int[itemCount];
         }
     }
 
     private void Awake()
     {
-        containerUIWindow.SetActive(true);
-        containerUIWindow.GetComponent<Canvas>().enabled = true;
         if (randomSize)
         {
             containerSize = Random.Range(minSize, maxSize);
         }
-        FillContainer();
+
+        _uiManager = GameManager.Instance.uiManager;
+        itemContainerUI = _uiManager.itemContainerUI.GetComponent<ItemContainerUI>();
+       
+        GetScriptableObjectsToItem();
+        if (randomItems)
+        {
+            itemList = RandomizeItems(itemList);
+        }
+
+        
     }
 
     private void OnEnable()
@@ -67,54 +90,51 @@ public class ItemContainer : MonoBehaviour
 
     private void Start()
     {
-       // InstantiateItems();
-        worldUITMP.text = "Open [ " + KeyAssignments.Instance.useKey.keyCode.ToString().ToUpper() + " ]";
+        slotTemplate = itemContainerUI.containerSlot;
+        worldUIText.text = "Open [ " + KeyAssignments.Instance.useKey.keyCode.ToString().ToUpper() + " ]";
+        
     }
     
     private void Update()
     {
         meshOutline.enabled = interactable;
-
+        worldUIText.gameObject.SetActive(interactable);
         if (interactable)
         {
-            worldUIText.SetActive(true);
-
             if (Input.GetKeyDown(KeyAssignments.Instance.useKey.keyCode))
             {
-                ToggleContainerUI();
+                containerOpen = true;
             }
 
         }
         else
         {
-            worldUIText.SetActive(false);
             containerOpen = false;
         }
+
+
         if (containerOpen)
         {
-            worldUIText.SetActive(false);
-            containerUIWindow.SetActive(true);
             playerController.controllerType = PlayerController.ControllerType.StandByController;
             if (Input.GetKeyDown(KeyAssignments.Instance.inventoryKey.keyCode) || Input.GetKeyDown(KeyCode.Escape))
             {
-                containerUIWindow.SetActive(false);
                 containerOpen = false;
             }
         }
 
-        if (!containerOpen)
-        {
-           containerUIWindow.SetActive(false);
-        }
+        playerInventory.showInventory = containerOpen;
+
+        itemContainerUI.root.visible = containerOpen;
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            playerController = other.GetComponent<PlayerController>();
             interactable = true;
-            inventory = other.GetComponent<Inventory>();
+
+            playerController = other.GetComponent<PlayerController>();
+            playerInventory = other.GetComponent<Inventory>();
         }
     }
 
@@ -135,76 +155,74 @@ public class ItemContainer : MonoBehaviour
     }
 
 
-    public void FillContainer()
+    /// <summary>
+    /// Gets scriptable objects and converts to Item Objects in a list
+    /// </summary>
+    public void GetScriptableObjectsToItem()
     {
-        int selectedWeapon;
-        int selectedItem;
-        int quantity = 0;
-        if (weaponPrefabs.Count > 0)
-        {
-            for (int i = 0; i < weaponPrefabs.Count; i++)
-            {
-                if (i > containerSize)
-                {
-                    return;
-                }
-                else
-                {
-                   Slot slotIndex = containerSlotsTransform.GetChild(i).GetComponent<Slot>();;
-                    GameObject instantiatedWeapon;
-                    if (randomWeapons)
-                    {
-                        selectedWeapon = Random.Range(0, weaponPrefabs.Count);
-                    }
-                    else
-                    {
-                        selectedWeapon = i;
-                    }
+        //Generate items list
 
-                    //instantiatedWeapon = Instantiate(weaponPrefabs[selectedWeapon], slotIndex.weaponHolderTransform);
-                    //WeaponItem weaponItem = instantiatedWeapon.GetComponent<WeaponItem>();
-                    //slotIndex.weaponItem = weaponItem;
-                    //weaponItem.weaponLocation = WeaponItem.WeaponLocation.Container;
-                    //slotIndex.UpdateWeaponSlot(weaponItem);
-                }
+        
+        if(itemScriptableObjects.Count > 0) 
+            foreach (ItemScriptableObject itemScriptableObject in itemScriptableObjects)
+        {
+            Item item = new Item();
+            item.GetItemScriptableObject(itemScriptableObject);
+            itemList.Add(item);
+        }
+
+        if (weaponScriptableObjects.Count > 0) foreach (WeaponScriptableObject weaponScriptableObject in weaponScriptableObjects)
+        {
+            Item item = new Item();
+            item.GetWeaponScriptableObject(weaponScriptableObject);
+            itemList.Add(item);
+        }
+
+        if (outfitScriptableObjects.Count > 0) foreach (OutfitScriptableObject outfitScriptableObject in outfitScriptableObjects)
+        {
+            Item item = new Item();
+            item.GetOutfitScriptableObject(outfitScriptableObject);
+            itemList.Add(item);
+        }
+    }
+
+    public List<Item> RandomizeItems (List<Item> list)
+    {
+       List<Item> items = new List<Item>();
+        for (int i = 0; i < containerSize; i++)
+        {
+            Item randomItem = list[Random.Range(0, list.Count)];
+            if (randomItem.isStackable)
+            {
+                randomItem.quantity = Random.Range(1, lootMultiplier);
+            }
+            items.Add(randomItem);
+        }
+        return items;   
+    }
+
+    /// <summary>
+    /// transfers itemlist data to UI
+    /// </summary>
+    public void RefreshContainerUI(List<Item> itemList)
+    { 
+        itemContainerUI.containerSlotArea.Clear();
+
+        if (randomItems)
+        {
+            for (int i = 0; i < containerSize; i++)
+            {
+                Item randomItem = itemList[Random.Range(0, itemList.Count)];
+                randomItem.quantity = orderedQuantity[i];
+                VisualElement slot = slotTemplate;
+                Label slotLabel = slot.Q<Label>();
+                slotLabel.text = randomItem.quantity.ToString();
+                slot.style.backgroundImage = new StyleBackground(randomItem.itemIcon);
+
+                itemContainerUI.containerSlotArea.Add(slot);                
             }
         }
 
-        if (itemScriptableObjects.Count > 0)
-        {
-            for (int i = 0; i < itemScriptableObjects.Count; i++)
-            {
-                if (i + weaponPrefabs.Count >= containerSize)
-                {
-                    return;
-                }
-                else
-                {
-                    Slot slotIndex = containerSlotsTransform.GetChild(i + weaponPrefabs.Count).GetComponent<Slot>();
-                    
-                    //GameObject instantiatedTemplate = Instantiate(itemTemplate, slotIndex.itemHolderTransform);
-                    //instantiatedTemplate.SetActive(false);
-                   // Item templateItem = instantiatedTemplate.GetComponent<Item>();
-
-                    if (randomItems)
-                    {
-                        selectedItem = Random.Range(0, itemScriptableObjects.Count);
-                        quantity = orderedQuantity[Random.Range(0, orderedQuantity.Length)] * lootMultiplier;
-                    }
-                    else
-                    {
-                        selectedItem = i;
-                        quantity = orderedQuantity[i] * lootMultiplier;
-                    }
-                    //templateItem.itemScriptableObject = itemScriptableObjects[selectedItem];
-                    //templateItem.quantity = quantity;
-                    //templateItem.GetItemScriptableObject(templateItem.itemScriptableObject);
-                    //templateItem.itemLocation = Item.ItemLocation.Container;
-                    //slotIndex._item = templateItem;
-                    //slotIndex.quantity = templateItem.quantity;
-                }
-            }
-        }
     }
     
     
@@ -214,15 +232,11 @@ public class ItemContainer : MonoBehaviour
 
         if (containerOpen)
         {
-            containerUIWindow.SetActive(true);
-            inventory.showInventory = true;
-
+            playerInventory.showInventory = true;
         }
         if(!containerOpen)
         {
-            containerUIWindow.SetActive(false);
-            inventory.showInventory = false;
-
+            playerInventory.showInventory = false;
         }
     }
     
