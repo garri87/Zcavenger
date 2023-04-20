@@ -8,21 +8,13 @@ using UnityEngine.UIElements;
 public class UIManager : MonoBehaviour
 {
     public GameObject mainMenuUI;
-
     public GameObject loadingScreenUI;
-
     public GameObject inGameOverlayUI;
-
     public GameObject inventoryUI;
-
     public GameObject pauseMenuUI;
-
     public GameObject optionsMenuUI;
-
     public GameObject gameOverScreenUI;
-
     public GameObject itemContainerUI;
-
     private GameObject[] uiList;
 
     private void OnEnable()
