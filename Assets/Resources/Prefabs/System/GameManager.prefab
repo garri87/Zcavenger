@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1161256350271930987}
   - component: {fileID: 1161256350271930986}
   - component: {fileID: 6089568438837413836}
+  - component: {fileID: 4067125176482786099}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -111,6 +112,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioMixer: {fileID: 24100000, guid: 19d8db5b99f43464fa833fafaeac8ef6, type: 2}
+--- !u!114 &4067125176482786099
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1161256350271930991}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdb72255d477db341a610f359334f6c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hints:
+  - Hold the jump key to grab a ledge and up key to climb.
+  - Press the crouch key twice to do a roll.
+  - Keep hydrated! Low thirst percentages cause slow stamina regeneration.
+  - Remember to keep your stomach full! Low hunger percentages cause slow health
+    regeneration.
+  - If your thirst or hunger meter goes to 0, you will gradually lose health.
+  - Use bandages or first-aid kits to prevent bleeding damage.
+  - Be wise using your flashlight, batteries drains quickly
+  - Crippled enemies can be crushed by pressing the attack key above them.
+  - If an undead catches you, try to get away pressing the jump key repeatedly.
+  - Check every room in buildings, they contain valuable resources for your survival
+    and maybe surprises!.
 --- !u!1001 &1161256348409201106
 PrefabInstance:
   m_ObjectHideFlags: 0
