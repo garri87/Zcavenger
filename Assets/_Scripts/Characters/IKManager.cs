@@ -111,9 +111,9 @@ public class IKManager : MonoBehaviour
                 
                 upperBodyLayerWeight = _animator.GetLayerWeight(1);
                 _animator.SetFloat("LayerWeight", upperBodyLayerWeight);
-                if (_playerController.weaponEquipped)
+                if (_playerController.weaponDrawn)
                 {
-                    weaponItem = _playerController.equippedWeaponItem;
+                    weaponItem = _playerController.drawnWeaponItem;
                     recoilMaxRotation = weaponItem.recoilMaxRotation; 
                     recoilDuration = weaponItem.recoilDuration;
                 }
@@ -151,7 +151,7 @@ public class IKManager : MonoBehaviour
         switch (playerType)
         {
             case PlayerType.Player:
-                if (_playerController.weaponEquipped && _playerController.isAiming)
+                if (_playerController.weaponDrawn && _playerController.isAiming)
                 {
                     if (!_playerController.drinking 
                         || !_playerController.bandaging
@@ -176,7 +176,7 @@ public class IKManager : MonoBehaviour
                     
                     IKLimbPlacement(AvatarIKGoal.LeftFoot, AvatarIKGoal.RightFoot, "IKLeftFootWeight" , "IKRightFootWeight",transform.TransformDirection(Vector3.down), distanceToGround);
                     
-                    if (!_playerController.weaponEquipped)
+                    if (!_playerController.weaponDrawn)
                     {
                         _animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, leftHandIKWeight);
                         _animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, leftHandRotWeight);
@@ -222,7 +222,7 @@ public class IKManager : MonoBehaviour
                         _playerController.grabItem)
                     {
                         if (!_playerController.climbingLadder || 
-                            !_playerController.equippedWeaponItem.attacking || 
+                            !_playerController.drawnWeaponItem.attacking || 
                             !_playerController.blocking)
                         {
                             _animator.SetLayerWeight(_animator.GetLayerIndex(upperBodyLayerName), 1); 

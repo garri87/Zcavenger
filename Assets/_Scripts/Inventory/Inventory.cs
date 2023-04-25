@@ -6,7 +6,7 @@ using Debug = UnityEngine.Debug;
 
 public class Inventory : MonoBehaviour
 {
-    public bool showInventory;
+    public bool showInventory = false;
 
     public UIManager uIManager;
     public InventoryUI inventoryUI;
@@ -20,15 +20,14 @@ public class Inventory : MonoBehaviour
 
 
     [HideInInspector] public int currentCapacity;
-    [HideInInspector] public int maxCapacity = 10;
-    [HideInInspector] public int defaultMaxCapacity = 10;
+    public int maxCapacity = 10;
+    public int defaultMaxCapacity = 10;
 
     public bool inventoryFull;
 
     [HideInInspector] public bool onItem;
     [HideInInspector] public bool onWeaponItem;
-    private Transform dropLocationItem;
-    private Transform dropLocationWeapon;
+    private Transform collectItemTransform;
 
     public bool drawWeapon;
     public bool holsterWeapon;
@@ -41,18 +40,27 @@ public class Inventory : MonoBehaviour
         Throwable,
     }
     public SelectedWeapon selectedWeapon;
-    public Item primaryWeapon;
-    public Item secondaryWeapon;
-    public Item meleeWeapon;
-    public Item throwableWeapon;
-    public Item headEquip;
-    public Item vestEquip;
-    public Item torsoEquip;
-    public Item legsEquip;
-    public Item feetEquip;
-    public Item backpackEquip;
+
+    #region Player Equipment Slots
+
+    public Item equippedPrimaryWeapon;
+    public Item equippedSecondaryWeapon;
+    public Item equippedMeleeWeapon;
+    public Item equippedThrowableWeapon;
+
+    public Item equippedHeadOutfit;
+    public Item equippedVestOutfit;
+    public Item equippedTorsoOutfit;
+    public Item equippedLegsOutfit;
+    public Item equippedFeetOutfit;
+    public Item equippedBackpackOutfit;
+    #endregion
+
+    public GameObject itemCollectiblePrefab;
+
     private void Awake()
     {
+        _playerController = GetComponent<PlayerController>();
         uIManager = GameManager.Instance.uiManager;
         inventoryUI = uIManager.inventoryUI.GetComponent<InventoryUI>();
         inGameOverlayUI = uIManager.inGameOverlayUI.GetComponent<InGameOverlayUI>();
@@ -62,8 +70,6 @@ public class Inventory : MonoBehaviour
 
     void Start()
     {
-        inventoryUI.FillInventoryWithSlots(maxCapacity); //Setup the inventory slots in UI
-
         RefreshInventoryToUI();//Refresh the inventory UI information
     }
 
@@ -88,7 +94,7 @@ public class Inventory : MonoBehaviour
 
         try
         {
-            maxCapacity = backpackEquip.backpackCapacity; //if a backpack is equipped, set its max capacity, else set to default
+            maxCapacity = equippedBackpackOutfit.backpackCapacity; //if a backpack is equipped, set its max capacity, else set to default
         }
         catch
         {
@@ -102,9 +108,9 @@ public class Inventory : MonoBehaviour
         {
             if (onItem && Input.GetKeyDown(_playerController.keyAssignments.useKey.keyCode))
             {
-                if (dropLocationItem != null)
+                if (collectItemTransform != null)
                 {
-                    AddItemToInventory(dropLocationItem.GetComponent<Item>());
+                    AddItemToInventory(collectItemTransform.GetComponent<Item>());
                     _playerController.grabItem = true;
                     onItem = false;
                 }
@@ -119,10 +125,12 @@ public class Inventory : MonoBehaviour
 
 
     /// <summary>
-    /// Shows inventory current information to UI
+    /// Updates the inventory capacity and stored items information to UI
     /// </summary>
     public void RefreshInventoryToUI()
     {
+        inventoryUI.FillInventoryWithSlots(maxCapacity);
+                
         if (itemsList.Count > 0)
         {
             for (int i = 0; i < itemsList.Count; i++)
@@ -132,80 +140,86 @@ public class Inventory : MonoBehaviour
                 IStyle style = inventoryUI.inventorySlotList[i].style; // Get the style of the slot
                 style.backgroundImage = new StyleBackground(item.itemIcon);//Set the icon image
                 quantity.text = item.quantity.ToString();//Set the quantity label
-                inventoryUI.inventorySlotList[i].UnregisterCallback<ClickEvent, int>(inventoryUI.SlotClickEvent,TrickleDown.NoTrickleDown);
-                inventoryUI.inventorySlotList[i].RegisterCallback<ClickEvent, int>(inventoryUI.SlotClickEvent, i);
+                inventoryUI.inventorySlotList[i].UnregisterCallback<MouseDownEvent, int>(inventoryUI.SlotClickEvent,TrickleDown.NoTrickleDown);
+                inventoryUI.inventorySlotList[i].RegisterCallback<MouseDownEvent, int>(inventoryUI.SlotClickEvent, i);
             }
         }
 
-        if (primaryWeapon) inventoryUI.primaryWeaponSlot.style.backgroundImage = new StyleBackground(primaryWeapon.itemIcon);
-        if (secondaryWeapon) inventoryUI.secondaryWeaponSlot.style.backgroundImage = new StyleBackground(secondaryWeapon.itemIcon);
-        if (meleeWeapon) inventoryUI.meleeWeaponSlot.style.backgroundImage = new StyleBackground(meleeWeapon.itemIcon);
-        if (throwableWeapon) inventoryUI.throwableWeaponSlot.style.backgroundImage = new StyleBackground(throwableWeapon.itemIcon);
-        if (headEquip) inventoryUI.headEquipSlot.style.backgroundImage = new StyleBackground(headEquip.itemIcon);
-        if (vestEquip) inventoryUI.vestEquipSlot.style.backgroundImage = new StyleBackground(vestEquip.itemIcon);
-        if (torsoEquip) inventoryUI.torsoEquipSlot.style.backgroundImage = new StyleBackground(torsoEquip.itemIcon);
-        if (legsEquip) inventoryUI.legsEquipSlot.style.backgroundImage = new StyleBackground(legsEquip.itemIcon);
-        if (feetEquip) inventoryUI.feetEquipSlot.style.backgroundImage = new StyleBackground(feetEquip.itemIcon);
-        if (backpackEquip) inventoryUI.backpackEquipSlot.style.backgroundImage = new StyleBackground(backpackEquip.itemIcon);
+        
+
+        if (equippedPrimaryWeapon) inventoryUI.primaryWeaponSlot.style.backgroundImage = new StyleBackground(equippedPrimaryWeapon.itemIcon);
+        if (equippedSecondaryWeapon) inventoryUI.secondaryWeaponSlot.style.backgroundImage = new StyleBackground(equippedSecondaryWeapon.itemIcon);
+        if (equippedMeleeWeapon) inventoryUI.meleeWeaponSlot.style.backgroundImage = new StyleBackground(equippedMeleeWeapon.itemIcon);
+        if (equippedThrowableWeapon) inventoryUI.throwableWeaponSlot.style.backgroundImage = new StyleBackground(equippedThrowableWeapon.itemIcon);
+        if (equippedHeadOutfit) inventoryUI.headEquipSlot.style.backgroundImage = new StyleBackground(equippedHeadOutfit.itemIcon);
+        if (equippedVestOutfit) inventoryUI.vestEquipSlot.style.backgroundImage = new StyleBackground(equippedVestOutfit.itemIcon);
+        if (equippedTorsoOutfit) inventoryUI.torsoEquipSlot.style.backgroundImage = new StyleBackground(equippedTorsoOutfit.itemIcon);
+        if (equippedLegsOutfit) inventoryUI.legsEquipSlot.style.backgroundImage = new StyleBackground(equippedLegsOutfit.itemIcon);
+        if (equippedFeetOutfit) inventoryUI.feetEquipSlot.style.backgroundImage = new StyleBackground(equippedFeetOutfit.itemIcon);
+        if (equippedBackpackOutfit) inventoryUI.backpackEquipSlot.style.backgroundImage = new StyleBackground(equippedBackpackOutfit.itemIcon);
     }
     private void OnTriggerEnter(Collider other)
     {
         if (!inventoryFull)
-        {
-            if (other.CompareTag("Item"))
+        { 
+            switch (other.tag)
             {
-                dropLocationItem = other.transform;
-                onItem = true;
+                case "Item":
+                case "Weapon":
 
-            }
+                    collectItemTransform = other.transform;
+                    onItem = true;
 
-            if (other.CompareTag("Weapon"))
-            {
-                dropLocationWeapon = other.transform;
-                onWeaponItem = true;
+                    break;
+
+
+                default:
+                    break;
             }
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Item"))
+        switch (other.tag)
         {
-            dropLocationItem = null;
-            onItem = false;
+            case "Item":
+            case "Weapon":
+
+                collectItemTransform = null;
+                onItem = false;
+
+                break;
+
+          
+            default:
+                break;
         }
 
-        if (other.CompareTag("Weapon"))
-        {
-            onWeaponItem = false;
-            dropLocationWeapon = null;
-        }
+       
+
+    
     }
 
     public void InventoryToggle()
     {
-        bool enabled = false;
-
-        if (Input.GetKeyDown(KeyAssignments.Instance.inventoryKey.keyCode))
+        
+        if (Input.GetKeyDown(GameManager.Instance._keyAssignments.inventoryKey.keyCode))
         {
-            enabled = !enabled;
+            showInventory = !showInventory;
+            if (showInventory)
+            {
+                RefreshInventoryToUI();
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            enabled = false;
+            showInventory = false;
         }
 
-        if (enabled == true)
-        {
-            RefreshInventoryToUI();
-        }
+        uIManager.ToggleUI(uIManager.inventoryUI, showInventory);
 
-        if (enabled == false)
-        {
-
-        }
-        inventoryUI.gameObject.SetActive(enabled);
     }
 
     /// <summary>
@@ -214,27 +228,33 @@ public class Inventory : MonoBehaviour
     /// <param name="itemTransform"> Item Component</param>
     public void AddItemToInventory(Item newItem)
     {
-        newItem.itemLocation = Item.ItemLocation.Inventory;
-
         if (newItem.isStackable)
         {
             for (int i = 0; i < itemsList.Count; i++)
             {
-                if (itemsList[i].ID == newItem.ID && newItem.itemClass == Item.ItemClass.Item)
+                Item item = itemsList[i];
+                if (item.ID == newItem.ID )
                 // if item already exists in inventory, stack quantities
                 {
-                    if (itemsList[i].quantity < itemsList[i].maxStack)
-                    {
-                        itemsList[i].quantity += newItem.quantity;
-                        CheckStackableItem(itemsList[i]);
-                        Destroy(newItem.gameObject);
-                        return;
-                    }
+                    
+                        item.quantity += newItem.quantity;
+                        CheckStackableItem(item);
+                        newItem.itemLocation = Item.ItemLocation.Inventory;
+
+                    //Destroy(item.gameObject);
+                    return;
+                    
                 }
             }
         }
-        itemsList.Add(newItem);
-        Destroy(newItem.gameObject);
+        if (!inventoryFull)
+        {
+            newItem.itemLocation = Item.ItemLocation.Inventory;
+            newItem.InitItem();
+            itemsList.Add(newItem);
+
+         //   Destroy(item.gameObject);
+        }
     }
 
 
@@ -260,9 +280,9 @@ public class Inventory : MonoBehaviour
                 //Create a new item with the remainging quantities
                 Item newItem = item;
                 newItem.quantity = leftOver;
-                if (itemsList.Count < maxCapacity)
+                if (!inventoryFull)
                 {
-                    itemsList.Add(newItem);
+                    AddItemToInventory(newItem);
                 }
                 else
                 {//drop item to world
@@ -276,64 +296,41 @@ public class Inventory : MonoBehaviour
 /// </summary>
 /// <param name="item"></param>
 /// <param name="dropLocation"></param>
-    public void GenerateItemObject(Item item, Transform dropLocation)
+    public GameObject GenerateItemObject(Item item, Transform dropLocation)
     {
-        GameObject newItemGO = new GameObject(item.name);
-        Item newItemComp = newItemGO.AddComponent<Item>();
-        newItemComp = item;
+        GameObject newItemGO = Instantiate(itemCollectiblePrefab, dropLocation.position + Vector3.up, dropLocation.rotation);
+        Item newItemComp = newItemGO.GetComponent<Item>();
+        newItemComp = item; 
         newItemComp.itemLocation = Item.ItemLocation.World;
-        Instantiate(newItemGO, dropLocation.position, dropLocation.rotation);
-
+        newItemComp.InitItem();
+        return newItemGO;
     }
-
-    public void ReplaceItem(Item itemToReplace, Item dropLocationEquipment)
-    {
-        if (!dropLocationEquipment)//if no item is present in the selected dropLocation, assign the item
-        {
-            dropLocationEquipment = itemToReplace;
-        }
-        else
-        {//Otherwise store old weapon in inventory
-            if (!inventoryFull)
-            {
-                AddItemToInventory(dropLocationEquipment);
-                dropLocationEquipment = itemToReplace;
-            }
-            else //if inventory full, drop the item in world
-            {
-                GenerateItemObject(dropLocationEquipment, transform);
-            }
-        }
-    }
-
-    
+       
 
     /// <summary>
     /// Replaces a clothing or weapon slot in the player equipment
     /// </summary>
-    /// <param name="newItem"></param>
-    public void ChangeEquipment(Item newItem)
+    /// <param name="newItem"> Item to equip </param>
+    public void ChangeEquipment(Item newItem)//TODO: MEJORAR
     {
         switch (newItem.itemClass)
         {
             case Item.ItemClass.Weapon:
                 switch (newItem.weaponClass)
                 {
-                    case WeaponScriptableObject.WeaponClass.None:
-                        break;
                     case WeaponScriptableObject.WeaponClass.Primary:
-                        ReplaceItem(newItem, primaryWeapon);
-
+                        ReplaceItem(newItem, equippedPrimaryWeapon);
                         break;
                     case WeaponScriptableObject.WeaponClass.Secondary:
-                        ReplaceItem(newItem, secondaryWeapon);
+                        ReplaceItem(newItem, equippedSecondaryWeapon);
+
                         break;
                     case WeaponScriptableObject.WeaponClass.Melee:
-                        ReplaceItem(newItem, meleeWeapon);
+                        ReplaceItem(newItem, equippedMeleeWeapon);
                         ;
                         break;
                     case WeaponScriptableObject.WeaponClass.Throwable:
-                        ReplaceItem(newItem, throwableWeapon);
+                        ReplaceItem(newItem, equippedThrowableWeapon);
                         break;
                     default:
                         // Invalid Weapon Class
@@ -347,22 +344,22 @@ public class Inventory : MonoBehaviour
                 switch (newItem.outfitBodyPart)
                 {
                     case OutfitScriptableObject.OutfitBodyPart.Head:
-                        ReplaceItem(newItem, headEquip);
+                        ReplaceItem(newItem, equippedHeadOutfit);
                         break;
                     case OutfitScriptableObject.OutfitBodyPart.Vest:
-                        ReplaceItem(newItem, vestEquip);
+                        ReplaceItem(newItem, equippedVestOutfit);
                         break;
                     case OutfitScriptableObject.OutfitBodyPart.Torso:
-                        ReplaceItem(newItem, torsoEquip);
+                        ReplaceItem(newItem, equippedTorsoOutfit);
                         break;
                     case OutfitScriptableObject.OutfitBodyPart.Legs:
-                        ReplaceItem(newItem, legsEquip);
+                        ReplaceItem(newItem, equippedLegsOutfit);
                         break;
                     case OutfitScriptableObject.OutfitBodyPart.Feet:
-                        ReplaceItem(newItem, feetEquip);
+                        ReplaceItem(newItem, equippedFeetOutfit);
                         break;
                     case OutfitScriptableObject.OutfitBodyPart.Backpack:
-                        ReplaceItem(newItem, backpackEquip);
+                        ReplaceItem(newItem, equippedBackpackOutfit);
                         break;
                     default:
 
@@ -374,7 +371,25 @@ public class Inventory : MonoBehaviour
 
     }
 
+    public void ReplaceItem(Item newItem, Item playerEquipmentSlot)
+    {
+        if (playerEquipmentSlot)
+        {//if equipment slot was not empty, try to store old weapon in inventory
+         
+            if (!inventoryFull)
+            {
+                AddItemToInventory(playerEquipmentSlot);
+            }
+            else //if inventory full, drop the item in world
+            {
+                    GenerateItemObject(playerEquipmentSlot, transform);
+            }
+        }
 
+        playerEquipmentSlot = newItem;
+
+        playerEquipmentSlot.GetWeaponScriptableObject();//Update item information
+    }
 
 
     public int CheckItemsLeft(int id, int counter)

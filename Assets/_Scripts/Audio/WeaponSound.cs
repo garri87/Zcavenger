@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class WeaponSound : MonoBehaviour
 {
+    private WeaponScriptableObject _weaponScriptableObject;
     public SoundSensor _soundSensor;
 
     public AudioSource _audioSource;
@@ -37,6 +38,18 @@ public class WeaponSound : MonoBehaviour
         _soundSensor = GameObject.Find("Player").transform.Find("SoundSensor").GetComponent<SoundSensor>();
 
     }
+
+    public void GetSounds(WeaponScriptableObject scriptableObject)
+    {
+    shotSound = scriptableObject.shotSound;
+    meleeAttackSound = scriptableObject.meleeAttackSound;
+    dropSound = scriptableObject.dropSound;
+    explosionSound = scriptableObject.explosionSound;
+    magazineOutSound = scriptableObject.magazineOutSound;
+    magazineInSound = scriptableObject.magazineInSound;
+    reloadEndSound = scriptableObject.reloadEndSound;
+    drawWeaponSound = scriptableObject.drawWeaponSound;
+}
 
     public void FireWeaponSound()
     {

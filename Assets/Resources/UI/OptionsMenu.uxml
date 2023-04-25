@@ -32,8 +32,8 @@
                     <ui:Toggle label="Chromatic Aberration" name="ChrAbrrToggle" value="false" class="Item" />
                 </ui:VisualElement>
             </ui:VisualElement>
-            <ui:VisualElement name="InputPanel" class="Tab" style="display: flex; justify-content: flex-start;">
-                <ui:VisualElement name="KeyAssignPanel" style="width: auto; height: 95%; align-items: stretch; justify-content: flex-start; flex-direction: column; flex-wrap: wrap; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; flex-grow: 0; flex-shrink: 1; overflow: visible;" />
+            <ui:VisualElement name="InputPanel" class="Tab" style="display: none; justify-content: flex-start;">
+                <ui:VisualElement name="KeyAssignPanel" class="KeyAssignPanel" />
             </ui:VisualElement>
             <ui:VisualElement name="AudioPanel" class="Tab" style="flex-grow: 0; width: 100%; display: none;">
                 <ui:VisualElement name="Panel" style="width: 100%; flex-grow: 1; flex-shrink: 1; flex-direction: row; flex-wrap: wrap;">

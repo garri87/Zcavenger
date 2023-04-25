@@ -22,11 +22,11 @@ public class GameManager : MonoBehaviour
             if (_instance == null)
             {
                 _instance = FindObjectOfType<GameManager>();
-                if (_instance == null)
+                /*if (_instance == null)
                 {
                     GameObject go = new GameObject("GameManager");
                     _instance = go.AddComponent<GameManager>();
-                }   
+                }  */ 
             }
             return _instance;
         }
@@ -69,6 +69,7 @@ public class GameManager : MonoBehaviour
     public Transform endLevelPosition;
     public float startingPlayline;
 
+    public bool finishedLevel = false;
     public bool gameOver;
 
 
@@ -79,34 +80,35 @@ public class GameManager : MonoBehaviour
 #else
         Debug.unityLogger.logEnabled = false;
 #endif
-        uiManager = GetComponent<UIManager>();
-        loadingScreenUI = uiManager.loadingScreenUI.GetComponent<LoadingScreenUI>();
+        uiManager = GetComponentInChildren<UIManager>();
+
 
         _graphicsManager = GetComponent<GraphicsManager>();
         _audioManager = GetComponent<AudioManager>();
         _keyAssignments = GetComponent<KeyAssignments>();
-        uiManager.CloseAllUI();
     }
 
     void Start()
     {
+        loadingScreenUI = uiManager.loadingScreenUI.GetComponent<LoadingScreenUI>();
+
         loadingGame = false;
         switch (sceneType)
         {
             case SceneType.mainTitle:
                 uiManager.CloseAllUI();
                 uiManager.ToggleUI(uiManager.mainMenuUI,true);
-                MainMenuUI mainMenuUI = uiManager.mainMenuUI.GetComponent<MainMenuUI>();
               
                 _graphicsManager.globalVolume.profile = _graphicsManager.mainTitlevolumeProfile;
                 break;
 
             case SceneType.inLevel:
+                uiManager.CloseAllUI();
                 player = GameObject.Find("Player");
                 playerController = player.GetComponent<PlayerController>();
                 playerHealthManager = player.GetComponent<HealthManager>();
 
-                uiManager.ToggleUI(uiManager.inGameOverlayUI, true);
+                uiManager.ToggleUI(uiManager.inGameOverlayUI,true);
 
                 _graphicsManager.globalVolume.profile = _graphicsManager.InGamevolumeProfile;
                 break;
@@ -124,7 +126,6 @@ public class GameManager : MonoBehaviour
                                                
                 if (Input.GetKeyDown(KeyCode.Escape) )
                 {
-                    uiManager.ToggleUI(uiManager.optionsMenuUI,false);
                     if (!loadingGame)
                     {
                         uiManager.ToggleUI(uiManager.mainMenuUI,true);
@@ -133,7 +134,7 @@ public class GameManager : MonoBehaviour
 
                 if (loadingGame)
                 {
-                    uiManager.ToggleUI(uiManager.loadingScreenUI, true);
+                    uiManager.ToggleUI(uiManager.loadingScreenUI,true);
                 }
                 break;
 
@@ -144,7 +145,7 @@ public class GameManager : MonoBehaviour
                     GameOver("YOU ARE DEAD");
                 }
 
-                if (playerController.finishedLevel)
+                if (finishedLevel)
                 {
                     GameOver("THANKS FOR PLAYING");
                 }
@@ -179,7 +180,7 @@ public class GameManager : MonoBehaviour
 
         if (gamePaused)
         {
-            uiManager.ToggleUI(uiManager.pauseMenuUI, true);
+            uiManager.ToggleUI(uiManager.pauseMenuUI,true);
             Time.timeScale = 0;
         }
         else

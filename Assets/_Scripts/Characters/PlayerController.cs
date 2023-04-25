@@ -143,20 +143,24 @@ public class PlayerController : MonoBehaviour
 
     #region Weapon Handling Variables
 
-    public Transform crosshairTransform;
-    public Transform _WeaponHolder;
-    public Item equippedWeaponItem;
-    public bool weaponEquipped;
+    public Transform crosshairTransform; //Transform reference of the player's crosshair Gameobject
+    private SpriteRenderer crosshairSprtRenderer;
+
+    public Transform _WeaponHolder; //Transform reference to place Child Gameobjects
+    public Item drawnWeaponItem; //Item Component of current drawn weapon
+    public bool weaponDrawn; //Player has weapon in hands?
+    
     [HideInInspector] public bool isAiming;
     [HideInInspector] public bool attacking;
     [HideInInspector] public bool reloadingWeapon;
-    private SpriteRenderer crosshairSprtRenderer;
+
     public LayerMask mouseAimMask;
+
     private bool drawWeapon, holsterWeapon;
 
     #endregion
 
-    #region Components
+    #region Components Variables
 
     [HideInInspector] public GameManager gameManager;
     [HideInInspector] public HealthManager _healthManager;
@@ -192,15 +196,14 @@ public class PlayerController : MonoBehaviour
 
     #endregion
 
-    public bool finishedLevel = false;
-
     private Transform leftFoot, rightFoot;
 
     private void Awake()
     {
+        
         mainCamera = Camera.main;
         gameManager = GameManager.Instance;
-        keyAssignments = KeyAssignments.Instance;
+        keyAssignments = GameManager.Instance._keyAssignments;
 
         #region GetComponents
 
@@ -236,7 +239,7 @@ public class PlayerController : MonoBehaviour
             transform.position = gameManager.startingPosition.position;
             SwitchPlayLine(gameManager.startingPlayline);
         }
-        
+
     }
 
     void Update()
@@ -280,6 +283,22 @@ public class PlayerController : MonoBehaviour
 
         #region Controller Switch
 
+        bool[] cantMoveConditions ={
+            _healthManager.IsDead,
+            _inventory.showInventory,
+            onTransition,
+            climbingLadder,
+            _climber.attachedToLedge,
+            _climber.climbingLedge,
+            climbingToTop,
+            roll,
+            blocking,
+            trapped,
+            beingBitten,
+            hardLanded,
+            blocking
+        };
+
         switch (controllerType)
         {
             case ControllerType.DefaultController:
@@ -305,76 +324,63 @@ public class PlayerController : MonoBehaviour
 
         }
 
-        if (_healthManager.IsDead)
+        bool canMove = true;
+
+        for (int i = 0; i < cantMoveConditions.Length; i++)
         {
-            controllerType = ControllerType.StandByController;
+            if (cantMoveConditions[i] == true)
+            {
+                canMove = false;
+                break;
+            }
         }
 
-        if (!_healthManager.IsDead)
+        if (!canMove)
         {
-            if (!_inventory.showInventory)
+            controllerType = ControllerType.StandByController;
+
+        }
+
+        if (canMove)
+        {
+            controllerType = ControllerType.DefaultController;
+        }
+        #endregion
+
+        #region Ladder Climbing
+
+        if (nextToLadder)
+        {
+            //player climbing from bottom side
+            if (verticalInput > 0 && !upLadder)
             {
-                if (!onTransition)
-                {
-                    if (!climbingLadder ||
-                        !_climber.attachedToLedge ||
-                        !_climber.climbingLedge ||
-                        !climbingToTop ||
-                        !roll ||
-                        !blocking ||
-                        !trapped ||
-                        !beingBitten ||
-                        !hardLanded ||
-                        !blocking ||
-                        !finishedLevel)
-                    {
-                        controllerType = ControllerType.DefaultController;
-                    }
-                }
+                climbingLadder = true;
+                nextToLadder = false;
+                AttachOnLadder("DownLadder");
             }
 
-            if (hardLanded || blocking || trapped || beingBitten || finishedLevel)
+            //player climbing from bottom upper side
+            if (verticalInput < 0 && nextToLadder && upLadder)
             {
-                controllerType = ControllerType.StandByController;
-            }
-
-            #region Ladder Climbing
-
-            if (nextToLadder)
-            {
-                //player climbing from bottom side
-                if (verticalInput > 0 && !upLadder)
-                {
-                    climbingLadder = true;
-                    nextToLadder = false;
-                    AttachOnLadder("DownLadder");
-                }
-
-                //player climbing from bottom upper side
-                if (verticalInput < 0 && nextToLadder && upLadder)
-                {
-                    climbingLadder = true;
-                    nextToLadder = false;
-                    AttachOnLadder("UpLadder");
-                    controllerType = ControllerType.OnLadderController;
-                }
-            }
-
-            if (climbingLadder || climbingToTop)
-            {
+                climbingLadder = true;
+                nextToLadder = false;
+                AttachOnLadder("UpLadder");
                 controllerType = ControllerType.OnLadderController;
             }
+        }
 
-            #endregion
+        if (climbingLadder || climbingToTop)
+        {
+            controllerType = ControllerType.OnLadderController;
+        }
 
-            #region Ledge Climbing
+        #endregion
 
-            if (_climber.attachedToLedge || _climber.climbingLedge)
-            {
-                controllerType = ControllerType.OnLedgeController;
-            }
+        #region Ledge Climbing
 
-            #endregion
+        if (_climber.attachedToLedge || _climber.climbingLedge)
+        {
+            controllerType = ControllerType.OnLedgeController;
         }
 
         #endregion
@@ -432,7 +438,7 @@ public class PlayerController : MonoBehaviour
 
         if (other.CompareTag("Finish"))
         {
-            finishedLevel = true;
+            gameManager.finishedLevel = true;
             controllerType = ControllerType.OnUIController;
         }
     }
@@ -478,10 +484,13 @@ public class PlayerController : MonoBehaviour
 
     #region Controllers Functions
 
+    /// <summary>
+    /// 
+    /// </summary>
     private void WeaponSelectionController()
     {
 
-        if (Input.GetKeyDown(KeyAssignments.Instance.primaryKey.keyCode))
+        if (Input.GetKeyDown(keyAssignments.primaryKey.keyCode) && _inventory.equippedPrimaryWeapon)
         {
             if (_inventory.selectedWeapon != Inventory.SelectedWeapon.Primary)
             {
@@ -495,7 +504,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyAssignments.Instance.secondaryKey.keyCode))
+        if (Input.GetKeyDown(keyAssignments.secondaryKey.keyCode) && _inventory.equippedSecondaryWeapon)
         {
             if (_inventory.selectedWeapon != Inventory.SelectedWeapon.Secondary)
             {
@@ -510,7 +519,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyAssignments.Instance.meleeKey.keyCode))
+        if (Input.GetKeyDown(keyAssignments.meleeKey.keyCode) && _inventory.equippedMeleeWeapon)
         {
             if (_inventory.selectedWeapon != Inventory.SelectedWeapon.Melee)
             {
@@ -524,7 +533,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyAssignments.Instance.throwableKey.keyCode))
+        if (Input.GetKeyDown(keyAssignments.throwableKey.keyCode) && _inventory.equippedThrowableWeapon)
         {
             if (_inventory.selectedWeapon != Inventory.SelectedWeapon.Throwable)
             {
@@ -538,7 +547,6 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-
 
     /// <summary>
     /// Triggers draw weapon animation
@@ -560,7 +568,7 @@ public class PlayerController : MonoBehaviour
                 _animator.SetBool("MeleeEquip", false);
                 _animator.SetBool("ThrowableEquip", false);
                 _inventory.selectedWeapon = SelectedWeapon.Primary;
-                selectedItem = _inventory.primaryWeapon;
+                selectedItem = _inventory.equippedPrimaryWeapon;
 
                 break;
 
@@ -570,7 +578,7 @@ public class PlayerController : MonoBehaviour
                 _animator.SetBool("MeleeEquip", false);
                 _animator.SetBool("ThrowableEquip", false);
                 _inventory.selectedWeapon = SelectedWeapon.Secondary;
-                selectedItem = _inventory.secondaryWeapon;
+                selectedItem = _inventory.equippedSecondaryWeapon;
 
                 break;
 
@@ -580,7 +588,7 @@ public class PlayerController : MonoBehaviour
                 _animator.SetBool("MeleeEquip", draw);
                 _animator.SetBool("ThrowableEquip", false);
                 _inventory.selectedWeapon = SelectedWeapon.Melee;
-                selectedItem = _inventory.meleeWeapon;
+                selectedItem = _inventory.equippedMeleeWeapon;
 
                 break;
 
@@ -590,7 +598,7 @@ public class PlayerController : MonoBehaviour
                 _animator.SetBool("MeleeEquip", false);
                 _animator.SetBool("ThrowableEquip", draw);
                 _inventory.selectedWeapon = SelectedWeapon.Throwable;
-                selectedItem = _inventory.throwableWeapon;
+                selectedItem = _inventory.equippedThrowableWeapon;
 
                 break;
         }
@@ -616,16 +624,16 @@ public class PlayerController : MonoBehaviour
                     case WeaponScriptableObject.WeaponClass.None:
                         break;
                     case WeaponScriptableObject.WeaponClass.Primary:
-                        _inventory.primaryWeapon = weaponItem;
+                        _inventory.equippedPrimaryWeapon = weaponItem;
                         break;
                     case WeaponScriptableObject.WeaponClass.Secondary:
-                        _inventory.secondaryWeapon = weaponItem;
+                        _inventory.equippedSecondaryWeapon = weaponItem;
                         break;
                     case WeaponScriptableObject.WeaponClass.Melee:
-                        _inventory.meleeWeapon = weaponItem;
+                        _inventory.equippedMeleeWeapon = weaponItem;
                         break;
                     case WeaponScriptableObject.WeaponClass.Throwable:
-                        _inventory.throwableWeapon = weaponItem;
+                        _inventory.equippedThrowableWeapon = weaponItem;
                         break;
                     default:
 
@@ -637,7 +645,6 @@ public class PlayerController : MonoBehaviour
 
 
     }
-
 
     public void DefaultController()
     {
@@ -676,7 +683,7 @@ public class PlayerController : MonoBehaviour
         {
             _animator.SetBool("IsMoving", true);
             playerState = PlayerState.IsMoving;
-            
+
             //Gradual moving acceleration
             currentSpeed += Time.deltaTime * acceleration;
             if (currentSpeed > normalSpeed)
@@ -705,7 +712,7 @@ public class PlayerController : MonoBehaviour
             currentSpeed = 0;
             _animator.SetBool("IsMoving", false);
         }
-        
+
         //PRONE MOVEMENT SPEED
         if (prone)
         {
@@ -716,7 +723,7 @@ public class PlayerController : MonoBehaviour
 
         #region PLAYER ACTIONS
 
-        
+
 
         //WALKING TOGGLE
         if (Input.GetKey(keyAssignments.walkKey.keyCode) && !crouch && !prone)
@@ -756,12 +763,12 @@ public class PlayerController : MonoBehaviour
             crosshairSprtRenderer.enabled = false;
         }
 
-        if (weaponEquipped)
+        if (weaponDrawn)
         {
             //Aiming toggle
             if (Input.GetKey(keyAssignments.aimBlockKey.keyCode) && !PlayerBusy())
             {
-                if (equippedWeaponItem.weaponClass != WeaponScriptableObject.WeaponClass.Melee)
+                if (drawnWeaponItem.weaponClass != WeaponScriptableObject.WeaponClass.Melee)
                 {
                     if (_checkGround.isGrounded && !_climber.attachedToLedge && !trapped && !beingBitten && !PlayerBusy())
                     {
@@ -774,8 +781,8 @@ public class PlayerController : MonoBehaviour
                     }
                 }
 
-                if (equippedWeaponItem.weaponClass == WeaponScriptableObject.WeaponClass.Melee &&
-                    equippedWeaponItem.ID != 1001 && !beingBitten && !trapped) // 1001: knife
+                if (drawnWeaponItem.weaponClass == WeaponScriptableObject.WeaponClass.Melee &&
+                    drawnWeaponItem.ID != 1001 && !beingBitten && !trapped) // 1001: knife
                 {
                     if (_healthManager.currentStamina >= _healthManager.blockHitPenalty)
                     {
@@ -797,7 +804,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (weaponEquipped && Input.GetKeyUp(keyAssignments.aimBlockKey.keyCode))
+        if (weaponDrawn && Input.GetKeyUp(keyAssignments.aimBlockKey.keyCode))
         {
             isAiming = false;
             blocking = false;
@@ -970,7 +977,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnUIController()
     {
-        
+
         _animator.SetFloat(AnimatorSpeed, 0);
 
         if (Input.GetKeyDown(KeyCode.Escape) || _inventory.showInventory == false)
@@ -1057,7 +1064,7 @@ public class PlayerController : MonoBehaviour
         _rigidbody.velocity = Vector3.zero;
         _animator.SetFloat(AnimatorSpeed, 0);
 
-        if (weaponEquipped && Input.GetKeyUp(keyAssignments.aimBlockKey.keyCode))
+        if (weaponDrawn && Input.GetKeyUp(keyAssignments.aimBlockKey.keyCode))
         {
             isAiming = false;
             blocking = false;
@@ -1198,21 +1205,21 @@ public class PlayerController : MonoBehaviour
     {
         if (_WeaponHolder.childCount > 0)
         {
-            weaponEquipped = true;
-            if (!equippedWeaponItem)
+            weaponDrawn = true;
+            if (!drawnWeaponItem)
             {
-                equippedWeaponItem = _WeaponHolder.GetComponentInChildren<Item>(); //TODO: CACHEAR
+                drawnWeaponItem = _WeaponHolder.GetComponentInChildren<Item>(); //TODO: CACHEAR
             }
             else
             {
-                attacking = equippedWeaponItem.attacking;
+                attacking = drawnWeaponItem.attacking;
             }
         }
         else
         {
-            weaponEquipped = false;
+            weaponDrawn = false;
             attacking = false;
-            equippedWeaponItem = null;
+            drawnWeaponItem = null;
         }
     }
 
@@ -1249,61 +1256,61 @@ public class PlayerController : MonoBehaviour
         switch (command)
         {
             case "ReloadStart":
-                equippedWeaponItem.ReloadWeaponAnim("ReloadStart");
+                drawnWeaponItem.ReloadWeaponAnim("ReloadStart");
                 break;
 
             case "GrabMag":
-                if (equippedWeaponItem.magGameObject != null)
+                if (drawnWeaponItem.magGameObject != null)
                 {
-                    equippedWeaponItem.magGameObject.transform.parent = leftHandTransform;
-                    equippedWeaponItem.magGameObject.transform.position = leftHandTransform.position;
+                    drawnWeaponItem.magGameObject.transform.parent = leftHandTransform;
+                    drawnWeaponItem.magGameObject.transform.position = leftHandTransform.position;
                 }
 
                 break;
 
             case "HideMag":
 
-                if (equippedWeaponItem.magGameObject != null)
+                if (drawnWeaponItem.magGameObject != null)
                 {
-                    equippedWeaponItem.magGameObject.SetActive(false);
+                    drawnWeaponItem.magGameObject.SetActive(false);
                 }
 
                 break;
 
             case "ShowMag":
-                if (equippedWeaponItem.magGameObject != null)
+                if (drawnWeaponItem.magGameObject != null)
                 {
-                    equippedWeaponItem.magGameObject.SetActive(true);
+                    drawnWeaponItem.magGameObject.SetActive(true);
                 }
 
                 break;
 
             case "AttachMag":
 
-                if (equippedWeaponItem.magGameObject != null)
+                if (drawnWeaponItem.magGameObject != null)
                 {
-                    equippedWeaponItem.magGameObject.transform.parent = equippedWeaponItem.magHolder;
-                    equippedWeaponItem.magGameObject.transform.localPosition = new Vector3(0, 0, 0);
-                    equippedWeaponItem.magGameObject.transform.localEulerAngles = new Vector3(0, 0, 0);
+                    drawnWeaponItem.magGameObject.transform.parent = drawnWeaponItem.magHolder;
+                    drawnWeaponItem.magGameObject.transform.localPosition = new Vector3(0, 0, 0);
+                    drawnWeaponItem.magGameObject.transform.localEulerAngles = new Vector3(0, 0, 0);
                 }
 
                 break;
 
             case "ReloadEnd":
-                equippedWeaponItem.ReloadWeaponAnim("ReloadEnd");
+                drawnWeaponItem.ReloadWeaponAnim("ReloadEnd");
                 break;
 
             case "MeleeStart":
-                equippedWeaponItem.MeleeAttackAnim("Start");
+                drawnWeaponItem.MeleeAttackAnim("Start");
                 break;
 
             case "DoDamage":
                 _healthManager.ConsumeStamina(_healthManager.meleeAttackPenalty);
-                equippedWeaponItem.MeleeAttackAnim("DoDamage");
+                drawnWeaponItem.MeleeAttackAnim("DoDamage");
                 break;
 
             case "MeleeEnd":
-                equippedWeaponItem.MeleeAttackAnim("MeleeEnd");
+                drawnWeaponItem.MeleeAttackAnim("MeleeEnd");
                 break;
 
             case "Throw":
@@ -1505,4 +1512,3 @@ public class PlayerController : MonoBehaviour
 
     }
 }
-

@@ -2,16 +2,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using UnityEditor.TerrainTools;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 using UnityEngine.Serialization;
 using UnityEngine.UIElements;
 
 
 [RequireComponent(typeof(WorldTextUI))]
-[RequireComponent(typeof(UIDocument))]
 [RequireComponent(typeof(BoxCollider))]
-[RequireComponent(typeof(Outline))]
 public class Item : MonoBehaviour
 {
     public enum ItemClass
@@ -23,8 +21,8 @@ public class Item : MonoBehaviour
 
     public ItemClass itemClass;
 
-    public ItemScriptableObject itemScriptableObject;
-    [Header("Item ID")] public int ID;
+    [Header("Item ID")] 
+    public int ID;
     public string itemName;
     public string description;
     public Sprite itemIcon;
@@ -32,6 +30,7 @@ public class Item : MonoBehaviour
     public int quantity = 1;
     public bool itemPickedUp;
     public bool itemEquipped;
+
 
     public enum ItemLocation
     {
@@ -44,7 +43,12 @@ public class Item : MonoBehaviour
 
     public ItemLocation itemLocation;
 
-    [FormerlySerializedAs("modelTransform")] [Header("Transform References")]
+
+    /// <summary>
+    /// Instantiated model from prefab
+    /// </summary>    
+   [Header("Transform References")]
+
     public GameObject itemModel;
 
     private BoxCollider _boxCollider;
@@ -52,9 +56,12 @@ public class Item : MonoBehaviour
     [HideInInspector] public Transform itemTransform;
     public float prefabRotationSpeed = 2f;
 
-    [Header("UI")] public WorldTextUI textUI;
+    [Header("UI")] 
+    public WorldTextUI worldTextUI;
 
-    [Header("Item Attributes")] public int healthRestore;
+    [Header("Item Attributes")]
+    public ItemScriptableObject itemScriptableObject;
+    public int healthRestore;
     public int foodRestore;
     public int waterRestore; 
     public bool usable;
@@ -78,11 +85,14 @@ public class Item : MonoBehaviour
     public int bulletsPerShot;
     public bool blockAttacks;
 
-    [Header("Weapon Effects")] public GameObject bulletImpactPrefab;
+    [Header("Weapon Effects")] 
+    public GameObject bulletImpactPrefab;
     public GameObject enemyImpactPrefab;
     public GameObject muzzleFlashPrefab;
 
-    [Header("Weapon Transforms")] public Transform flashLightTransform;
+    [Header("Weapon Transforms")] 
+    public WeaponTransforms weaponTransforms;
+    public Transform flashLightTransform;
     public Transform gunMuzzleTransform;
     public Transform handguardTransform;
     public Transform gripTransform;
@@ -98,7 +108,6 @@ public class Item : MonoBehaviour
     public int attackNumber;
     public float meleeAttackTimer;
     public bool firing;
-    private float lastfired;
     public bool aiming;
     public bool drawingWeapon;
     public float meleeAttackDistance;
@@ -116,9 +125,6 @@ public class Item : MonoBehaviour
     public GameObject equipmentPrefab;
     public HumanBodyBones targetBone;
    
-
-
-
     private Transform playerTransform;
     private IKManager playerIKManager;
     private Inventory playerInventory;
@@ -131,9 +137,14 @@ public class Item : MonoBehaviour
 
     private void Awake()
     {
-        textUI = GetComponent<WorldTextUI>();
+        _boxCollider = GetComponent<BoxCollider>();
 
-        if (itemScriptableObject != null || weaponScriptableObject != null /*|| equipmentScriptableObject*/)
+
+    }
+
+    public void InitItem()
+    {
+        if (itemScriptableObject || weaponScriptableObject || outfitScriptableObject)
         {
             //OBTENEMOS LOS DATOS DEL ITEM SEGUN CLASE
             switch (itemClass)
@@ -144,18 +155,41 @@ public class Item : MonoBehaviour
 
                 case ItemClass.Weapon:
                     GetWeaponScriptableObject(weaponScriptableObject);
+                    GetWeaponTransforms(itemModel);
+                    _weaponSound = gameObject.AddComponent<WeaponSound>();
+                    _weaponSound.GetSounds(weaponScriptableObject);
                     break;
 
                 case ItemClass.Outfit:
                     GetOutfitScriptableObject(outfitScriptableObject);
-
                     break;
             }
 
-            textUI.text = itemName;
-            itemModel = InstantiateItem(itemPrefab);
-            textUI.target = itemModel.transform;
-            _boxCollider = GetComponent<BoxCollider>();
+            worldTextUI = GetComponent<WorldTextUI>();
+            worldTextUI.text = itemName;
+
+            switch (itemLocation)
+            {   
+                case ItemLocation.World:
+                    itemModel = InstantiateItem(itemPrefab);
+                    outline.enabled = false;
+
+                    worldTextUI.targetTransform = itemModel.transform;
+                    worldTextUI.uIEnabled = false;
+                    break;
+                case ItemLocation.Container:
+                    break;
+                case ItemLocation.Player:
+                    break;
+                case ItemLocation.Inventory:
+                    break;
+                case ItemLocation.Throwed:
+                    break;
+                default:
+                    break;
+            }
+
+            
         }
         else
         {
@@ -163,10 +197,9 @@ public class Item : MonoBehaviour
         }
     }
 
-    private void Start()
+    private void OnEnable()
     {
-        textUI.uiDocument.enabled = false;
-        outline.enabled = false;
+        InitItem();
     }
 
     private void Update()
@@ -179,6 +212,7 @@ public class Item : MonoBehaviour
                 itemModel.SetActive(true);
                 itemPickedUp = false;
                 break;
+
             case ItemLocation.Container:
                 _boxCollider.enabled = false;
                 itemModel.SetActive(false);
@@ -198,7 +232,12 @@ public class Item : MonoBehaviour
                 break;
 
             case ItemLocation.Throwed:
+                itemModel.SetActive(true);
                 break;
+        }
+        if(itemLocation != ItemLocation.World && itemLocation != ItemLocation.Throwed)
+        {
+            worldTextUI.uIEnabled = false;
         }
     }
 
@@ -221,9 +260,17 @@ public class Item : MonoBehaviour
         return instantiatedItem;
     }
 
-    public void GetItemScriptableObject(ItemScriptableObject itemScriptableObject)
+    public void GetItemScriptableObject(ItemScriptableObject itemScriptableObject = null)
     {
-        this.itemScriptableObject = itemScriptableObject; 
+        if (itemScriptableObject)
+        {
+            this.itemScriptableObject = itemScriptableObject;
+
+        }
+        else
+        {
+            itemScriptableObject = this.itemScriptableObject;
+        }
         ID = itemScriptableObject.ID;
         itemName = itemScriptableObject.itemName;
         description = itemScriptableObject.description;
@@ -238,9 +285,17 @@ public class Item : MonoBehaviour
         waterRestore = itemScriptableObject.waterRestore;
     }
 
-    public void GetWeaponScriptableObject(WeaponScriptableObject weaponScriptableObject)
+    public void GetWeaponScriptableObject(WeaponScriptableObject weaponScriptableObject = null)
     {
-        this.weaponScriptableObject = weaponScriptableObject;
+        if (weaponScriptableObject)
+        {
+            this.weaponScriptableObject = weaponScriptableObject;
+        }
+        else
+        {
+            weaponScriptableObject = this.weaponScriptableObject;
+        }
+        
         weaponClass = weaponScriptableObject.weaponClass;
         ID = weaponScriptableObject.ID;
         itemIcon = weaponScriptableObject.weaponIcon;
@@ -263,9 +318,17 @@ public class Item : MonoBehaviour
         muzzleFlashPrefab = weaponScriptableObject.muzzleFlashPrefab;
     }
 
-    public void GetOutfitScriptableObject(OutfitScriptableObject outfitScriptableObject)
+    public void GetOutfitScriptableObject(OutfitScriptableObject outfitScriptableObject = null)
     {
-        this.outfitScriptableObject = outfitScriptableObject;
+        if (weaponScriptableObject)
+        {
+            this.outfitScriptableObject = outfitScriptableObject;
+        }
+        else
+        {
+            outfitScriptableObject = this.outfitScriptableObject;
+        }
+
         ID = outfitScriptableObject.ID;
         name = outfitScriptableObject.itemName;
         description = outfitScriptableObject.description;   
@@ -278,6 +341,49 @@ public class Item : MonoBehaviour
         defense = outfitScriptableObject.defense;  
 
         backpackCapacity = outfitScriptableObject.backpackCapacity; 
+    }
+
+    #region Weapon Functions
+
+    public void GetWeaponTransforms(GameObject model)
+    {
+        weaponTransforms = model.GetComponent<WeaponTransforms>();
+        flashLightTransform = weaponTransforms.flashLightTransform;
+        gunMuzzleTransform = weaponTransforms.gunMuzzleTransform;
+        handguardTransform = weaponTransforms.handguardTransform;
+        gripTransform = weaponTransforms.gripTransform;
+        muzzleCollider = weaponTransforms.muzzleCollider;
+        flashLight = weaponTransforms.flashLight;
+        magHolder = weaponTransforms.magHolder;
+        magGameObject = weaponTransforms.magGameObject;
+
+    }
+
+    public void FireWeapon()
+    {
+        if (bulletsInMag > 0)
+        {
+            playerIKManager.recoilTimer = Time.time;
+
+            GetBulletFromPool();
+
+            GameObject muzzleFlash = ObjectPool.SharedInstance.GetPooledObject("MuzzleFlashParticle");
+
+            if (muzzleFlash != null)
+            {
+                muzzleFlash.transform.position = gunMuzzleTransform.position;
+                muzzleFlash.transform.rotation = Quaternion.LookRotation(-gunMuzzleTransform.forward, Vector3.up);
+                muzzleFlash.transform.parent = gunMuzzleTransform;
+                muzzleFlash.SetActive(true);
+            }
+
+            bulletsInMag -= 1;
+            _weaponSound.FireWeaponSound();
+        }
+        else
+        {
+            Debug.Log("Magazine is empty! Reload!");
+        }
     }
 
     public void GetBulletFromPool()
@@ -306,33 +412,6 @@ public class Item : MonoBehaviour
                 bullet.SetActive(true);
                 shootAngle += nextAngle;
             }
-        }
-    }
-
-    public void FireWeapon()
-    {
-        if (bulletsInMag > 0)
-        {
-            playerIKManager.recoilTimer = Time.time;
-
-            GetBulletFromPool();
-
-            GameObject muzzleFlash = ObjectPool.SharedInstance.GetPooledObject("MuzzleFlashParticle");
-
-            if (muzzleFlash != null)
-            {
-                muzzleFlash.transform.position = gunMuzzleTransform.position;
-                muzzleFlash.transform.rotation = Quaternion.LookRotation(-gunMuzzleTransform.forward, Vector3.up);
-                muzzleFlash.transform.parent = gunMuzzleTransform;
-                muzzleFlash.SetActive(true);
-            }
-
-            bulletsInMag -= 1;
-            _weaponSound.FireWeaponSound();
-        }
-        else
-        {
-            Debug.Log("Magazine is empty! Reload!");
         }
     }
 
@@ -382,30 +461,30 @@ public class Item : MonoBehaviour
         for (int i = 0; i < playerInventory.itemsList.Count; i++)
         {
             if (playerInventory.itemsList[i].ID == bulletID)
+            {
+                while (bulletsInMag < magazineCap)
                 {
-                    while (bulletsInMag < magazineCap)
+                    playerInventory.itemsList[i].quantity -= 1;
+                    bulletsInMag += 1;
+
+                    if (playerInventory.itemsList[i].quantity < 1)
                     {
-                        playerInventory.itemsList[i].quantity -= 1;
-                        bulletsInMag += 1;
+                        playerInventory.itemsList.RemoveAt(i);
+                        break; // break the loop if the slot has no more bullets
+                    }
 
-                        if (playerInventory.itemsList[i].quantity < 1)
-                        {
-                            playerInventory.itemsList.RemoveAt(i);
-                            break; // break the loop if the slot has no more bullets
-                        }
-
-                        if (bulletsInMag == magazineCap)
-                        {
-                            totalBullets = playerInventory.CheckItemsLeft(bulletID, totalBullets);
-                            playerInventory.UpdateBulletCounter(this);
-                            return; //stop the method if we fill the magazine
-                        }
+                    if (bulletsInMag == magazineCap)
+                    {
+                        totalBullets = playerInventory.CheckItemsLeft(bulletID, totalBullets);
+                        playerInventory.UpdateBulletCounter(this);
+                        return; //stop the method if we fill the magazine
                     }
                 }
+            }
         }
     }
 
-    public void ReloadWeaponAnim(string command) //called by animator event
+    public void ReloadWeaponAnim(string command) //Animator events called by WeaponAnimEvent() in PlayerController
     {
         switch (command)
         {
@@ -435,7 +514,7 @@ public class Item : MonoBehaviour
         switch (command)
         {
             case "MeleeStart":
-               // playerController.controllerType = PlayerController.ControllerType.StandByController;
+                // playerController.controllerType = PlayerController.ControllerType.StandByController;
                 break;
 
             case "DoDamage":
@@ -447,11 +526,13 @@ public class Item : MonoBehaviour
                 playerAnimator.SetBool("MeleeAttack1", attacking);
                 playerAnimator.SetBool("MeleeAttack2", attacking);
                 playerAnimator.SetBool("MeleeAttack3", attacking);
-               // playerController.controllerType = PlayerController.ControllerType.DefaultController;
+                // playerController.controllerType = PlayerController.ControllerType.DefaultController;
 
                 break;
         }
     }
+
+    #endregion
 
 
     private void OnTriggerEnter(Collider other)
@@ -462,7 +543,7 @@ public class Item : MonoBehaviour
             {
                 case ItemLocation.World:
                     outline.enabled = true;
-                    textUI.uiDocument.enabled = true;
+                    worldTextUI.uIEnabled = true;
                     break;
             }
         }
@@ -483,7 +564,7 @@ public class Item : MonoBehaviour
             {
                 case ItemLocation.World:
                     outline.enabled = false;
-                    textUI.uiDocument.enabled = false;
+                    worldTextUI.uIEnabled = false;
                     break;
             }
         }

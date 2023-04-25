@@ -15,6 +15,17 @@ public class UIManager : MonoBehaviour
     public GameObject optionsMenuUI;
     public GameObject gameOverScreenUI;
     public GameObject itemContainerUI;
+
+    public MainMenuUI mainMenuUIDocument;
+    public LoadingScreenUI loadingScreenUIDocument;
+    public InGameOverlayUI inGameOverlayUIDocument;
+    public InventoryUI inventoryUIDocument;
+    public PauseMenuUI pauseMenuUIDocument;
+    public OptionsMenuUI optionsMenuUIDocument;
+    public GameOverScreenUI gameOverScreenUIDocument;
+    public ItemContainerUI itemContainerUIDocument;
+
+
     private GameObject[] uiList;
 
     private void OnEnable()
@@ -30,21 +41,43 @@ public class UIManager : MonoBehaviour
             gameOverScreenUI,
             itemContainerUI
         };
-    }
 
+
+        mainMenuUIDocument = mainMenuUI.GetComponent<MainMenuUI>();
+        loadingScreenUIDocument = loadingScreenUI.GetComponent<LoadingScreenUI>();
+        inGameOverlayUIDocument = inGameOverlayUI.GetComponent<InGameOverlayUI>();
+        inventoryUIDocument = inventoryUI.GetComponent<InventoryUI>();
+        pauseMenuUIDocument = pauseMenuUI.GetComponent<PauseMenuUI>();
+        optionsMenuUIDocument = optionsMenuUI.GetComponent<OptionsMenuUI>();
+        gameOverScreenUIDocument = gameOverScreenUI.GetComponent<GameOverScreenUI>();
+        itemContainerUIDocument = itemContainerUI.GetComponent<ItemContainerUI>();
+}
+
+    private void Update()
+    {
+        
+    }
 
     public void CloseAllUI()
     {
         foreach (GameObject uIObject in uiList)
         {
             
-            uIObject.GetComponent<UIDocument>().rootVisualElement.visible = false;
+            uIObject.GetComponent<UIDocument>().rootVisualElement.style.display = DisplayStyle.None;
         }
     }
 
     public void ToggleUI(GameObject uiGameobject, bool enabled)
     {
         UIDocument uIDocument = uiGameobject.GetComponent<UIDocument>();
-        uIDocument.rootVisualElement.visible = enabled;
+
+        if (enabled)
+        {
+            uIDocument.rootVisualElement.style.display = DisplayStyle.Flex;
+        }
+        else
+        {
+            uIDocument.rootVisualElement.style.display = DisplayStyle.None;
+        }
     }
 }

@@ -8,7 +8,7 @@
             </ui:VisualElement>
             <ui:VisualElement name="InventorySlots" style="flex-grow: 1; width: 100%; height: 100%; justify-content: flex-start; flex-direction: row; flex-wrap: wrap; align-items: flex-start; flex-shrink: 1; margin-top: 0; margin-left: 0; margin-right: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0);">
                 <ui:VisualElement name="Slot" focusable="true" class="Slot">
-                    <ui:Label text="9999" display-tooltip-when-elided="true" name="SlotQuantity" />
+                    <ui:Label text="9999" display-tooltip-when-elided="true" name="SlotQuantity" focusable="false" />
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>
@@ -64,10 +64,10 @@
         <ui:Button display-tooltip-when-elided="true" name="InventoryCloseButton" class="CloseButton" />
     </ui:VisualElement>
     <ui:VisualElement name="ContextMenu" class="ContextMenu" style="display: flex;">
-        <ui:Button text="Use" display-tooltip-when-elided="true" name="UseButton" />
-        <ui:Button text="Equip" display-tooltip-when-elided="true" name="EquipButton" />
-        <ui:Button text="Throw" display-tooltip-when-elided="true" name="ThrowButton" />
-        <ui:Button text="Inspect" display-tooltip-when-elided="true" name="InspectButton" />
+        <ui:Button text="Use" display-tooltip-when-elided="true" name="UseButton" focusable="true" class="ContextButton" />
+        <ui:Button text="Equip" display-tooltip-when-elided="true" name="EquipButton" focusable="true" class="ContextButton" />
+        <ui:Button text="Throw" display-tooltip-when-elided="true" name="ThrowButton" focusable="true" class="ContextButton" />
+        <ui:Button text="Inspect" display-tooltip-when-elided="true" name="InspectButton" focusable="true" class="ContextButton" />
     </ui:VisualElement>
     <ui:VisualElement name="InspectWindow" style="position: absolute; left: 10%; top: 10%; right: 10%; bottom: 10%; flex-grow: 1; background-color: rgba(0, 0, 0, 0.89); flex-direction: row; width: 80%; height: 80%; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgb(185, 185, 185); border-right-color: rgb(185, 185, 185); border-top-color: rgb(185, 185, 185); border-bottom-color: rgb(185, 185, 185); display: none;">
         <ui:VisualElement name="LeftPanel" style="flex-grow: 1; width: 60%; height: 100%; justify-content: flex-start; align-items: stretch; border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-width: 0; border-right-width: 1px; border-top-width: 0; border-bottom-width: 0;">

@@ -54,14 +54,20 @@ public class ItemContainer : MonoBehaviour
 
     private void OnValidate()
     {
-        int itemCount = itemScriptableObjects.Count + 
-                        weaponScriptableObjects.Count + 
-                        outfitScriptableObjects.Count;
-
-        if (orderedQuantity.Length != itemCount)
+        if (itemScriptableObjects.Count > 0 ||
+            weaponScriptableObjects.Count > 0||
+            outfitScriptableObjects.Count > 0)
         {
-            orderedQuantity = new int[itemCount];
+            int itemCount = itemScriptableObjects.Count +
+                                    weaponScriptableObjects.Count +
+                                    outfitScriptableObjects.Count;
+
+            if (orderedQuantity.Length != itemCount)
+            {
+                orderedQuantity = new int[itemCount];
+            }
         }
+        
     }
 
     private void Awake()
@@ -91,7 +97,7 @@ public class ItemContainer : MonoBehaviour
     private void Start()
     {
         slotTemplate = itemContainerUI.containerSlot;
-        worldUIText.text = "Open [ " + KeyAssignments.Instance.useKey.keyCode.ToString().ToUpper() + " ]";
+        worldUIText.text = "Open [ " + GameManager.Instance._keyAssignments.useKey.keyCode.ToString().ToUpper() + " ]";
         
     }
     
@@ -101,7 +107,7 @@ public class ItemContainer : MonoBehaviour
         worldUIText.gameObject.SetActive(interactable);
         if (interactable)
         {
-            if (Input.GetKeyDown(KeyAssignments.Instance.useKey.keyCode))
+            if (Input.GetKeyDown(GameManager.Instance._keyAssignments.useKey.keyCode))
             {
                 containerOpen = true;
             }
@@ -116,15 +122,20 @@ public class ItemContainer : MonoBehaviour
         if (containerOpen)
         {
             playerController.controllerType = PlayerController.ControllerType.StandByController;
-            if (Input.GetKeyDown(KeyAssignments.Instance.inventoryKey.keyCode) || Input.GetKeyDown(KeyCode.Escape))
+            if (Input.GetKeyDown(GameManager.Instance._keyAssignments.inventoryKey.keyCode) || Input.GetKeyDown(KeyCode.Escape))
             {
                 containerOpen = false;
             }
+            itemContainerUI.root.style.display = DisplayStyle.Flex;
+        }
+        else
+        {
+            itemContainerUI.root.style.display = DisplayStyle.None;
+
         }
 
         playerInventory.showInventory = containerOpen;
 
-        itemContainerUI.root.visible = containerOpen;
     }
 
     private void OnTriggerEnter(Collider other)

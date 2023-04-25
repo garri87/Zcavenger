@@ -1,16 +1,13 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using UnityEditor.UIElements;
-using UnityEngine.UIElements;
+
 
 [CustomEditor(typeof(Item))]
 public class ItemGUI : Editor
 {
     Item item;
-    private SerializedObject _object;
+    //private SerializedObject _object;
     private SerializedProperty _itemClass;
     private SerializedProperty _ID;
     private SerializedProperty _itemName;
@@ -21,13 +18,12 @@ public class ItemGUI : Editor
     private SerializedProperty _itemPickedUp;
     private SerializedProperty _itemEquipped;
     private SerializedProperty _itemLocation;
-    private SerializedProperty _modelTransform;
-    private SerializedProperty _boxCollider;
+    private SerializedProperty _itemModel;
+    //private SerializedProperty _boxCollider;
     private SerializedProperty _outline;
     private SerializedProperty _itemTransform;
     private SerializedProperty _prefabRotationSpeed;
-    private SerializedProperty _uiDocument;
-    private SerializedProperty _itemText;
+    private SerializedProperty _worldTextUI;
 
     // Item variables
     private SerializedProperty _itemScriptableObject;
@@ -54,84 +50,149 @@ public class ItemGUI : Editor
     private SerializedProperty _bulletsPerShot;
     private SerializedProperty _blockAttacks;
 
+    // Weapon Effects Variables
+    private SerializedProperty _bulletImpactPrefab;
+    private SerializedProperty _enemyImpactPrefab;
+    private SerializedProperty _muzzleFlashPrefab;
+    private SerializedProperty _flashLightTransform;
+    private SerializedProperty _gunMuzzleTransform;
+    private SerializedProperty _handguardTransform;
+    private SerializedProperty _gripTransform;
+    private SerializedProperty _muzzleCollider;
+    private SerializedProperty _flashLight;
+    private SerializedProperty _magHolder;
+    private SerializedProperty _magGameObject;
+
+    private SerializedProperty _weaponEquipped;
+    private SerializedProperty _totalBullets;
+    private SerializedProperty _reloadingWeapon;
+    private SerializedProperty _attacking;
+    private SerializedProperty _attackNumber;
+    private SerializedProperty _meleeAttackTimer;
+    private SerializedProperty _firing;
+    private SerializedProperty _aiming;
+    private SerializedProperty _drawingWeapon;
+    private SerializedProperty _meleeAttackDistance;
+    //private SerializedProperty _meleeAttackNumber;
+    private SerializedProperty _enemyLayer;
+
+    private SerializedProperty _weaponSound;
+    //private SerializedProperty _playerWeaponSound;
+
     // Equipment variables
+    private SerializedProperty _outfitScriptableObject;
     private SerializedProperty _defense;
     private SerializedProperty _targetBone;
+    private SerializedProperty _outfitBodyPart;
+    private SerializedProperty _backpackCapacity;
+    private SerializedProperty _equipmentPrefab;
+
+    //Player Components
+   // private SerializedProperty _playerTransform;
+   // private SerializedProperty _playerIKManager;
+   // private SerializedProperty _playerInventory;
+   // private SerializedProperty _playerAnimator;
+
+
 
     private List<SerializedProperty> _properties;
 
     private void OnEnable()
     {
-        _object = new SerializedObject(target);
+        item = (Item)target;
 
-        _ID = _object.FindProperty("ID");
-        _itemClass = _object.FindProperty("itemClass");
-        _itemName = _object.FindProperty("itemName");
-        _description = _object.FindProperty("description");
-        _itemIcon = _object.FindProperty("itemIcon");
-        _itemPrefab = _object.FindProperty("itemPrefab");
-        _quantity = _object.FindProperty("quantity");
-        _itemPickedUp = _object.FindProperty("itemPickedUp");
-        _itemEquipped = _object.FindProperty("itemEquipped");
-        _itemLocation = _object.FindProperty("itemLocation");
-        _modelTransform = _object.FindProperty("modelTransform");
-        _boxCollider = _object.FindProperty("_boxCollider");
-        _outline = _object.FindProperty("outline");
-        _itemTransform = _object.FindProperty("itemTransform");
-        _prefabRotationSpeed = _object.FindProperty("prefabRotationSpeed");
-        _uiDocument = _object.FindProperty("_uiDocument");
-        _itemText = _object.FindProperty("itemText");
+        _itemClass = serializedObject.FindProperty("itemClass");
+        _ID = serializedObject.FindProperty("ID");
+        _itemName = serializedObject.FindProperty("itemName");
+        _description = serializedObject.FindProperty("description");
+        _itemIcon = serializedObject.FindProperty("itemIcon");
+        _itemPrefab = serializedObject.FindProperty("itemPrefab");
+        _quantity = serializedObject.FindProperty("quantity");
+        _itemPickedUp = serializedObject.FindProperty("itemPickedUp");
+        _itemEquipped = serializedObject.FindProperty("itemEquipped");
+        _itemLocation = serializedObject.FindProperty("itemLocation");
+        _itemModel = serializedObject.FindProperty("itemModel");
+        //_boxCollider = _object.FindProperty("_boxCollider");
+        _outline = serializedObject.FindProperty("outline");
+        _itemTransform = serializedObject.FindProperty("itemTransform");
+        _prefabRotationSpeed = serializedObject.FindProperty("prefabRotationSpeed");
+        _worldTextUI = serializedObject.FindProperty("worldTextUI");
 
         // Item variables
-        _itemScriptableObject = _object.FindProperty("itemScriptableObject");
-        _healthRestore = _object.FindProperty("healthRestore");
-        _foodRestore = _object.FindProperty("foodRestore");
-        _waterRestore = _object.FindProperty("waterRestore");
-        _usable = _object.FindProperty("usable");
-        _consumable = _object.FindProperty("consumable");
-        _isStackable = _object.FindProperty("isStackable");
-        _maxStack = _object.FindProperty("maxStack");
+        _itemScriptableObject = serializedObject.FindProperty("itemScriptableObject");
+        _healthRestore = serializedObject.FindProperty("healthRestore");
+        _foodRestore = serializedObject.FindProperty("foodRestore");
+        _waterRestore = serializedObject.FindProperty("waterRestore");
+        _usable = serializedObject.FindProperty("usable");
+        _consumable = serializedObject.FindProperty("consumable");
+        _isStackable = serializedObject.FindProperty("isStackable");
+        _maxStack = serializedObject.FindProperty("maxStack");
 
         // Weapon variables
-        _weaponScriptableObject = _object.FindProperty("weaponScriptableObject");
-        _weaponClass = _object.FindProperty("weaponClass");
-        _bulletID = _object.FindProperty("bulletID");
-        _damage = _object.FindProperty("damage");
-        _fireRate = _object.FindProperty("fireRate");
-        _magazineCap = _object.FindProperty("magazineCap");
-        _bulletsInMag = _object.FindProperty("bulletsInMag");
-        _recoilDuration = _object.FindProperty("recoilDuration");
-        _recoilMaxRotation = _object.FindProperty("recoilMaxRotation");
-        _maxFireAngle = _object.FindProperty("maxFireAngle");
-        _minFireAngle = _object.FindProperty("minFireAngle");
-        _bulletsPerShot = _object.FindProperty("bulletsPerShot");
-        _blockAttacks = _object.FindProperty("blockAttacks");
-        _defense = _object.FindProperty("defense");
-        _targetBone = _object.FindProperty("targetBone");
+        _weaponScriptableObject = serializedObject.FindProperty("weaponScriptableObject");
+        _weaponClass = serializedObject.FindProperty("weaponClass");
+        _bulletID = serializedObject.FindProperty("bulletID");
+        _damage = serializedObject.FindProperty("damage");
+        _fireRate = serializedObject.FindProperty("fireRate");
+        _magazineCap = serializedObject.FindProperty("magazineCap");
+        _bulletsInMag = serializedObject.FindProperty("bulletsInMag");
+        _recoilDuration = serializedObject.FindProperty("recoilDuration");
+        _recoilMaxRotation = serializedObject.FindProperty("recoilMaxRotation");
+        _maxFireAngle = serializedObject.FindProperty("maxFireAngle");
+        _minFireAngle = serializedObject.FindProperty("minFireAngle");
+        _bulletsPerShot = serializedObject.FindProperty("bulletsPerShot");
+        _blockAttacks = serializedObject.FindProperty("blockAttacks");
+
+        _bulletImpactPrefab = serializedObject.FindProperty("bulletImpactPrefab");
+        _enemyImpactPrefab = serializedObject.FindProperty("enemyImpactPrefab");
+        _muzzleFlashPrefab = serializedObject.FindProperty("muzzleFlashPrefab");
+        _flashLightTransform = serializedObject.FindProperty("flashLightTransform");
+        _gunMuzzleTransform = serializedObject.FindProperty("gunMuzzleTransform");
+        _handguardTransform = serializedObject.FindProperty("handguardTransform");
+        _gripTransform = serializedObject.FindProperty("gripTransform");
+        _muzzleCollider = serializedObject.FindProperty("muzzleCollider");
+        _flashLight = serializedObject.FindProperty("flashLight");
+        _magHolder = serializedObject.FindProperty("magHolder");
+        _magGameObject = serializedObject.FindProperty("magGameObject");
+        _weaponEquipped = serializedObject.FindProperty("weaponEquipped");
+        _totalBullets = serializedObject.FindProperty("totalBullets");
+        _reloadingWeapon = serializedObject.FindProperty("reloadingWeapon");
+        _attacking = serializedObject.FindProperty("attacking");
+        _attackNumber = serializedObject.FindProperty("attackNumber");
+        _meleeAttackTimer = serializedObject.FindProperty("meleeAttackTimer");
+        _firing = serializedObject.FindProperty("firing");
+        _aiming = serializedObject.FindProperty("aiming");
+        _drawingWeapon = serializedObject.FindProperty("drawingWeapon");
+        _meleeAttackDistance = serializedObject.FindProperty("meleeAttackDistance");
+        //_meleeAttackNumber = _object.FindProperty("meleeAttackNumber");
+        _enemyLayer = serializedObject.FindProperty("enemyLayer");
+        _weaponSound = serializedObject.FindProperty("_weaponSound");
+        //_playerWeaponSound = _object.FindProperty("playerWeaponSound");
+
+        //Outfit variables
+        _outfitScriptableObject = serializedObject.FindProperty("outfitScriptableObject");
+        _outfitBodyPart = serializedObject.FindProperty("outfitBodyPart");
+        _defense = serializedObject.FindProperty("defense");
+        _backpackCapacity = serializedObject.FindProperty("backpackCapacity");
+        _equipmentPrefab = serializedObject.FindProperty("equipmentPrefab");
+
+        //PlayerComponents
+        //_playerTransform = _object.FindProperty("playerTransform");
+        //_playerIKManager = _object.FindProperty("playerIKManager");
+        //_playerInventory = _object.FindProperty("playerInventory");
+        //_playerAnimator = _object.FindProperty("playerAnimator");
     }
 
     public override void OnInspectorGUI()
     {
         serializedObject.Update();
-        
+
         GUI.enabled = false;
         SerializedProperty prop = serializedObject.FindProperty("m_Script");
         EditorGUILayout.PropertyField(prop, true, new GUILayoutOption[0]);
         GUI.enabled = true;
+
         EditorGUILayout.PropertyField(_itemClass);
-        switch (_itemClass.enumValueIndex)
-        {
-            case (int)Item.ItemClass.Item:
-                EditorGUILayout.PropertyField(_itemScriptableObject);
-                break;
-
-            case (int)Item.ItemClass.Weapon:
-                EditorGUILayout.PropertyField(_weaponScriptableObject);
-                break;
-
-            case (int)Item.ItemClass.Outfit:
-                break;
-        }
         EditorGUILayout.PropertyField(_ID);
         EditorGUILayout.PropertyField(_itemName);
         EditorGUILayout.PropertyField(_description);
@@ -141,17 +202,20 @@ public class ItemGUI : Editor
         EditorGUILayout.PropertyField(_itemPickedUp);
         EditorGUILayout.PropertyField(_itemEquipped);
         EditorGUILayout.PropertyField(_itemLocation);
-        EditorGUILayout.PropertyField(_modelTransform);
-//        EditorGUILayout.PropertyField(_boxCollider);
+        
+        EditorGUILayout.PropertyField(_itemModel);
+        //EditorGUILayout.PropertyField(_boxCollider);
         EditorGUILayout.PropertyField(_outline);
         EditorGUILayout.PropertyField(_itemTransform);
         EditorGUILayout.PropertyField(_prefabRotationSpeed);
-        EditorGUILayout.PropertyField(_uiDocument);
-//        EditorGUILayout.PropertyField(_itemText);
+        EditorGUILayout.PropertyField(_worldTextUI);
+
+        
 
         switch (_itemClass.enumValueIndex)
         {
             case (int)Item.ItemClass.Item:
+                EditorGUILayout.PropertyField(_itemScriptableObject);
                 EditorGUILayout.PropertyField(_healthRestore);
                 EditorGUILayout.PropertyField(_foodRestore);
                 EditorGUILayout.PropertyField(_waterRestore);
@@ -162,6 +226,7 @@ public class ItemGUI : Editor
                 break;
 
             case (int)Item.ItemClass.Weapon:
+                EditorGUILayout.PropertyField(_weaponScriptableObject);
                 EditorGUILayout.PropertyField(_weaponClass);
                 EditorGUILayout.PropertyField(_bulletID);
                 EditorGUILayout.PropertyField(_damage);
@@ -174,13 +239,53 @@ public class ItemGUI : Editor
                 EditorGUILayout.PropertyField(_minFireAngle);
                 EditorGUILayout.PropertyField(_bulletsPerShot);
                 EditorGUILayout.PropertyField(_blockAttacks);
+                //weapon effects
+                EditorGUILayout.PropertyField(_bulletImpactPrefab);
+                EditorGUILayout.PropertyField(_enemyImpactPrefab);
+                EditorGUILayout.PropertyField(_muzzleFlashPrefab);
+                //weapon transforms
+                EditorGUILayout.PropertyField(_flashLightTransform);
+                EditorGUILayout.PropertyField(_gunMuzzleTransform);
+                EditorGUILayout.PropertyField(_handguardTransform);
+                EditorGUILayout.PropertyField(_gripTransform);
+                EditorGUILayout.PropertyField(_muzzleCollider);
+                EditorGUILayout.PropertyField(_flashLight);
+                EditorGUILayout.PropertyField(_magHolder);
+                EditorGUILayout.PropertyField(_magGameObject);
+                EditorGUILayout.PropertyField(_weaponEquipped);
+                EditorGUILayout.PropertyField(_totalBullets);
+                EditorGUILayout.PropertyField(_reloadingWeapon);
+                EditorGUILayout.PropertyField(_attacking);
+                EditorGUILayout.PropertyField(_attackNumber);
+                EditorGUILayout.PropertyField(_meleeAttackTimer);
+                EditorGUILayout.PropertyField(_firing);
+                EditorGUILayout.PropertyField(_aiming);
+                EditorGUILayout.PropertyField(_drawingWeapon);
+                EditorGUILayout.PropertyField(_meleeAttackDistance);
+                //EditorGUILayout.PropertyField(_meleeAttackNumber);
+                EditorGUILayout.PropertyField(_enemyLayer);
+                EditorGUILayout.PropertyField(_weaponSound);
+                //EditorGUILayout.PropertyField(_playerWeaponSound);
                 break;
 
             case (int)Item.ItemClass.Outfit:
+                EditorGUILayout.PropertyField(_outfitScriptableObject);
+                EditorGUILayout.PropertyField(_outfitBodyPart);
                 EditorGUILayout.PropertyField(_defense);
-                EditorGUILayout.PropertyField(_targetBone);
+                EditorGUILayout.PropertyField(_backpackCapacity);
+
+                EditorGUILayout.PropertyField(_equipmentPrefab);
+
+               
+
+
                 break;
         }
+
+        //EditorGUILayout.PropertyField(_playerTransform);
+        //EditorGUILayout.PropertyField(_playerIKManager);
+        //EditorGUILayout.PropertyField(_playerInventory);
+        //EditorGUILayout.PropertyField(_playerAnimator);
 
         serializedObject.ApplyModifiedProperties();
     }

@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/Resources/UI/OptionsMenu.uss?fileID=7433441132597879392&amp;guid=57e2f905d32eb364083009de35f77eac&amp;type=3#OptionsMenu" />
+    <ui:VisualElement name="KeyAssign" class="KeyAssign">
+        <ui:Label text="Move Up" display-tooltip-when-elided="true" name="KeyName" />
+        <ui:Label text="PRESS ANY KEY" display-tooltip-when-elided="true" name="KeyValue" focusable="true" class="KeyValue" />
+    </ui:VisualElement>
+</ui:UXML>

@@ -54,7 +54,7 @@ public class IKAimer : MonoBehaviour
 
    private void Update()
    {
-      if (_playerController.equippedWeaponItem != null) _weaponItem = _playerController.equippedWeaponItem;
+      if (_playerController.drawnWeaponItem != null) _weaponItem = _playerController.drawnWeaponItem;
       
       ConstraintLeftHand();
       
@@ -95,7 +95,7 @@ public class IKAimer : MonoBehaviour
          }
       }
 
-      if (!_playerController.isAiming || !_playerController.weaponEquipped)
+      if (!_playerController.isAiming || !_playerController.weaponDrawn)
       {
          foreach (MultiAimConstraint aimConstraint in aimConstraints)
          {
@@ -113,7 +113,7 @@ public class IKAimer : MonoBehaviour
 
    private void ConstraintLeftHand()
    {
-      if (_playerController.weaponEquipped && !_playerController._healthManager.isBleeding || _playerController.isAiming)
+      if (_playerController.weaponDrawn && !_playerController._healthManager.isBleeding || _playerController.isAiming)
       {
          if (_weaponItem.weaponClass == WeaponScriptableObject.WeaponClass.Primary && !_playerController.reloadingWeapon)
          {

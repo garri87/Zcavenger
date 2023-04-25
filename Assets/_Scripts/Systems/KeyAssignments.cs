@@ -18,23 +18,7 @@ public class KeyStr
 
 public class KeyAssignments : MonoBehaviour
 {
-    private static KeyAssignments _instance;
-    public static KeyAssignments Instance
-    {
-        get
-        {
-            if (_instance == null)
-            {
-                _instance = FindObjectOfType<KeyAssignments>();
-                if (_instance == null)
-                {
-                    GameObject go = new GameObject("GameManager");
-                    _instance = go.AddComponent<KeyAssignments>();
-                }
-            }
-            return _instance;
-        }
-    }
+    
     
     public KeyStr leftKey = new KeyStr          (KeyCode.A, "left");
     public KeyStr rightKey = new KeyStr         (KeyCode.D, "right");
@@ -90,7 +74,7 @@ public class KeyAssignments : MonoBehaviour
         {
             foreach (var key in keys)
             {
-                key.keyCode = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString(nameof(key)));
+                //key.keyCode = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString(nameof(key)));
             } 
 
         }
@@ -98,7 +82,7 @@ public class KeyAssignments : MonoBehaviour
         {
             foreach (var key in keys)
             {
-                PlayerPrefs.SetString(nameof(key), key.keyCode.ToString());
+            //    PlayerPrefs.SetString(nameof(key), key.keyCode.ToString());
             }
         }
 

@@ -202,9 +202,9 @@ MonoBehaviour:
   upLadder: 0
   climbingToTop: 0
   crosshairTransform: {fileID: 6277752834557844597}
-  _WeaponHolder: {fileID: 0}
-  equippedWeaponItem: {fileID: 0}
-  weaponEquipped: 0
+  _WeaponHolder: {fileID: 8549361242576915107}
+  drawnWeaponItem: {fileID: 0}
+  weaponDrawn: 0
   isAiming: 0
   attacking: 0
   reloadingWeapon: 0
@@ -225,7 +225,6 @@ MonoBehaviour:
   doorScript: {fileID: 0}
   mouseTargetLayer: {fileID: 0}
   _inventory: {fileID: 0}
-  finishedLevel: 0
 --- !u!114 &9006865958518780554
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -320,11 +319,12 @@ MonoBehaviour:
   showInventory: 0
   uIManager: {fileID: 0}
   inventoryUI: {fileID: 0}
+  inGameOverlayUI: {fileID: 0}
   _playerController: {fileID: 0}
   playerWeaponHolder: {fileID: 0}
   itemsList: []
   currentCapacity: 0
-  maxCapacity: 0
+  maxCapacity: 10
   defaultMaxCapacity: 10
   inventoryFull: 0
   onItem: 0
@@ -332,16 +332,17 @@ MonoBehaviour:
   drawWeapon: 0
   holsterWeapon: 0
   selectedWeapon: 0
-  primaryWeapon: {fileID: 0}
-  secondaryWeapon: {fileID: 0}
-  meleeWeapon: {fileID: 0}
-  throwableWeapon: {fileID: 0}
-  headEquip: {fileID: 0}
-  vestEquip: {fileID: 0}
-  torsoEquip: {fileID: 0}
-  legsEquip: {fileID: 0}
-  feetEquip: {fileID: 0}
-  backpackEquip: {fileID: 0}
+  equippedPrimaryWeapon: {fileID: 0}
+  equippedSecondaryWeapon: {fileID: 0}
+  equippedMeleeWeapon: {fileID: 0}
+  equippedThrowableWeapon: {fileID: 0}
+  equippedHeadOutfit: {fileID: 0}
+  equippedVestOutfit: {fileID: 0}
+  equippedTorsoOutfit: {fileID: 0}
+  equippedLegsOutfit: {fileID: 0}
+  equippedFeetOutfit: {fileID: 0}
+  equippedBackpackOutfit: {fileID: 0}
+  itemCollectiblePrefab: {fileID: 1643082142514611498, guid: b9eac2de9eb08ef4d9dab5000ee1bd0b, type: 3}
 --- !u!114 &4870130170666209119
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -932,6 +933,37 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 1
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!1 &8830591390746641048
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8549361242576915107}
+  m_Layer: 0
+  m_Name: WeaponHolder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8549361242576915107
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8830591390746641048}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2654560452091838048}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &4051903869854765949
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1045,12 +1077,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -4261223413460448264, guid: b8d6e560c5b59ee4fb9f2f5e73b66bca, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 7af9dc509b80b5942b33e5b143bebd4c, type: 2}
     - target: {fileID: 919132149155446097, guid: b8d6e560c5b59ee4fb9f2f5e73b66bca, type: 3}
       propertyPath: m_Name
       value: Player1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b8d6e560c5b59ee4fb9f2f5e73b66bca, type: 3}
+--- !u!4 &2654560452091838048 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7714240806762201034, guid: b8d6e560c5b59ee4fb9f2f5e73b66bca, type: 3}
+  m_PrefabInstance: {fileID: 5753517363347177898}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5211263949116581441 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: b8d6e560c5b59ee4fb9f2f5e73b66bca, type: 3}

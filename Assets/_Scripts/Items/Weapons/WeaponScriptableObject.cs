@@ -51,5 +51,15 @@ public class WeaponScriptableObject : ScriptableObject
     public GameObject enemyImpactPrefab;
     public GameObject muzzleFlashPrefab;
 
+    [Header("Weapon Sounds")]
+    public AudioClip shotSound;
+    public AudioClip meleeAttackSound;
+    public AudioClip dropSound;
+    public AudioClip explosionSound;
+    public AudioClip magazineOutSound;
+    public AudioClip magazineInSound;
+    public AudioClip reloadEndSound;
+    public AudioClip drawWeaponSound;
+
 
 }

@@ -118,7 +118,7 @@ public class Door : MonoBehaviour
                 textGameObject.SetActive(true);
                 text.enabled = true;  
                 
-                text.text = " Open " + "[ " + KeyAssignments.Instance.useKey.keyCode.ToString() + " ]";
+                text.text = " Open " + "[ " + GameManager.Instance._keyAssignments.useKey.keyCode.ToString() + " ]";
 
             }
             if (TryGetComponent(out ElevatorDoors elevatorDoors))

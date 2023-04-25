@@ -7,13 +7,14 @@ using UnityEngine.UIElements;
 
 public class InventoryUI : MonoBehaviour
 {
-    public UIDocument inventory;
-    
-    [Header("Items area")]
+    public UIDocument inventoryUI;
+    public VisualElement root;
+
+   [Header("Items area")]
     public VisualElement inventorySlotArea;
     public Label capacityLabel;
 
-    public VisualElement inventorySlot;
+    public VisualTreeAsset slotTemplate;
     public List<VisualElement> inventorySlotList;
 
     public VisualElement outfitSlotsArea;
@@ -53,23 +54,22 @@ public class InventoryUI : MonoBehaviour
     private int selectedSlot;
 
     private Inventory playerInventory;
+    private Camera _camera;
+    private Vector3 mousePos;
     
     private void OnEnable()
     {
        
-        playerInventory = GameObject.Find("Player").GetComponent<Inventory>();
         
-        inventory = GetComponent<UIDocument>();
+        inventoryUI = GetComponent<UIDocument>();
         
         
-        VisualElement root = inventory.rootVisualElement;
+        root = inventoryUI.rootVisualElement;
 
         #region Inventory Slots Area
 
-        inventorySlotArea = root.Q<VisualElement>("InventorySlots");
+        inventorySlotArea = root.Q<VisualElement>("SlotsSection").Q<VisualElement>("InventorySlots");
         capacityLabel = root.Q<Label>("Cap");
-
-        inventorySlot = root.Q<VisualElement>("InventorySlot");
 
         #endregion
 
@@ -131,6 +131,8 @@ public class InventoryUI : MonoBehaviour
         inspectButton.RegisterCallback<ClickEvent, VisualElement>(ToggleVisibility, inspectItemPanel);
         throwButton.RegisterCallback<ClickEvent>(DropItem);
 
+        contextMenu.style.display = DisplayStyle.None;
+
         #endregion
 
 
@@ -143,15 +145,36 @@ public class InventoryUI : MonoBehaviour
         #endregion
     }
 
+    private void Start()
+    {
+        _camera = Camera.main;
+        playerInventory = GameObject.Find("Player").GetComponent<Inventory>();
+
+        FillInventoryWithSlots(playerInventory.maxCapacity);
+    }
+
+    private void Update()
+    {
+        
+
+    }
+
+    private void LateUpdate()
+    {
+    
+    }
+
+   
+
     public void ToggleVisibility(ClickEvent evt, VisualElement element)
     {
-        if (element.visible)
+        if (element.style.display == DisplayStyle.Flex)
         {
-            element.visible = false;
+            element.style.display = DisplayStyle.None;
         }
         else
         {
-            element.visible = true;
+            element.style.display = DisplayStyle.Flex;
         }
     }
 
@@ -160,21 +183,28 @@ public class InventoryUI : MonoBehaviour
 
     public void FillInventoryWithSlots(int capacity)
     {
+        inventorySlotArea.Clear();
         for (int i = 0; i < capacity; i++)
         {
-            inventorySlotArea.Add(inventorySlot);
+            VisualElement slot = slotTemplate.Instantiate();
+            slot = slot.Q<VisualElement>("Slot");
+            Label slotQuantity = slot.Q<Label>("SlotQuantity");
+            slotQuantity.text = "";
+            slot.AddToClassList("Slot");
+            inventorySlotArea.Add(slot);
         }
 
         inventorySlotList = inventorySlotArea.Query<VisualElement>("Slot").ToList();
 
         for (int i = 0; i < inventorySlotList.Count; i++)
         {
-            //inventorySlotList[i].RegisterCallback<ClickEvent>(SlotClickEvent);
+            inventorySlotList[i].RegisterCallback<MouseDownEvent, int>(SlotClickEvent, i);
             inventorySlotList[i].name = "Slot_" + i;
         }
+        Debug.Log("Inventory Filled with " + capacity + "Slots");
     }
 
-    public void SlotClickEvent(ClickEvent evt, int itemIndex)
+    public void SlotClickEvent(MouseDownEvent evt, int itemIndex)
     {
         var target = evt.target as VisualElement;
         selectedSlot = itemIndex;
@@ -182,59 +212,117 @@ public class InventoryUI : MonoBehaviour
         if (evt.button == (int)MouseButton.LeftMouse)
         {
             //TODO: USE ITEM EVENT
-            if (contextMenu.visible)
+            if (contextMenu.style.display == DisplayStyle.Flex)
             {
-               contextMenu.visible = false; 
+               contextMenu.style.display = DisplayStyle.None;
             }
         }
         if (evt.button == (int)MouseButton.RightMouse)
         {
-            contextMenu.transform.position = target.transform.position; //Set the menu transform to the slot
-            contextMenu.visible = !contextMenu.visible;
+            if(contextMenu.style.display == DisplayStyle.Flex)
+            {
+                contextMenu.style.display = DisplayStyle.None;
+            }
+            else
+            {
+                Vector3 targetPos = target.LocalToWorld(evt.localMousePosition);
+                contextMenu.transform.position = targetPos;
+
+                contextMenu.style.display = DisplayStyle.Flex;
+
+                Debug.Log("Context Menu open on " + target.name);
+            }
         }
         inspectButton.UnregisterCallback<ClickEvent, Item>(InspectItem);
-        inspectButton.RegisterCallback<ClickEvent, Item>(InspectItem, playerInventory.itemsList[selectedSlot]);
+
+        try
+        {
+            inspectButton.RegisterCallback<ClickEvent, Item>(InspectItem, playerInventory.itemsList[selectedSlot]);
+
+        }
+        catch
+        {
+            Debug.Log("No item assigned to this slot");
+        }
+        
+       
     }
+
+    
 
     public void UseItem(ClickEvent evt)
     {
-        contextMenu.visible = false;
-        Item item = playerInventory.itemsList[selectedSlot];
-        switch (item.itemClass)
+        contextMenu.style.display = DisplayStyle.None;
+        try
         {
-            case Item.ItemClass.Item:
-                playerInventory.UseItem(playerInventory.itemsList[selectedSlot]);
-                break;
-            
-            case Item.ItemClass.Weapon:
-                
-                break;
-            
-            case Item.ItemClass.Outfit:
-                
-                break;
+            Item item = playerInventory.itemsList[selectedSlot];
+            switch (item.itemClass)
+            {
+                case Item.ItemClass.Item:
+                    playerInventory.UseItem(playerInventory.itemsList[selectedSlot]);
+                    break;
+
+                case Item.ItemClass.Weapon:
+                    playerInventory.ChangeEquipment(item);
+                    break;
+
+                case Item.ItemClass.Outfit:
+
+                    break;
+            }
+
+            Debug.Log("Used " + item.itemName);  
         }
+        catch (Exception e)
+        {
+
+            Debug.Log(e);
+        }
+        
     }
     public void EquipItem(ClickEvent evt)
     {
-        contextMenu.visible = false;
-        Item item = playerInventory.itemsList[selectedSlot];
-        
-        if(item.itemClass == Item.ItemClass.Weapon || item.itemClass == Item.ItemClass.Outfit)
+        contextMenu.style.display = DisplayStyle.None;
+
+        try
         {
-            playerInventory.ChangeEquipment(item);
+            Item item = playerInventory.itemsList[selectedSlot];
+
+            if (item.itemClass != Item.ItemClass.Item)
+            {
+                playerInventory.ChangeEquipment(item);
+            }
         }
+        catch (Exception e)
+        {
+
+            Debug.Log(e);
+        }
+        
     }
     public void DropItem(ClickEvent evt)
     {
-        contextMenu.visible = false;
-        Item item = playerInventory.itemsList[selectedSlot];
-        playerInventory.DropItem(item);
+        contextMenu.style.display = DisplayStyle.None;
+
+        try
+        {
+            Item item = playerInventory.itemsList[selectedSlot];
+
+            playerInventory.DropItem(item);
+        }
+        catch (Exception e)
+        {
+
+            Debug.Log(e);
+        }
+
+
+       
 
     }
     public void InspectItem(ClickEvent evt, Item item)
     {
-        contextMenu.visible = false;
+        contextMenu.style.display = DisplayStyle.None;
         GetItemStats(item);
     }
 
@@ -249,8 +337,6 @@ public class InventoryUI : MonoBehaviour
         inspectItemImage.style.backgroundImage = new StyleBackground(item.itemIcon);
         inspectItemTitle.text = item.itemName;
         inspectItemInfo.text = item.description;
-
-        VisualElement statTemplate = statsPanel.Q<VisualElement>("Stat");
 
         statsPanel.Clear();//Clear the area before generating new stats
 
@@ -278,9 +364,9 @@ public class InventoryUI : MonoBehaviour
         }
     }
 
-    public void CreateStatBar(VisualElement template, int order, string name, int value)
+    public void CreateStatBar(VisualTreeAsset template, int order, string name, int value)
     {
-        VisualElement newStat = template;
+        VisualElement newStat = template.Instantiate().Q<VisualElement>("Stat");
         newStat.name = "Stat" + order;
         statsPanel.Add(newStat);
         VisualElement stat = statsPanel.Q<VisualElement>(newStat.name);

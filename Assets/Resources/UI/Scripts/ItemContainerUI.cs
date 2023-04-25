@@ -111,15 +111,23 @@ public class ItemContainerUI : MonoBehaviour
         if (evt.button == (int)MouseButton.LeftMouse)
         {
             //TODO: USE ITEM EVENT
-            if (contextMenu.visible)
+            if (contextMenu.style.display == DisplayStyle.Flex)
             {
-                contextMenu.visible = false;
+                contextMenu.style.display = DisplayStyle.None;
             }
         }
         if (evt.button == (int)MouseButton.RightMouse)
         {
             contextMenu.transform.position = target.transform.position; //Set the menu transform to the slot
-            contextMenu.visible = !contextMenu.visible;
+            if (contextMenu.style.display == DisplayStyle.Flex)
+            {
+                contextMenu.style.display = DisplayStyle.None;
+            }
+            else
+            {
+                contextMenu.style.display = DisplayStyle.Flex;
+            }
+
         }
         inspectButton.UnregisterCallback<ClickEvent, Item>(InspectItem);
         inspectButton.RegisterCallback<ClickEvent, Item>(InspectItem, playerInventory.itemsList[selectedSlot]);
@@ -128,7 +136,7 @@ public class ItemContainerUI : MonoBehaviour
 
     public void UseItem(ClickEvent evt)
     {
-        contextMenu.visible = false;
+        contextMenu.style.display = DisplayStyle.None;
         Item item = playerInventory.itemsList[selectedSlot];
         switch (item.itemClass)
         {
@@ -147,7 +155,7 @@ public class ItemContainerUI : MonoBehaviour
     }
     public void EquipItem(ClickEvent evt)
     {
-        contextMenu.visible = false;
+        contextMenu.style.display = DisplayStyle.None;
         Item item = playerInventory.itemsList[selectedSlot];
 
         if (item.itemClass == Item.ItemClass.Weapon || item.itemClass == Item.ItemClass.Outfit)
@@ -157,14 +165,14 @@ public class ItemContainerUI : MonoBehaviour
     }
     public void DropItem(ClickEvent evt)
     {
-        contextMenu.visible = false;
+        contextMenu.style.display = DisplayStyle.None;
         Item item = playerInventory.itemsList[selectedSlot];
         playerInventory.DropItem(item);
 
     }
     public void InspectItem(ClickEvent evt, Item item)
     {
-        contextMenu.visible = false;
+        contextMenu.style.display = DisplayStyle.None;
         GetItemStats(item);
 
     }
@@ -231,13 +239,13 @@ public class ItemContainerUI : MonoBehaviour
 
     public void ToggleVisibility(ClickEvent evt, VisualElement element)
     {
-        if (element.visible)
+        if (element.style.display == DisplayStyle.Flex)
         {
-            element.visible = false;
+            element.style.display = DisplayStyle.None;
         }
         else
         {
-            element.visible = true;
+            element.style.display = DisplayStyle.Flex;
         }
     }
 

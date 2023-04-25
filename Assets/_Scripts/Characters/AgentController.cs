@@ -454,9 +454,9 @@ public class AgentController : MonoBehaviour
 
                     DealDamage();
                     attacking = false;
-                    if (playerController.equippedWeaponItem != null)
+                    if (playerController.drawnWeaponItem != null)
                     {
-                        playerController.equippedWeaponItem.attacking = false;
+                        playerController.drawnWeaponItem.attacking = false;
                     }
 
                     playerAnimator.SetBool("MeleeAttack1", false);

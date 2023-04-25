@@ -146,39 +146,6 @@ Label {
     transition-duration: 0.3s;
 }
 
-.ContextMenu Button {
-    background-color: rgb(72, 72, 72);
-    -unity-font-definition: resource('Fonts/BebasNeue-Regular SDF');
-    color: rgb(255, 255, 255);
-    font-size: 67%;
-    -unity-font-style: normal;
-    border-left-width: 1px;
-    border-right-width: 1px;
-    border-top-width: 1px;
-    border-bottom-width: 1px;
-    border-left-color: rgba(0, 0, 0, 0.37);
-    border-right-color: rgba(0, 0, 0, 0.37);
-    border-top-color: rgba(0, 0, 0, 0.37);
-    border-bottom-color: rgba(0, 0, 0, 0.37);
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-    flex-grow: 1;
-    flex-shrink: 1;
-    -unity-text-align: middle-center;
-    -unity-text-outline-width: 0.2px;
-    -unity-text-outline-color: rgb(0, 0, 0);
-    margin-left: 0;
-    margin-right: 0;
-    margin-top: 0;
-    margin-bottom: 0;
-    padding-left: 0;
-    padding-right: 0;
-    padding-top: 0;
-    padding-bottom: 0;
-}
-
 #SlotQuantity {
     top: 3px;
     right: -2px;
@@ -481,4 +448,44 @@ Label {
     padding-bottom: 1px;
     transform-origin: left top;
     display: none;
+}
+
+.ContextButton {
+}
+
+.ContextMenu Button {
+    background-color: rgb(72, 72, 72);
+    -unity-font-definition: resource('Fonts/BebasNeue-Regular SDF');
+    color: rgb(255, 255, 255);
+    font-size: 67%;
+    -unity-font-style: normal;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgba(0, 0, 0, 0.37);
+    border-right-color: rgba(0, 0, 0, 0.37);
+    border-top-color: rgba(0, 0, 0, 0.37);
+    border-bottom-color: rgba(0, 0, 0, 0.37);
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    flex-grow: 1;
+    flex-shrink: 1;
+    -unity-text-align: middle-center;
+    -unity-text-outline-width: 0.2px;
+    -unity-text-outline-color: rgb(0, 0, 0);
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.ContextButton:hover {
+    background-color: rgb(120, 120, 120);
 }

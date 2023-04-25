@@ -1,6 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <Style src="project://database/Assets/Resources/UI/Inventory.uss?fileID=7433441132597879392&amp;guid=9e4bdd29bf0962a4dbedea7a78af38e6&amp;type=3#Inventory" />
     <ui:VisualElement name="Slot" focusable="true" class="Slot">
-        <ui:Label text="9999" display-tooltip-when-elided="true" name="SlotQuantity" />
+        <ui:Label text="9999" display-tooltip-when-elided="true" name="SlotQuantity" focusable="false" />
     </ui:VisualElement>
 </ui:UXML>

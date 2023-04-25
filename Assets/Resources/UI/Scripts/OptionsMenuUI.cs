@@ -9,7 +9,7 @@ using Slider = UnityEngine.UIElements.Slider;
 using Toggle = UnityEngine.UIElements.Toggle;
 using DropdownField = UnityEngine.UIElements.DropdownField;
 using UnityEngine.Audio;
-
+using System.Linq;
 
 public class OptionsMenuUI : MonoBehaviour
 {
@@ -42,8 +42,8 @@ public class OptionsMenuUI : MonoBehaviour
     public Button inputButton;
     public VisualElement inputTab;
     public VisualElement keyAssignPanel;
+    public List<VisualElement> keyAssignList = new List<VisualElement>();
     public VisualTreeAsset keyAssignTemplate;
-    public List<VisualElement> keyAssignList;
 
     //Audio Tab
     public Button audioButton;
@@ -79,6 +79,12 @@ public class OptionsMenuUI : MonoBehaviour
         "Ultra"
         };
 
+    List<String> displayModeChoices = new List<string> 
+    { "FullScreen",
+        "Windowed",
+        "Borderless" };
+
+
     private List<String> antiAliasChoices = new List<string>
         {
         "Disabled",
@@ -101,28 +107,27 @@ public class OptionsMenuUI : MonoBehaviour
          "7.1"
         };
 
-    private void OnEnable()
+    private void Start()
     {
+        keyAssignments = GameManager.Instance._keyAssignments;
         optionsMenu = GetComponent<UIDocument>();
         root = optionsMenu.rootVisualElement;
 
         gameManager = GameManager.Instance;
         graphicsManager = gameManager._graphicsManager;
-        KeyAssignments keyAssignments= KeyAssignments.Instance;
 
         //Display Tab
         displayButton = root.Q<Button>("DisplayButton");
-        displayButton.RegisterCallback<ClickEvent, VisualElement>(OpenTab, displayTab);
         displayTab = root.Q<VisualElement>("DisplayPanel");
+        displayButton.RegisterCallback<ClickEvent, VisualElement>(OpenTab, displayTab);
 
         resolutionDropdown = displayTab.Q<DropdownField>("ResolutionDropdown");
-        resolutionDropdown.choices.Clear();
         GetResolutions(resolutionDropdown);
         resolutionDropdown.RegisterValueChangedCallback(ChangeResolution);
 
         displayModeDropdown = displayTab.Q<DropdownField>("ModeDropdown");
         displayModeDropdown.Clear();
-        List<String> displayModeChoices = new List<string> { "FullScreen", "Windowed", "Borderless" };
+        
         displayModeDropdown.choices = displayModeChoices;
         displayModeDropdown.RegisterValueChangedCallback(ChangeDisplayMode);
 
@@ -136,15 +141,16 @@ public class OptionsMenuUI : MonoBehaviour
 
         //Graphics Tab
         graphicsButton = root.Q<Button>("GraphicsButton");
-        graphicsButton.RegisterCallback<ClickEvent, VisualElement>(OpenTab, graphicsTab);
         graphicsTab = root.Q<VisualElement>("GraphicsPanel");
+        graphicsButton.RegisterCallback<ClickEvent, VisualElement>(OpenTab, graphicsTab);
+
 
         qualityDropdown = graphicsTab.Q<DropdownField>("QualityDropdown");
         qualityDropdown.choices = qualitiyChoices;
         qualityDropdown.choices.Add("Custom");
         qualityDropdown.RegisterValueChangedCallback(ChangeQuality);
 
-        textureDropdown = graphicsTab.Q<DropdownField>("TextureDropdown");
+        textureDropdown = graphicsTab.Q<DropdownField>("TexResDropdown");
 
         textureDropdown.choices = textureChoices;
         textureDropdown.RegisterValueChangedCallback(ChangeTextureQuality);
@@ -155,7 +161,7 @@ public class OptionsMenuUI : MonoBehaviour
         shadowsDropdown.RegisterValueChangedCallback(ChangeShadowsQuality);
 
 
-        antiAliasDropdown = graphicsTab.Q<DropdownField>("AntiAliasDropDown");
+        antiAliasDropdown = graphicsTab.Q<DropdownField>("AntiAliasDropdown");
         antiAliasDropdown.choices = antiAliasChoices;
         antiAliasDropdown.RegisterValueChangedCallback(ChangeAntiAliasQuality);
 
@@ -182,18 +188,20 @@ public class OptionsMenuUI : MonoBehaviour
 
         //Input Tab
         inputButton = root.Q<Button>("InputButton");
-        inputButton.RegisterCallback<ClickEvent, VisualElement>(OpenTab, inputTab);
-        inputButton.RegisterCallback<ClickEvent, VisualElement>(RefreshKeyCodes, keyAssignPanel);
+       
         inputTab = root.Q<VisualElement>("InputPanel");
+        inputButton.RegisterCallback<ClickEvent, VisualElement>(OpenTab, inputTab);
 
-        keyAssignPanel = root.Q<VisualElement>("KeyAssignPanel");
 
+        keyAssignPanel = inputTab.Q<VisualElement>("KeyAssignPanel");
+        inputButton.RegisterCallback<ClickEvent, VisualElement>(RefreshKeyCodes, keyAssignPanel);
 
         //Audio Tab
         audioButton = root.Q<Button>("AudioButton");
-        audioButton.RegisterCallback<ClickEvent, VisualElement>(OpenTab, audioTab);
 
         audioTab = root.Q<VisualElement>("AudioPanel");
+        audioButton.RegisterCallback<ClickEvent, VisualElement>(OpenTab, audioTab);
+
 
         masterVolSlider = root.Q<Slider>("MasterSlider");
         ambienceVolSlider = root.Q<Slider>("AmbienceSlider");
@@ -203,12 +211,13 @@ public class OptionsMenuUI : MonoBehaviour
         audioModeDropdown.choices = audioModeChoices;
         audioModeDropdown.RegisterValueChangedCallback(ChangeAudioMode);
 
-        AudioMixer mixer = gameManager._audioManager.audioMixer;
 
         string masterChannelName = "Master";
         string ambienceChannelName = "Ambience"; 
         string effectsChannelName = "Effects"; 
-        string weaponsChannelName = "Weapons"; 
+        string weaponsChannelName = "Weapons";
+        
+        AudioMixer mixer = gameManager._audioManager.audioMixer;
 
         masterVolSlider.RegisterCallback<ChangeEvent<float>>(evt => ChangeVolume(masterVolSlider, mixer, masterChannelName));
         ambienceVolSlider.RegisterCallback<ChangeEvent<float>>(evt => ChangeVolume(ambienceVolSlider, mixer, ambienceChannelName));
@@ -219,16 +228,13 @@ public class OptionsMenuUI : MonoBehaviour
         //General
         closeButton = root.Q<Button>("CloseButton");
         closeButton.RegisterCallback<ClickEvent>(CloseOptions);
+
+        CloseAllTabs();
     }
 
     
 
-    private void Start()
-    {
-        //Input Tab
-        RefreshKeyCodes(targetPanel: keyAssignPanel);
-    }
-
+   
     private void Update()
     {
         if (waitForKey)
@@ -262,10 +268,14 @@ public class OptionsMenuUI : MonoBehaviour
     /// </summary>
     public void GetKeyAssigns(VisualElement targetPanel)
     {
+        targetPanel.Clear();
         for (int i = 0; i < keyAssignments.keys.Length; i++)
         {
-            VisualElement keyAssign = keyAssignTemplate.Instantiate().Q<VisualElement>("KeyAssign");
+            VisualElement keyAssign = keyAssignTemplate.Instantiate();
+            keyAssign = keyAssign.Q<VisualElement>("KeyAssign");
+
             keyAssign.name = "KeyAssign";
+            keyAssign.AddToClassList("KeyAssign");
 
             Label keyValue = keyAssign.Q<Label>("KeyValue");
             Label keyName = keyAssign.Q<Label>("KeyName");
@@ -287,8 +297,9 @@ public class OptionsMenuUI : MonoBehaviour
         {
             if(!waitForKey)
             {
-                activeLabelValue = activeLabel.text;    
                 activeLabel = evt.target as Label;
+                activeLabelValue = activeLabel.text;
+
                 activeLabel.text = "Press Any Key";
                 waitForKey = true;
                 selectedKey = key;
@@ -315,14 +326,13 @@ public class OptionsMenuUI : MonoBehaviour
 
     private void RefreshKeyCodes(ClickEvent evt = null, VisualElement targetPanel = null)
     {        
-       targetPanel.Clear();
        GetKeyAssigns(targetPanel);
     }
 
 
     public void CloseOptions(ClickEvent evt)
     {
-        root.visible = false;
+        root.style.display = DisplayStyle.None;
     }
     #endregion
 
@@ -331,16 +341,16 @@ public class OptionsMenuUI : MonoBehaviour
     
     public void CloseAllTabs()
     {
-        displayTab.visible = false;
-        graphicsTab.visible = false;
-        inputTab.visible = false;
-        audioTab.visible = false;
+        displayTab.style.display = DisplayStyle.None;
+        graphicsTab.style.display = DisplayStyle.None;
+        inputTab.style.display = DisplayStyle.None;
+        audioTab.style.display = DisplayStyle.None;
     }
 
     public void OpenTab(ClickEvent evt, VisualElement tab)
     {
         CloseAllTabs();
-        tab.visible = true;
+        tab.style.display = DisplayStyle.Flex;
     }
 
     #endregion
@@ -348,35 +358,36 @@ public class OptionsMenuUI : MonoBehaviour
     #region Display & Graphics Tabs
         public void GetResolutions(DropdownField dropdown)
     {
-        // Obtener resoluciones de pantalla soportadas
-        Resolution[] resolutions = Screen.resolutions;
+            // Obtener resoluciones de pantalla soportadas
+            List<Resolution> resolutions = Screen.resolutions.ToList();
 
-        // Limpiar opciones del dropdown de resoluciones
-        dropdown.choices.Clear();
+            // Limpiar opciones del dropdown de resoluciones
+            dropdown.choices.Clear();
 
-        // Agregar cada resoluci�n como opci�n en el dropdown
+             // Agregar cada resoluci�n como opci�n en el dropdown
 
-        foreach (Resolution resolution in resolutions)
-        {
-            dropdown.choices.Add(resolution.width.ToString() + "X" + resolution.height.ToString());
-        }
-
-        // Establecer resoluci�n actual como opci�n seleccionada en el dropdown
-        int currentResolutionIndex = GetCurrentResolution();
-        dropdown.index = currentResolutionIndex;
-
-        int GetCurrentResolution()
-        {
-            Resolution currentResolution = Screen.currentResolution;
-            for (int i = 0; i < resolutions.Length; i++)
+            foreach (Resolution resolution in resolutions)
             {
-                if (resolutions[i].width == currentResolution.width && resolutions[i].height == currentResolution.height)
-                {
-                    return i;
-                }
+                dropdown.choices.Add(resolution.ToString());
             }
-            return 0;
-        }
+
+            // Establecer resoluci�n actual como opci�n seleccionada en el dropdown
+            int currentResolutionIndex = GetCurrentResolution();
+            dropdown.index = currentResolutionIndex;
+
+            int GetCurrentResolution()
+            {
+                
+                Resolution currentResolution = Screen.currentResolution;
+                for (int i = 0; i < resolutions.Count; i++)
+                {
+                    if (resolutions[i].width == currentResolution.width && resolutions[i].height == currentResolution.height)
+                    {
+                        return i;
+                    }
+                }
+                return 0;
+            }
     }
 
     public void ChangeResolution(ChangeEvent<string> evt)

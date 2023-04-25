@@ -7,15 +7,20 @@ using Random = UnityEngine.Random;
 
 public class Bullet : MonoBehaviour
 {
-    public Collider _collider;
-    public Transform playerTransform;
-    public AgentController agentController;
-    public HealthManager enemyHealth;
-    public Animator enemyAnimator;
-    public PlayerController playerController;
-    public CrashObject crashObject;
-    public Transform objectPoolTransform;
-    public Item weaponItem;
+    private SphereCollider _collider;
+    private Transform playerTransform;
+    private PlayerController playerController;
+
+    private AgentController agentController;
+    private HealthManager enemyHealth;
+    private Animator enemyAnimator;
+
+    private CrashObject crashObject;
+    
+    private Transform objectPoolTransform;
+    
+    private Item weaponItem;
+    
     private TrailRenderer _trailRenderer;
 
     #region Shooting
@@ -24,8 +29,11 @@ public class Bullet : MonoBehaviour
     public LayerMask hitLayers;
     public float bulletSpeed;
     public float bulletLifeTime = 1f;
-    public float timer;
-    public int bulletDamage;
+    [SerializeField]private float timer;
+    private int bulletDamage;
+
+    private bool bulletFired;
+
     #endregion
 
     private void Awake()
@@ -34,19 +42,19 @@ public class Bullet : MonoBehaviour
         playerController = playerTransform.GetComponent<PlayerController>();
         objectPoolTransform = GameObject.Find("ObjectPool").GetComponent<Transform>();
         _trailRenderer = GetComponent<TrailRenderer>();
+        _collider = GetComponent<SphereCollider>();
     }
 
     private void OnEnable()
     {
-        if (playerController.weaponEquipped)
+        if (playerController.weaponDrawn)
         {
-            weaponItem = playerController.equippedWeaponItem;
-            bulletDamage = weaponItem.damage;
+            weaponItem = playerController.drawnWeaponItem;
             timer = bulletLifeTime;
             _collider.enabled = true;
            _trailRenderer.enabled = true;
             _trailRenderer.startColor = new Color(Random.Range(0, 255), Random.Range(0, 255), Random.Range(0, 255));
-            Fire();
+            Fire(weaponItem);
         }
        
     }
@@ -61,11 +69,8 @@ public class Bullet : MonoBehaviour
     void Update()
     {
         timer -= Time.deltaTime;
-        if (transform.position.z != playerTransform.position.z)
-        {
-            transform.position = new Vector3(transform.position.x,transform.position.y,playerTransform.position.z);
-        }
-       if (Physics.Raycast(transform.position, transform.forward, out hit, bulletSpeed * Time.deltaTime,hitLayers))
+       
+       if (Physics.Raycast(transform.position, transform.forward, out hit, bulletSpeed * Time.deltaTime, hitLayers)) //Look for bullet hits
         {
             
                 transform.position = hit.point;
@@ -74,18 +79,17 @@ public class Bullet : MonoBehaviour
                 Vector3 vop = Vector3.ProjectOnPlane(reflected, Vector3.forward);
                 transform.forward = vop;
                 transform.rotation = Quaternion.LookRotation(vop, Vector3.forward);
-                Hit(transform.position, direction,reflected, hit.collider);
+                CheckHit(hit.collider);
         }
-       else
+       else // Bullet trayectory
        {
            transform.Translate(transform.TransformDirection(Vector3.up) * bulletSpeed * Time.deltaTime);
             
-           if (timer <= 0)
+           if (timer <= 0) // Disable the bullet GameObject if time expires
            {
                gameObject.SetActive(false);
-              // _trailRenderer.enabled = false;
-               gameObject.transform.parent = objectPoolTransform.transform;
-
+               gameObject.transform.parent = objectPoolTransform.transform;//Place back to pool
+               bulletFired = false;
            }
        }
     }
@@ -97,38 +101,46 @@ public class Bullet : MonoBehaviour
 
     
 
-    public void Fire()
+    public void Fire(Item item)
     {
-        Transform gunMuzzleTransform = playerController.equippedWeaponItem.gunMuzzleTransform;
-        transform.position = new Vector3(gunMuzzleTransform.position.x,gunMuzzleTransform.position.y,playerController.currentPlayLine);
+        bulletDamage = Mathf.RoundToInt( item.damage / item.bulletsPerShot ); //Get weapon item damage and divide in equal values. for example: shotgun shells.
+        Transform gunMuzzleTransform = item.gunMuzzleTransform;//Get transform of the weapon muzzle
+        
+        transform.position = new Vector3(gunMuzzleTransform.position.x,gunMuzzleTransform.position.y,playerController.currentPlayLine);//Place the bullet on the muzzle
        
         Vector3 vop = Vector3.ProjectOnPlane(transform.forward, Vector3.forward);
         transform.forward = vop;
         
         transform.rotation = Quaternion.LookRotation(vop,Vector3.forward);
+
+        bulletFired = true;
     }
     
+  
     
-    private void Hit(Vector3 transformPosition, Vector3 direction, Vector3 reflected, Collider hitCollider)
+    /// <summary>
+    /// Manages the hit status of the bullet
+    /// </summary>
+    /// <param name="transformPosition"></param>
+    /// <param name="direction"></param>
+    /// <param name="reflected"></param>
+    /// <param name="hitCollider"></param>
+    private void CheckHit(Collider hitCollider)
     {
         
         if (hitCollider.CompareTag("Enemy"))
         {
-            int damage = Mathf.RoundToInt(bulletDamage / weaponItem.bulletsPerShot);
+          
             agentController = hitCollider.GetComponent<AgentController>();
-            enemyHealth = hitCollider.GetComponentInParent<HealthManager>();
-            enemyAnimator = hitCollider.GetComponentInParent<Animator>();
+            enemyHealth = agentController._healthManager;
+            enemyAnimator = agentController._animator;
+            
             agentController.hisHit = true;
-            enemyHealth.currentHealth -= (bulletDamage / weaponItem.bulletsPerShot);
-            Debug.Log("Enemy Took " + damage);
+            enemyHealth.currentHealth -= (bulletDamage);
+            Debug.Log("Enemy Took " + bulletDamage);
             enemyAnimator.SetTrigger("Hit");
-            GameObject enemyImpactParticle = ObjectPool.SharedInstance.GetPooledObject("EnemyImpactParticle");
-            if (enemyImpactParticle != null)
-            {
-                enemyImpactParticle.transform.position = hit.point;
-                enemyImpactParticle.transform.rotation = Quaternion.LookRotation(-weaponItem.gunMuzzleTransform.forward,Vector3.up);
-                enemyImpactParticle.SetActive(true);
-            }
+
+            GenerateHitParticle("EnemyImpactParticle");
             gameObject.transform.parent = objectPoolTransform.transform;
             gameObject.SetActive(false);
         }
@@ -141,17 +153,25 @@ public class Bullet : MonoBehaviour
         }
         else
         {
-            GameObject ImpactParticle = ObjectPool.SharedInstance.GetPooledObject("BulletImpactParticle");
-            if (ImpactParticle != null)
-            {
-                ImpactParticle.transform.position = hit.point;
-                ImpactParticle.transform.localEulerAngles = -transform.TransformDirection(playerTransform.position);
-                ImpactParticle.SetActive(true);
-            }
-
+            GenerateHitParticle("BulletImpactParticle");
+           
             gameObject.transform.parent = objectPoolTransform.transform;
             gameObject.SetActive(false);
         }
     }
-    
+
+    public void GenerateHitParticle(string particleName)
+    {
+        GameObject particle = ObjectPool.SharedInstance.GetPooledObject(particleName);
+        if (particle != null)
+        {
+            particle.transform.position = hit.point;
+
+            Vector3 vop = Vector3.ProjectOnPlane(particle.transform.forward, Vector3.forward);
+
+            particle.transform.rotation = Quaternion.LookRotation(vop, Vector3.forward);
+
+            particle.SetActive(true);
+        }
+    }
 }
