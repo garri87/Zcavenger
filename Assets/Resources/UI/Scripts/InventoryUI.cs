@@ -259,7 +259,7 @@ public class InventoryUI : MonoBehaviour
             switch (item.itemClass)
             {
                 case Item.ItemClass.Item:
-                    playerInventory.UseItem(playerInventory.itemsList[selectedSlot]);
+                    playerInventory.UseItem(selectedSlot);
                     break;
 
                 case Item.ItemClass.Weapon:
@@ -308,17 +308,13 @@ public class InventoryUI : MonoBehaviour
         {
             Item item = playerInventory.itemsList[selectedSlot];
 
-            playerInventory.DropItem(item);
+            playerInventory.DropItem(selectedSlot);
         }
         catch (Exception e)
         {
 
             Debug.Log(e);
         }
-
-
-       
-
     }
     public void InspectItem(ClickEvent evt, Item item)
     {

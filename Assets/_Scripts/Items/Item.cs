@@ -20,8 +20,9 @@ public class Item : MonoBehaviour
     }
 
     public ItemClass itemClass;
+    public ScriptableObject scriptableObject;
 
-    [Header("Item ID")] 
+    [Header("Item ID")]
     public int ID;
     public string itemName;
     public string description;
@@ -47,7 +48,7 @@ public class Item : MonoBehaviour
     /// <summary>
     /// Instantiated model from prefab
     /// </summary>    
-   [Header("Transform References")]
+    [Header("Transform References")]
 
     public GameObject itemModel;
 
@@ -56,21 +57,21 @@ public class Item : MonoBehaviour
     [HideInInspector] public Transform itemTransform;
     public float prefabRotationSpeed = 2f;
 
-    [Header("UI")] 
+    [Header("UI")]
     public WorldTextUI worldTextUI;
 
     [Header("Item Attributes")]
     public ItemScriptableObject itemScriptableObject;
     public int healthRestore;
     public int foodRestore;
-    public int waterRestore; 
+    public int waterRestore;
     public bool usable;
     public bool consumable;
     public bool isStackable;
     public int maxStack;
 
     [Header("Weapon Attributes")] public WeaponScriptableObject weaponScriptableObject;
-    
+
     public WeaponScriptableObject.WeaponClass weaponClass;
 
     [HideInInspector] public int bulletID;
@@ -85,12 +86,12 @@ public class Item : MonoBehaviour
     public int bulletsPerShot;
     public bool blockAttacks;
 
-    [Header("Weapon Effects")] 
+    [Header("Weapon Effects")]
     public GameObject bulletImpactPrefab;
     public GameObject enemyImpactPrefab;
     public GameObject muzzleFlashPrefab;
 
-    [Header("Weapon Transforms")] 
+    [Header("Weapon Transforms")]
     public WeaponTransforms weaponTransforms;
     public Transform flashLightTransform;
     public Transform gunMuzzleTransform;
@@ -124,7 +125,7 @@ public class Item : MonoBehaviour
     public int backpackCapacity;
     public GameObject equipmentPrefab;
     public HumanBodyBones targetBone;
-   
+
     private Transform playerTransform;
     private IKManager playerIKManager;
     private Inventory playerInventory;
@@ -144,24 +145,23 @@ public class Item : MonoBehaviour
 
     public void InitItem()
     {
-        if (itemScriptableObject || weaponScriptableObject || outfitScriptableObject)
+        if (scriptableObject)
         {
+            GetScriptableObject(scriptableObject);
             //OBTENEMOS LOS DATOS DEL ITEM SEGUN CLASE
+
             switch (itemClass)
             {
                 case ItemClass.Item:
-                    GetItemScriptableObject(itemScriptableObject);
                     break;
 
                 case ItemClass.Weapon:
-                    GetWeaponScriptableObject(weaponScriptableObject);
                     GetWeaponTransforms(itemModel);
                     _weaponSound = gameObject.AddComponent<WeaponSound>();
                     _weaponSound.GetSounds(weaponScriptableObject);
                     break;
 
                 case ItemClass.Outfit:
-                    GetOutfitScriptableObject(outfitScriptableObject);
                     break;
             }
 
@@ -169,7 +169,7 @@ public class Item : MonoBehaviour
             worldTextUI.text = itemName;
 
             switch (itemLocation)
-            {   
+            {
                 case ItemLocation.World:
                     itemModel = InstantiateItem(itemPrefab);
                     outline.enabled = false;
@@ -189,7 +189,7 @@ public class Item : MonoBehaviour
                     break;
             }
 
-            
+
         }
         else
         {
@@ -235,7 +235,7 @@ public class Item : MonoBehaviour
                 itemModel.SetActive(true);
                 break;
         }
-        if(itemLocation != ItemLocation.World && itemLocation != ItemLocation.Throwed)
+        if (itemLocation != ItemLocation.World && itemLocation != ItemLocation.Throwed)
         {
             worldTextUI.uIEnabled = false;
         }
@@ -260,87 +260,80 @@ public class Item : MonoBehaviour
         return instantiatedItem;
     }
 
-    public void GetItemScriptableObject(ItemScriptableObject itemScriptableObject = null)
+
+    /// <summary>
+    /// Gets data from an ScriptableObject. If no parameter is given, the current ScriptableObject is used. 
+    /// </summary>
+    /// <param name="scriptableObj"></param>
+    public void GetScriptableObject(ScriptableObject scriptableObj = null)
     {
-        if (itemScriptableObject)
+        if (scriptableObj)
         {
-            this.itemScriptableObject = itemScriptableObject;
-
-        }
-        else
-        {
-            itemScriptableObject = this.itemScriptableObject;
-        }
-        ID = itemScriptableObject.ID;
-        itemName = itemScriptableObject.itemName;
-        description = itemScriptableObject.description;
-        itemIcon = itemScriptableObject.itemIcon;
-        itemPrefab = itemScriptableObject.itemPrefab;
-        usable = itemScriptableObject.usable;
-        consumable = itemScriptableObject.consumable;
-        isStackable = itemScriptableObject.isStackable;
-        maxStack = itemScriptableObject.maxStack;
-        healthRestore = itemScriptableObject.healthRestore;
-        foodRestore = itemScriptableObject.foodRestore;
-        waterRestore = itemScriptableObject.waterRestore;
-    }
-
-    public void GetWeaponScriptableObject(WeaponScriptableObject weaponScriptableObject = null)
-    {
-        if (weaponScriptableObject)
-        {
-            this.weaponScriptableObject = weaponScriptableObject;
-        }
-        else
-        {
-            weaponScriptableObject = this.weaponScriptableObject;
-        }
-        
-        weaponClass = weaponScriptableObject.weaponClass;
-        ID = weaponScriptableObject.ID;
-        itemIcon = weaponScriptableObject.weaponIcon;
-        itemName = weaponScriptableObject.weaponName;
-        description = weaponScriptableObject.description;
-        
-        bulletID = weaponScriptableObject.bulletID;
-
-        damage = weaponScriptableObject.damage;
-        bulletsPerShot = weaponScriptableObject.bulletsPerShot;
-        fireRate = weaponScriptableObject.fireRate;
-        magazineCap = weaponScriptableObject.magazineCap;
-        blockAttacks = weaponScriptableObject.blockAttacks;
-
-        recoilDuration = weaponScriptableObject.recoilDuration;
-        recoilMaxRotation = weaponScriptableObject.recoilMaxRotation;
-
-        bulletImpactPrefab = weaponScriptableObject.bulletImpactPrefab;
-        enemyImpactPrefab = weaponScriptableObject.enemyImpactPrefab;
-        muzzleFlashPrefab = weaponScriptableObject.muzzleFlashPrefab;
-    }
-
-    public void GetOutfitScriptableObject(OutfitScriptableObject outfitScriptableObject = null)
-    {
-        if (weaponScriptableObject)
-        {
-            this.outfitScriptableObject = outfitScriptableObject;
-        }
-        else
-        {
-            outfitScriptableObject = this.outfitScriptableObject;
+            this.scriptableObject = scriptableObj;
         }
 
-        ID = outfitScriptableObject.ID;
-        name = outfitScriptableObject.itemName;
-        description = outfitScriptableObject.description;   
-        itemIcon = outfitScriptableObject.itemIcon;
+        if (scriptableObject)
+        {
+            if (scriptableObj is ItemScriptableObject)
+            {
+                ItemScriptableObject itemScriptable = scriptableObj as ItemScriptableObject;
+                ID = itemScriptable.ID;
+                itemName = itemScriptable.itemName;
+                description = itemScriptable.description;
+                itemIcon = itemScriptable.itemIcon;
+                itemPrefab = itemScriptable.itemPrefab;
 
-        itemPrefab = outfitScriptableObject.outfitPrefab;
+                usable = itemScriptable.usable;
+                consumable = itemScriptable.consumable;
+                isStackable = itemScriptable.isStackable;
+                maxStack = itemScriptable.maxStack;
 
-        outfitBodyPart = outfitScriptableObject.outfitBodyPart;
+                healthRestore = itemScriptable.healthRestore;
+                foodRestore = itemScriptable.foodRestore;
+                waterRestore = itemScriptable.waterRestore;
+            }
 
-        defense = outfitScriptableObject.defense;  
+            else if (scriptableObj is WeaponScriptableObject)
+            {
+                WeaponScriptableObject weaponScriptable = scriptableObj as WeaponScriptableObject;
 
-        backpackCapacity = outfitScriptableObject.backpackCapacity; 
+                weaponClass = weaponScriptable.weaponClass;
+                ID = weaponScriptable.ID;
+                itemIcon = weaponScriptable.weaponIcon;
+                itemName = weaponScriptable.weaponName;
+                description = weaponScriptable.description;
+
+                bulletID = weaponScriptable.bulletID;
+
+                damage = weaponScriptable.damage;
+                bulletsPerShot = weaponScriptable.bulletsPerShot;
+                fireRate = weaponScriptable.fireRate;
+                magazineCap = weaponScriptable.magazineCap;
+                blockAttacks = weaponScriptable.blockAttacks;
+
+                recoilDuration = weaponScriptable.recoilDuration;
+                recoilMaxRotation = weaponScriptable.recoilMaxRotation;
+
+                bulletImpactPrefab = weaponScriptable.bulletImpactPrefab;
+                enemyImpactPrefab = weaponScriptable.enemyImpactPrefab;
+                muzzleFlashPrefab = weaponScriptable.muzzleFlashPrefab;
+            }
+
+            else if (scriptableObj is OutfitScriptableObject)
+            {
+                OutfitScriptableObject outfitScriptable = scriptableObj as OutfitScriptableObject;
+
+                ID = outfitScriptableObject.ID;
+                name = outfitScriptableObject.itemName;
+                description = outfitScriptableObject.description;
+                itemIcon = outfitScriptableObject.itemIcon;
+                itemPrefab = outfitScriptableObject.outfitPrefab;
+                outfitBodyPart = outfitScriptableObject.outfitBodyPart;
+                defense = outfitScriptableObject.defense;
+                backpackCapacity = outfitScriptableObject.backpackCapacity;
+            }
+        }
+
     }
 
     #region Weapon Functions

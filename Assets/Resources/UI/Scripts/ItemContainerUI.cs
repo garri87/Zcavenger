@@ -141,7 +141,7 @@ public class ItemContainerUI : MonoBehaviour
         switch (item.itemClass)
         {
             case Item.ItemClass.Item:
-                playerInventory.UseItem(playerInventory.itemsList[selectedSlot]);
+                playerInventory.UseItem(selectedSlot);
                 break;
 
             case Item.ItemClass.Weapon:
@@ -167,7 +167,7 @@ public class ItemContainerUI : MonoBehaviour
     {
         contextMenu.style.display = DisplayStyle.None;
         Item item = playerInventory.itemsList[selectedSlot];
-        playerInventory.DropItem(item);
+        playerInventory.DropItem(selectedSlot);
 
     }
     public void InspectItem(ClickEvent evt, Item item)

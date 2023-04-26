@@ -371,24 +371,24 @@ public class Inventory : MonoBehaviour
 
     }
 
-    public void ReplaceItem(Item newItem, Item playerEquipmentSlot)
+    public void ReplaceItem(Item newItem, Item playerEquipmentSlotItem)
     {
-        if (playerEquipmentSlot)
+        if (playerEquipmentSlotItem)
         {//if equipment slot was not empty, try to store old weapon in inventory
          
             if (!inventoryFull)
             {
-                AddItemToInventory(playerEquipmentSlot);
+                AddItemToInventory(playerEquipmentSlotItem);
             }
             else //if inventory full, drop the item in world
             {
-                    GenerateItemObject(playerEquipmentSlot, transform);
+                    GenerateItemObject(playerEquipmentSlotItem, transform);
             }
         }
 
-        playerEquipmentSlot = newItem;
+        playerEquipmentSlotItem = newItem;
 
-        playerEquipmentSlot.GetWeaponScriptableObject();//Update item information
+        playerEquipmentSlotItem.GetScriptableObject();//Update item information
     }
 
 
@@ -411,13 +411,14 @@ public class Inventory : MonoBehaviour
     }
 
 
-    public void UseItem(Item item){
+    public void UseItem(int itemListIndex){
 
+        Item item = itemsList[itemListIndex];
         if(item.itemClass == ItemClass.Item)
         {
             switch(item.ID)
                 {
-                    case 1000: //TODO: CREAR BIBLIOTECA DE EFECTOS DE ITEMS
+                    case 000: //TODO: CREAR BIBLIOTECA DE EFECTOS DE ITEMS
                     break;    
                 }
 
@@ -426,12 +427,11 @@ public class Inventory : MonoBehaviour
         RefreshInventoryToUI();
     }
 
-    public void DropItem(Item item){
+    public void DropItem(int itemListIndex){
        
-        GenerateItemObject(item,transform);
-        itemsList.Remove(item);
+        GenerateItemObject(itemsList[itemListIndex],transform);
+        itemsList.RemoveAt(itemListIndex);
         RefreshInventoryToUI();
-
     }
 
 

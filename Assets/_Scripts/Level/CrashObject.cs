@@ -37,7 +37,7 @@ public class CrashObject : MonoBehaviour
         {
             _item = itemHolder.GetComponent<Item>();
             _item.itemScriptableObject = insideItem;
-            _item.GetItemScriptableObject(insideItem);
+            _item.GetScriptableObject(insideItem);
             _item.quantity = itemQuantity;
             _item.itemLocation = Item.ItemLocation.World;
         }

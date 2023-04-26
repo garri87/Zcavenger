@@ -16,6 +16,7 @@ public class Elevator : MonoBehaviour
     [SerializeField] private int floorCount;
     [SerializeField] private float floorSeparation;
     [SerializeField] private List<Transform> floorTransforms;
+    ///TODO: Actualizar a UI TOOLKIT
     [SerializeField] private List<TextMeshProUGUI> buttonTextList;
 
     public int currentFloor = 0;

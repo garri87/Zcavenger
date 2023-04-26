@@ -7,8 +7,10 @@ using UnityEngine;
 public class ItemGUI : Editor
 {
     Item item;
+
     //private SerializedObject _object;
     private SerializedProperty _itemClass;
+    private SerializedProperty _scriptableObject;
     private SerializedProperty _ID;
     private SerializedProperty _itemName;
     private SerializedProperty _description;
@@ -26,7 +28,6 @@ public class ItemGUI : Editor
     private SerializedProperty _worldTextUI;
 
     // Item variables
-    private SerializedProperty _itemScriptableObject;
     private SerializedProperty _healthRestore;
     private SerializedProperty _foodRestore;
     private SerializedProperty _waterRestore;
@@ -36,7 +37,6 @@ public class ItemGUI : Editor
     private SerializedProperty _maxStack;
 
     // Weapon variables
-    private SerializedProperty _weaponScriptableObject;
     private SerializedProperty _weaponClass;
     private SerializedProperty _bulletID;
     private SerializedProperty _damage;
@@ -80,7 +80,6 @@ public class ItemGUI : Editor
     //private SerializedProperty _playerWeaponSound;
 
     // Equipment variables
-    private SerializedProperty _outfitScriptableObject;
     private SerializedProperty _defense;
     private SerializedProperty _targetBone;
     private SerializedProperty _outfitBodyPart;
@@ -102,6 +101,7 @@ public class ItemGUI : Editor
         item = (Item)target;
 
         _itemClass = serializedObject.FindProperty("itemClass");
+        _scriptableObject = serializedObject.FindProperty("scriptableObject");
         _ID = serializedObject.FindProperty("ID");
         _itemName = serializedObject.FindProperty("itemName");
         _description = serializedObject.FindProperty("description");
@@ -119,7 +119,6 @@ public class ItemGUI : Editor
         _worldTextUI = serializedObject.FindProperty("worldTextUI");
 
         // Item variables
-        _itemScriptableObject = serializedObject.FindProperty("itemScriptableObject");
         _healthRestore = serializedObject.FindProperty("healthRestore");
         _foodRestore = serializedObject.FindProperty("foodRestore");
         _waterRestore = serializedObject.FindProperty("waterRestore");
@@ -129,7 +128,6 @@ public class ItemGUI : Editor
         _maxStack = serializedObject.FindProperty("maxStack");
 
         // Weapon variables
-        _weaponScriptableObject = serializedObject.FindProperty("weaponScriptableObject");
         _weaponClass = serializedObject.FindProperty("weaponClass");
         _bulletID = serializedObject.FindProperty("bulletID");
         _damage = serializedObject.FindProperty("damage");
@@ -170,7 +168,6 @@ public class ItemGUI : Editor
         //_playerWeaponSound = _object.FindProperty("playerWeaponSound");
 
         //Outfit variables
-        _outfitScriptableObject = serializedObject.FindProperty("outfitScriptableObject");
         _outfitBodyPart = serializedObject.FindProperty("outfitBodyPart");
         _defense = serializedObject.FindProperty("defense");
         _backpackCapacity = serializedObject.FindProperty("backpackCapacity");
@@ -193,6 +190,7 @@ public class ItemGUI : Editor
         GUI.enabled = true;
 
         EditorGUILayout.PropertyField(_itemClass);
+        EditorGUILayout.PropertyField(_scriptableObject);
         EditorGUILayout.PropertyField(_ID);
         EditorGUILayout.PropertyField(_itemName);
         EditorGUILayout.PropertyField(_description);
@@ -215,7 +213,6 @@ public class ItemGUI : Editor
         switch (_itemClass.enumValueIndex)
         {
             case (int)Item.ItemClass.Item:
-                EditorGUILayout.PropertyField(_itemScriptableObject);
                 EditorGUILayout.PropertyField(_healthRestore);
                 EditorGUILayout.PropertyField(_foodRestore);
                 EditorGUILayout.PropertyField(_waterRestore);
@@ -226,7 +223,6 @@ public class ItemGUI : Editor
                 break;
 
             case (int)Item.ItemClass.Weapon:
-                EditorGUILayout.PropertyField(_weaponScriptableObject);
                 EditorGUILayout.PropertyField(_weaponClass);
                 EditorGUILayout.PropertyField(_bulletID);
                 EditorGUILayout.PropertyField(_damage);
@@ -269,7 +265,6 @@ public class ItemGUI : Editor
                 break;
 
             case (int)Item.ItemClass.Outfit:
-                EditorGUILayout.PropertyField(_outfitScriptableObject);
                 EditorGUILayout.PropertyField(_outfitBodyPart);
                 EditorGUILayout.PropertyField(_defense);
                 EditorGUILayout.PropertyField(_backpackCapacity);

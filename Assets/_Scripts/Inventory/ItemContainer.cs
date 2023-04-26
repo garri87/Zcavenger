@@ -7,8 +7,7 @@ using UnityEngine.SocialPlatforms;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 using Random = UnityEngine.Random;
-using Unity.Mathematics;
-
+using System.Linq;
 
 public class ItemContainer : MonoBehaviour
 {
@@ -23,10 +22,9 @@ public class ItemContainer : MonoBehaviour
     public bool randomItems;
 
     [Header("#Drop loot here#")]
-    public List<WeaponScriptableObject> weaponScriptableObjects = new List<WeaponScriptableObject>();
-    public List<ItemScriptableObject> itemScriptableObjects = new List<ItemScriptableObject>();
-    public List<OutfitScriptableObject> outfitScriptableObjects = new List<OutfitScriptableObject>();
 
+    public List<ScriptableObject>scriptableObjects = new List<ScriptableObject>();
+   
     [HideInInspector]
     public List<Item> itemList;
 
@@ -45,26 +43,22 @@ public class ItemContainer : MonoBehaviour
     public Outline meshOutline;
     private PlayerController playerController;
     private Inventory playerInventory;
-
-
     public bool containerFilled;
-
     private VisualElement slotTemplate;
-
-
     private void OnValidate()
     {
-        if (itemScriptableObjects.Count > 0 ||
-            weaponScriptableObjects.Count > 0||
-            outfitScriptableObjects.Count > 0)
+        if (scriptableObjects.Any())
         {
-            int itemCount = itemScriptableObjects.Count +
-                                    weaponScriptableObjects.Count +
-                                    outfitScriptableObjects.Count;
-
-            if (orderedQuantity.Length != itemCount)
+            if (orderedQuantity.Length != scriptableObjects.Count)
             {
-                orderedQuantity = new int[itemCount];
+                Array.Resize(ref orderedQuantity, scriptableObjects.Count);
+            }
+            for (int i = 0; i < orderedQuantity.Length; i++)
+            {
+                if(orderedQuantity[i] == 0){
+                    int minQuantity = 1*lootMultiplier;
+                    orderedQuantity[i] = Random.Range(minQuantity, minQuantity*lootMultiplier);
+                } 
             }
         }
         
@@ -72,15 +66,17 @@ public class ItemContainer : MonoBehaviour
 
     private void Awake()
     {
+         _uiManager = GameManager.Instance.uiManager;
+
+        itemContainerUI = _uiManager.itemContainerUI.GetComponent<ItemContainerUI>();
+
         if (randomSize)
         {
             containerSize = Random.Range(minSize, maxSize);
         }
 
-        _uiManager = GameManager.Instance.uiManager;
-        itemContainerUI = _uiManager.itemContainerUI.GetComponent<ItemContainerUI>();
-       
-        GetScriptableObjectsToItem();
+        itemList = GetScriptableObjectsToItem(scriptableObjects);
+
         if (randomItems)
         {
             itemList = RandomizeItems(itemList);
@@ -169,32 +165,21 @@ public class ItemContainer : MonoBehaviour
     /// <summary>
     /// Gets scriptable objects and converts to Item Objects in a list
     /// </summary>
-    public void GetScriptableObjectsToItem()
+    public List<Item> GetScriptableObjectsToItem(List<ScriptableObject> scriptableObjs)
     {
         //Generate items list
+        List<Item> list = new List<Item>();
 
-        
-        if(itemScriptableObjects.Count > 0) 
-            foreach (ItemScriptableObject itemScriptableObject in itemScriptableObjects)
-        {
-            Item item = new Item();
-            item.GetItemScriptableObject(itemScriptableObject);
-            itemList.Add(item);
-        }
+        if(scriptableObjs.Any()){
 
-        if (weaponScriptableObjects.Count > 0) foreach (WeaponScriptableObject weaponScriptableObject in weaponScriptableObjects)
-        {
-            Item item = new Item();
-            item.GetWeaponScriptableObject(weaponScriptableObject);
-            itemList.Add(item);
+            foreach ( ScriptableObject obj in scriptableObjs)
+            {
+                Item item = new Item();
+                item.GetScriptableObject(obj);
+                list.Add(item);
+            }
         }
-
-        if (outfitScriptableObjects.Count > 0) foreach (OutfitScriptableObject outfitScriptableObject in outfitScriptableObjects)
-        {
-            Item item = new Item();
-            item.GetOutfitScriptableObject(outfitScriptableObject);
-            itemList.Add(item);
-        }
+        return list;
     }
 
     public List<Item> RandomizeItems (List<Item> list)
