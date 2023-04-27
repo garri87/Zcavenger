@@ -139,10 +139,18 @@ public class Item : MonoBehaviour
     private void Awake()
     {
         _boxCollider = GetComponent<BoxCollider>();
+        playerTransform = GameObject.Find("Player").transform;
+        playerIKManager = playerTransform.GetComponent<IKManager>();
+        playerInventory = playerTransform.GetComponent<Inventory>();
+        playerAnimator = playerTransform.GetComponent<Animator>();
 
 
     }
 
+    /// <summary>
+    /// Updates item data from scriptable object. <br></br>
+    /// If item is weapon gets weapon transform from model and gets weapon sounds from scriptable object.
+    /// </summary>
     public void InitItem()
     {
         if (scriptableObject)
@@ -166,7 +174,7 @@ public class Item : MonoBehaviour
             }
 
             worldTextUI = GetComponent<WorldTextUI>();
-            worldTextUI.text = itemName;
+            worldTextUI.text = itemName + " (" + quantity+")";
 
             switch (itemLocation)
             {
@@ -204,41 +212,47 @@ public class Item : MonoBehaviour
 
     private void Update()
     {
-        switch (itemLocation)
+        if (scriptableObject)
         {
-            case ItemLocation.World:
-                itemModel.transform.Rotate(Vector3.up * (Time.deltaTime * prefabRotationSpeed));
-                _boxCollider.enabled = true;
-                itemModel.SetActive(true);
-                itemPickedUp = false;
-                break;
+            switch (itemLocation)
+            {
+                case ItemLocation.World:
+                    transform.parent = null;
+                    itemModel.transform.Rotate(Vector3.up * (Time.deltaTime * prefabRotationSpeed));
+                    _boxCollider.enabled = true;
+                    itemModel.SetActive(true);
+                    itemPickedUp = false;
+                    break;
 
-            case ItemLocation.Container:
-                _boxCollider.enabled = false;
-                itemModel.SetActive(false);
-                itemPickedUp = false;
-                break;
+                case ItemLocation.Container:
+                    _boxCollider.enabled = false;
+                    itemModel.SetActive(false);
+                    itemPickedUp = false;
+                    break;
 
-            case ItemLocation.Inventory:
-                _boxCollider.enabled = false;
-                itemModel.SetActive(false);
-                itemPickedUp = true;
-                break;
+                case ItemLocation.Inventory:
+                    transform.parent = playerInventory.inventoryGo.transform;
+                    _boxCollider.enabled = false;
+                    itemModel.SetActive(false);
+                    itemPickedUp = true;
+                    break;
 
-            case ItemLocation.Player:
-                _boxCollider.enabled = false;
-                itemModel.SetActive(true);
-                itemPickedUp = true;
-                break;
+                case ItemLocation.Player:
+                    _boxCollider.enabled = false;
+                    itemModel.SetActive(true);
+                    itemPickedUp = true;
+                    break;
 
-            case ItemLocation.Throwed:
-                itemModel.SetActive(true);
-                break;
+                case ItemLocation.Throwed:
+                    itemModel.SetActive(true);
+                    break;
+            }
+            if (itemLocation != ItemLocation.World && itemLocation != ItemLocation.Throwed)
+            {
+                worldTextUI.uIEnabled = false;
+            }
         }
-        if (itemLocation != ItemLocation.World && itemLocation != ItemLocation.Throwed)
-        {
-            worldTextUI.uIEnabled = false;
-        }
+        
     }
 
     /// <summary>
@@ -451,19 +465,30 @@ public class Item : MonoBehaviour
     {
         totalBullets = playerInventory.CheckItemsLeft(bulletID, totalBullets);
 
-        for (int i = 0; i < playerInventory.itemsList.Count; i++)
+        List<Item> itemList = new List<Item>();
+
+        foreach (GameObject item in playerInventory.itemsList)
         {
-            if (playerInventory.itemsList[i].ID == bulletID)
+            itemList.Add(item.GetComponent<Item>());
+        }
+
+        for (int i = 0; i < itemList.Count; i++)
+        {
+
+            if (itemList[i].ID == bulletID)
             {
                 while (bulletsInMag < magazineCap)
                 {
-                    playerInventory.itemsList[i].quantity -= 1;
+                    itemList[i].quantity -= 1;
                     bulletsInMag += 1;
 
-                    if (playerInventory.itemsList[i].quantity < 1)
+                    if (itemList[i].quantity < 1)
                     {
-                        playerInventory.itemsList.RemoveAt(i);
-                        break; // break the loop if the slot has no more bullets
+                        playerInventory.UpdateBulletCounter(this);
+                        playerInventory.itemsList.Remove(itemList[i].gameObject);
+                        totalBullets = playerInventory.CheckItemsLeft(bulletID, totalBullets);
+
+                        break; // break the loop if the slot has no more bullets and remove bullet item
                     }
 
                     if (bulletsInMag == magazineCap)
@@ -532,20 +557,17 @@ public class Item : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            switch (itemLocation)
+            if (scriptableObject)
             {
-                case ItemLocation.World:
-                    outline.enabled = true;
-                    worldTextUI.uIEnabled = true;
-                    break;
+                switch (itemLocation)
+                {
+                    case ItemLocation.World:
+                        outline.enabled = true;
+                        worldTextUI.uIEnabled = true;
+                        break;
+                }
             }
-        }
-
-        if (weaponClass == WeaponScriptableObject.WeaponClass.Throwable)
-        {
-            /*if (other.CompareTag("Ground") && throwableActive)
-            {
-            }*/
+            
         }
     }
 
@@ -553,13 +575,17 @@ public class Item : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            switch (itemLocation)
+            if (scriptableObject)
             {
-                case ItemLocation.World:
-                    outline.enabled = false;
-                    worldTextUI.uIEnabled = false;
-                    break;
+                switch (itemLocation)
+                {
+                    case ItemLocation.World:
+                        outline.enabled = false;
+                        worldTextUI.uIEnabled = false;
+                        break;
+                }
             }
+            
         }
     }
 }

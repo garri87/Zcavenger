@@ -12,10 +12,11 @@ public class Inventory : MonoBehaviour
     public InventoryUI inventoryUI;
     public InGameOverlayUI inGameOverlayUI;
     public PlayerController _playerController;
-    [HideInInspector] public Transform playerWeaponHolder;
+    public Transform playerWeaponHolder;
     private Animator _playerAnimator;
 
-    public List<Item> itemsList;
+    public List<GameObject> itemsList;
+    public GameObject inventoryGo;
     public Dictionary<VisualElement, Item> equipmentItems = new Dictionary<VisualElement, Item>();
 
 
@@ -61,11 +62,12 @@ public class Inventory : MonoBehaviour
     private void Awake()
     {
         _playerController = GetComponent<PlayerController>();
+        inventoryGo = transform.Find("Inventory").gameObject;
         uIManager = GameManager.Instance.uiManager;
         inventoryUI = uIManager.inventoryUI.GetComponent<InventoryUI>();
         inGameOverlayUI = uIManager.inGameOverlayUI.GetComponent<InGameOverlayUI>();
         _playerAnimator = GetComponent<Animator>();
-        playerWeaponHolder = _playerAnimator.GetBoneTransform(HumanBodyBones.RightHand).Find("WeaponHolder");
+        playerWeaponHolder = transform.Find("WeaponHolder");
     }
 
     void Start()
@@ -108,9 +110,9 @@ public class Inventory : MonoBehaviour
         {
             if (onItem && Input.GetKeyDown(_playerController.keyAssignments.useKey.keyCode))
             {
-                if (collectItemTransform != null)
+                if (collectItemTransform)
                 {
-                    AddItemToInventory(collectItemTransform.GetComponent<Item>());
+                    AddItemToInventory(collectItemTransform.gameObject);
                     _playerController.grabItem = true;
                     onItem = false;
                 }
@@ -136,7 +138,7 @@ public class Inventory : MonoBehaviour
             for (int i = 0; i < itemsList.Count; i++)
             {
                 Label quantity = inventoryUI.inventorySlotList[i].Q<Label>("SlotQuantity");//Get Quantity Label
-                Item item = itemsList[i];
+                Item item = itemsList[i].GetComponent<Item>();
                 IStyle style = inventoryUI.inventorySlotList[i].style; // Get the style of the slot
                 style.backgroundImage = new StyleBackground(item.itemIcon);//Set the icon image
                 quantity.text = item.quantity.ToString();//Set the quantity label
@@ -226,22 +228,22 @@ public class Inventory : MonoBehaviour
     /// Store a item into the inventory
     /// </summary>
     /// <param name="itemTransform"> Item Component</param>
-    public void AddItemToInventory(Item newItem)
+    public void AddItemToInventory(GameObject newItemGO)
     {
-        if (newItem.isStackable)
+        Item item = newItemGO.GetComponent<Item>();
+        
+        if (item.isStackable)
         {
             for (int i = 0; i < itemsList.Count; i++)
             {
-                Item item = itemsList[i];
-                if (item.ID == newItem.ID )
+                Item inventoryItem = itemsList[i].GetComponent<Item>();
+
+                if (inventoryItem.ID == item.ID && inventoryItem.quantity < inventoryItem.maxStack)
                 // if item already exists in inventory, stack quantities
                 {
-                    
-                        item.quantity += newItem.quantity;
-                        CheckStackableItem(item);
-                        newItem.itemLocation = Item.ItemLocation.Inventory;
-
-                    //Destroy(item.gameObject);
+                    inventoryItem.quantity += item.quantity;
+                    CheckStackableItem(inventoryItem); //Check if quanity exceeds max stack value
+                    Destroy(newItemGO);//Destroy the world item object
                     return;
                     
                 }
@@ -249,12 +251,11 @@ public class Inventory : MonoBehaviour
         }
         if (!inventoryFull)
         {
-            newItem.itemLocation = Item.ItemLocation.Inventory;
-            newItem.InitItem();
-            itemsList.Add(newItem);
-
-         //   Destroy(item.gameObject);
+            
+            itemsList.Add(newItemGO);
+            item.itemLocation = ItemLocation.Inventory;
         }
+        RefreshInventoryToUI();
     }
 
 
@@ -272,65 +273,72 @@ public class Inventory : MonoBehaviour
                 Debug.Log("The slot " + " has reached max stackable capacity of "
                     + item.maxStack + " for " + item.itemName);//example = current> 150/100 <max
 
-                int leftOver = item.quantity - item.maxStack;//get the leftover units 150-100
+                int leftOver = item.quantity - item.maxStack;//extract the leftover units 150-100
                 Debug.Log("remaining units: " + leftOver);//50
 
                 item.quantity = item.maxStack;
 
                 //Create a new item with the remainging quantities
-                Item newItem = item;
-                newItem.quantity = leftOver;
+                GameObject newItemGO = GenerateItemObject(item.scriptableObject,leftOver); 
+
                 if (!inventoryFull)
                 {
-                    AddItemToInventory(newItem);
+                    AddItemToInventory(newItemGO);
                 }
                 else
-                {//drop item to world
-                    GenerateItemObject(newItem, transform);
+                {
+                    Debug.Log("Inventory is full");
+                    //drop item to world
                 }
             }
     }
 
-/// <summary>
-/// Generates a new item and instantiates in world
-/// </summary>
-/// <param name="item"></param>
-/// <param name="dropLocation"></param>
-    public GameObject GenerateItemObject(Item item, Transform dropLocation)
+    /// <summary>
+    /// Generates a new item and instantiates in desired location
+    /// </summary>
+    /// <param name="scriptableObject"></param>
+    /// <param name="quantity"></param>
+    /// <param name="dropLocation"></param>
+    /// <returns></returns>
+    public GameObject GenerateItemObject(ScriptableObject scriptableObject,int quantity = 1, Item.ItemLocation dropLocation = ItemLocation.World)
     {
-        GameObject newItemGO = Instantiate(itemCollectiblePrefab, dropLocation.position + Vector3.up, dropLocation.rotation);
+           
+        GameObject newItemGO = Instantiate(itemCollectiblePrefab,transform.position, transform.rotation);
         Item newItemComp = newItemGO.GetComponent<Item>();
-        newItemComp = item; 
-        newItemComp.itemLocation = Item.ItemLocation.World;
+        newItemComp.scriptableObject = scriptableObject; 
+        newItemComp.itemLocation = dropLocation;
+        newItemComp.quantity = quantity;   
         newItemComp.InitItem();
         return newItemGO;
     }
        
 
     /// <summary>
-    /// Replaces a clothing or weapon slot in the player equipment
+    /// Equips a clothing or weapon to the player
     /// </summary>
-    /// <param name="newItem"> Item to equip </param>
-    public void ChangeEquipment(Item newItem)//TODO: MEJORAR
+    /// <param name="itemGO"> Item to equip </param>
+    public void EquipItem(GameObject itemGO)//TODO: MEJORAR
     {
+        Item newItem = itemGO.GetComponent<Item>();
+
         switch (newItem.itemClass)
         {
             case Item.ItemClass.Weapon:
                 switch (newItem.weaponClass)
                 {
                     case WeaponScriptableObject.WeaponClass.Primary:
-                        ReplaceItem(newItem, equippedPrimaryWeapon);
+                        ReplaceItem(itemGO, equippedPrimaryWeapon);
                         break;
                     case WeaponScriptableObject.WeaponClass.Secondary:
-                        ReplaceItem(newItem, equippedSecondaryWeapon);
+                        ReplaceItem(itemGO, equippedSecondaryWeapon);
 
                         break;
                     case WeaponScriptableObject.WeaponClass.Melee:
-                        ReplaceItem(newItem, equippedMeleeWeapon);
+                        ReplaceItem(itemGO, equippedMeleeWeapon);
                         ;
                         break;
                     case WeaponScriptableObject.WeaponClass.Throwable:
-                        ReplaceItem(newItem, equippedThrowableWeapon);
+                        ReplaceItem(itemGO, equippedThrowableWeapon);
                         break;
                     default:
                         // Invalid Weapon Class
@@ -344,22 +352,22 @@ public class Inventory : MonoBehaviour
                 switch (newItem.outfitBodyPart)
                 {
                     case OutfitScriptableObject.OutfitBodyPart.Head:
-                        ReplaceItem(newItem, equippedHeadOutfit);
+                        ReplaceItem(itemGO, equippedHeadOutfit);
                         break;
                     case OutfitScriptableObject.OutfitBodyPart.Vest:
-                        ReplaceItem(newItem, equippedVestOutfit);
+                        ReplaceItem(itemGO, equippedVestOutfit);
                         break;
                     case OutfitScriptableObject.OutfitBodyPart.Torso:
-                        ReplaceItem(newItem, equippedTorsoOutfit);
+                        ReplaceItem(itemGO, equippedTorsoOutfit);
                         break;
                     case OutfitScriptableObject.OutfitBodyPart.Legs:
-                        ReplaceItem(newItem, equippedLegsOutfit);
+                        ReplaceItem(itemGO, equippedLegsOutfit);
                         break;
                     case OutfitScriptableObject.OutfitBodyPart.Feet:
-                        ReplaceItem(newItem, equippedFeetOutfit);
+                        ReplaceItem(itemGO, equippedFeetOutfit);
                         break;
                     case OutfitScriptableObject.OutfitBodyPart.Backpack:
-                        ReplaceItem(newItem, equippedBackpackOutfit);
+                        ReplaceItem(itemGO, equippedBackpackOutfit);
                         break;
                     default:
 
@@ -368,25 +376,14 @@ public class Inventory : MonoBehaviour
 
                 break;
         }
+        RefreshInventoryToUI();
 
     }
 
-    public void ReplaceItem(Item newItem, Item playerEquipmentSlotItem)
+    public void ReplaceItem(GameObject newItemGO, Item playerEquipmentSlotItem)
     {
-        if (playerEquipmentSlotItem)
-        {//if equipment slot was not empty, try to store old weapon in inventory
-         
-            if (!inventoryFull)
-            {
-                AddItemToInventory(playerEquipmentSlotItem);
-            }
-            else //if inventory full, drop the item in world
-            {
-                    GenerateItemObject(playerEquipmentSlotItem, transform);
-            }
-        }
-
-        playerEquipmentSlotItem = newItem;
+       
+        playerEquipmentSlotItem = newItemGO.GetComponent<Item>();
 
         playerEquipmentSlotItem.GetScriptableObject();//Update item information
     }
@@ -399,9 +396,10 @@ public class Inventory : MonoBehaviour
         int total = 0;
         for (int i = 0; i < itemsList.Count; i++)
         {
-            if (itemsList[i].ID == id)
+            Item item = itemsList[i].GetComponent<Item>();
+            if (item.ID == id)
             {
-                total += itemsList[i].quantity;
+                total += item.quantity;
             }
         }
 
@@ -411,9 +409,10 @@ public class Inventory : MonoBehaviour
     }
 
 
-    public void UseItem(int itemListIndex){
+    public void UseItem(GameObject itemGO){
 
-        Item item = itemsList[itemListIndex];
+        
+        Item item = itemGO.GetComponent<Item>();
         if(item.itemClass == ItemClass.Item)
         {
             switch(item.ID)
@@ -427,10 +426,16 @@ public class Inventory : MonoBehaviour
         RefreshInventoryToUI();
     }
 
-    public void DropItem(int itemListIndex){
-       
-        GenerateItemObject(itemsList[itemListIndex],transform);
-        itemsList.RemoveAt(itemListIndex);
+    public void DropItem(GameObject droppedGO){
+
+        Item droppedItem = droppedGO.GetComponent<Item>();
+
+        Debug.Log("Dropping item " + droppedItem.name);
+        droppedItem.itemLocation = ItemLocation.World;
+        droppedGO.transform.position = transform.position + Vector3.up;
+        droppedGO.transform.parent = null;
+        itemsList.Remove(droppedGO);
+
         RefreshInventoryToUI();
     }
 

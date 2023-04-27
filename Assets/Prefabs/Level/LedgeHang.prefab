@@ -326,7 +326,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 940524049680750180}
-  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -362,9 +362,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ledgeType: 0
-  orientation: 2
-  ledgeTransform: {fileID: 1932488562635103187}
-  finalPositionTransform: {fileID: 5856405125359908802}
+  orientation: 0
+  ledgeTransform: {fileID: 0}
+  finalPositionTransform: {fileID: 0}
 --- !u!1 &4348607761292148796
 GameObject:
   m_ObjectHideFlags: 0

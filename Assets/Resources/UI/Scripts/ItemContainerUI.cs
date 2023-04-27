@@ -130,18 +130,19 @@ public class ItemContainerUI : MonoBehaviour
 
         }
         inspectButton.UnregisterCallback<ClickEvent, Item>(InspectItem);
-        inspectButton.RegisterCallback<ClickEvent, Item>(InspectItem, playerInventory.itemsList[selectedSlot]);
+        inspectButton.RegisterCallback<ClickEvent, Item>(InspectItem, playerInventory.itemsList[selectedSlot].GetComponent<Item>());
 
     }
 
     public void UseItem(ClickEvent evt)
     {
         contextMenu.style.display = DisplayStyle.None;
-        Item item = playerInventory.itemsList[selectedSlot];
+        GameObject ItemGO = playerInventory.itemsList[selectedSlot];
+        Item item = ItemGO.GetComponent<Item>();
         switch (item.itemClass)
         {
             case Item.ItemClass.Item:
-                playerInventory.UseItem(selectedSlot);
+                playerInventory.UseItem(ItemGO);
                 break;
 
             case Item.ItemClass.Weapon:
@@ -156,18 +157,22 @@ public class ItemContainerUI : MonoBehaviour
     public void EquipItem(ClickEvent evt)
     {
         contextMenu.style.display = DisplayStyle.None;
-        Item item = playerInventory.itemsList[selectedSlot];
+        GameObject ItemGO = playerInventory.itemsList[selectedSlot];
+        Item item = ItemGO.GetComponent<Item>();
 
         if (item.itemClass == Item.ItemClass.Weapon || item.itemClass == Item.ItemClass.Outfit)
         {
-            playerInventory.ChangeEquipment(item);
+            playerInventory.EquipItem(ItemGO);
+        }
+        else
+        {
+            //TODO: ALERTAR AL JUGADOR QUE NO ES EQUIPABLE
         }
     }
     public void DropItem(ClickEvent evt)
     {
         contextMenu.style.display = DisplayStyle.None;
-        Item item = playerInventory.itemsList[selectedSlot];
-        playerInventory.DropItem(selectedSlot);
+        playerInventory.DropItem(playerInventory.itemsList[selectedSlot]);
 
     }
     public void InspectItem(ClickEvent evt, Item item)

@@ -28,6 +28,7 @@ public class UIManager : MonoBehaviour
 
     private GameObject[] uiList;
 
+
     private void OnEnable()
     {
         uiList = new GameObject[]
@@ -51,18 +52,20 @@ public class UIManager : MonoBehaviour
         optionsMenuUIDocument = optionsMenuUI.GetComponent<OptionsMenuUI>();
         gameOverScreenUIDocument = gameOverScreenUI.GetComponent<GameOverScreenUI>();
         itemContainerUIDocument = itemContainerUI.GetComponent<ItemContainerUI>();
-}
 
-    private void Update()
-    {
-        
+        foreach (var ui in uiList)
+        {
+            ui.GetComponent<UIDocument>().enabled = true;
+        }
     }
+
+
 
     public void CloseAllUI()
     {
         foreach (GameObject uIObject in uiList)
         {
-            
+
             uIObject.GetComponent<UIDocument>().rootVisualElement.style.display = DisplayStyle.None;
         }
     }

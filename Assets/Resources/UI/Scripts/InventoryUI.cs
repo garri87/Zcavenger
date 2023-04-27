@@ -189,8 +189,9 @@ public class InventoryUI : MonoBehaviour
             VisualElement slot = slotTemplate.Instantiate();
             slot = slot.Q<VisualElement>("Slot");
             Label slotQuantity = slot.Q<Label>("SlotQuantity");
-            slotQuantity.text = "";
+            slotQuantity.text = "slot " + i;
             slot.AddToClassList("Slot");
+            slot.RegisterCallback<MouseDownEvent, int>(SlotClickEvent, i);
             inventorySlotArea.Add(slot);
         }
 
@@ -198,7 +199,6 @@ public class InventoryUI : MonoBehaviour
 
         for (int i = 0; i < inventorySlotList.Count; i++)
         {
-            inventorySlotList[i].RegisterCallback<MouseDownEvent, int>(SlotClickEvent, i);
             inventorySlotList[i].name = "Slot_" + i;
         }
         Debug.Log("Inventory Filled with " + capacity + "Slots");
@@ -230,14 +230,14 @@ public class InventoryUI : MonoBehaviour
 
                 contextMenu.style.display = DisplayStyle.Flex;
 
-                Debug.Log("Context Menu open on " + target.name);
+                Debug.Log("Context Menu open on " + selectedSlot);
             }
         }
         inspectButton.UnregisterCallback<ClickEvent, Item>(InspectItem);
 
         try
         {
-            inspectButton.RegisterCallback<ClickEvent, Item>(InspectItem, playerInventory.itemsList[selectedSlot]);
+            inspectButton.RegisterCallback<ClickEvent, Item>(InspectItem, playerInventory.itemsList[selectedSlot].GetComponent<Item>());
 
         }
         catch
@@ -255,19 +255,18 @@ public class InventoryUI : MonoBehaviour
         contextMenu.style.display = DisplayStyle.None;
         try
         {
-            Item item = playerInventory.itemsList[selectedSlot];
+            GameObject itemGO = playerInventory.itemsList[selectedSlot];
+            Item item = itemGO.GetComponent<Item>();
             switch (item.itemClass)
             {
                 case Item.ItemClass.Item:
-                    playerInventory.UseItem(selectedSlot);
+                    playerInventory.UseItem(itemGO);
                     break;
 
                 case Item.ItemClass.Weapon:
-                    playerInventory.ChangeEquipment(item);
-                    break;
-
                 case Item.ItemClass.Outfit:
 
+                    //TODO: ALERTAR AL JUGADOR QUE EL ITEM NO SE PUEDE USAR
                     break;
             }
 
@@ -286,11 +285,16 @@ public class InventoryUI : MonoBehaviour
 
         try
         {
-            Item item = playerInventory.itemsList[selectedSlot];
+            GameObject itemGO = playerInventory.itemsList[selectedSlot];
+            Item item = itemGO.GetComponent<Item>();
 
             if (item.itemClass != Item.ItemClass.Item)
             {
-                playerInventory.ChangeEquipment(item);
+                playerInventory.EquipItem(itemGO);
+            }
+            else
+            {
+                //TODO: ALERTAR AL JUGADOR QUE EL ITEM NO SE PUEDE USAR
             }
         }
         catch (Exception e)
@@ -306,9 +310,9 @@ public class InventoryUI : MonoBehaviour
 
         try
         {
-            Item item = playerInventory.itemsList[selectedSlot];
+            //Item item = playerInventory.itemsList[selectedSlot].GetComponent<Item>();
 
-            playerInventory.DropItem(selectedSlot);
+            playerInventory.DropItem(playerInventory.itemsList[selectedSlot]);
         }
         catch (Exception e)
         {
