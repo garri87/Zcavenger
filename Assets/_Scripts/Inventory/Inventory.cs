@@ -45,16 +45,26 @@ public class Inventory : MonoBehaviour
     #region Player Equipment Slots
 
     public Item equippedPrimaryWeapon;
+
     public Item equippedSecondaryWeapon;
+
     public Item equippedMeleeWeapon;
+
     public Item equippedThrowableWeapon;
+    
 
     public Item equippedHeadOutfit;
+
     public Item equippedVestOutfit;
+
     public Item equippedTorsoOutfit;
+
     public Item equippedLegsOutfit;
+
     public Item equippedFeetOutfit;
+
     public Item equippedBackpackOutfit;
+
     #endregion
 
     public GameObject itemCollectiblePrefab;
@@ -88,6 +98,14 @@ public class Inventory : MonoBehaviour
         if (currentCapacity >= maxCapacity)
         {
             inventoryFull = true;
+            //Remove items that exceeds the max capacity
+            if(currentCapacity > maxCapacity)
+            {
+                for (int i = maxCapacity+1; i < currentCapacity; i++)
+                {
+                DropItem(itemsList[i]);  
+                }      
+            }
         }
         else
         {
@@ -97,18 +115,21 @@ public class Inventory : MonoBehaviour
         try
         {
             maxCapacity = equippedBackpackOutfit.backpackCapacity; //if a backpack is equipped, set its max capacity, else set to default
+           
         }
         catch
         {
             maxCapacity = defaultMaxCapacity;
+
         }
+
         inventoryUI.capacityLabel.text = "Capacity: " + currentCapacity + "/" + maxCapacity;
 
         InventoryToggle();
 
         if (!inventoryFull)
         {
-            if (onItem && Input.GetKeyDown(_playerController.keyAssignments.useKey.keyCode))
+            if (onItem && Input.GetKeyDown(GameManager.Instance._keyAssignments.useKey.keyCode))
             {
                 if (collectItemTransform)
                 {
@@ -148,7 +169,6 @@ public class Inventory : MonoBehaviour
         }
 
         
-
         if (equippedPrimaryWeapon) inventoryUI.primaryWeaponSlot.style.backgroundImage = new StyleBackground(equippedPrimaryWeapon.itemIcon);
         if (equippedSecondaryWeapon) inventoryUI.secondaryWeaponSlot.style.backgroundImage = new StyleBackground(equippedSecondaryWeapon.itemIcon);
         if (equippedMeleeWeapon) inventoryUI.meleeWeaponSlot.style.backgroundImage = new StyleBackground(equippedMeleeWeapon.itemIcon);
@@ -203,6 +223,9 @@ public class Inventory : MonoBehaviour
     
     }
 
+    /// <summary>
+    /// Manages the open/close inventory actions 
+    /// </summary>
     public void InventoryToggle()
     {
         
@@ -382,7 +405,10 @@ public class Inventory : MonoBehaviour
 
     public void ReplaceItem(GameObject newItemGO, Item playerEquipmentSlotItem)
     {
-       
+        Item item = newItemGO.GetComponent<Item>();
+
+        item.itemLocation = ItemLocation.Player;
+
         playerEquipmentSlotItem = newItemGO.GetComponent<Item>();
 
         playerEquipmentSlotItem.GetScriptableObject();//Update item information

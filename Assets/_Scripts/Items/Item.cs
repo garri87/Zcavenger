@@ -124,7 +124,7 @@ public class Item : MonoBehaviour
     public int defense;
     public int backpackCapacity;
     public GameObject equipmentPrefab;
-    public HumanBodyBones targetBone;
+    public SkinnedMeshRenderer targetSkinMesh;
 
     private Transform playerTransform;
     private IKManager playerIKManager;
@@ -241,6 +241,20 @@ public class Item : MonoBehaviour
                     _boxCollider.enabled = false;
                     itemModel.SetActive(true);
                     itemPickedUp = true;
+
+
+                    switch (itemClass)
+                    {
+                        case ItemClass.Weapon:
+                            transform.position = playerInventory.playerWeaponHolder.position;
+                            transform.rotation = playerInventory.playerWeaponHolder.rotation;
+                        break;
+
+                        case ItemClass.Outfit:
+                            
+                        break;
+                    }
+                    
                     break;
 
                 case ItemLocation.Throwed:

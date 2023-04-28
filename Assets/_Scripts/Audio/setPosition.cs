@@ -3,9 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// USED FOR CAMERA AUDIO LISTENER MATCH THE TARGET POSITION
+/// </summary>
+
 public class setPosition : MonoBehaviour
 {
-    //USED FOR AUDIO LISTENER MATCH THE TARGET POSITION
     public Transform targetTransform;
 
     private void Awake()
