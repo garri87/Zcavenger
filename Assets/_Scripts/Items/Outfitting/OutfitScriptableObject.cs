@@ -11,22 +11,10 @@ public class OutfitScriptableObject : ScriptableObject
     public string itemName;
     public string description;
     public Sprite itemIcon;
+    public Item.EquipmentSlot equipmentSlot;
 
     [Header("Prefabs")]
     public GameObject outfitPrefab;
-
-    
-    public enum OutfitBodyPart
-    {
-        Head,
-        Vest,
-        Torso,
-        Legs,
-        Feet,
-        Backpack
-    }
-    [Header("Properties")]
-    public OutfitBodyPart outfitBodyPart;
 
     public int defense;
 

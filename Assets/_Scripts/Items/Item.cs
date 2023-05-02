@@ -50,7 +50,11 @@ public class Item : MonoBehaviour
     /// </summary>    
     [Header("Transform References")]
 
-    public GameObject itemModel;
+    public GameObject itemModelGO;
+    public SkinnedMeshRenderer modelRenderer;
+
+    private bool modelInstantiated;
+
 
     private BoxCollider _boxCollider;
     public Outline outline;
@@ -70,7 +74,8 @@ public class Item : MonoBehaviour
     public bool isStackable;
     public int maxStack;
 
-    [Header("Weapon Attributes")] public WeaponScriptableObject weaponScriptableObject;
+    [Header("Weapon Attributes")] 
+    public WeaponScriptableObject weaponScriptableObject;
 
     public WeaponScriptableObject.WeaponClass weaponClass;
 
@@ -120,7 +125,9 @@ public class Item : MonoBehaviour
 
     [Header("Equipment Attributes")]
     public OutfitScriptableObject outfitScriptableObject;
-    public OutfitScriptableObject.OutfitBodyPart outfitBodyPart;
+    public enum EquipmentSlot { Head, Torso, Vest, Legs, Feet, Backpack }
+    public EquipmentSlot equipmentSlot;
+
     public int defense;
     public int backpackCapacity;
     public GameObject equipmentPrefab;
@@ -144,7 +151,6 @@ public class Item : MonoBehaviour
         playerInventory = playerTransform.GetComponent<Inventory>();
         playerAnimator = playerTransform.GetComponent<Animator>();
 
-
     }
 
     /// <summary>
@@ -164,7 +170,7 @@ public class Item : MonoBehaviour
                     break;
 
                 case ItemClass.Weapon:
-                    GetWeaponTransforms(itemModel);
+                    GetWeaponTransforms(itemModelGO);
                     _weaponSound = gameObject.AddComponent<WeaponSound>();
                     _weaponSound.GetSounds(weaponScriptableObject);
                     break;
@@ -179,15 +185,28 @@ public class Item : MonoBehaviour
             switch (itemLocation)
             {
                 case ItemLocation.World:
-                    itemModel = InstantiateItem(itemPrefab);
+
+                    if (!modelInstantiated)
+                    {
+                        itemModelGO = InstantiateItem(itemPrefab);
+                    }
+                    else
+                    {
+                        itemModelGO.SetActive(true);
+                    }
+
+                    
                     outline.enabled = false;
 
-                    worldTextUI.targetTransform = itemModel.transform;
+                    worldTextUI.targetTransform = itemModelGO.transform;
                     worldTextUI.uIEnabled = false;
                     break;
                 case ItemLocation.Container:
+                  
+
                     break;
                 case ItemLocation.Player:
+                 
                     break;
                 case ItemLocation.Inventory:
                     break;
@@ -218,28 +237,28 @@ public class Item : MonoBehaviour
             {
                 case ItemLocation.World:
                     transform.parent = null;
-                    itemModel.transform.Rotate(Vector3.up * (Time.deltaTime * prefabRotationSpeed));
+                    itemModelGO.transform.Rotate(Vector3.up * (Time.deltaTime * prefabRotationSpeed));
                     _boxCollider.enabled = true;
-                    itemModel.SetActive(true);
+                    itemModelGO.SetActive(true);
                     itemPickedUp = false;
                     break;
 
                 case ItemLocation.Container:
                     _boxCollider.enabled = false;
-                    itemModel.SetActive(false);
+                    itemModelGO.SetActive(false);
                     itemPickedUp = false;
                     break;
 
                 case ItemLocation.Inventory:
                     transform.parent = playerInventory.inventoryGo.transform;
                     _boxCollider.enabled = false;
-                    itemModel.SetActive(false);
+                    itemModelGO.SetActive(false);
                     itemPickedUp = true;
                     break;
 
                 case ItemLocation.Player:
                     _boxCollider.enabled = false;
-                    itemModel.SetActive(true);
+                    itemModelGO.SetActive(true);
                     itemPickedUp = true;
 
 
@@ -258,12 +277,14 @@ public class Item : MonoBehaviour
                     break;
 
                 case ItemLocation.Throwed:
-                    itemModel.SetActive(true);
+                    itemModelGO.SetActive(true);
                     break;
             }
             if (itemLocation != ItemLocation.World && itemLocation != ItemLocation.Throwed)
             {
                 worldTextUI.uIEnabled = false;
+                outline.enabled = false;
+
             }
         }
         
@@ -284,7 +305,9 @@ public class Item : MonoBehaviour
         outline.OutlineMode = Outline.Mode.OutlineAll;
         outline.OutlineColor = Color.white;
         outline.enabled = false;
-
+        modelRenderer = instantiatedItem.GetComponent<SkinnedMeshRenderer>();
+        modelInstantiated = true;
+        
         return instantiatedItem;
     }
 
@@ -305,10 +328,11 @@ public class Item : MonoBehaviour
             if (scriptableObj is ItemScriptableObject)
             {
                 ItemScriptableObject itemScriptable = scriptableObj as ItemScriptableObject;
+                itemScriptableObject = itemScriptable;
                 ID = itemScriptable.ID;
+                itemIcon = itemScriptable.itemIcon;
                 itemName = itemScriptable.itemName;
                 description = itemScriptable.description;
-                itemIcon = itemScriptable.itemIcon;
                 itemPrefab = itemScriptable.itemPrefab;
 
                 usable = itemScriptable.usable;
@@ -324,7 +348,7 @@ public class Item : MonoBehaviour
             else if (scriptableObj is WeaponScriptableObject)
             {
                 WeaponScriptableObject weaponScriptable = scriptableObj as WeaponScriptableObject;
-
+                weaponScriptableObject = weaponScriptable;
                 weaponClass = weaponScriptable.weaponClass;
                 ID = weaponScriptable.ID;
                 itemIcon = weaponScriptable.weaponIcon;
@@ -350,15 +374,15 @@ public class Item : MonoBehaviour
             else if (scriptableObj is OutfitScriptableObject)
             {
                 OutfitScriptableObject outfitScriptable = scriptableObj as OutfitScriptableObject;
-
-                ID = outfitScriptableObject.ID;
-                name = outfitScriptableObject.itemName;
-                description = outfitScriptableObject.description;
-                itemIcon = outfitScriptableObject.itemIcon;
-                itemPrefab = outfitScriptableObject.outfitPrefab;
-                outfitBodyPart = outfitScriptableObject.outfitBodyPart;
-                defense = outfitScriptableObject.defense;
-                backpackCapacity = outfitScriptableObject.backpackCapacity;
+                outfitScriptableObject = outfitScriptable;
+                ID = outfitScriptable.ID;
+                equipmentSlot = outfitScriptable.equipmentSlot;
+                itemIcon = outfitScriptable.itemIcon;
+                itemName = outfitScriptable.itemName;
+                description = outfitScriptable.description;
+                itemPrefab = outfitScriptable.outfitPrefab;
+                defense = outfitScriptable.defense;
+                backpackCapacity = outfitScriptable.backpackCapacity;
             }
         }
 

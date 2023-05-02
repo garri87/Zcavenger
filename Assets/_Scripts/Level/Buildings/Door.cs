@@ -39,7 +39,7 @@ public class Door : MonoBehaviour
     
     private void OnValidate()
     {
-        text = textGameObject.GetComponent<TextMeshPro>();
+       // text = textGameObject.GetComponent<TextMeshPro>();
         _doorZoneCollider = GetComponent<Collider>();
         switch (doorOrientation)
         {

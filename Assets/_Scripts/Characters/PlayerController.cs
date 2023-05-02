@@ -229,9 +229,6 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-
-
-
         currentSpeed = normalSpeed;
 
         if (gameManager)

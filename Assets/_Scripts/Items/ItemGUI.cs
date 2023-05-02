@@ -20,7 +20,7 @@ public class ItemGUI : Editor
     private SerializedProperty _itemPickedUp;
     private SerializedProperty _itemEquipped;
     private SerializedProperty _itemLocation;
-    private SerializedProperty _itemModel;
+    private SerializedProperty _itemModelGO;
     //private SerializedProperty _boxCollider;
     private SerializedProperty _outline;
     private SerializedProperty _itemTransform;
@@ -82,7 +82,7 @@ public class ItemGUI : Editor
     // Equipment variables
     private SerializedProperty _defense;
     private SerializedProperty _targetBone;
-    private SerializedProperty _outfitBodyPart;
+   
     private SerializedProperty _backpackCapacity;
     private SerializedProperty _equipmentPrefab;
 
@@ -111,7 +111,7 @@ public class ItemGUI : Editor
         _itemPickedUp = serializedObject.FindProperty("itemPickedUp");
         _itemEquipped = serializedObject.FindProperty("itemEquipped");
         _itemLocation = serializedObject.FindProperty("itemLocation");
-        _itemModel = serializedObject.FindProperty("itemModel");
+        _itemModelGO = serializedObject.FindProperty("itemModelGO");
         //_boxCollider = _object.FindProperty("_boxCollider");
         _outline = serializedObject.FindProperty("outline");
         _itemTransform = serializedObject.FindProperty("itemTransform");
@@ -168,7 +168,7 @@ public class ItemGUI : Editor
         //_playerWeaponSound = _object.FindProperty("playerWeaponSound");
 
         //Outfit variables
-        _outfitBodyPart = serializedObject.FindProperty("outfitBodyPart");
+       
         _defense = serializedObject.FindProperty("defense");
         _backpackCapacity = serializedObject.FindProperty("backpackCapacity");
         _equipmentPrefab = serializedObject.FindProperty("equipmentPrefab");
@@ -201,7 +201,7 @@ public class ItemGUI : Editor
         EditorGUILayout.PropertyField(_itemEquipped);
         EditorGUILayout.PropertyField(_itemLocation);
         
-        EditorGUILayout.PropertyField(_itemModel);
+        EditorGUILayout.PropertyField(_itemModelGO);
         //EditorGUILayout.PropertyField(_boxCollider);
         EditorGUILayout.PropertyField(_outline);
         EditorGUILayout.PropertyField(_itemTransform);
@@ -265,7 +265,7 @@ public class ItemGUI : Editor
                 break;
 
             case (int)Item.ItemClass.Outfit:
-                EditorGUILayout.PropertyField(_outfitBodyPart);
+                
                 EditorGUILayout.PropertyField(_defense);
                 EditorGUILayout.PropertyField(_backpackCapacity);
 
@@ -282,6 +282,7 @@ public class ItemGUI : Editor
         //EditorGUILayout.PropertyField(_playerInventory);
         //EditorGUILayout.PropertyField(_playerAnimator);
 
+        EditorUtility.SetDirty(target);
         serializedObject.ApplyModifiedProperties();
     }
 }

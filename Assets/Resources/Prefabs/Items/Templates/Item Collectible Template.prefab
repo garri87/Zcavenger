@@ -32,8 +32,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 7380839365426135388}
+  m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -63,6 +62,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemClass: 0
+  scriptableObject: {fileID: 0}
   ID: 0
   itemName: 
   description: 
@@ -72,7 +72,8 @@ MonoBehaviour:
   itemPickedUp: 0
   itemEquipped: 0
   itemLocation: 0
-  itemModel: {fileID: 0}
+  itemModelGO: {fileID: 0}
+  modelRenderer: {fileID: 0}
   outline: {fileID: 0}
   itemTransform: {fileID: 0}
   prefabRotationSpeed: 2
@@ -125,11 +126,10 @@ MonoBehaviour:
     m_Bits: 0
   _weaponSound: {fileID: 0}
   outfitScriptableObject: {fileID: 0}
-  outfitBodyPart: 0
   defense: 0
   backpackCapacity: 0
   equipmentPrefab: {fileID: 0}
-  targetBone: 0
+  targetSkinMesh: {fileID: 0}
 --- !u!114 &625885873165458254
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -181,34 +181,3 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
---- !u!1 &5590250647235465765
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7380839365426135388}
-  m_Layer: 18
-  m_Name: prefabHolder
-  m_TagString: Item
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7380839365426135388
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5590250647235465765}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1643082142514611499}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

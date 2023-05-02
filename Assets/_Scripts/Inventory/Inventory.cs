@@ -17,8 +17,7 @@ public class Inventory : MonoBehaviour
 
     public List<GameObject> itemsList;
     public GameObject inventoryGo;
-    public Dictionary<VisualElement, Item> equipmentItems = new Dictionary<VisualElement, Item>();
-
+    private EquipmentManager _equipmentManager;
 
     [HideInInspector] public int currentCapacity;
     public int maxCapacity = 10;
@@ -78,6 +77,7 @@ public class Inventory : MonoBehaviour
         inGameOverlayUI = uIManager.inGameOverlayUI.GetComponent<InGameOverlayUI>();
         _playerAnimator = GetComponent<Animator>();
         playerWeaponHolder = transform.Find("WeaponHolder");
+        _equipmentManager = GetComponent<EquipmentManager>();
     }
 
     void Start()
@@ -170,14 +170,23 @@ public class Inventory : MonoBehaviour
 
         
         if (equippedPrimaryWeapon) inventoryUI.primaryWeaponSlot.style.backgroundImage = new StyleBackground(equippedPrimaryWeapon.itemIcon);
+       
         if (equippedSecondaryWeapon) inventoryUI.secondaryWeaponSlot.style.backgroundImage = new StyleBackground(equippedSecondaryWeapon.itemIcon);
+       
         if (equippedMeleeWeapon) inventoryUI.meleeWeaponSlot.style.backgroundImage = new StyleBackground(equippedMeleeWeapon.itemIcon);
+       
         if (equippedThrowableWeapon) inventoryUI.throwableWeaponSlot.style.backgroundImage = new StyleBackground(equippedThrowableWeapon.itemIcon);
+       
         if (equippedHeadOutfit) inventoryUI.headEquipSlot.style.backgroundImage = new StyleBackground(equippedHeadOutfit.itemIcon);
+       
         if (equippedVestOutfit) inventoryUI.vestEquipSlot.style.backgroundImage = new StyleBackground(equippedVestOutfit.itemIcon);
+       
         if (equippedTorsoOutfit) inventoryUI.torsoEquipSlot.style.backgroundImage = new StyleBackground(equippedTorsoOutfit.itemIcon);
+       
         if (equippedLegsOutfit) inventoryUI.legsEquipSlot.style.backgroundImage = new StyleBackground(equippedLegsOutfit.itemIcon);
+       
         if (equippedFeetOutfit) inventoryUI.feetEquipSlot.style.backgroundImage = new StyleBackground(equippedFeetOutfit.itemIcon);
+      
         if (equippedBackpackOutfit) inventoryUI.backpackEquipSlot.style.backgroundImage = new StyleBackground(equippedBackpackOutfit.itemIcon);
     }
     private void OnTriggerEnter(Collider other)
@@ -372,33 +381,57 @@ public class Inventory : MonoBehaviour
 
             case Item.ItemClass.Outfit:
 
-                switch (newItem.outfitBodyPart)
+                if (!newItem.itemEquipped)
                 {
-                    case OutfitScriptableObject.OutfitBodyPart.Head:
-                        ReplaceItem(itemGO, equippedHeadOutfit);
-                        break;
-                    case OutfitScriptableObject.OutfitBodyPart.Vest:
-                        ReplaceItem(itemGO, equippedVestOutfit);
-                        break;
-                    case OutfitScriptableObject.OutfitBodyPart.Torso:
-                        ReplaceItem(itemGO, equippedTorsoOutfit);
-                        break;
-                    case OutfitScriptableObject.OutfitBodyPart.Legs:
-                        ReplaceItem(itemGO, equippedLegsOutfit);
-                        break;
-                    case OutfitScriptableObject.OutfitBodyPart.Feet:
-                        ReplaceItem(itemGO, equippedFeetOutfit);
-                        break;
-                    case OutfitScriptableObject.OutfitBodyPart.Backpack:
-                        ReplaceItem(itemGO, equippedBackpackOutfit);
-                        break;
-                    default:
+                    _equipmentManager.Equip(itemGO);
 
-                        break;
                 }
-
+                else
+                {
+                    _equipmentManager.Unequip(itemGO);
+                }
                 break;
         }
+        newItem.itemLocation = ItemLocation.Player;
+
+        switch (newItem.equipmentSlot)
+        {
+
+            case EquipmentSlot.Head:
+                equippedHeadOutfit = newItem;
+                break;
+            case EquipmentSlot.Torso:
+                equippedTorsoOutfit = newItem;
+
+                inventoryUI.torsoEquipSlot.style.backgroundImage = new StyleBackground(newItem.itemIcon);
+
+                break;
+            case EquipmentSlot.Vest:
+                equippedVestOutfit = newItem;
+
+                inventoryUI.vestEquipSlot.style.backgroundImage = new StyleBackground(newItem.itemIcon);
+
+                break;
+            case EquipmentSlot.Legs:
+                equippedLegsOutfit = newItem;
+
+                inventoryUI.legsEquipSlot.style.backgroundImage = new StyleBackground(newItem.itemIcon);
+
+                break;
+            case EquipmentSlot.Feet:
+                equippedFeetOutfit = newItem;
+
+                inventoryUI.feetEquipSlot.style.backgroundImage = new StyleBackground(newItem.itemIcon);
+                break;
+            case EquipmentSlot.Backpack:
+                equippedBackpackOutfit = newItem;
+
+                inventoryUI.backpackEquipSlot.style.backgroundImage = new StyleBackground(newItem.itemIcon);
+                break;
+            default:
+                break;
+        }
+
         RefreshInventoryToUI();
 
     }
