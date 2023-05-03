@@ -17,7 +17,6 @@ public class Inventory : MonoBehaviour
 
     public List<GameObject> itemsList;
     public GameObject inventoryGo;
-    private EquipmentManager _equipmentManager;
 
     [HideInInspector] public int currentCapacity;
     public int maxCapacity = 10;
@@ -50,7 +49,7 @@ public class Inventory : MonoBehaviour
     public Item equippedMeleeWeapon;
 
     public Item equippedThrowableWeapon;
-    
+
 
     public Item equippedHeadOutfit;
 
@@ -64,9 +63,14 @@ public class Inventory : MonoBehaviour
 
     public Item equippedBackpackOutfit;
 
+    public SkinnedMeshRenderer playerModelRenderer;
+
+
     #endregion
 
     public GameObject itemCollectiblePrefab;
+
+
 
     private void Awake()
     {
@@ -77,7 +81,6 @@ public class Inventory : MonoBehaviour
         inGameOverlayUI = uIManager.inGameOverlayUI.GetComponent<InGameOverlayUI>();
         _playerAnimator = GetComponent<Animator>();
         playerWeaponHolder = transform.Find("WeaponHolder");
-        _equipmentManager = GetComponent<EquipmentManager>();
     }
 
     void Start()
@@ -92,6 +95,15 @@ public class Inventory : MonoBehaviour
 
     void Update()
     {
+        try
+        {
+            maxCapacity = equippedBackpackOutfit.backpackCapacity; //if a backpack is equipped, set its max capacity, else set to default
+
+        }
+        catch
+        {
+            maxCapacity = defaultMaxCapacity;
+        }
 
         currentCapacity = itemsList.Count;
 
@@ -99,12 +111,12 @@ public class Inventory : MonoBehaviour
         {
             inventoryFull = true;
             //Remove items that exceeds the max capacity
-            if(currentCapacity > maxCapacity)
+            if (currentCapacity > maxCapacity)
             {
-                for (int i = maxCapacity+1; i < currentCapacity; i++)
+                for (int i = maxCapacity + 1; i < currentCapacity; i++)
                 {
-                DropItem(itemsList[i]);  
-                }      
+                    DropItem(itemsList[i]);
+                }
             }
         }
         else
@@ -112,16 +124,7 @@ public class Inventory : MonoBehaviour
             inventoryFull = false;
         }
 
-        try
-        {
-            maxCapacity = equippedBackpackOutfit.backpackCapacity; //if a backpack is equipped, set its max capacity, else set to default
-           
-        }
-        catch
-        {
-            maxCapacity = defaultMaxCapacity;
 
-        }
 
         inventoryUI.capacityLabel.text = "Capacity: " + currentCapacity + "/" + maxCapacity;
 
@@ -153,7 +156,7 @@ public class Inventory : MonoBehaviour
     public void RefreshInventoryToUI()
     {
         inventoryUI.FillInventoryWithSlots(maxCapacity);
-                
+
         if (itemsList.Count > 0)
         {
             for (int i = 0; i < itemsList.Count; i++)
@@ -163,36 +166,36 @@ public class Inventory : MonoBehaviour
                 IStyle style = inventoryUI.inventorySlotList[i].style; // Get the style of the slot
                 style.backgroundImage = new StyleBackground(item.itemIcon);//Set the icon image
                 quantity.text = item.quantity.ToString();//Set the quantity label
-                inventoryUI.inventorySlotList[i].UnregisterCallback<MouseDownEvent, int>(inventoryUI.SlotClickEvent,TrickleDown.NoTrickleDown);
+                inventoryUI.inventorySlotList[i].UnregisterCallback<MouseDownEvent, int>(inventoryUI.SlotClickEvent, TrickleDown.NoTrickleDown);
                 inventoryUI.inventorySlotList[i].RegisterCallback<MouseDownEvent, int>(inventoryUI.SlotClickEvent, i);
             }
         }
 
-        
+
         if (equippedPrimaryWeapon) inventoryUI.primaryWeaponSlot.style.backgroundImage = new StyleBackground(equippedPrimaryWeapon.itemIcon);
-       
+
         if (equippedSecondaryWeapon) inventoryUI.secondaryWeaponSlot.style.backgroundImage = new StyleBackground(equippedSecondaryWeapon.itemIcon);
-       
+
         if (equippedMeleeWeapon) inventoryUI.meleeWeaponSlot.style.backgroundImage = new StyleBackground(equippedMeleeWeapon.itemIcon);
-       
+
         if (equippedThrowableWeapon) inventoryUI.throwableWeaponSlot.style.backgroundImage = new StyleBackground(equippedThrowableWeapon.itemIcon);
-       
+
         if (equippedHeadOutfit) inventoryUI.headEquipSlot.style.backgroundImage = new StyleBackground(equippedHeadOutfit.itemIcon);
-       
+
         if (equippedVestOutfit) inventoryUI.vestEquipSlot.style.backgroundImage = new StyleBackground(equippedVestOutfit.itemIcon);
-       
+
         if (equippedTorsoOutfit) inventoryUI.torsoEquipSlot.style.backgroundImage = new StyleBackground(equippedTorsoOutfit.itemIcon);
-       
+
         if (equippedLegsOutfit) inventoryUI.legsEquipSlot.style.backgroundImage = new StyleBackground(equippedLegsOutfit.itemIcon);
-       
+
         if (equippedFeetOutfit) inventoryUI.feetEquipSlot.style.backgroundImage = new StyleBackground(equippedFeetOutfit.itemIcon);
-      
+
         if (equippedBackpackOutfit) inventoryUI.backpackEquipSlot.style.backgroundImage = new StyleBackground(equippedBackpackOutfit.itemIcon);
     }
     private void OnTriggerEnter(Collider other)
     {
         if (!inventoryFull)
-        { 
+        {
             switch (other.tag)
             {
                 case "Item":
@@ -222,14 +225,14 @@ public class Inventory : MonoBehaviour
 
                 break;
 
-          
+
             default:
                 break;
         }
 
-       
 
-    
+
+
     }
 
     /// <summary>
@@ -237,7 +240,7 @@ public class Inventory : MonoBehaviour
     /// </summary>
     public void InventoryToggle()
     {
-        
+
         if (Input.GetKeyDown(GameManager.Instance._keyAssignments.inventoryKey.keyCode))
         {
             showInventory = !showInventory;
@@ -263,7 +266,7 @@ public class Inventory : MonoBehaviour
     public void AddItemToInventory(GameObject newItemGO)
     {
         Item item = newItemGO.GetComponent<Item>();
-        
+
         if (item.isStackable)
         {
             for (int i = 0; i < itemsList.Count; i++)
@@ -277,13 +280,13 @@ public class Inventory : MonoBehaviour
                     CheckStackableItem(inventoryItem); //Check if quanity exceeds max stack value
                     Destroy(newItemGO);//Destroy the world item object
                     return;
-                    
+
                 }
             }
         }
         if (!inventoryFull)
         {
-            
+
             itemsList.Add(newItemGO);
             item.itemLocation = ItemLocation.Inventory;
         }
@@ -311,7 +314,7 @@ public class Inventory : MonoBehaviour
                 item.quantity = item.maxStack;
 
                 //Create a new item with the remainging quantities
-                GameObject newItemGO = GenerateItemObject(item.scriptableObject,leftOver); 
+                GameObject newItemGO = GenerateItemObject(item.scriptableObject, leftOver);
 
                 if (!inventoryFull)
                 {
@@ -332,23 +335,23 @@ public class Inventory : MonoBehaviour
     /// <param name="quantity"></param>
     /// <param name="dropLocation"></param>
     /// <returns></returns>
-    public GameObject GenerateItemObject(ScriptableObject scriptableObject,int quantity = 1, Item.ItemLocation dropLocation = ItemLocation.World)
+    public GameObject GenerateItemObject(ScriptableObject scriptableObject, int quantity = 1, Item.ItemLocation dropLocation = ItemLocation.World)
     {
-           
-        GameObject newItemGO = Instantiate(itemCollectiblePrefab,transform.position, transform.rotation);
+
+        GameObject newItemGO = Instantiate(itemCollectiblePrefab, transform.position, transform.rotation);
         Item newItemComp = newItemGO.GetComponent<Item>();
-        newItemComp.scriptableObject = scriptableObject; 
+        newItemComp.scriptableObject = scriptableObject;
         newItemComp.itemLocation = dropLocation;
-        newItemComp.quantity = quantity;   
+        newItemComp.quantity = quantity;
         newItemComp.InitItem();
         return newItemGO;
     }
-       
+
 
     /// <summary>
     /// Equips a clothing or weapon to the player
     /// </summary>
-    /// <param name="itemGO"> Item to equip </param>
+    /// <param name="itemGO"> Item gameobject to equip </param>
     public void EquipItem(GameObject itemGO)//TODO: MEJORAR
     {
         Item newItem = itemGO.GetComponent<Item>();
@@ -359,23 +362,20 @@ public class Inventory : MonoBehaviour
                 switch (newItem.weaponClass)
                 {
                     case WeaponScriptableObject.WeaponClass.Primary:
-                        ReplaceItem(itemGO, equippedPrimaryWeapon);
+                        equippedPrimaryWeapon = newItem;
                         break;
                     case WeaponScriptableObject.WeaponClass.Secondary:
-                        ReplaceItem(itemGO, equippedSecondaryWeapon);
-
+                        equippedSecondaryWeapon = newItem;
                         break;
                     case WeaponScriptableObject.WeaponClass.Melee:
-                        ReplaceItem(itemGO, equippedMeleeWeapon);
-                        ;
+                        equippedMeleeWeapon = newItem;
                         break;
                     case WeaponScriptableObject.WeaponClass.Throwable:
-                        ReplaceItem(itemGO, equippedThrowableWeapon);
+                        equippedThrowableWeapon = newItem;
                         break;
                     default:
                         // Invalid Weapon Class
                         break;
-
                 }
                 break;
 
@@ -383,69 +383,52 @@ public class Inventory : MonoBehaviour
 
                 if (!newItem.itemEquipped)
                 {
-                    _equipmentManager.Equip(itemGO);
-
+                    RenderOutfit(itemGO);
                 }
                 else
                 {
-                    _equipmentManager.Unequip(itemGO);
+                    UnrenderOutfit(itemGO);
                 }
-                break;
+                switch (newItem.equipmentSlot)
+                {
+
+                    case EquipmentSlot.Head:
+                        equippedHeadOutfit = newItem;
+                        break;
+                    case EquipmentSlot.Torso:
+                        equippedTorsoOutfit = newItem;
+
+
+                        break;
+                    case EquipmentSlot.Vest:
+                        equippedVestOutfit = newItem;
+
+
+                        break;
+                    case EquipmentSlot.Legs:
+                        equippedLegsOutfit = newItem;
+
+
+                        break;
+                    case EquipmentSlot.Feet:
+                        equippedFeetOutfit = newItem;
+
+                        break;
+                    case EquipmentSlot.Backpack:
+                        equippedBackpackOutfit = newItem;
+
+                        break;
+                    default:
+                        break;
+                }
+            break;
         }
         newItem.itemLocation = ItemLocation.Player;
-
-        switch (newItem.equipmentSlot)
-        {
-
-            case EquipmentSlot.Head:
-                equippedHeadOutfit = newItem;
-                break;
-            case EquipmentSlot.Torso:
-                equippedTorsoOutfit = newItem;
-
-                inventoryUI.torsoEquipSlot.style.backgroundImage = new StyleBackground(newItem.itemIcon);
-
-                break;
-            case EquipmentSlot.Vest:
-                equippedVestOutfit = newItem;
-
-                inventoryUI.vestEquipSlot.style.backgroundImage = new StyleBackground(newItem.itemIcon);
-
-                break;
-            case EquipmentSlot.Legs:
-                equippedLegsOutfit = newItem;
-
-                inventoryUI.legsEquipSlot.style.backgroundImage = new StyleBackground(newItem.itemIcon);
-
-                break;
-            case EquipmentSlot.Feet:
-                equippedFeetOutfit = newItem;
-
-                inventoryUI.feetEquipSlot.style.backgroundImage = new StyleBackground(newItem.itemIcon);
-                break;
-            case EquipmentSlot.Backpack:
-                equippedBackpackOutfit = newItem;
-
-                inventoryUI.backpackEquipSlot.style.backgroundImage = new StyleBackground(newItem.itemIcon);
-                break;
-            default:
-                break;
-        }
 
         RefreshInventoryToUI();
 
     }
 
-    public void ReplaceItem(GameObject newItemGO, Item playerEquipmentSlotItem)
-    {
-        Item item = newItemGO.GetComponent<Item>();
-
-        item.itemLocation = ItemLocation.Player;
-
-        playerEquipmentSlotItem = newItemGO.GetComponent<Item>();
-
-        playerEquipmentSlotItem.GetScriptableObject();//Update item information
-    }
 
 
     public int CheckItemsLeft(int id, int counter)
@@ -468,24 +451,26 @@ public class Inventory : MonoBehaviour
     }
 
 
-    public void UseItem(GameObject itemGO){
+    public void UseItem(GameObject itemGO)
+    {
 
-        
+
         Item item = itemGO.GetComponent<Item>();
-        if(item.itemClass == ItemClass.Item)
+        if (item.itemClass == ItemClass.Item)
         {
-            switch(item.ID)
-                {
-                    case 000: //TODO: CREAR BIBLIOTECA DE EFECTOS DE ITEMS
-                    break;    
-                }
+            switch (item.ID)
+            {
+                case 000: //TODO: CREAR BIBLIOTECA DE EFECTOS DE ITEMS
+                    break;
+            }
 
         }
-        
+
         RefreshInventoryToUI();
     }
 
-    public void DropItem(GameObject droppedGO){
+    public void DropItem(GameObject droppedGO)
+    {
 
         Item droppedItem = droppedGO.GetComponent<Item>();
 
@@ -528,6 +513,30 @@ public class Inventory : MonoBehaviour
     }
 
 
+/// <summary>
+/// Renders a item mesh over the player model
+/// </summary>
+/// <param name="itemGO"> Item GameObject </param>
+    public void RenderOutfit(GameObject itemGO)
+    {
+        Item item = itemGO.GetComponent<Item>();
+        SkinnedMeshRenderer itemRenderer = item.itemModelGO.GetComponent<SkinnedMeshRenderer>();
+        itemRenderer.bones = playerModelRenderer.bones;
+        itemRenderer.rootBone = playerModelRenderer.rootBone;
+    }
+
+
+/// <summary>
+/// Disables the item rendering
+/// </summary>
+/// <param name="itemGO">Item GameObject</param>
+    public void UnrenderOutfit(GameObject itemGO)
+    {
+        Item item = itemGO.GetComponent<Item>();
+        SkinnedMeshRenderer itemRenderer = item.itemModelGO.GetComponent<SkinnedMeshRenderer>();
+        itemRenderer.bones = null;
+        itemRenderer.rootBone = null;
+    }
 
 }
 
