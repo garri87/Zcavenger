@@ -24,40 +24,26 @@ public class CheckGround : MonoBehaviour
 
   private void FixedUpdate()
   {
+
+    isGrounded = IsGrounded();
+
     _animator.SetBool("IsGrounded",isGrounded);
-    
-    Ray ray = new Ray(transform.position + new Vector3(0,0.1f,0), Vector3.down * distance);
-    RaycastHit hit;
-    if (Physics.Raycast(ray,out hit, distance))
-    {
-      isGrounded = true;
-    }
-    else
-    {
-      isGrounded = false;
-    }
-    
+        
   }
 
-  
+/// <summary>
+/// Determines if object is grounded
+/// </summary>
+/// <returns></returns>
+  private bool IsGrounded()
+  {
+    Ray ray = new Ray(transform.position + new Vector3(0,0.1f,0), Vector3.down * distance);
+    return Physics.Raycast(ray, distance);
+  }
 
   private void OnDrawGizmosSelected()
   {
     Gizmos.color = Color.yellow;
     Gizmos.DrawRay(transform.position + new Vector3(0,0.1f,0), Vector3.down * distance);
-  }
-
-  /*private void OnTriggerStay(Collider other)
-  {
-    if (!isGrounded)
-    {
-      if (other.CompareTag("Ground") || other.CompareTag("Crashable"))
-      {
-        isGrounded = true;
-        playerAnimator.SetBool("IsGrounded",isGrounded);
-      }
-    }
-    
-  }*/
-  
+  }  
 }

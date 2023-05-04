@@ -124,8 +124,6 @@ public class Inventory : MonoBehaviour
             inventoryFull = false;
         }
 
-
-
         inventoryUI.capacityLabel.text = "Capacity: " + currentCapacity + "/" + maxCapacity;
 
         InventoryToggle();

@@ -12,21 +12,21 @@ using System.Linq;
 public class ItemContainer : MonoBehaviour
 {
 
-    [Range(1,15)] public int containerSize;
+    [Range(1, 15)] public int containerSize;
     private int minSize = 1;
     private int maxSize = 15;
     public bool randomSize;
 
     public int lootMultiplier = 1;
-    
+
     public bool randomItems;
 
     [Header("#Drop loot here#")]
 
-    public List<ScriptableObject>scriptableObjects = new List<ScriptableObject>();
-   
+    public List<ScriptableObject> scriptableObjects = new List<ScriptableObject>();
+
     [HideInInspector]
-    public List<Item> itemList;
+    public List<GameObject> itemGOList;
 
     /// <summary>
     /// List of item quantities in order
@@ -37,9 +37,9 @@ public class ItemContainer : MonoBehaviour
     [SerializeField] private bool containerOpen;
 
     private UIManager _uiManager;
-    
     public ItemContainerUI itemContainerUI;
     public TextMeshPro worldUIText;
+
     public Outline meshOutline;
     private PlayerController playerController;
     private Inventory playerInventory;
@@ -47,6 +47,8 @@ public class ItemContainer : MonoBehaviour
     private VisualElement slotTemplate;
     private void OnValidate()
     {
+
+
         if (scriptableObjects.Any())
         {
             if (orderedQuantity.Length != scriptableObjects.Count)
@@ -55,18 +57,19 @@ public class ItemContainer : MonoBehaviour
             }
             for (int i = 0; i < orderedQuantity.Length; i++)
             {
-                if(orderedQuantity[i] == 0){
-                    int minQuantity = 1*lootMultiplier;
-                    orderedQuantity[i] = Random.Range(minQuantity, minQuantity*lootMultiplier);
-                } 
+                if (orderedQuantity[i] == 0)
+                {
+                    int minQuantity = 1 * lootMultiplier;
+                    orderedQuantity[i] = Random.Range(minQuantity, minQuantity * lootMultiplier);
+                }
             }
         }
-        
+
     }
 
     private void Awake()
     {
-         _uiManager = GameManager.Instance.uiManager;
+        _uiManager = GameManager.Instance.uiManager;
 
         itemContainerUI = _uiManager.itemContainerUI.GetComponent<ItemContainerUI>();
 
@@ -75,14 +78,31 @@ public class ItemContainer : MonoBehaviour
             containerSize = Random.Range(minSize, maxSize);
         }
 
-        itemList = GetScriptableObjectsToItem(scriptableObjects);
 
-        if (randomItems)
+        int index = 0;
+        for (int i = 0; i < containerSize; i++)
         {
-            itemList = RandomizeItems(itemList);
+            if (randomItems)
+            {
+                itemGOList.Add(GenerateItemGO(scriptableObjects[Random.Range(0, scriptableObjects.Count)]));
+            }
+            else
+            {
+                try
+                {
+
+                    itemGOList.Add(GenerateItemGO(scriptableObjects[index]));
+                    index++;
+                }
+                catch
+                {
+                    index = 0;
+                    itemGOList.Add(GenerateItemGO(scriptableObjects[index]));
+                    index++;
+                }
+            }
         }
 
-        
     }
 
     private void OnEnable()
@@ -94,9 +114,9 @@ public class ItemContainer : MonoBehaviour
     {
         slotTemplate = itemContainerUI.containerSlot;
         worldUIText.text = "Open [ " + GameManager.Instance._keyAssignments.useKey.keyCode.ToString().ToUpper() + " ]";
-        
+
     }
-    
+
     private void Update()
     {
         meshOutline.enabled = interactable;
@@ -162,46 +182,34 @@ public class ItemContainer : MonoBehaviour
     }
 
 
-    /// <summary>
-    /// Gets scriptable objects and converts to Item Objects in a list
-    /// </summary>
-    public List<Item> GetScriptableObjectsToItem(List<ScriptableObject> scriptableObjs)
+    public GameObject GenerateItemGO(ScriptableObject scriptableObj)
     {
-        //Generate items list
-        List<Item> list = new List<Item>();
 
-        if(scriptableObjs.Any()){
+        GameObject newItemGO = new GameObject(scriptableObj.name);
+        Item item = newItemGO.AddComponent<Item>();
+        item.scriptableObject = scriptableObj;
+        item.itemLocation = Item.ItemLocation.Container;
+        item.InitItem();
 
-            foreach ( ScriptableObject obj in scriptableObjs)
-            {
-                Item item = new Item();
-                item.GetScriptableObject(obj);
-                list.Add(item);
-            }
-        }
-        return list;
+        return newItemGO;
     }
 
-    public List<Item> RandomizeItems (List<Item> list)
-    {
-       List<Item> items = new List<Item>();
-        for (int i = 0; i < containerSize; i++)
+    
+    public void RandomizeQuantities(List<GameObject> list)
+    {       
+        foreach (GameObject itemGO in list)
         {
-            Item randomItem = list[Random.Range(0, list.Count)];
-            if (randomItem.isStackable)
-            {
-                randomItem.quantity = Random.Range(1, lootMultiplier);
-            }
-            items.Add(randomItem);
+            Item item = itemGO.GetComponent<Item>();
+            if(item.isStackable){
+            item.quantity = Random.Range(1,item.maxStack/2 * lootMultiplier);}
         }
-        return items;   
     }
 
     /// <summary>
     /// transfers itemlist data to UI
     /// </summary>
     public void RefreshContainerUI(List<Item> itemList)
-    { 
+    {
         itemContainerUI.containerSlotArea.Clear();
 
         if (randomItems)
@@ -215,13 +223,13 @@ public class ItemContainer : MonoBehaviour
                 slotLabel.text = randomItem.quantity.ToString();
                 slot.style.backgroundImage = new StyleBackground(randomItem.itemIcon);
 
-                itemContainerUI.containerSlotArea.Add(slot);                
+                itemContainerUI.containerSlotArea.Add(slot);
             }
         }
 
     }
-    
-    
+
+
     public void ToggleContainerUI()
     {
         containerOpen = !containerOpen;
@@ -230,35 +238,35 @@ public class ItemContainer : MonoBehaviour
         {
             playerInventory.showInventory = true;
         }
-        if(!containerOpen)
+        if (!containerOpen)
         {
             playerInventory.showInventory = false;
         }
     }
-    
+
     public void TakeAll()
     {
-       /* for (int i = 0; i < containerSize; i++)
-        {
-            if (!inventory.inventoryFull)
-            {
-                Slot contSlotIndex = containerSlotsTransform.GetChild(i).GetComponent<Slot>();
+        /* for (int i = 0; i < containerSize; i++)
+         {
+             if (!inventory.inventoryFull)
+             {
+                 Slot contSlotIndex = containerSlotsTransform.GetChild(i).GetComponent<Slot>();
 
-                if (!contSlotIndex.empty && contSlotIndex.itemHolderTransform.childCount > 0)
-                {      
-                    Item contItemIndex = contSlotIndex.itemHolderTransform.GetChild(0).GetComponent<Item>();
-                    inventory.AddItemToInventory(contItemIndex.itemTransform);
-                    contSlotIndex.UpdateItemSlot(null);
-                } else if (!contSlotIndex.empty && contSlotIndex.weaponHolderTransform.childCount >0)
-                {      
-                    inventory.AddWeaponToInventory(contSlotIndex.weaponHolderTransform.GetChild(0));
-                    contSlotIndex.UpdateWeaponSlot(null);
-                }
-                else
-                {
-                    Debug.Log("The container is empty!");
-                }
-            }
-        }*/
+                 if (!contSlotIndex.empty && contSlotIndex.itemHolderTransform.childCount > 0)
+                 {      
+                     Item contItemIndex = contSlotIndex.itemHolderTransform.GetChild(0).GetComponent<Item>();
+                     inventory.AddItemToInventory(contItemIndex.itemTransform);
+                     contSlotIndex.UpdateItemSlot(null);
+                 } else if (!contSlotIndex.empty && contSlotIndex.weaponHolderTransform.childCount >0)
+                 {      
+                     inventory.AddWeaponToInventory(contSlotIndex.weaponHolderTransform.GetChild(0));
+                     contSlotIndex.UpdateWeaponSlot(null);
+                 }
+                 else
+                 {
+                     Debug.Log("The container is empty!");
+                 }
+             }
+         }*/
     }
 }

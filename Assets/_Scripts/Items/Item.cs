@@ -155,7 +155,7 @@ public class Item : MonoBehaviour
 
     /// <summary>
     /// Updates item data from scriptable object. <br></br>
-    /// If item is weapon gets weapon transform from model and gets weapon sounds from scriptable object.
+    /// If item is weapon, gets weapon transform from model and gets weapon sounds from scriptable object.
     /// </summary>
     public void InitItem()
     {
