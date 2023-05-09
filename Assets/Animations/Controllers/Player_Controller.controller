@@ -3892,7 +3892,7 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: 3104743973445427619}
-    m_Position: {x: 280, y: -510, z: 0}
+    m_Position: {x: 380, y: -560, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 3265246608677535117}
     m_Position: {x: 240, y: -390, z: 0}
@@ -3904,7 +3904,7 @@ AnimatorStateMachine:
     m_Position: {x: 270, y: -70, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -9172802047677580556}
-    m_Position: {x: 980, y: -480, z: 0}
+    m_Position: {x: 880, y: -550, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 550649828963603750}
     m_Position: {x: 970, y: -340, z: 0}
@@ -18639,7 +18639,7 @@ AnimatorController:
     m_Controller: {fileID: 9100000}
   m_AnimatorLayers:
   - serializedVersion: 5
-    m_Name: LowerBody
+    m_Name: Base
     m_StateMachine: {fileID: 3213916800989841424}
     m_Mask: {fileID: 31900000, guid: f1e19e3b06add7c4f8cbb107a734e37b, type: 2}
     m_Motions: []
@@ -19821,16 +19821,10 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: DrawWeapon
-    m_EventTreshold: 0
-  - m_ConditionMode: 1
     m_ConditionEvent: RifleEquip
     m_EventTreshold: 0
-  - m_ConditionMode: 2
-    m_ConditionEvent: PistolEquip
-    m_EventTreshold: 0
-  - m_ConditionMode: 2
-    m_ConditionEvent: MeleeEquip
+  - m_ConditionMode: 1
+    m_ConditionEvent: DrawWeapon
     m_EventTreshold: 0
   - m_ConditionMode: 2
     m_ConditionEvent: HolsterWeapon
@@ -26001,7 +25995,7 @@ AnimatorStateMachine:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: LowerBody
+  m_Name: Base
   m_ChildStates: []
   m_ChildStateMachines:
   - serializedVersion: 1
@@ -37588,19 +37582,13 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
+    m_ConditionEvent: RifleEquip
+    m_EventTreshold: 0
+  - m_ConditionMode: 1
     m_ConditionEvent: DrawWeapon
     m_EventTreshold: 0
   - m_ConditionMode: 2
     m_ConditionEvent: HolsterWeapon
-    m_EventTreshold: 0
-  - m_ConditionMode: 1
-    m_ConditionEvent: RifleEquip
-    m_EventTreshold: 0
-  - m_ConditionMode: 2
-    m_ConditionEvent: PistolEquip
-    m_EventTreshold: 0
-  - m_ConditionMode: 2
-    m_ConditionEvent: MeleeEquip
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 3104743973445427619}

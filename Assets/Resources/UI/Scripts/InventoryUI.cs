@@ -56,14 +56,14 @@ public class InventoryUI : MonoBehaviour
     private Inventory playerInventory;
     private Camera _camera;
     private Vector3 mousePos;
+    public Sprite emptySlotImg;
     
     private void OnEnable()
     {
        
         
         inventoryUI = GetComponent<UIDocument>();
-        
-        
+
         root = inventoryUI.rootVisualElement;
 
         #region Inventory Slots Area
@@ -201,7 +201,7 @@ public class InventoryUI : MonoBehaviour
         {
             inventorySlotList[i].name = "Slot_" + i;
         }
-        Debug.Log("Inventory Filled with " + capacity + "Slots");
+        //Debug.Log("Inventory Filled with " + capacity + "Slots");
     }
 
     public void SlotClickEvent(MouseDownEvent evt, int itemIndex)

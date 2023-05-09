@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf024635cc165114f8a391313e719346, type: 3}
+  m_Name: M4A1 Rifle
+  m_EditorClassIdentifier: 
+  ID: 3003
+  weaponName: M4A1 Rifle
+  description: Automatic assault rifle. Standard weapon of the US forces. Uses 5.56mm
+    rounds
+  weaponIcon: {fileID: 21300000, guid: aec9ed21126005d40817c1918f9e8a54, type: 3}
+  weaponPrefab: {fileID: 554726338646404138, guid: 43b745d8ed2a20b4f93caad78b805b0b, type: 3}
+  weaponClass: 1
+  bulletID: 9005
+  damage: 7
+  fireRate: 12
+  bulletsPerShot: 1
+  magazineCap: 30
+  minFireAngle: 0
+  maxFireAngle: 0
+  recoilDuration: 0.2
+  recoilMaxRotation: 20
+  blockAttacks: 0
+  explosionRange: 0
+  bulletImpactPrefab: {fileID: 100002, guid: 9d25129d5c3e42841a660568a12d1f5b, type: 3}
+  enemyImpactPrefab: {fileID: 4574046231875852703, guid: 072c806ec52c79f419ddf9b0ec5ccfdf, type: 3}
+  muzzleFlashPrefab: {fileID: 100006, guid: ffda10e980415944bb80e1a2263b1712, type: 3}
+  shotSound: {fileID: 8300000, guid: 01bcb4f63bfb2884786ffd0294fa5363, type: 3}
+  meleeAttackSound: {fileID: 0}
+  dropSound: {fileID: 0}
+  explosionSound: {fileID: 0}
+  magazineOutSound: {fileID: 8300000, guid: e0c70bed5c1a4443083a81de5648c7d5, type: 3}
+  magazineInSound: {fileID: 8300000, guid: eb5685b26a6494994af389a3293064e8, type: 3}
+  reloadEndSound: {fileID: 8300000, guid: 9158afb6966d445db9caf1dccf7acbcc, type: 3}
+  drawWeaponSound: {fileID: 8300000, guid: 95d6c402778044a598e0c2fd3fe3cdb7, type: 3}

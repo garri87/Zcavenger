@@ -40,6 +40,9 @@ public class Inventory : MonoBehaviour
     }
     public SelectedWeapon selectedWeapon;
 
+
+
+
     #region Player Equipment Slots
 
     public Item equippedPrimaryWeapon;
@@ -65,6 +68,11 @@ public class Inventory : MonoBehaviour
 
     public SkinnedMeshRenderer playerModelRenderer;
 
+    public Dictionary<SelectedWeapon, Item> selectedWeapons;
+
+    public Dictionary<WeaponScriptableObject.WeaponClass, Item> weaponsClasses;
+
+    public Dictionary<EquipmentSlot, Item> equipmentSlots;
 
     #endregion
 
@@ -81,6 +89,33 @@ public class Inventory : MonoBehaviour
         inGameOverlayUI = uIManager.inGameOverlayUI.GetComponent<InGameOverlayUI>();
         _playerAnimator = GetComponent<Animator>();
         playerWeaponHolder = transform.Find("WeaponHolder");
+
+        selectedWeapons = new Dictionary<SelectedWeapon, Item>
+        {
+            { SelectedWeapon.Primary, equippedPrimaryWeapon },
+            { SelectedWeapon.Secondary, equippedSecondaryWeapon },
+            { SelectedWeapon.Melee, equippedMeleeWeapon },
+            { SelectedWeapon.Throwable, equippedThrowableWeapon }
+        };
+
+        weaponsClasses = new Dictionary<WeaponScriptableObject.WeaponClass, Item>
+        {
+            {WeaponScriptableObject.WeaponClass.Primary, equippedPrimaryWeapon},
+            {WeaponScriptableObject.WeaponClass.Secondary, equippedSecondaryWeapon},
+            {WeaponScriptableObject.WeaponClass.Melee, equippedMeleeWeapon},
+            {WeaponScriptableObject.WeaponClass.Throwable, equippedThrowableWeapon},
+
+        };
+
+        equipmentSlots = new Dictionary<EquipmentSlot, Item>
+        {
+            { EquipmentSlot.Head,equippedHeadOutfit },
+            { EquipmentSlot.Torso, equippedTorsoOutfit },
+            { EquipmentSlot.Vest, equippedVestOutfit },
+            { EquipmentSlot.Legs, equippedLegsOutfit},
+            { EquipmentSlot.Feet, equippedFeetOutfit }
+        };
+
     }
 
     void Start()
@@ -95,6 +130,9 @@ public class Inventory : MonoBehaviour
 
     void Update()
     {
+
+
+
         try
         {
             maxCapacity = equippedBackpackOutfit.backpackCapacity; //if a backpack is equipped, set its max capacity, else set to default
@@ -169,26 +207,27 @@ public class Inventory : MonoBehaviour
             }
         }
 
+        inventoryUI.primaryWeaponSlot.style.backgroundImage = (equippedPrimaryWeapon) ? new StyleBackground(equippedPrimaryWeapon.itemIcon) : new StyleBackground(inventoryUI.emptySlotImg);
+        
+        inventoryUI.secondaryWeaponSlot.style.backgroundImage = (equippedSecondaryWeapon) ? new StyleBackground(equippedSecondaryWeapon.itemIcon) : new StyleBackground(inventoryUI.emptySlotImg);
 
-        if (equippedPrimaryWeapon) inventoryUI.primaryWeaponSlot.style.backgroundImage = new StyleBackground(equippedPrimaryWeapon.itemIcon);
+        inventoryUI.meleeWeaponSlot.style.backgroundImage = (equippedMeleeWeapon) ? new StyleBackground(equippedMeleeWeapon.itemIcon) : new StyleBackground(inventoryUI.emptySlotImg);
 
-        if (equippedSecondaryWeapon) inventoryUI.secondaryWeaponSlot.style.backgroundImage = new StyleBackground(equippedSecondaryWeapon.itemIcon);
+        inventoryUI.throwableWeaponSlot.style.backgroundImage = (equippedThrowableWeapon) ? new StyleBackground(equippedThrowableWeapon.itemIcon) : new StyleBackground(inventoryUI.emptySlotImg);
 
-        if (equippedMeleeWeapon) inventoryUI.meleeWeaponSlot.style.backgroundImage = new StyleBackground(equippedMeleeWeapon.itemIcon);
+        inventoryUI.headEquipSlot.style.backgroundImage = (equippedHeadOutfit) ? new StyleBackground(equippedHeadOutfit.itemIcon) : new StyleBackground(inventoryUI.emptySlotImg);
 
-        if (equippedThrowableWeapon) inventoryUI.throwableWeaponSlot.style.backgroundImage = new StyleBackground(equippedThrowableWeapon.itemIcon);
+        inventoryUI.vestEquipSlot.style.backgroundImage = (equippedVestOutfit) ? new StyleBackground(equippedVestOutfit.itemIcon) : new StyleBackground(inventoryUI.emptySlotImg);
 
-        if (equippedHeadOutfit) inventoryUI.headEquipSlot.style.backgroundImage = new StyleBackground(equippedHeadOutfit.itemIcon);
+        inventoryUI.torsoEquipSlot.style.backgroundImage = (equippedTorsoOutfit) ? new StyleBackground(equippedTorsoOutfit.itemIcon) : new StyleBackground(inventoryUI.emptySlotImg);
 
-        if (equippedVestOutfit) inventoryUI.vestEquipSlot.style.backgroundImage = new StyleBackground(equippedVestOutfit.itemIcon);
+        inventoryUI.legsEquipSlot.style.backgroundImage = (equippedLegsOutfit) ? new StyleBackground(equippedLegsOutfit.itemIcon) : new StyleBackground(inventoryUI.emptySlotImg);
 
-        if (equippedTorsoOutfit) inventoryUI.torsoEquipSlot.style.backgroundImage = new StyleBackground(equippedTorsoOutfit.itemIcon);
+        inventoryUI.feetEquipSlot.style.backgroundImage = (equippedFeetOutfit) ? new StyleBackground(equippedFeetOutfit.itemIcon) : new StyleBackground(inventoryUI.emptySlotImg);
 
-        if (equippedLegsOutfit) inventoryUI.legsEquipSlot.style.backgroundImage = new StyleBackground(equippedLegsOutfit.itemIcon);
+        inventoryUI.backpackEquipSlot.style.backgroundImage = (equippedBackpackOutfit) ? new StyleBackground(equippedBackpackOutfit.itemIcon) : new StyleBackground(inventoryUI.emptySlotImg);
 
-        if (equippedFeetOutfit) inventoryUI.feetEquipSlot.style.backgroundImage = new StyleBackground(equippedFeetOutfit.itemIcon);
-
-        if (equippedBackpackOutfit) inventoryUI.backpackEquipSlot.style.backgroundImage = new StyleBackground(equippedBackpackOutfit.itemIcon);
+        
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -354,70 +393,76 @@ public class Inventory : MonoBehaviour
     {
         Item newItem = itemGO.GetComponent<Item>();
 
+        
         switch (newItem.itemClass)
         {
             case Item.ItemClass.Weapon:
+
                 switch (newItem.weaponClass)
                 {
+                    case WeaponScriptableObject.WeaponClass.None:
+                        break;
                     case WeaponScriptableObject.WeaponClass.Primary:
-                        equippedPrimaryWeapon = newItem;
+
+                        if (equippedPrimaryWeapon || equippedPrimaryWeapon == newItem)
+                        {
+                            equippedPrimaryWeapon.itemEquipped = false;
+                            equippedPrimaryWeapon.itemLocation = ItemLocation.Inventory;
+                            equippedPrimaryWeapon = null;
+                        }
+                        else
+                        {
+                            equippedPrimaryWeapon = newItem;
+                            equippedPrimaryWeapon.itemEquipped = true;
+                        }
+                        
+                       
+
                         break;
                     case WeaponScriptableObject.WeaponClass.Secondary:
-                        equippedSecondaryWeapon = newItem;
                         break;
                     case WeaponScriptableObject.WeaponClass.Melee:
-                        equippedMeleeWeapon = newItem;
                         break;
                     case WeaponScriptableObject.WeaponClass.Throwable:
-                        equippedThrowableWeapon = newItem;
                         break;
                     default:
-                        // Invalid Weapon Class
                         break;
                 }
+
+
+/*                if (weaponsClasses.TryGetValue(newItem.weaponClass, out Item equippedWeapon))
+                {
+                    if (equippedWeapon != null) //If a weapon is already equipped unequip the old weapon
+                    {
+                        equippedWeapon.itemEquipped = false;
+                        equippedWeapon.itemLocation = ItemLocation.Inventory;
+                        Debug.Log("Replacing weapon");
+                    }
+                   Item newEquippedWeapon = itemGO.GetComponent<Item>(); //assign the new weapon
+                    newEquippedWeapon.itemEquipped = true;
+                    weaponsClasses[newItem.weaponClass] = newEquippedWeapon;
+                    Debug.Log("Weapon " + newItem.name + " equipped on " + newEquippedWeapon.name);
+
+                }*/
+
+
+
+
                 break;
 
             case Item.ItemClass.Outfit:
 
-                if (!newItem.itemEquipped)
+                if (equipmentSlots.TryGetValue(newItem.equipmentSlot, out Item equippedOutfit))
                 {
+                    if(equippedOutfit)//If a outfit is already equipped unequip the old outfit
+                    {
+                        equippedOutfit.itemEquipped = false;
+                        equippedOutfit.itemLocation = ItemLocation.Inventory;
+                        UnrenderOutfit(equippedOutfit.gameObject);
+                    }
+                    equippedOutfit = newItem;
+                    equippedOutfit.itemEquipped = true;
                     RenderOutfit(itemGO);
-                }
-                else
-                {
-                    UnrenderOutfit(itemGO);
-                }
-                switch (newItem.equipmentSlot)
-                {
-
-                    case EquipmentSlot.Head:
-                        equippedHeadOutfit = newItem;
-                        break;
-                    case EquipmentSlot.Torso:
-                        equippedTorsoOutfit = newItem;
-
-
-                        break;
-                    case EquipmentSlot.Vest:
-                        equippedVestOutfit = newItem;
-
-
-                        break;
-                    case EquipmentSlot.Legs:
-                        equippedLegsOutfit = newItem;
-
-
-                        break;
-                    case EquipmentSlot.Feet:
-                        equippedFeetOutfit = newItem;
-
-                        break;
-                    case EquipmentSlot.Backpack:
-                        equippedBackpackOutfit = newItem;
-
-                        break;
-                    default:
-                        break;
                 }
             break;
         }
@@ -535,6 +580,41 @@ public class Inventory : MonoBehaviour
         itemRenderer.bones = null;
         itemRenderer.rootBone = null;
     }
+
+
+    #region Animator Events
+
+    public void DrawWeaponAnim(string animatorMessage)
+    {
+        switch (animatorMessage)
+        {
+            case "DrawWeapon":
+                if (selectedWeapons.TryGetValue(selectedWeapon, out Item weapon))
+                {
+                    weapon.weaponDrawn = true;
+                }
+                break;
+
+            case "HolsterWeapon":
+                if (selectedWeapons.TryGetValue(selectedWeapon, out weapon))
+                {
+                    weapon.weaponDrawn = false;
+                }
+                break;
+
+
+            case "End":
+
+
+                break;
+            default:
+                Debug.LogWarning("Invalid Animator Event Message: " + animatorMessage );
+                break;
+        }
+    }
+
+
+    #endregion
 
 }
 

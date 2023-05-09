@@ -10,6 +10,7 @@ using UnityEngine.UIElements;
 
 [RequireComponent(typeof(WorldTextUI))]
 [RequireComponent(typeof(BoxCollider))]
+[RequireComponent(typeof(WorldTextUI))]
 public class Item : MonoBehaviour
 {
     public enum ItemClass
@@ -53,7 +54,7 @@ public class Item : MonoBehaviour
     public GameObject itemModelGO;
     public SkinnedMeshRenderer modelRenderer;
 
-    private bool modelInstantiated;
+    private bool modelInstantiated = false;
 
 
     private BoxCollider _boxCollider;
@@ -107,7 +108,7 @@ public class Item : MonoBehaviour
     public Transform magHolder;
     [HideInInspector] public GameObject magGameObject;
 
-    public bool weaponEquipped;
+    public bool weaponDrawn;
     public int totalBullets;
     public bool reloadingWeapon;
     public bool attacking;
@@ -150,79 +151,12 @@ public class Item : MonoBehaviour
         playerIKManager = playerTransform.GetComponent<IKManager>();
         playerInventory = playerTransform.GetComponent<Inventory>();
         playerAnimator = playerTransform.GetComponent<Animator>();
-
+        worldTextUI = GetComponent<WorldTextUI>();
+        modelInstantiated = false;
+        InitItem();
+        
     }
 
-    /// <summary>
-    /// Updates item data from scriptable object. <br></br>
-    /// If item is weapon, gets weapon transform from model and gets weapon sounds from scriptable object.
-    /// </summary>
-    public void InitItem()
-    {
-        if (scriptableObject)
-        {
-            GetScriptableObject(scriptableObject);
-            //OBTENEMOS LOS DATOS DEL ITEM SEGUN CLASE
-
-            switch (itemClass)
-            {
-                case ItemClass.Item:
-                    break;
-
-                case ItemClass.Weapon:
-                    GetWeaponTransforms(itemModelGO);
-                    _weaponSound = gameObject.AddComponent<WeaponSound>();
-                    _weaponSound.GetSounds(weaponScriptableObject);
-                    break;
-
-                case ItemClass.Outfit:
-                    break;
-            }
-
-            worldTextUI = GetComponent<WorldTextUI>();
-            worldTextUI.text = itemName + " (" + quantity+")";
-
-            switch (itemLocation)
-            {
-                case ItemLocation.World:
-
-                    if (!modelInstantiated)
-                    {
-                        itemModelGO = InstantiateItem(itemPrefab);
-                    }
-                    else
-                    {
-                        itemModelGO.SetActive(true);
-                    }
-
-                    
-                    outline.enabled = false;
-
-                    worldTextUI.targetTransform = itemModelGO.transform;
-                    worldTextUI.uIEnabled = false;
-                    break;
-                case ItemLocation.Container:
-                  
-
-                    break;
-                case ItemLocation.Player:
-                 
-                    break;
-                case ItemLocation.Inventory:
-                    break;
-                case ItemLocation.Throwed:
-                    break;
-                default:
-                    break;
-            }
-
-
-        }
-        else
-        {
-            Debug.Log("No Scriptable Object attached on " + gameObject.name);
-        }
-    }
 
     private void OnEnable()
     {
@@ -258,19 +192,19 @@ public class Item : MonoBehaviour
 
                 case ItemLocation.Player:
                     _boxCollider.enabled = false;
-                    itemModelGO.SetActive(true);
                     itemPickedUp = true;
 
 
                     switch (itemClass)
                     {
                         case ItemClass.Weapon:
+                            itemModelGO.SetActive(weaponDrawn);
                             transform.position = playerInventory.playerWeaponHolder.position;
                             transform.rotation = playerInventory.playerWeaponHolder.rotation;
                         break;
 
                         case ItemClass.Outfit:
-                            
+                            itemModelGO.SetActive(true);
                         break;
                     }
                     
@@ -290,6 +224,80 @@ public class Item : MonoBehaviour
         
     }
 
+
+    /// <summary>
+    /// Updates item data from scriptable object. <br></br>
+    /// If item is weapon, gets weapon transform from model and gets weapon sounds from scriptable object.
+    /// </summary>
+    public void InitItem()
+    {
+        if (scriptableObject)
+        {
+            GetScriptableObject(scriptableObject);
+
+            switch (itemLocation)
+            {
+                case ItemLocation.World:
+
+                    if (!modelInstantiated)
+                    {
+                        itemModelGO = InstantiateItem(itemPrefab);
+                    }
+                    else
+                    {
+                        itemModelGO.SetActive(true);
+                    }
+
+
+                    outline.enabled = false;
+
+                    worldTextUI.targetTransform = itemModelGO.transform;
+                    worldTextUI.uIEnabled = false;
+                    break;
+                case ItemLocation.Container:
+
+
+                    break;
+                case ItemLocation.Player:
+
+                    break;
+                case ItemLocation.Inventory:
+                    break;
+                case ItemLocation.Throwed:
+                    break;
+                default:
+                    break;
+            }
+
+
+            //OBTENEMOS LOS DATOS DEL ITEM SEGUN CLASE
+            switch (itemClass)
+            {
+                case ItemClass.Item:
+                    break;
+
+                case ItemClass.Weapon:
+                    GetWeaponTransforms(itemModelGO);
+                    _weaponSound = gameObject.AddComponent<WeaponSound>();
+                    _weaponSound.GetSounds(weaponScriptableObject);
+                    break;
+
+                case ItemClass.Outfit:
+                    break;
+            }
+
+            worldTextUI = GetComponent<WorldTextUI>();
+            worldTextUI.text = itemName + " (" + quantity + ")";
+
+            
+
+
+        }
+        else
+        {
+            Debug.Log("No Scriptable Object attached on " + gameObject.name);
+        }
+    }
     /// <summary>
     /// Instantiates a prefab as child of item GameObject
     /// </summary>
@@ -327,6 +335,7 @@ public class Item : MonoBehaviour
         {
             if (scriptableObj is ItemScriptableObject)
             {
+                itemClass = ItemClass.Item;
                 ItemScriptableObject itemScriptable = scriptableObj as ItemScriptableObject;
                 itemScriptableObject = itemScriptable;
                 ID = itemScriptable.ID;
@@ -347,12 +356,16 @@ public class Item : MonoBehaviour
 
             else if (scriptableObj is WeaponScriptableObject)
             {
+                itemClass = ItemClass.Weapon;
+                quantity = 1;
                 WeaponScriptableObject weaponScriptable = scriptableObj as WeaponScriptableObject;
                 weaponScriptableObject = weaponScriptable;
                 weaponClass = weaponScriptable.weaponClass;
                 ID = weaponScriptable.ID;
                 itemIcon = weaponScriptable.weaponIcon;
                 itemName = weaponScriptable.weaponName;
+                itemPrefab = weaponScriptable.weaponPrefab;
+                
                 description = weaponScriptable.description;
 
                 bulletID = weaponScriptable.bulletID;
@@ -373,6 +386,8 @@ public class Item : MonoBehaviour
 
             else if (scriptableObj is OutfitScriptableObject)
             {
+                itemClass = ItemClass.Outfit;
+                quantity = 1;
                 OutfitScriptableObject outfitScriptable = scriptableObj as OutfitScriptableObject;
                 outfitScriptableObject = outfitScriptable;
                 ID = outfitScriptable.ID;

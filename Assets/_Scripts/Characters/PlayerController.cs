@@ -66,6 +66,7 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] public float horizontalInput, verticalInput;
 
     [HideInInspector] private Vector3 lastPosition;
+    public bool canMove;
     public bool ascending;
     public bool descending;
     [HideInInspector] public bool jump;
@@ -204,7 +205,7 @@ public class PlayerController : MonoBehaviour
         mainCamera = Camera.main;
         gameManager = GameManager.Instance;
         keyAssignments = GameManager.Instance._keyAssignments;
-
+        mouseTargetLayer = GameObject.Find("MouseTargetLayer").transform;
         #region GetComponents
 
         keyAssignments = gameManager.GetComponent<KeyAssignments>();
@@ -222,7 +223,11 @@ public class PlayerController : MonoBehaviour
         #endregion
 
 
-        _WeaponHolder = _animator.GetBoneTransform(HumanBodyBones.RightHand).Find("WeaponHolder");
+        Transform rightHand = _animator.GetBoneTransform(HumanBodyBones.RightHand);
+
+        _WeaponHolder.transform.position = rightHand.position;
+        _WeaponHolder.parent = rightHand;
+        _WeaponHolder.transform.forward = rightHand.forward;
 
         _stompDetector = gameObject.transform.Find("StompDetector").GetComponent<StompDetector>();
     }
@@ -321,7 +326,7 @@ public class PlayerController : MonoBehaviour
 
         }
 
-        bool canMove = true;
+        canMove = true;
 
         for (int i = 0; i < cantMoveConditions.Length; i++)
         {
@@ -553,7 +558,7 @@ public class PlayerController : MonoBehaviour
     public void DrawWeapon(WeaponScriptableObject.WeaponClass weaponClass, bool draw)
     {
         Item selectedItem = null;
-
+        
         switch (weaponClass)
         {
             case WeaponScriptableObject.WeaponClass.None:
@@ -600,47 +605,21 @@ public class PlayerController : MonoBehaviour
                 break;
         }
 
+        if (_inventory.selectedWeapons.TryGetValue(_inventory.selectedWeapon, out Item weapon))
+        {
+            weapon.weaponDrawn = draw;
+        }
+
         if (draw)
         {
-            GameObject weapon = new GameObject();
-            Item weaponItem = weapon.AddComponent<Item>();
-            weaponItem = selectedItem;
-            weaponItem.itemLocation = ItemLocation.Player;
-            Instantiate(weapon, _WeaponHolder.position, _WeaponHolder.rotation, _WeaponHolder);
-
+            selectedItem.itemLocation = ItemLocation.Player;
         }
         else
         {
-            if (_WeaponHolder.childCount > 0)
-            {
-                GameObject weapon = _WeaponHolder.GetChild(0).gameObject;
-                Item weaponItem = weapon.GetComponent<Item>();
-
-                switch (weaponItem.weaponClass)
-                {
-                    case WeaponScriptableObject.WeaponClass.None:
-                        break;
-                    case WeaponScriptableObject.WeaponClass.Primary:
-                        _inventory.equippedPrimaryWeapon = weaponItem;
-                        break;
-                    case WeaponScriptableObject.WeaponClass.Secondary:
-                        _inventory.equippedSecondaryWeapon = weaponItem;
-                        break;
-                    case WeaponScriptableObject.WeaponClass.Melee:
-                        _inventory.equippedMeleeWeapon = weaponItem;
-                        break;
-                    case WeaponScriptableObject.WeaponClass.Throwable:
-                        _inventory.equippedThrowableWeapon = weaponItem;
-                        break;
-                    default:
-
-                        break;
-                }
-                Destroy(weapon);
-            }
+           
         }
 
-
+        selectedItem.weaponDrawn = draw;
     }
 
     public void DefaultController()
@@ -1099,9 +1078,9 @@ public class PlayerController : MonoBehaviour
 
     #region Animator Event Functions
 
-    public void AnimationEvent(string message)
+    public void AnimationEvent(string animatorMessage)
     {
-        switch (message)
+        switch (animatorMessage)
         {
             case "TransitionStart":
                 controllerType = ControllerType.StandByController;
@@ -1148,6 +1127,10 @@ public class PlayerController : MonoBehaviour
 
             case "GrabItemEnd":
                 grabItem = false;
+                break;
+
+            default:
+                Debug.LogWarning("Invalid Animator Event Message: " + animatorMessage);
                 break;
         }
     }

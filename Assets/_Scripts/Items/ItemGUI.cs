@@ -63,7 +63,6 @@ public class ItemGUI : Editor
     private SerializedProperty _magHolder;
     private SerializedProperty _magGameObject;
 
-    private SerializedProperty _weaponEquipped;
     private SerializedProperty _totalBullets;
     private SerializedProperty _reloadingWeapon;
     private SerializedProperty _attacking;
@@ -152,7 +151,6 @@ public class ItemGUI : Editor
         _flashLight = serializedObject.FindProperty("flashLight");
         _magHolder = serializedObject.FindProperty("magHolder");
         _magGameObject = serializedObject.FindProperty("magGameObject");
-        _weaponEquipped = serializedObject.FindProperty("weaponEquipped");
         _totalBullets = serializedObject.FindProperty("totalBullets");
         _reloadingWeapon = serializedObject.FindProperty("reloadingWeapon");
         _attacking = serializedObject.FindProperty("attacking");
@@ -248,7 +246,6 @@ public class ItemGUI : Editor
                 EditorGUILayout.PropertyField(_flashLight);
                 EditorGUILayout.PropertyField(_magHolder);
                 EditorGUILayout.PropertyField(_magGameObject);
-                EditorGUILayout.PropertyField(_weaponEquipped);
                 EditorGUILayout.PropertyField(_totalBullets);
                 EditorGUILayout.PropertyField(_reloadingWeapon);
                 EditorGUILayout.PropertyField(_attacking);

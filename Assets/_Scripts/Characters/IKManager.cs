@@ -16,25 +16,27 @@ public class IKManager : MonoBehaviour
         Enemy,
     }
     public PlayerType playerType;
-    
+
     public Animator _animator;
 
     public string upperBodyLayerName = "UpperBody";
-    
+    public bool upperMaskActive;
+    private bool[] upperMaskConditions;
+
     public Transform leftHandTarget;
     public Transform rightHandTarget;
     public Transform leftElbowTarget;
     public Transform rightElbowTarget;
     public Transform spineTarget;
-    
-    
+
+
     public Transform agentHead;
-    
+
     private PlayerController _playerController;
     private AgentController _agentController;
     private Inventory _inventory;
     public Item weaponItem;
-    
+
     private Transform muzzleTransform;
 
     public Vector3 targetPosition;
@@ -45,29 +47,29 @@ public class IKManager : MonoBehaviour
     public float recoilDuration;
     public float recoilTimer;
     #endregion
-    
+
     private float leftHandIKWeight;
     private float rightHandIKWeight;
     private float leftHandRotWeight;
     private float rightHandRotWeight;
     private float leftElbowIKWeight;
     private float rightElbowIKWeight;
-    
+
     public float distanceToObject;
     public float verticalOffset;
-    
+
     [HideInInspector] public static bool pushingObject; //TODO: Implementar detección cuando esta empujando un objeto
-    
+
     private RaycastHit frontHit, backHit, leftHit, rightHit;
-    
+
     public LayerMask layer, footIkLayer;
-    
-    
-    [Range(0,1)]public float weight = 1f;
-    [Range(0,1)]public float upperBodyLayerWeight;
-    
+
+
+    [Range(0, 1)] public float weight = 1f;
+    [Range(0, 1)] public float upperBodyLayerWeight;
+
     private float distanceToGround;
-    
+
     void Awake()
     {
         switch (playerType)
@@ -76,49 +78,66 @@ public class IKManager : MonoBehaviour
                 _playerController = GetComponent<PlayerController>();
                 _inventory = GetComponent<Inventory>();
                 break;
-            
+
             case PlayerType.Enemy:
                 _agentController = GetComponent<AgentController>();
                 break;
         }
-        
+
         _animator = GetComponent<Animator>();
         spineTarget = _animator.GetBoneTransform(HumanBodyBones.Spine);
     }
-    
+
     void FixedUpdate()
     {
-        switch (playerType)
-        {
-            case PlayerType.Player:
-              SetLayerWeight();
-                break;
-            
-            case PlayerType.Enemy:
-                SetLayerWeight();
-                break;
-        }
-       
+
+        SetLayerWeight();
+
     }
 
     private void Update()
     {
+        upperMaskConditions = new bool[]{
+            _inventory.drawWeapon,
+            _inventory.holsterWeapon ,
+            _playerController.isAiming ,
+            _playerController.reloadingWeapon ,
+            _playerController._healthManager.isBleeding ,
+            _playerController.bandaging ,
+            _playerController.drinking ,
+            _playerController.eating ,
+            _playerController.grabItem
+        };
+
+        upperMaskActive = false;
+
+        for (int i = 0; i < upperMaskConditions.Length; i++)
+        {
+            if (upperMaskConditions[i] == true)
+            {
+                upperMaskActive = true;
+                break;
+            }
+        }
+
+
+
         switch (playerType)
         {
             case PlayerType.Player:
-                
+
                 SetLayerWeight();
-                
+
                 upperBodyLayerWeight = _animator.GetLayerWeight(1);
                 _animator.SetFloat("LayerWeight", upperBodyLayerWeight);
                 if (_playerController.weaponDrawn)
                 {
                     weaponItem = _playerController.drawnWeaponItem;
-                    recoilMaxRotation = weaponItem.recoilMaxRotation; 
+                    recoilMaxRotation = weaponItem.recoilMaxRotation;
                     recoilDuration = weaponItem.recoilDuration;
                 }
-               
-                
+
+
                 if (_playerController.isAiming)
                 {
                     weight = 0.4f;
@@ -128,13 +147,13 @@ public class IKManager : MonoBehaviour
                     weight = 0;
                 }
                 break;
-            
+
             case PlayerType.Enemy:
-                
+
                 SetLayerWeight();
                 if (_agentController._enemyFov.targetInSight || _agentController._enemyFov.targetInRange)
                 {
-                    agentHead.LookAt(targetPosition+ Vector3.up);
+                    agentHead.LookAt(targetPosition + Vector3.up);
                     weight = 1;
                 }
                 else
@@ -143,9 +162,9 @@ public class IKManager : MonoBehaviour
                 }
                 break;
         }
-        
+
     }
-    
+
     private void LateUpdate()
     {
         switch (playerType)
@@ -153,16 +172,16 @@ public class IKManager : MonoBehaviour
             case PlayerType.Player:
                 if (_playerController.weaponDrawn && _playerController.isAiming)
                 {
-                    if (!_playerController.drinking 
+                    if (!_playerController.drinking
                         || !_playerController.bandaging
                         || !_playerController.eating)
                     {
                         RecoilAnimation();
                     }
-                } 
+                }
                 break;
             case PlayerType.Enemy:
-                
+
                 break;
         }
     }
@@ -173,9 +192,9 @@ public class IKManager : MonoBehaviour
             switch (playerType)
             {
                 case PlayerType.Player:
-                    
-                    IKLimbPlacement(AvatarIKGoal.LeftFoot, AvatarIKGoal.RightFoot, "IKLeftFootWeight" , "IKRightFootWeight",transform.TransformDirection(Vector3.down), distanceToGround);
-                    
+
+                    IKLimbPlacement(AvatarIKGoal.LeftFoot, AvatarIKGoal.RightFoot, "IKLeftFootWeight", "IKRightFootWeight", transform.TransformDirection(Vector3.down), distanceToGround);
+                    /*
                     if (!_playerController.weaponDrawn)
                     {
                         _animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, leftHandIKWeight);
@@ -191,41 +210,33 @@ public class IKManager : MonoBehaviour
                         _animator.SetIKPosition(AvatarIKGoal.RightHand, rightHandTarget.position);
                         _animator.SetIKRotation(AvatarIKGoal.RightHand, rightHandTarget.rotation);
                         _animator.SetIKHintPosition(AvatarIKHint.RightElbow, rightElbowTarget.position);
-                    }
+                    }*/
                     break;
-                
+
                 case PlayerType.Enemy:
-                    
+
                     break;
             }
-            
-            
+
+
         }
     }
-    
+
     public void SetLayerWeight()
     {
         switch (playerType)
         {
             case PlayerType.Player:
-            
+
                 if (!_playerController._healthManager.IsDead)
                 { //activates the upper boy layer of the animator if one of the actions is being played 
-                    if (_inventory.drawWeapon ||
-                        _inventory.holsterWeapon ||
-                        _playerController.isAiming ||
-                        _playerController.reloadingWeapon ||
-                        _playerController._healthManager.isBleeding||
-                        _playerController.bandaging||
-                        _playerController.drinking||
-                        _playerController.eating||
-                        _playerController.grabItem)
+                    if (upperMaskActive)
                     {
-                        if (!_playerController.climbingLadder || 
-                            !_playerController.drawnWeaponItem.attacking || 
+                        if (!_playerController.climbingLadder ||
+                            !_playerController.drawnWeaponItem.attacking ||
                             !_playerController.blocking)
                         {
-                            _animator.SetLayerWeight(_animator.GetLayerIndex(upperBodyLayerName), 1); 
+                            _animator.SetLayerWeight(_animator.GetLayerIndex(upperBodyLayerName), 1);
                         }
                         else
                         {
@@ -243,11 +254,11 @@ public class IKManager : MonoBehaviour
                     _animator.SetLayerWeight(_animator.GetLayerIndex(upperBodyLayerName), 0);
                 }
                 break;
-            
+
             case PlayerType.Enemy:
 
-                if (_agentController.attacking||
-                    _agentController.playerCatch||
+                if (_agentController.attacking ||
+                    _agentController.playerCatch ||
                     /*_agentController._enemyFov.targetInSight||*/ _agentController.hisHit)
                 {
                     _animator.SetLayerWeight(_animator.GetLayerIndex(upperBodyLayerName), 1);
@@ -256,66 +267,66 @@ public class IKManager : MonoBehaviour
                 {
                     _animator.SetLayerWeight(_animator.GetLayerIndex(upperBodyLayerName), 0);
                 }
-                
-                
+
+
                 break;
-            
+
         }
-        
+
     }
-    
-    private void IKLimbPlacement(AvatarIKGoal leftLimb, AvatarIKGoal rightLimb, 
+
+    private void IKLimbPlacement(AvatarIKGoal leftLimb, AvatarIKGoal rightLimb,
         string ikLeftWeight, string iKRightWeight, Vector3 rayDirection, float rayDistance)
     {
         //GET LIMB WEIGHT FROM ANIMATOR CURVES
-        _animator.SetIKPositionWeight(leftLimb,_animator.GetFloat(ikLeftWeight));
-        _animator.SetIKRotationWeight(leftLimb,_animator.GetFloat(ikLeftWeight));
-        _animator.SetIKPositionWeight(rightLimb,_animator.GetFloat(iKRightWeight));
-        _animator.SetIKRotationWeight(rightLimb,_animator.GetFloat(iKRightWeight));
+        _animator.SetIKPositionWeight(leftLimb, _animator.GetFloat(ikLeftWeight));
+        _animator.SetIKRotationWeight(leftLimb, _animator.GetFloat(ikLeftWeight));
+        _animator.SetIKPositionWeight(rightLimb, _animator.GetFloat(iKRightWeight));
+        _animator.SetIKRotationWeight(rightLimb, _animator.GetFloat(iKRightWeight));
 
         RaycastHit hit1; // LEFT FOOT RAYCAST
-        
+
         Ray leftFootRay = new Ray(_animator.GetIKPosition(leftLimb), rayDirection);
-        if (Physics.Raycast(leftFootRay,out hit1, rayDistance, footIkLayer.value))
+        if (Physics.Raycast(leftFootRay, out hit1, rayDistance, footIkLayer.value))
         {
             if (hit1.transform.tag == "Ground")
             {
                 Vector3 leftFootPosition = hit1.point;
                 leftFootPosition.y += rayDistance;
                 Vector3 leftFoot = _animator.GetBoneTransform(HumanBodyBones.LeftFoot).position;
-                _animator.SetIKPosition(leftLimb, new Vector3(leftFoot.x,leftFoot.y, leftFoot.z));
-               _animator.SetIKRotation(leftLimb, Quaternion.FromToRotation(Vector3.up, hit1.normal) * transform.rotation);
+                _animator.SetIKPosition(leftLimb, new Vector3(leftFoot.x, leftFoot.y, leftFoot.z));
+                _animator.SetIKRotation(leftLimb, Quaternion.FromToRotation(Vector3.up, hit1.normal) * transform.rotation);
             }
         }
-        
+
         RaycastHit hit2; //RIGHT FOOT RAYCAST
-        
+
         Ray ray2 = new Ray(_animator.GetIKPosition(rightLimb), rayDirection);
-        
-        if (Physics.Raycast(ray2,out hit2, rayDistance, footIkLayer.value))
+
+        if (Physics.Raycast(ray2, out hit2, rayDistance, footIkLayer.value))
         {
             if (hit2.transform.tag == "Ground")
-            { 
+            {
                 Vector3 rightFootPosition = hit2.point;
                 rightFootPosition.y += rayDistance;
                 Vector3 rightFoot = _animator.GetBoneTransform(HumanBodyBones.RightFoot).position;
-                _animator.SetIKPosition(rightLimb, new Vector3(rightFoot.x,rightFoot.y, rightFoot.z));
-               _animator.SetIKRotation(rightLimb, Quaternion.FromToRotation(Vector3.up, hit2.normal) * transform.rotation);
+                _animator.SetIKPosition(rightLimb, new Vector3(rightFoot.x, rightFoot.y, rightFoot.z));
+                _animator.SetIKRotation(rightLimb, Quaternion.FromToRotation(Vector3.up, hit2.normal) * transform.rotation);
             }
         }
         Debug.DrawRay(_animator.GetIKPosition(leftLimb), rayDirection * distanceToGround, Color.green);
         Debug.DrawRay(_animator.GetIKPosition(rightLimb), rayDirection * distanceToGround, Color.green);
     }
-    
-    
-    
+
+
+
     private void RecoilAnimation()
     {
         if (recoilTimer < 0)
         {
             return;
         }
-        
+
         float curveTime = (Time.time - recoilTimer) / recoilDuration;
         if (curveTime > 1f)
         {
@@ -323,9 +334,9 @@ public class IKManager : MonoBehaviour
         }
         else
         {
-              leftElbowTarget.Rotate(Vector3.up,bulletRecoilCurve.Evaluate(curveTime) * recoilMaxRotation, Space.Self);
-              rightElbowTarget.Rotate(Vector3.up,bulletRecoilCurve.Evaluate(curveTime) * recoilMaxRotation, Space.Self);
-              spineTarget.Rotate(Vector3.left,bulletRecoilCurve.Evaluate(curveTime) * recoilMaxRotation/2, Space.Self);
+            leftElbowTarget.Rotate(Vector3.up, bulletRecoilCurve.Evaluate(curveTime) * recoilMaxRotation, Space.Self);
+            rightElbowTarget.Rotate(Vector3.up, bulletRecoilCurve.Evaluate(curveTime) * recoilMaxRotation, Space.Self);
+            spineTarget.Rotate(Vector3.left, bulletRecoilCurve.Evaluate(curveTime) * recoilMaxRotation / 2, Space.Self);
         }
     }
     private void OnDrawGizmos()
@@ -333,8 +344,8 @@ public class IKManager : MonoBehaviour
         Gizmos.color = Color.blue;
         Gizmos.DrawLine(transform.position + Vector3.up * verticalOffset, transform.position + Vector3.up * verticalOffset + transform.forward * distanceToObject);
         Gizmos.DrawLine(transform.position + Vector3.up * verticalOffset, transform.position + Vector3.up * verticalOffset - transform.forward * distanceToObject);
-        
-       
+
+
 
         Gizmos.color = Color.yellow;
         Gizmos.DrawLine(transform.position + Vector3.up * verticalOffset,
