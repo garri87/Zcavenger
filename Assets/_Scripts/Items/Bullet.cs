@@ -32,7 +32,6 @@ public class Bullet : MonoBehaviour
     [SerializeField]private float timer;
     private int bulletDamage;
 
-    private bool bulletFired;
 
     #endregion
 
@@ -89,7 +88,6 @@ public class Bullet : MonoBehaviour
            {
                gameObject.SetActive(false);
                gameObject.transform.parent = objectPoolTransform.transform;//Place back to pool
-               bulletFired = false;
            }
        }
     }
@@ -113,7 +111,6 @@ public class Bullet : MonoBehaviour
         
         transform.rotation = Quaternion.LookRotation(vop,Vector3.forward);
 
-        bulletFired = true;
     }
     
   

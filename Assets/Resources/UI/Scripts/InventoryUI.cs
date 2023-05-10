@@ -77,7 +77,7 @@ public class InventoryUI : MonoBehaviour
 
         outfitSlotsArea = root.Q<VisualElement>("EquipmentSlots");
         primaryWeaponSlot = outfitSlotsArea.Q<VisualElement>("PrimaryWpnSlot");
-        secondaryWeaponSlot = outfitSlotsArea.Q<VisualElement>("SecondayWpnSlot");
+        secondaryWeaponSlot = outfitSlotsArea.Q<VisualElement>("SecondaryWpnSlot");
         meleeWeaponSlot = outfitSlotsArea.Q<VisualElement>("MeleeWpnSlot");
         throwableWeaponSlot = outfitSlotsArea.Q<VisualElement>("ThrowableWpnSlot");
 

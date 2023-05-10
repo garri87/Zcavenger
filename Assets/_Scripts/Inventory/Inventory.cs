@@ -208,7 +208,7 @@ public class Inventory : MonoBehaviour
         }
 
         inventoryUI.primaryWeaponSlot.style.backgroundImage = (equippedPrimaryWeapon) ? new StyleBackground(equippedPrimaryWeapon.itemIcon) : new StyleBackground(inventoryUI.emptySlotImg);
-        
+
         inventoryUI.secondaryWeaponSlot.style.backgroundImage = (equippedSecondaryWeapon) ? new StyleBackground(equippedSecondaryWeapon.itemIcon) : new StyleBackground(inventoryUI.emptySlotImg);
 
         inventoryUI.meleeWeaponSlot.style.backgroundImage = (equippedMeleeWeapon) ? new StyleBackground(equippedMeleeWeapon.itemIcon) : new StyleBackground(inventoryUI.emptySlotImg);
@@ -227,7 +227,7 @@ public class Inventory : MonoBehaviour
 
         inventoryUI.backpackEquipSlot.style.backgroundImage = (equippedBackpackOutfit) ? new StyleBackground(equippedBackpackOutfit.itemIcon) : new StyleBackground(inventoryUI.emptySlotImg);
 
-        
+
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -393,7 +393,7 @@ public class Inventory : MonoBehaviour
     {
         Item newItem = itemGO.GetComponent<Item>();
 
-        
+
         switch (newItem.itemClass)
         {
             case Item.ItemClass.Weapon:
@@ -404,75 +404,98 @@ public class Inventory : MonoBehaviour
                         break;
                     case WeaponScriptableObject.WeaponClass.Primary:
 
-                        if (equippedPrimaryWeapon || equippedPrimaryWeapon == newItem)
-                        {
-                            equippedPrimaryWeapon.itemEquipped = false;
-                            equippedPrimaryWeapon.itemLocation = ItemLocation.Inventory;
-                            equippedPrimaryWeapon = null;
-                        }
-                        else
-                        {
-                            equippedPrimaryWeapon = newItem;
-                            equippedPrimaryWeapon.itemEquipped = true;
-                        }
-                        
-                       
+                        SwapItem(equippedPrimaryWeapon, newItem);
 
                         break;
                     case WeaponScriptableObject.WeaponClass.Secondary:
+
+                        SwapItem(equippedSecondaryWeapon, newItem);
+
                         break;
                     case WeaponScriptableObject.WeaponClass.Melee:
+
+                        SwapItem(equippedMeleeWeapon, newItem);
+
                         break;
                     case WeaponScriptableObject.WeaponClass.Throwable:
+
+                        SwapItem(equippedThrowableWeapon, newItem);
+
                         break;
                     default:
                         break;
                 }
 
-
-/*                if (weaponsClasses.TryGetValue(newItem.weaponClass, out Item equippedWeapon))
-                {
-                    if (equippedWeapon != null) //If a weapon is already equipped unequip the old weapon
-                    {
-                        equippedWeapon.itemEquipped = false;
-                        equippedWeapon.itemLocation = ItemLocation.Inventory;
-                        Debug.Log("Replacing weapon");
-                    }
-                   Item newEquippedWeapon = itemGO.GetComponent<Item>(); //assign the new weapon
-                    newEquippedWeapon.itemEquipped = true;
-                    weaponsClasses[newItem.weaponClass] = newEquippedWeapon;
-                    Debug.Log("Weapon " + newItem.name + " equipped on " + newEquippedWeapon.name);
-
-                }*/
-
-
-
-
                 break;
 
             case Item.ItemClass.Outfit:
 
-                if (equipmentSlots.TryGetValue(newItem.equipmentSlot, out Item equippedOutfit))
+                switch (newItem.equipmentSlot)
                 {
-                    if(equippedOutfit)//If a outfit is already equipped unequip the old outfit
-                    {
-                        equippedOutfit.itemEquipped = false;
-                        equippedOutfit.itemLocation = ItemLocation.Inventory;
-                        UnrenderOutfit(equippedOutfit.gameObject);
-                    }
-                    equippedOutfit = newItem;
-                    equippedOutfit.itemEquipped = true;
-                    RenderOutfit(itemGO);
+
+                    case EquipmentSlot.Head:
+                        SwapItem(equippedHeadOutfit, newItem);
+                        break;
+
+                    case EquipmentSlot.Vest:
+                        SwapItem(equippedVestOutfit, newItem);
+
+                        break;
+
+                    case EquipmentSlot.Torso:
+                        SwapItem(equippedTorsoOutfit, newItem);
+
+                        break;
+
+                    case EquipmentSlot.Legs:
+                        SwapItem(equippedLegsOutfit, newItem);
+
+                        break;
+
+                    case EquipmentSlot.Feet:
+                        SwapItem(equippedFeetOutfit, newItem);
+
+                        break;
+
+                    case EquipmentSlot.Backpack:
+                        SwapItem(equippedBackpackOutfit, newItem);
+
+                        break;
+
+                    default:
+
+                        break;
                 }
-            break;
+
+                break;
         }
-        newItem.itemLocation = ItemLocation.Player;
 
         RefreshInventoryToUI();
 
+        Item SwapItem(Item targetItem, Item item)
+        {
+            if (targetItem != null || targetItem == item)
+            {
+                targetItem.itemEquipped = false;
+                targetItem.itemLocation = ItemLocation.Inventory;
+                if(targetItem.itemClass == ItemClass.Outfit)
+                {
+                 UnrenderOutfit(targetItem.gameObject);   
+                }
+                targetItem = null;
+            }
+            else
+            {
+                item.itemEquipped = true;
+                item.itemLocation = ItemLocation.Player;
+                if(item.itemClass == ItemClass.Outfit)
+                {
+                 RenderOutfit(item.gameObject);   
+                }
+            }
+            return targetItem;
+        }
     }
-
-
 
     public int CheckItemsLeft(int id, int counter)
     {
@@ -556,10 +579,10 @@ public class Inventory : MonoBehaviour
     }
 
 
-/// <summary>
-/// Renders a item mesh over the player model
-/// </summary>
-/// <param name="itemGO"> Item GameObject </param>
+    /// <summary>
+    /// Renders a item mesh over the player model
+    /// </summary>
+    /// <param name="itemGO"> Item GameObject </param>
     public void RenderOutfit(GameObject itemGO)
     {
         Item item = itemGO.GetComponent<Item>();
@@ -569,10 +592,10 @@ public class Inventory : MonoBehaviour
     }
 
 
-/// <summary>
-/// Disables the item rendering
-/// </summary>
-/// <param name="itemGO">Item GameObject</param>
+    /// <summary>
+    /// Disables the item rendering
+    /// </summary>
+    /// <param name="itemGO">Item GameObject</param>
     public void UnrenderOutfit(GameObject itemGO)
     {
         Item item = itemGO.GetComponent<Item>();
@@ -608,7 +631,7 @@ public class Inventory : MonoBehaviour
 
                 break;
             default:
-                Debug.LogWarning("Invalid Animator Event Message: " + animatorMessage );
+                Debug.LogWarning("Invalid Animator Event Message: " + animatorMessage);
                 break;
         }
     }

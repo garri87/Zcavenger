@@ -126,7 +126,13 @@ public class Item : MonoBehaviour
 
     [Header("Equipment Attributes")]
     public OutfitScriptableObject outfitScriptableObject;
-    public enum EquipmentSlot { Head, Torso, Vest, Legs, Feet, Backpack }
+    public enum EquipmentSlot { 
+        Head, 
+        Torso, 
+        Vest, 
+        Legs, 
+        Feet,
+        Backpack }
     public EquipmentSlot equipmentSlot;
 
     public int defense;

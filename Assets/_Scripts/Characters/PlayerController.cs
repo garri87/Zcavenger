@@ -1070,6 +1070,8 @@ public class PlayerController : MonoBehaviour
         _animator.SetBool("Drink", drinking);
         _animator.SetBool("Eat", eating);
         _animator.SetBool("GrabItem", grabItem);
+        _animator.SetBool("DrawWeapon", drawWeapon);
+        _animator.SetBool("HolsterWeapon", holsterWeapon);
 
         _animator.SetFloat("GroundDistance", CalculateDistance(
             Vector3.Lerp(leftFoot.position, rightFoot.position, 0.5f) + Vector3.down / 8, Vector3.down,
