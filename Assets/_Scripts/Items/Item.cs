@@ -177,7 +177,7 @@ public class Item : MonoBehaviour
             {
                 case ItemLocation.World:
                     transform.parent = null;
-                    itemModelGO.transform.Rotate(Vector3.up * (Time.deltaTime * prefabRotationSpeed));
+                    transform.Rotate(Vector3.up * (Time.deltaTime * prefabRotationSpeed));
                     _boxCollider.enabled = true;
                     itemModelGO.SetActive(true);
                     itemPickedUp = false;
@@ -205,9 +205,10 @@ public class Item : MonoBehaviour
                     {
                         case ItemClass.Weapon:
                             itemModelGO.SetActive(weaponDrawn);
-                            transform.position = playerInventory.playerWeaponHolder.position;
-                            transform.rotation = playerInventory.playerWeaponHolder.rotation;
-                        break;
+                            Transform rightHand = playerAnimator.GetBoneTransform(HumanBodyBones.RightHand);
+                            transform.position = rightHand.position;
+                            transform.rotation = Quaternion.LookRotation(rightHand.up);
+                            break;
 
                         case ItemClass.Outfit:
                             itemModelGO.SetActive(true);

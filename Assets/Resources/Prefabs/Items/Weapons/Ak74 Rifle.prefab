@@ -93,7 +93,6 @@ GameObject:
   m_Component:
   - component: {fileID: 934804815465297552}
   - component: {fileID: 576297614038277336}
-  - component: {fileID: 2537434731063509867}
   - component: {fileID: 248336373672548398}
   m_Layer: 13
   m_Name: Ak74 Rifle
@@ -144,19 +143,6 @@ MonoBehaviour:
   lowSoundSensorScale: 0.5
   normalSoundSensorScale: 20
   highSoundSensorScale: 40
---- !u!65 &2537434731063509867
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 554726338646404138}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0.19}
 --- !u!82 &248336373672548398
 AudioSource:
   m_ObjectHideFlags: 0

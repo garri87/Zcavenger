@@ -4,6 +4,8 @@ using UnityEngine.UIElements;
 using static Item;
 using Debug = UnityEngine.Debug;
 
+using System.Linq;
+
 public class Inventory : MonoBehaviour
 {
     public bool showInventory = false;
@@ -37,6 +39,7 @@ public class Inventory : MonoBehaviour
         Secondary,
         Melee,
         Throwable,
+        None,
     }
     public SelectedWeapon selectedWeapon;
 
@@ -130,9 +133,6 @@ public class Inventory : MonoBehaviour
 
     void Update()
     {
-
-
-
         try
         {
             maxCapacity = equippedBackpackOutfit.backpackCapacity; //if a backpack is equipped, set its max capacity, else set to default
@@ -179,6 +179,8 @@ public class Inventory : MonoBehaviour
 
             }
         }
+
+        CheckEquippedWeapon();
 
         _playerAnimator.SetBool("DrawWeapon", drawWeapon);
         _playerAnimator.SetBool("HolsterWeapon", holsterWeapon);
@@ -365,6 +367,22 @@ public class Inventory : MonoBehaviour
             }
     }
 
+    public void CheckEquippedWeapon()
+    {
+        bool[] equippedWeapons =
+        {
+            equippedPrimaryWeapon,
+            equippedSecondaryWeapon,
+            equippedMeleeWeapon,
+            equippedThrowableWeapon
+        };
+
+        if (equippedWeapons.All(weapon => weapon == false ))
+        {
+            selectedWeapon = SelectedWeapon.None;
+        }
+    }
+
     /// <summary>
     /// Generates a new item and instantiates in desired location
     /// </summary>
@@ -404,22 +422,22 @@ public class Inventory : MonoBehaviour
                         break;
                     case WeaponScriptableObject.WeaponClass.Primary:
 
-                        SwapItem(equippedPrimaryWeapon, newItem);
+                        equippedPrimaryWeapon = SwapItem(equippedPrimaryWeapon, newItem);
 
                         break;
                     case WeaponScriptableObject.WeaponClass.Secondary:
 
-                        SwapItem(equippedSecondaryWeapon, newItem);
+                        equippedSecondaryWeapon = SwapItem(equippedSecondaryWeapon, newItem);
 
                         break;
                     case WeaponScriptableObject.WeaponClass.Melee:
 
-                        SwapItem(equippedMeleeWeapon, newItem);
+                        equippedMeleeWeapon = SwapItem(equippedMeleeWeapon, newItem);
 
                         break;
                     case WeaponScriptableObject.WeaponClass.Throwable:
 
-                        SwapItem(equippedThrowableWeapon, newItem);
+                        equippedThrowableWeapon = SwapItem(equippedThrowableWeapon, newItem);
 
                         break;
                     default:
@@ -434,31 +452,31 @@ public class Inventory : MonoBehaviour
                 {
 
                     case EquipmentSlot.Head:
-                        SwapItem(equippedHeadOutfit, newItem);
+                        equippedHeadOutfit = SwapItem(equippedHeadOutfit, newItem);
                         break;
 
                     case EquipmentSlot.Vest:
-                        SwapItem(equippedVestOutfit, newItem);
+                        equippedVestOutfit = SwapItem(equippedVestOutfit, newItem);
 
                         break;
 
                     case EquipmentSlot.Torso:
-                        SwapItem(equippedTorsoOutfit, newItem);
+                        equippedTorsoOutfit = SwapItem(equippedTorsoOutfit, newItem);
 
                         break;
 
                     case EquipmentSlot.Legs:
-                        SwapItem(equippedLegsOutfit, newItem);
+                        equippedLegsOutfit = SwapItem(equippedLegsOutfit, newItem);
 
                         break;
 
                     case EquipmentSlot.Feet:
-                        SwapItem(equippedFeetOutfit, newItem);
+                         equippedFeetOutfit = SwapItem(equippedFeetOutfit, newItem);
 
                         break;
 
                     case EquipmentSlot.Backpack:
-                        SwapItem(equippedBackpackOutfit, newItem);
+                        equippedBackpackOutfit = SwapItem(equippedBackpackOutfit, newItem);
 
                         break;
 
@@ -474,7 +492,7 @@ public class Inventory : MonoBehaviour
 
         Item SwapItem(Item targetItem, Item item)
         {
-            if (targetItem != null || targetItem == item)
+            if (targetItem != null || item == targetItem)
             {
                 targetItem.itemEquipped = false;
                 targetItem.itemLocation = ItemLocation.Inventory;
@@ -484,16 +502,15 @@ public class Inventory : MonoBehaviour
                 }
                 targetItem = null;
             }
-            else
-            {
+            
                 item.itemEquipped = true;
                 item.itemLocation = ItemLocation.Player;
                 if(item.itemClass == ItemClass.Outfit)
                 {
                  RenderOutfit(item.gameObject);   
                 }
-            }
-            return targetItem;
+            
+            return item;
         }
     }
 

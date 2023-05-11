@@ -146,7 +146,7 @@ public class PlayerController : MonoBehaviour
 
     public Transform crosshairTransform; //Transform reference of the player's crosshair Gameobject
     private SpriteRenderer crosshairSprtRenderer;
-
+    public Transform rightHand;
     public Transform _WeaponHolder; //Transform reference to place Child Gameobjects
     public Item drawnWeaponItem; //Item Component of current drawn weapon
     public bool weaponDrawn; //Player has weapon in hands?
@@ -223,11 +223,12 @@ public class PlayerController : MonoBehaviour
         #endregion
 
 
-        Transform rightHand = _animator.GetBoneTransform(HumanBodyBones.RightHand);
+        rightHand = _animator.GetBoneTransform(HumanBodyBones.RightHand);
 
-        _WeaponHolder.transform.position = rightHand.position;
         _WeaponHolder.parent = rightHand;
-        _WeaponHolder.transform.forward = rightHand.forward;
+        _WeaponHolder.transform.position = rightHand.position;
+        _WeaponHolder.transform.rotation = rightHand.rotation;
+       
 
         _stompDetector = gameObject.transform.Find("StompDetector").GetComponent<StompDetector>();
     }
@@ -264,7 +265,8 @@ public class PlayerController : MonoBehaviour
 
         CheckFallingState();
 
-        CheckWeaponEquipped();
+
+       // CheckWeaponEquipped();
 
         #region PlayLine placement
 
@@ -605,11 +607,7 @@ public class PlayerController : MonoBehaviour
                 break;
         }
 
-        if (_inventory.selectedWeapons.TryGetValue(_inventory.selectedWeapon, out Item weapon))
-        {
-            weapon.weaponDrawn = draw;
-        }
-
+        
         if (draw)
         {
             selectedItem.itemLocation = ItemLocation.Player;
@@ -1183,8 +1181,9 @@ public class PlayerController : MonoBehaviour
         return playerBusy;
     }
 
-    private void CheckWeaponEquipped()
+   /* private void CheckWeaponEquipped()
     {
+        
         if (_WeaponHolder.childCount > 0)
         {
             weaponDrawn = true;
@@ -1203,7 +1202,7 @@ public class PlayerController : MonoBehaviour
             attacking = false;
             drawnWeaponItem = null;
         }
-    }
+    }*/
 
     public void JumpAnim(float value) //Used for Animator events
     {
