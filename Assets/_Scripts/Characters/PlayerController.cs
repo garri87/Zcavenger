@@ -499,12 +499,12 @@ public class PlayerController : MonoBehaviour
             if (_inventory.selectedWeapon != Inventory.SelectedWeapon.Primary)
             {
                 drawWeapon = true;
-                DrawWeapon(WeaponScriptableObject.WeaponClass.Primary, true);
+                _inventory.DrawWeapon(WeaponScriptableObject.WeaponClass.Primary, true);
             }
             else
             {
                 holsterWeapon = true;
-                DrawWeapon(WeaponScriptableObject.WeaponClass.Primary, false);
+                _inventory.DrawWeapon(WeaponScriptableObject.WeaponClass.Primary, false);
             }
         }
 
@@ -514,12 +514,12 @@ public class PlayerController : MonoBehaviour
             {
                 drawWeapon = true;
 
-                DrawWeapon(WeaponScriptableObject.WeaponClass.Secondary, true);
+                _inventory.DrawWeapon(WeaponScriptableObject.WeaponClass.Secondary, true);
             }
             else
             {
                 holsterWeapon = true;
-                DrawWeapon(WeaponScriptableObject.WeaponClass.Secondary, false);
+                _inventory.DrawWeapon(WeaponScriptableObject.WeaponClass.Secondary, false);
             }
         }
 
@@ -528,12 +528,12 @@ public class PlayerController : MonoBehaviour
             if (_inventory.selectedWeapon != Inventory.SelectedWeapon.Melee)
             {
                 drawWeapon = true;
-                DrawWeapon(WeaponScriptableObject.WeaponClass.Melee, true);
+                _inventory.DrawWeapon(WeaponScriptableObject.WeaponClass.Melee, true);
             }
             else
             {
                 holsterWeapon = true;
-                DrawWeapon(WeaponScriptableObject.WeaponClass.Melee, false);
+                _inventory.DrawWeapon(WeaponScriptableObject.WeaponClass.Melee, false);
             }
         }
 
@@ -542,84 +542,17 @@ public class PlayerController : MonoBehaviour
             if (_inventory.selectedWeapon != Inventory.SelectedWeapon.Throwable)
             {
                 drawWeapon = true;
-                DrawWeapon(WeaponScriptableObject.WeaponClass.Throwable, true);
+                _inventory.DrawWeapon(WeaponScriptableObject.WeaponClass.Throwable, true);
             }
             else
             {
                 holsterWeapon = true;
-                DrawWeapon(WeaponScriptableObject.WeaponClass.Throwable, false);
+                _inventory.DrawWeapon(WeaponScriptableObject.WeaponClass.Throwable, false);
             }
         }
     }
 
-    /// <summary>
-    /// Triggers draw weapon animation
-    /// </summary>
-    /// <param name="weaponClass"></param>
-    /// <param name="draw"></param>
-    public void DrawWeapon(WeaponScriptableObject.WeaponClass weaponClass, bool draw)
-    {
-        Item selectedItem = null;
-        
-        switch (weaponClass)
-        {
-            case WeaponScriptableObject.WeaponClass.None:
-                break;
-
-            case WeaponScriptableObject.WeaponClass.Primary:
-                _animator.SetBool("RifleEquip", draw);
-                _animator.SetBool("PistolEquip", false);
-                _animator.SetBool("MeleeEquip", false);
-                _animator.SetBool("ThrowableEquip", false);
-                _inventory.selectedWeapon = SelectedWeapon.Primary;
-                selectedItem = _inventory.equippedPrimaryWeapon;
-
-                break;
-
-            case WeaponScriptableObject.WeaponClass.Secondary:
-                _animator.SetBool("RifleEquip", false);
-                _animator.SetBool("PistolEquip", draw);
-                _animator.SetBool("MeleeEquip", false);
-                _animator.SetBool("ThrowableEquip", false);
-                _inventory.selectedWeapon = SelectedWeapon.Secondary;
-                selectedItem = _inventory.equippedSecondaryWeapon;
-
-                break;
-
-            case WeaponScriptableObject.WeaponClass.Melee:
-                _animator.SetBool("RifleEquip", false);
-                _animator.SetBool("PistolEquip", false);
-                _animator.SetBool("MeleeEquip", draw);
-                _animator.SetBool("ThrowableEquip", false);
-                _inventory.selectedWeapon = SelectedWeapon.Melee;
-                selectedItem = _inventory.equippedMeleeWeapon;
-
-                break;
-
-            case WeaponScriptableObject.WeaponClass.Throwable:
-                _animator.SetBool("RifleEquip", false);
-                _animator.SetBool("PistolEquip", false);
-                _animator.SetBool("MeleeEquip", false);
-                _animator.SetBool("ThrowableEquip", draw);
-                _inventory.selectedWeapon = SelectedWeapon.Throwable;
-                selectedItem = _inventory.equippedThrowableWeapon;
-
-                break;
-        }
-
-        
-        if (draw)
-        {
-            selectedItem.itemLocation = ItemLocation.Player;
-        }
-        else
-        {
-           
-        }
-
-        selectedItem.weaponDrawn = draw;
-    }
-
+    
     public void DefaultController()
     {
 

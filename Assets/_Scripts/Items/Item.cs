@@ -173,6 +173,13 @@ public class Item : MonoBehaviour
     {
         if (scriptableObject)
         {
+            if(itemLocation == ItemLocation.Container || 
+            itemLocation == ItemLocation.Inventory ||
+            itemLocation == ItemLocation.Player || 
+            itemLocation == ItemLocation.Throwed){
+                    _boxCollider.enabled = false;
+            }
+
             switch (itemLocation)
             {
                 case ItemLocation.World:
@@ -184,22 +191,18 @@ public class Item : MonoBehaviour
                     break;
 
                 case ItemLocation.Container:
-                    _boxCollider.enabled = false;
                     itemModelGO.SetActive(false);
                     itemPickedUp = false;
                     break;
 
                 case ItemLocation.Inventory:
                     transform.parent = playerInventory.inventoryGo.transform;
-                    _boxCollider.enabled = false;
                     itemModelGO.SetActive(false);
                     itemPickedUp = true;
                     break;
 
                 case ItemLocation.Player:
-                    _boxCollider.enabled = false;
                     itemPickedUp = true;
-
 
                     switch (itemClass)
                     {
@@ -219,6 +222,7 @@ public class Item : MonoBehaviour
 
                 case ItemLocation.Throwed:
                     itemModelGO.SetActive(true);
+                    transform.parent = null;
                     break;
             }
             if (itemLocation != ItemLocation.World && itemLocation != ItemLocation.Throwed)

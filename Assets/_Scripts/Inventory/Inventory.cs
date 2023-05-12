@@ -622,6 +622,75 @@ public class Inventory : MonoBehaviour
     }
 
 
+/// <summary>
+    /// Triggers draw weapon animation
+    /// </summary>
+    /// <param name="weaponClass"></param>
+    /// <param name="draw"></param>
+    public void DrawWeapon(WeaponScriptableObject.WeaponClass weaponClass, bool draw)
+    {
+        Item selectedItem = null;
+        
+        switch (weaponClass)
+        {
+            case WeaponScriptableObject.WeaponClass.None:
+                break;
+
+            case WeaponScriptableObject.WeaponClass.Primary:
+                _playerAnimator.SetBool("RifleEquip", draw);
+                _playerAnimator.SetBool("PistolEquip", false);
+                _playerAnimator.SetBool("MeleeEquip", false);
+                _playerAnimator.SetBool("ThrowableEquip", false);
+                selectedWeapon = SelectedWeapon.Primary;
+                selectedItem = equippedPrimaryWeapon;
+
+                break;
+
+            case WeaponScriptableObject.WeaponClass.Secondary:
+                _playerAnimator.SetBool("RifleEquip", false);
+                _playerAnimator.SetBool("PistolEquip", draw);
+                _playerAnimator.SetBool("MeleeEquip", false);
+                _playerAnimator.SetBool("ThrowableEquip", false);
+                selectedWeapon = SelectedWeapon.Secondary;
+                selectedItem = equippedSecondaryWeapon;
+
+                break;
+
+            case WeaponScriptableObject.WeaponClass.Melee:
+                _playerAnimator.SetBool("RifleEquip", false);
+                _playerAnimator.SetBool("PistolEquip", false);
+                _playerAnimator.SetBool("MeleeEquip", draw);
+                _playerAnimator.SetBool("ThrowableEquip", false);
+                selectedWeapon = SelectedWeapon.Melee;
+                selectedItem = equippedMeleeWeapon;
+
+                break;
+
+            case WeaponScriptableObject.WeaponClass.Throwable:
+                _playerAnimator.SetBool("RifleEquip", false);
+                _playerAnimator.SetBool("PistolEquip", false);
+                _playerAnimator.SetBool("MeleeEquip", false);
+                _playerAnimator.SetBool("ThrowableEquip", draw);
+                selectedWeapon = SelectedWeapon.Throwable;
+                selectedItem = equippedThrowableWeapon;
+
+                break;
+        }
+
+        
+        if (draw)
+        {
+            selectedItem.itemLocation = ItemLocation.Player;
+        }
+        else
+        {
+           selectedWeapon = SelectedWeapon.None;
+        }
+
+        selectedItem.weaponDrawn = draw;
+    }
+
+
     #region Animator Events
 
     public void DrawWeaponAnim(string animatorMessage)
