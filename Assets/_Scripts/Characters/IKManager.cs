@@ -130,7 +130,7 @@ public class IKManager : MonoBehaviour
 
                 upperBodyLayerWeight = _animator.GetLayerWeight(1);
                 _animator.SetFloat("LayerWeight", upperBodyLayerWeight);
-                if (_playerController.weaponDrawn)
+                if (_playerController.weaponOnHands)
                 {
                     weaponItem = _playerController.drawnWeaponItem;
                     recoilMaxRotation = weaponItem.recoilMaxRotation;
@@ -170,7 +170,7 @@ public class IKManager : MonoBehaviour
         switch (playerType)
         {
             case PlayerType.Player:
-                if (_playerController.weaponDrawn && _playerController.isAiming)
+                if (_playerController.weaponOnHands && _playerController.isAiming)
                 {
                     if (!_playerController.drinking
                         || !_playerController.bandaging

@@ -765,6 +765,7 @@ GameObject:
   - component: {fileID: 478291837504896798}
   - component: {fileID: 9115604665980684958}
   - component: {fileID: 3320007712664421668}
+  - component: {fileID: 8646827503054690854}
   m_Layer: 13
   m_Name: Colt 1911
   m_TagString: Weapon
@@ -910,6 +911,18 @@ MonoBehaviour:
   lowSoundSensorScale: 0.5
   normalSoundSensorScale: 20
   highSoundSensorScale: 40
+--- !u!114 &8646827503054690854
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7985733274879894257}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48948dfe9d76b07488dacd46a7955fa1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &7809851170977483274
 PrefabInstance:
   m_ObjectHideFlags: 0

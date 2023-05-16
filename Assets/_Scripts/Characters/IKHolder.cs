@@ -35,7 +35,7 @@ public class IKHolder : MonoBehaviour
 
    private void Update()
    {
-      if (_playerController.weaponDrawn)
+      if (_playerController.weaponOnHands)
       {
          rightHandTarget = _playerController.drawnWeaponItem.gripTransform;
          
@@ -48,7 +48,7 @@ public class IKHolder : MonoBehaviour
 
    private void OnAnimatorIK(int layerIndex)
    {
-      if (_playerController.weaponDrawn)
+      if (_playerController.weaponOnHands)
       {
           handguardTarget.position = _playerController.drawnWeaponItem.handguardTransform.position;
 

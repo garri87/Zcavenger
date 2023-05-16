@@ -283,8 +283,7 @@ public class InventoryUI : MonoBehaviour
     {
         contextMenu.style.display = DisplayStyle.None;
 
-        try
-        {
+       
             GameObject itemGO = playerInventory.itemsList[selectedSlot];
             Item item = itemGO.GetComponent<Item>();
 
@@ -296,12 +295,8 @@ public class InventoryUI : MonoBehaviour
             {
                 //TODO: ALERTAR AL JUGADOR QUE EL ITEM NO SE PUEDE USAR
             }
-        }
-        catch (Exception e)
-        {
-
-            Debug.Log(e);
-        }
+        
+        
         
     }
     public void DropItem(ClickEvent evt)

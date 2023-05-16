@@ -1,11 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
-using UnityEngine.Animations.Rigging;
-using UnityEngine.Serialization;
-using UnityEngine.UIElements;
+
 
 
 [RequireComponent(typeof(WorldTextUI))]
@@ -141,6 +138,7 @@ public class Item : MonoBehaviour
     public SkinnedMeshRenderer targetSkinMesh;
 
     private Transform playerTransform;
+    private PlayerController playerController;
     private IKManager playerIKManager;
     private Inventory playerInventory;
     private Animator playerAnimator;
@@ -154,6 +152,7 @@ public class Item : MonoBehaviour
     {
         _boxCollider = GetComponent<BoxCollider>();
         playerTransform = GameObject.Find("Player").transform;
+        playerController = playerTransform.GetComponent<PlayerController>();
         playerIKManager = playerTransform.GetComponent<IKManager>();
         playerInventory = playerTransform.GetComponent<Inventory>();
         playerAnimator = playerTransform.GetComponent<Animator>();
@@ -208,9 +207,9 @@ public class Item : MonoBehaviour
                     {
                         case ItemClass.Weapon:
                             itemModelGO.SetActive(weaponDrawn);
-                            Transform rightHand = playerAnimator.GetBoneTransform(HumanBodyBones.RightHand);
-                            transform.position = rightHand.position;
-                            transform.rotation = Quaternion.LookRotation(rightHand.up);
+                            transform.position = playerController._WeaponHolder.position;
+                            transform.rotation = Quaternion.LookRotation(playerController._WeaponHolder.forward);
+                            transform.parent = playerController._WeaponHolder;
                             break;
 
                         case ItemClass.Outfit:

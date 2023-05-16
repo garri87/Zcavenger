@@ -94,6 +94,7 @@ GameObject:
   - component: {fileID: 934804815465297552}
   - component: {fileID: 576297614038277336}
   - component: {fileID: 248336373672548398}
+  - component: {fileID: 2523438461343324479}
   m_Layer: 13
   m_Name: Ak74 Rifle
   m_TagString: Weapon
@@ -239,6 +240,18 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &2523438461343324479
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 554726338646404138}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48948dfe9d76b07488dacd46a7955fa1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1021252213586603323
 GameObject:
   m_ObjectHideFlags: 0

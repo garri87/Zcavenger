@@ -46,7 +46,7 @@ public class Bullet : MonoBehaviour
 
     private void OnEnable()
     {
-        if (playerController.weaponDrawn)
+        if (playerController.weaponOnHands)
         {
             weaponItem = playerController.drawnWeaponItem;
             timer = bulletLifeTime;

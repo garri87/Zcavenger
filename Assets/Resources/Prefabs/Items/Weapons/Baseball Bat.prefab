@@ -157,6 +157,7 @@ GameObject:
   - component: {fileID: 3764544357597413636}
   - component: {fileID: 742960702846119038}
   - component: {fileID: 1321479984099538161}
+  - component: {fileID: 6281041594865332574}
   m_Layer: 13
   m_Name: Baseball Bat
   m_TagString: Weapon
@@ -303,6 +304,18 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &6281041594865332574
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3764544357597413639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48948dfe9d76b07488dacd46a7955fa1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3764544357826964923
 GameObject:
   m_ObjectHideFlags: 0

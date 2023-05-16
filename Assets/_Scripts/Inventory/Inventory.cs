@@ -2,38 +2,49 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 using static Item;
-using Debug = UnityEngine.Debug;
-
 using System.Linq;
+using static UnityEditor.Progress;
+using Autodesk.Fbx;
 
 public class Inventory : MonoBehaviour
 {
+
+    #region UI
     public bool showInventory = false;
 
     public UIManager uIManager;
     public InventoryUI inventoryUI;
     public InGameOverlayUI inGameOverlayUI;
+    #endregion
+
+    #region PLAYER REFERENCES
     public PlayerController _playerController;
     public Transform playerWeaponHolder;
     private Animator _playerAnimator;
-
-    public List<GameObject> itemsList;
     public GameObject inventoryGo;
+    public SkinnedMeshRenderer playerModelRenderer;
+    #endregion
 
-    [HideInInspector] public int currentCapacity;
+    #region INVENTORY LIST AND SETTINGS
+    public List<GameObject> itemsList;
+ 
     public int maxCapacity = 10;
     public int defaultMaxCapacity = 10;
-
+    [HideInInspector] public int currentCapacity;
     public bool inventoryFull;
 
-    [HideInInspector] public bool onItem;
-    [HideInInspector] public bool onWeaponItem;
-    private Transform collectItemTransform;
+    #endregion
 
-    public bool drawWeapon;
-    public bool holsterWeapon;
+    #region COLLECTIBLE REFERENCES
+    [HideInInspector] public bool onItem; //Is player over a collectible?
+    private Transform collectItemTransform; // Transform in world of current collectible
+    public GameObject itemCollectiblePrefab; //Collectible prefab for instantiate new items
+    #endregion
 
-    public enum SelectedWeapon
+    #region EQUIPMENT VARIABLES
+    public bool drawWeapon; //Animator trigger for draw weapons
+    public bool holsterWeapon;//Animator trigger for holster weapons
+    public enum SelectedWeapon //Current drawn weapon class
     {
         Primary,
         Secondary,
@@ -42,44 +53,24 @@ public class Inventory : MonoBehaviour
         None,
     }
     public SelectedWeapon selectedWeapon;
-
-
-
-
-    #region Player Equipment Slots
-
-    public Item equippedPrimaryWeapon;
-
-    public Item equippedSecondaryWeapon;
-
-    public Item equippedMeleeWeapon;
-
-    public Item equippedThrowableWeapon;
-
-
-    public Item equippedHeadOutfit;
-
-    public Item equippedVestOutfit;
-
-    public Item equippedTorsoOutfit;
-
-    public Item equippedLegsOutfit;
-
-    public Item equippedFeetOutfit;
-
-    public Item equippedBackpackOutfit;
-
-    public SkinnedMeshRenderer playerModelRenderer;
-
     public Dictionary<SelectedWeapon, Item> selectedWeapons;
-
     public Dictionary<WeaponScriptableObject.WeaponClass, Item> weaponsClasses;
-
-    public Dictionary<EquipmentSlot, Item> equipmentSlots;
-
     #endregion
 
-    public GameObject itemCollectiblePrefab;
+    #region Player Equipment Slots
+    public Item equippedPrimaryWeapon;
+    public Item equippedSecondaryWeapon;
+    public Item equippedMeleeWeapon;
+    public Item equippedThrowableWeapon;
+    public Item equippedHeadOutfit;
+    public Item equippedVestOutfit;
+    public Item equippedTorsoOutfit;
+    public Item equippedLegsOutfit;
+    public Item equippedFeetOutfit;
+    public Item equippedBackpackOutfit;
+    public Dictionary<EquipmentSlot, Item> equipmentSlots;
+    #endregion
+
 
 
 
@@ -87,11 +78,13 @@ public class Inventory : MonoBehaviour
     {
         _playerController = GetComponent<PlayerController>();
         inventoryGo = transform.Find("Inventory").gameObject;
+        _playerAnimator = GetComponent<Animator>();
+        playerWeaponHolder = transform.Find("WeaponHolder");
+
         uIManager = GameManager.Instance.uiManager;
         inventoryUI = uIManager.inventoryUI.GetComponent<InventoryUI>();
         inGameOverlayUI = uIManager.inGameOverlayUI.GetComponent<InGameOverlayUI>();
-        _playerAnimator = GetComponent<Animator>();
-        playerWeaponHolder = transform.Find("WeaponHolder");
+
 
         selectedWeapons = new Dictionary<SelectedWeapon, Item>
         {
@@ -133,12 +126,14 @@ public class Inventory : MonoBehaviour
 
     void Update()
     {
-        try
+
+        InventoryToggle();
+
+        if (equippedBackpackOutfit)
         {
             maxCapacity = equippedBackpackOutfit.backpackCapacity; //if a backpack is equipped, set its max capacity, else set to default
-
         }
-        catch
+        else
         {
             maxCapacity = defaultMaxCapacity;
         }
@@ -164,11 +159,10 @@ public class Inventory : MonoBehaviour
 
         inventoryUI.capacityLabel.text = "Capacity: " + currentCapacity + "/" + maxCapacity;
 
-        InventoryToggle();
 
-        if (!inventoryFull)
+        if (onItem && Input.GetKeyDown(GameManager.Instance._keyAssignments.useKey.keyCode))
         {
-            if (onItem && Input.GetKeyDown(GameManager.Instance._keyAssignments.useKey.keyCode))
+            if (!inventoryFull)
             {
                 if (collectItemTransform)
                 {
@@ -177,6 +171,10 @@ public class Inventory : MonoBehaviour
                     onItem = false;
                 }
 
+            }
+            else
+            {
+                Debug.Log("Inventory Full!");
             }
         }
 
@@ -268,10 +266,6 @@ public class Inventory : MonoBehaviour
             default:
                 break;
         }
-
-
-
-
     }
 
     /// <summary>
@@ -301,7 +295,7 @@ public class Inventory : MonoBehaviour
     /// <summary>
     /// Store a item into the inventory
     /// </summary>
-    /// <param name="itemTransform"> Item Component</param>
+    /// <param name="newItemGO">GameObject that contains item component+</param>
     public void AddItemToInventory(GameObject newItemGO)
     {
         Item item = newItemGO.GetComponent<Item>();
@@ -407,7 +401,7 @@ public class Inventory : MonoBehaviour
     /// Equips a clothing or weapon to the player
     /// </summary>
     /// <param name="itemGO"> Item gameobject to equip </param>
-    public void EquipItem(GameObject itemGO)//TODO: MEJORAR
+    public void EquipItem(GameObject itemGO)
     {
         Item newItem = itemGO.GetComponent<Item>();
 
@@ -442,6 +436,10 @@ public class Inventory : MonoBehaviour
                         break;
                     default:
                         break;
+                }
+                if (!_playerController.weaponOnHands)
+                {
+                  DrawWeapon(newItem.weaponClass, true);
                 }
 
                 break;
@@ -494,7 +492,7 @@ public class Inventory : MonoBehaviour
         {
             if (targetItem != null || item == targetItem)
             {
-                targetItem.itemEquipped = false;
+                targetItem.itemEquipped = false;  
                 targetItem.itemLocation = ItemLocation.Inventory;
                 if(targetItem.itemClass == ItemClass.Outfit)
                 {
@@ -505,6 +503,9 @@ public class Inventory : MonoBehaviour
             
                 item.itemEquipped = true;
                 item.itemLocation = ItemLocation.Player;
+
+                
+                item.weaponDrawn = true;
                 if(item.itemClass == ItemClass.Outfit)
                 {
                  RenderOutfit(item.gameObject);   
@@ -680,14 +681,24 @@ public class Inventory : MonoBehaviour
         
         if (draw)
         {
+
             selectedItem.itemLocation = ItemLocation.Player;
+            _playerController.drawnWeaponItem = selectedItem;
+            
         }
         else
         {
            selectedWeapon = SelectedWeapon.None;
+           _playerController.drawnWeaponItem = null;
+
         }
 
         selectedItem.weaponDrawn = draw;
+        _playerController.weaponOnHands = draw;
+
+        drawWeapon = draw;
+        holsterWeapon = !draw;
+
     }
 
 
@@ -695,31 +706,58 @@ public class Inventory : MonoBehaviour
 
     public void DrawWeaponAnim(string animatorMessage)
     {
+        
+
         switch (animatorMessage)
         {
             case "DrawWeapon":
-                if (selectedWeapons.TryGetValue(selectedWeapon, out Item weapon))
-                {
-                    weapon.weaponDrawn = true;
-                }
+
+                DrawSelected(true);
+
                 break;
 
             case "HolsterWeapon":
-                if (selectedWeapons.TryGetValue(selectedWeapon, out weapon))
-                {
-                    weapon.weaponDrawn = false;
-                }
+
+                DrawSelected(false);
+
                 break;
 
 
             case "End":
 
+                drawWeapon = false;
+                holsterWeapon = false;
 
                 break;
             default:
                 Debug.LogWarning("Invalid Animator Event Message: " + animatorMessage);
                 break;
         }
+
+        void DrawSelected(bool draw)
+        {
+            switch (selectedWeapon)
+            {
+                case SelectedWeapon.Primary:
+                    equippedPrimaryWeapon.weaponDrawn = draw;
+                    break;
+                case SelectedWeapon.Secondary:
+                    equippedSecondaryWeapon.weaponDrawn = draw;
+                    break;
+                case SelectedWeapon.Melee:
+                    equippedMeleeWeapon.weaponDrawn = draw;
+                    break;
+                case SelectedWeapon.Throwable:
+                    equippedThrowableWeapon.weaponDrawn = draw;
+                    break;
+                case SelectedWeapon.None:
+
+                    break;
+                default:
+                    break;
+            }
+        }
+        
     }
 
 

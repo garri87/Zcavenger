@@ -1,12 +1,5 @@
-using System;
-using TMPro;
-using Unity.Mathematics;
-using UnityEditor;
+
 using UnityEngine;
-using UnityEngine.Purchasing;
-using UnityEngine.Serialization;
-using static Inventory;
-using static Item;
 
 public class PlayerController : MonoBehaviour
 {
@@ -149,15 +142,13 @@ public class PlayerController : MonoBehaviour
     public Transform rightHand;
     public Transform _WeaponHolder; //Transform reference to place Child Gameobjects
     public Item drawnWeaponItem; //Item Component of current drawn weapon
-    public bool weaponDrawn; //Player has weapon in hands?
+    public bool weaponOnHands; //Player has weapon in hands?
     
-    [HideInInspector] public bool isAiming;
-    [HideInInspector] public bool attacking;
-    [HideInInspector] public bool reloadingWeapon;
+    public bool isAiming;
+    public bool attacking;
+    public bool reloadingWeapon;
 
     public LayerMask mouseAimMask;
-
-    private bool drawWeapon, holsterWeapon;
 
     #endregion
 
@@ -211,7 +202,7 @@ public class PlayerController : MonoBehaviour
         keyAssignments = gameManager.GetComponent<KeyAssignments>();
         _healthManager = GetComponent<HealthManager>();
         _rigidbody = GetComponent<Rigidbody>();
-
+        
         _inventory = GetComponent<Inventory>();
         _checkGround = GetComponentInChildren<CheckGround>();
         _playerAudio = GetComponent<PlayerAudio>();
@@ -225,9 +216,7 @@ public class PlayerController : MonoBehaviour
 
         rightHand = _animator.GetBoneTransform(HumanBodyBones.RightHand);
 
-        _WeaponHolder.parent = rightHand;
-        _WeaponHolder.transform.position = rightHand.position;
-        _WeaponHolder.transform.rotation = rightHand.rotation;
+        
        
 
         _stompDetector = gameObject.transform.Find("StompDetector").GetComponent<StompDetector>();
@@ -498,12 +487,10 @@ public class PlayerController : MonoBehaviour
         {
             if (_inventory.selectedWeapon != Inventory.SelectedWeapon.Primary)
             {
-                drawWeapon = true;
                 _inventory.DrawWeapon(WeaponScriptableObject.WeaponClass.Primary, true);
             }
             else
             {
-                holsterWeapon = true;
                 _inventory.DrawWeapon(WeaponScriptableObject.WeaponClass.Primary, false);
             }
         }
@@ -512,13 +499,11 @@ public class PlayerController : MonoBehaviour
         {
             if (_inventory.selectedWeapon != Inventory.SelectedWeapon.Secondary)
             {
-                drawWeapon = true;
 
                 _inventory.DrawWeapon(WeaponScriptableObject.WeaponClass.Secondary, true);
             }
             else
             {
-                holsterWeapon = true;
                 _inventory.DrawWeapon(WeaponScriptableObject.WeaponClass.Secondary, false);
             }
         }
@@ -527,12 +512,10 @@ public class PlayerController : MonoBehaviour
         {
             if (_inventory.selectedWeapon != Inventory.SelectedWeapon.Melee)
             {
-                drawWeapon = true;
                 _inventory.DrawWeapon(WeaponScriptableObject.WeaponClass.Melee, true);
             }
             else
             {
-                holsterWeapon = true;
                 _inventory.DrawWeapon(WeaponScriptableObject.WeaponClass.Melee, false);
             }
         }
@@ -541,17 +524,77 @@ public class PlayerController : MonoBehaviour
         {
             if (_inventory.selectedWeapon != Inventory.SelectedWeapon.Throwable)
             {
-                drawWeapon = true;
                 _inventory.DrawWeapon(WeaponScriptableObject.WeaponClass.Throwable, true);
             }
             else
             {
-                holsterWeapon = true;
                 _inventory.DrawWeapon(WeaponScriptableObject.WeaponClass.Throwable, false);
             }
         }
     }
 
+    public void AimBlock()
+    {
+        if (isAiming)
+        {
+            crosshairSprtRenderer.enabled = true;
+        }
+        else
+        {
+            crosshairSprtRenderer.enabled = false;
+        }
+
+        if (drawnWeaponItem)
+        {
+            if (drawnWeaponItem.weaponDrawn)
+            {
+                //Aiming toggle
+                if (Input.GetKey(keyAssignments.aimBlockKey.keyCode) && !PlayerBusy())
+                {
+                    if (drawnWeaponItem.weaponClass != WeaponScriptableObject.WeaponClass.Melee)
+                    {
+                        if (_checkGround.isGrounded && !_climber.attachedToLedge && !trapped && !beingBitten)
+                        {
+                            playerState = PlayerState.IsAiming;
+                            isAiming = true;
+                        }
+                        else
+                        {
+                            isAiming = false;
+                        }
+                    }
+
+                    if (drawnWeaponItem.weaponClass == WeaponScriptableObject.WeaponClass.Melee &&
+                        drawnWeaponItem.ID != 1001 && !beingBitten && !trapped) // 1001: knife
+                    {
+                        if (_healthManager.currentStamina >= _healthManager.blockHitPenalty)
+                        {
+                            blocking = true;
+                        }
+                        else
+                        {
+                            blocking = false;
+                        }
+                    }
+                    else
+                    {
+                        blocking = false;
+                    }
+                }
+                else
+                {
+                    isAiming = false;
+                }
+            }
+        }
+
+        if (weaponOnHands && Input.GetKeyUp(keyAssignments.aimBlockKey.keyCode))
+        {
+            isAiming = false;
+            blocking = false;
+        }
+
+    }
     
     public void DefaultController()
     {
@@ -630,8 +673,6 @@ public class PlayerController : MonoBehaviour
 
         #region PLAYER ACTIONS
 
-
-
         //WALKING TOGGLE
         if (Input.GetKey(keyAssignments.walkKey.keyCode) && !crouch && !prone)
         {
@@ -659,63 +700,11 @@ public class PlayerController : MonoBehaviour
             playerState = PlayerState.IsMoving;
         }
 
-        //AIMING
+        //AIMING AND BLOCKING
 
-        if (isAiming)
-        {
-            crosshairSprtRenderer.enabled = true;
-        }
-        else
-        {
-            crosshairSprtRenderer.enabled = false;
-        }
+        AimBlock();
 
-        if (weaponDrawn)
-        {
-            //Aiming toggle
-            if (Input.GetKey(keyAssignments.aimBlockKey.keyCode) && !PlayerBusy())
-            {
-                if (drawnWeaponItem.weaponClass != WeaponScriptableObject.WeaponClass.Melee)
-                {
-                    if (_checkGround.isGrounded && !_climber.attachedToLedge && !trapped && !beingBitten && !PlayerBusy())
-                    {
-                        playerState = PlayerState.IsAiming;
-                        isAiming = true;
-                    }
-                    else
-                    {
-                        isAiming = false;
-                    }
-                }
-
-                if (drawnWeaponItem.weaponClass == WeaponScriptableObject.WeaponClass.Melee &&
-                    drawnWeaponItem.ID != 1001 && !beingBitten && !trapped) // 1001: knife
-                {
-                    if (_healthManager.currentStamina >= _healthManager.blockHitPenalty)
-                    {
-                        blocking = true;
-                    }
-                    else
-                    {
-                        blocking = false;
-                    }
-                }
-                else
-                {
-                    blocking = false;
-                }
-            }
-            else
-            {
-                isAiming = false;
-            }
-        }
-
-        if (weaponDrawn && Input.GetKeyUp(keyAssignments.aimBlockKey.keyCode))
-        {
-            isAiming = false;
-            blocking = false;
-        }
+        
 
         //JUMPING
         if (Input.GetKeyDown(keyAssignments.jumpKey.keyCode)
@@ -836,7 +825,7 @@ public class PlayerController : MonoBehaviour
         //INTERACTION
         if (onDoor && Input.GetKeyDown(keyAssignments.useKey.keyCode))
         {
-            if (!_inventory.onItem && !_inventory.onWeaponItem)
+            if (!_inventory.onItem)
             {
                 if (!doorScript.locked && doorScript.doorOrientation == Door.DoorOrientation.Back)
                 {
@@ -971,7 +960,7 @@ public class PlayerController : MonoBehaviour
         _rigidbody.velocity = Vector3.zero;
         _animator.SetFloat(AnimatorSpeed, 0);
 
-        if (weaponDrawn && Input.GetKeyUp(keyAssignments.aimBlockKey.keyCode))
+        if (weaponOnHands && Input.GetKeyUp(keyAssignments.aimBlockKey.keyCode))
         {
             isAiming = false;
             blocking = false;
@@ -1001,8 +990,7 @@ public class PlayerController : MonoBehaviour
         _animator.SetBool("Drink", drinking);
         _animator.SetBool("Eat", eating);
         _animator.SetBool("GrabItem", grabItem);
-        _animator.SetBool("DrawWeapon", drawWeapon);
-        _animator.SetBool("HolsterWeapon", holsterWeapon);
+        
 
         _animator.SetFloat("GroundDistance", CalculateDistance(
             Vector3.Lerp(leftFoot.position, rightFoot.position, 0.5f) + Vector3.down / 8, Vector3.down,
