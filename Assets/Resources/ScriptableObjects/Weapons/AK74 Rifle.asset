@@ -12,19 +12,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf024635cc165114f8a391313e719346, type: 3}
   m_Name: AK74 Rifle
   m_EditorClassIdentifier: 
-  weaponClass: 1
   ID: 3004
-  weaponIcon: {fileID: 21300000, guid: 3278d2fa3a22cab41b55db2a2c0be1ba, type: 3}
   weaponName: AK74 rifle
   description: A Modern version of the AKM used by the soviet army. Uses 5.45mm ammo
     rounds
+  weaponIcon: {fileID: 21300000, guid: 3278d2fa3a22cab41b55db2a2c0be1ba, type: 3}
+  weaponPrefab: {fileID: 6347003740822450651, guid: 2795b862e3e735e40a1d38edefaf81fc, type: 3}
+  weaponClass: 1
   bulletID: 9007
-  bulletImpactPrefab: {fileID: 100002, guid: 9d25129d5c3e42841a660568a12d1f5b, type: 3}
-  enemyImpactPrefab: {fileID: 4574046231875852703, guid: 072c806ec52c79f419ddf9b0ec5ccfdf, type: 3}
-  muzzleFlashPrefab: {fileID: 100006, guid: ffda10e980415944bb80e1a2263b1712, type: 3}
   damage: 8
   fireRate: 10
   bulletsPerShot: 1
   magazineCap: 30
+  minFireAngle: 0
+  maxFireAngle: 0
   recoilDuration: 0.4
   recoilMaxRotation: -30
+  blockAttacks: 0
+  explosionRange: 0
+  bulletImpactPrefab: {fileID: 100002, guid: 9d25129d5c3e42841a660568a12d1f5b, type: 3}
+  enemyImpactPrefab: {fileID: 4574046231875852703, guid: 072c806ec52c79f419ddf9b0ec5ccfdf, type: 3}
+  muzzleFlashPrefab: {fileID: 100006, guid: ffda10e980415944bb80e1a2263b1712, type: 3}
+  shotSound: {fileID: 8300000, guid: 22e21b3121e101e4d915dab56ebf0f00, type: 3}
+  meleeAttackSound: {fileID: 0}
+  dropSound: {fileID: 0}
+  explosionSound: {fileID: 0}
+  magazineOutSound: {fileID: 8300000, guid: e0c70bed5c1a4443083a81de5648c7d5, type: 3}
+  magazineInSound: {fileID: 8300000, guid: eb5685b26a6494994af389a3293064e8, type: 3}
+  reloadEndSound: {fileID: 8300000, guid: 9158afb6966d445db9caf1dccf7acbcc, type: 3}
+  drawWeaponSound: {fileID: 8300000, guid: 592ab1b970cbc428eb6e02f1644b51cf, type: 3}

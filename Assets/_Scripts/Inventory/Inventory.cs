@@ -55,6 +55,7 @@ public class Inventory : MonoBehaviour
     public SelectedWeapon selectedWeapon;
     public Dictionary<SelectedWeapon, Item> selectedWeapons;
     public Dictionary<WeaponScriptableObject.WeaponClass, Item> weaponsClasses;
+    public IKAimer iKAimer;
     #endregion
 
     #region Player Equipment Slots
@@ -79,8 +80,8 @@ public class Inventory : MonoBehaviour
         _playerController = GetComponent<PlayerController>();
         inventoryGo = transform.Find("Inventory").gameObject;
         _playerAnimator = GetComponent<Animator>();
-        playerWeaponHolder = transform.Find("WeaponHolder");
-
+        //playerWeaponHolder = transform.Find("WeaponHolder");
+        iKAimer = GetComponent<IKAimer>();
         uIManager = GameManager.Instance.uiManager;
         inventoryUI = uIManager.inventoryUI.GetComponent<InventoryUI>();
         inGameOverlayUI = uIManager.inGameOverlayUI.GetComponent<InGameOverlayUI>();
@@ -126,7 +127,7 @@ public class Inventory : MonoBehaviour
 
     void Update()
     {
-
+        playerWeaponHolder.forward = playerWeaponHolder.parent.up;
         InventoryToggle();
 
         if (equippedBackpackOutfit)
@@ -503,12 +504,17 @@ public class Inventory : MonoBehaviour
             
                 item.itemEquipped = true;
                 item.itemLocation = ItemLocation.Player;
+                
 
                 
                 item.weaponDrawn = true;
                 if(item.itemClass == ItemClass.Outfit)
                 {
                  RenderOutfit(item.gameObject);   
+                }
+                else
+                {
+                    iKAimer.ConstraintHands(item);
                 }
             
             return item;
@@ -684,7 +690,8 @@ public class Inventory : MonoBehaviour
 
             selectedItem.itemLocation = ItemLocation.Player;
             _playerController.drawnWeaponItem = selectedItem;
-            
+            iKAimer.ConstraintHands(selectedItem);
+
         }
         else
         {

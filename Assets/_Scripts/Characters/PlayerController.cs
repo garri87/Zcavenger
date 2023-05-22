@@ -139,7 +139,6 @@ public class PlayerController : MonoBehaviour
 
     public Transform crosshairTransform; //Transform reference of the player's crosshair Gameobject
     private SpriteRenderer crosshairSprtRenderer;
-    public Transform rightHand;
     public Transform _WeaponHolder; //Transform reference to place Child Gameobjects
     public Item drawnWeaponItem; //Item Component of current drawn weapon
     public bool weaponOnHands; //Player has weapon in hands?
@@ -212,12 +211,6 @@ public class PlayerController : MonoBehaviour
         _soundSensor = GetComponent<SoundSensor>();
         _animator = GetComponent<Animator>();
         #endregion
-
-
-        rightHand = _animator.GetBoneTransform(HumanBodyBones.RightHand);
-
-        
-       
 
         _stompDetector = gameObject.transform.Find("StompDetector").GetComponent<StompDetector>();
     }

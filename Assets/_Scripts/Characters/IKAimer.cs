@@ -9,15 +9,19 @@ using UnityEngine.Animations.Rigging;
 public class IKAimer : MonoBehaviour
 {
 
-   public RigBuilder rigBuilder;
+  public RigBuilder rigBuilder;
    public Animator _animator;
    private PlayerController _playerController;
       
    public TwoBoneIKConstraint leftHandBoneConstraint,rightHandBoneConstraint;
 
-   private List<TwoBoneIKConstraint> boneConstraints; 
+   private List<TwoBoneIKConstraint> boneConstraints;
 
-
+   public Transform rightHandBone;
+   public Transform headBone;
+   public Transform spine3Bone;
+   public Transform hipsBone;
+   
    public MultiAimConstraint 
       spineAimConstraint, 
       chestAimConstraint, 
@@ -37,19 +41,20 @@ public class IKAimer : MonoBehaviour
    {
      // _animator = GetComponentInParent<Animator>();
       _playerController = GetComponentInParent<PlayerController>();
-      rigBuilder = GetComponentInParent<RigBuilder>();  
+   //   rigBuilder = GetComponentInParent<RigBuilder>();  
 
-      spineAimConstraint.data.constrainedObject = _animator.GetBoneTransform(HumanBodyBones.Spine);
-      chestAimConstraint.data.constrainedObject = _animator.GetBoneTransform(HumanBodyBones.Chest);
-      headAimConstraint.data.constrainedObject = _animator.GetBoneTransform(HumanBodyBones.Head);
-      rightHandAimConstraint.data.constrainedObject = _animator.GetBoneTransform(HumanBodyBones.RightHand);
+      //spineAimConstraint.data.constrainedObject = _animator.GetBoneTransform(HumanBodyBones.Spine);
+      //chestAimConstraint.data.constrainedObject = _animator.GetBoneTransform(HumanBodyBones.Chest);
+      //headAimConstraint.data.constrainedObject = _animator.GetBoneTransform(HumanBodyBones.Head);
+      //rightHandAimConstraint.data.constrainedObject = _animator.GetBoneTransform(HumanBodyBones.RightHand);
 
 
       aimConstraints = new List<MultiAimConstraint>()
       {
           spineAimConstraint,
           chestAimConstraint,
-          headAimConstraint
+          headAimConstraint,
+          rightHandAimConstraint
       };
 
         boneConstraints = new List<TwoBoneIKConstraint>()
@@ -57,30 +62,12 @@ public class IKAimer : MonoBehaviour
             leftHandBoneConstraint,
             rightHandBoneConstraint
         };
-
-        WeightedTransform targetSource = new WeightedTransform
-        {
-            transform = _playerController.crosshairTransform,
-            weight = 1f
-        };
-        foreach (MultiAimConstraint constraint in aimConstraints) //Add crosshair to aim constraints as target
-        {
-            var data = constraint.data.sourceObjects;
-            data.Clear();
-            data.Add(targetSource);
-            constraint.data.sourceObjects = data;
-
-        }
-        rigBuilder.Build();
-
-
+      
     }
 
     private void Start()
    {
-
-       
-        aimWeights = new float[aimConstraints.Count]; 
+      aimWeights = new float[aimConstraints.Count]; 
 
         for (int i = 0; i < aimConstraints.Count; i++) //Save the weights parameters of the editor
         {
@@ -92,17 +79,37 @@ public class IKAimer : MonoBehaviour
             aimConstraint.weight = 0;
         }
 
+        foreach (var bone in boneConstraints)
+        {
+           bone.weight = 0;
+        }
+
     }
 
    private void Update()
    {
-     // if (_playerController.drawnWeaponItem != null) _weaponItem = _playerController.drawnWeaponItem;
-            
-      AimAtTarget();       
+      AimAtTarget();
+
+      if (_playerController.drawnWeaponItem)
+      {
+         ConstraintHands(_playerController.drawnWeaponItem);
+         foreach (var bone in boneConstraints)
+         {
+            IncreaseConstraintWeight(bone);
+         }
+      }
+      else
+      {
+         foreach (var bone in boneConstraints)
+         {
+            DecreaseConstraintWeight(bone);
+         }
+      }
     }
    
    private void AimAtTarget()
    {
+      
       targetDistance = Vector3.Distance(_playerController._WeaponHolder.position,
          _playerController.crosshairTransform.position);
     
@@ -111,6 +118,8 @@ public class IKAimer : MonoBehaviour
       {
          if (_playerController.drawnWeaponItem.weaponClass != WeaponScriptableObject.WeaponClass.Melee)
          {
+            
+
             for (int i = 0; i < aimConstraints.Count; i++) 
             { 
                if (aimConstraints[i].weight < aimWeights[i]) 
@@ -119,6 +128,11 @@ public class IKAimer : MonoBehaviour
                }
                
             } 
+
+         
+
+            
+
          }
          else
          {
@@ -156,15 +170,12 @@ public class IKAimer : MonoBehaviour
    {
             try
             {
-                leftHandBoneConstraint.data.target = weapon.handguardTransform;
-                rightHandBoneConstraint.data.target = weapon.gripTransform;
-
-                rigBuilder.Build();
+               leftHandBoneConstraint.data.target.position = weapon.handguardTransform.position;
+               //rightHandBoneConstraint.data.target.position = weapon.gripTransform.position;
             }
-            catch
+            catch (Exception e)
             {
-
-                
+               Debug.Log(e);
             }
    }
 
