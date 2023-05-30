@@ -274,9 +274,9 @@ MonoBehaviour:
       m_Item7:
         transform: {fileID: 0}
         weight: 0
-    m_Offset: {x: 0, y: -13, z: 0}
-    m_MinLimit: -180
-    m_MaxLimit: 180
+    m_Offset: {x: 0, y: 0, z: 0}
+    m_MinLimit: -90
+    m_MaxLimit: 90
     m_AimAxis: 4
     m_UpAxis: 2
     m_WorldUpType: 0
@@ -285,8 +285,8 @@ MonoBehaviour:
     m_MaintainOffset: 0
     m_ConstrainedAxes:
       x: 1
-      y: 0
-      z: 0
+      y: 1
+      z: 1
 --- !u!1 &519487967170971219
 GameObject:
   m_ObjectHideFlags: 0
@@ -333,12 +333,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Weight: 0.5
   m_Data:
-    m_ConstrainedObject: {fileID: 2243960412559288516}
+    m_ConstrainedObject: {fileID: 0}
     m_SourceObjects:
       m_Length: 1
       m_Item0:
         transform: {fileID: 8008613908714685623}
-        weight: 1
+        weight: 0.2
       m_Item1:
         transform: {fileID: 0}
         weight: 0
@@ -360,9 +360,9 @@ MonoBehaviour:
       m_Item7:
         transform: {fileID: 0}
         weight: 0
-    m_Offset: {x: 0, y: -13, z: 0}
-    m_MinLimit: -90
-    m_MaxLimit: 90
+    m_Offset: {x: 0, y: 0, z: 0}
+    m_MinLimit: -45
+    m_MaxLimit: 45
     m_AimAxis: 4
     m_UpAxis: 2
     m_WorldUpType: 0
@@ -417,14 +417,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3c430f382484144e925c097c2d33cfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Weight: 0.8
+  m_Weight: 0.5
   m_Data:
     m_ConstrainedObject: {fileID: 3265849347950329329}
     m_SourceObjects:
       m_Length: 1
       m_Item0:
         transform: {fileID: 8008613908714685623}
-        weight: 1
+        weight: 0.5
       m_Item1:
         transform: {fileID: 0}
         weight: 0
@@ -446,9 +446,9 @@ MonoBehaviour:
       m_Item7:
         transform: {fileID: 0}
         weight: 0
-    m_Offset: {x: 0, y: -13, z: 0}
-    m_MinLimit: -60
-    m_MaxLimit: 60
+    m_Offset: {x: 0, y: 0, z: 0}
+    m_MinLimit: -90
+    m_MaxLimit: 90
     m_AimAxis: 4
     m_UpAxis: 2
     m_WorldUpType: 0
@@ -711,7 +711,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4264401178765928508}
-  - {fileID: 2441706124222976022}
   m_Father: {fileID: 5602110467758173512}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -797,7 +796,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Weight: 1
-  m_Effectors: []
+  m_Effectors:
+  - m_Transform: {fileID: 8008613908714685623}
+    m_Style:
+      shape: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+      color: {r: 0.8962264, g: 0.7421406, b: 0.004227493, a: 0.5}
+      size: 0.1
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0}
+    m_Visible: 1
 --- !u!1 &1386980493492743087
 GameObject:
   m_ObjectHideFlags: 0
@@ -1184,7 +1191,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &8821578971226373176
 Transform:
   m_ObjectHideFlags: 0
@@ -1246,7 +1253,6 @@ GameObject:
   - component: {fileID: 6203521335106203608}
   - component: {fileID: 656333378582832933}
   - component: {fileID: 5795788018572495649}
-  - component: {fileID: 5744798299842134181}
   - component: {fileID: 3941401723030504493}
   - component: {fileID: 5876263577225628495}
   - component: {fileID: 1460618742352263149}
@@ -1256,7 +1262,7 @@ GameObject:
   - component: {fileID: 5850774065968739280}
   m_Layer: 6
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1421,14 +1427,15 @@ MonoBehaviour:
   _animator: {fileID: 4956584997949074188}
   upperBodyLayerName: UpperBody
   upperMaskActive: 0
-  leftHandTarget: {fileID: 0}
-  rightHandTarget: {fileID: 0}
-  leftElbowTarget: {fileID: 0}
-  rightElbowTarget: {fileID: 0}
+  leftHandTarget: {fileID: 3590655215399447403}
+  rightHandTarget: {fileID: 8821578971226373176}
+  leftElbowTarget: {fileID: 4680046723624449076}
+  rightElbowTarget: {fileID: 6281960124636645010}
   spineTarget: {fileID: 0}
   agentHead: {fileID: 0}
   weaponItem: {fileID: 0}
   targetPosition: {x: 0, y: 0, z: 0}
+  recoilActive: 1
   bulletRecoilCurve:
     serializedVersion: 2
     m_Curve:
@@ -1615,31 +1622,6 @@ MonoBehaviour:
   lowSoundSensorScale: 0.2
   normalSoundSensorScale: 2
   highSoundSensorScale: 5
---- !u!114 &5744798299842134181
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1829217584047025100}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ebd1a9715cd55164eb9b7bdfba16f429, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _soundSensor: {fileID: 4238633660213838388}
-  _audioSource: {fileID: 2193770038334123245}
-  shotSound: {fileID: 0}
-  meleeAttackSound: {fileID: 0}
-  dropSound: {fileID: 0}
-  explosionSound: {fileID: 0}
-  magazineOutSound: {fileID: 8300000, guid: e0c70bed5c1a4443083a81de5648c7d5, type: 3}
-  magazineInSound: {fileID: 8300000, guid: eb5685b26a6494994af389a3293064e8, type: 3}
-  reloadEndSound: {fileID: 0}
-  drawWeaponSound: {fileID: 8300000, guid: 95d6c402778044a598e0c2fd3fe3cdb7, type: 3}
-  lowSoundSensorScale: 20
-  normalSoundSensorScale: 200
-  highSoundSensorScale: 400
 --- !u!114 &3941401723030504493
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1813,8 +1795,8 @@ MonoBehaviour:
   rightHandAimConstraint: {fileID: 6147451264655562214}
   aimWeights: []
   targetDistance: 0
-  minDistance: 1
-  aimTime: 1.3
+  minDistance: 0.1
+  aimTime: 10
 --- !u!114 &1548733465547014423
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2378,14 +2360,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2124945412287036164}
-  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: -0, z: 16.1}
-  m_LocalScale: {x: 0.099999964, y: 31.799997, z: 0.09999998}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 17.04, z: 0}
+  m_LocalScale: {x: 0.099999934, y: 31.800016, z: 0.09999998}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 4215486391356547914}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+  m_Father: {fileID: 7276315342575535742}
+  m_RootOrder: 10
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &8298651537075453984
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -3366,6 +3348,7 @@ Transform:
   - {fileID: 4680046723624449076}
   - {fileID: 8821578971226373176}
   - {fileID: 6281960124636645010}
+  - {fileID: 2441706124222976022}
   m_Father: {fileID: 4503663635571787294}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4891,7 +4874,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &6281960124636645010
 Transform:
   m_ObjectHideFlags: 0
@@ -5342,9 +5325,9 @@ MonoBehaviour:
       m_Item7:
         transform: {fileID: 0}
         weight: 0
-    m_Offset: {x: -12, y: -13, z: 0}
-    m_MinLimit: -180
-    m_MaxLimit: 180
+    m_Offset: {x: 0, y: 0, z: 0}
+    m_MinLimit: -90
+    m_MaxLimit: 90
     m_AimAxis: 2
     m_UpAxis: 1
     m_WorldUpType: 0
@@ -5353,8 +5336,8 @@ MonoBehaviour:
     m_MaintainOffset: 0
     m_ConstrainedAxes:
       x: 1
-      y: 0
-      z: 0
+      y: 1
+      z: 1
 --- !u!1 &6673458210336734839
 GameObject:
   m_ObjectHideFlags: 0

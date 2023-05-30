@@ -1,7 +1,7 @@
 fileFormatVersion: 2
 guid: a67c4cd6e85dba44187ccdd82e209898
 ModelImporter:
-  serializedVersion: 21202
+  serializedVersion: 21300
   internalIDToNameTable:
   - first:
       74: -203655887218126122
@@ -75,8 +75,8 @@ ModelImporter:
         intParameter: 0
         messageOptions: 0
       - time: 0.20652173
-        functionName: DrawWeaponSound
-        data: 
+        functionName: AnimationSound
+        data: DrawWeaponSound
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0
@@ -898,6 +898,7 @@ ModelImporter:
   humanoidOversampling: 1
   avatarSetup: 2
   addHumanoidExtraRootOnlyWhenUsingAvatar: 1
+  remapMaterialsIfMaterialImportModeIsNone: 1
   additionalBone: 0
   userData: 
   assetBundleName: 

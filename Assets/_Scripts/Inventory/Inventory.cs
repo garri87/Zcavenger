@@ -521,7 +521,7 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    public int CheckItemsLeft(int id, int counter)
+    public int CheckItemsLeft(int id)
     {
         //Debug.Log("seeking inventory for ID " + id);
 
@@ -534,9 +534,6 @@ public class Inventory : MonoBehaviour
                 total += item.quantity;
             }
         }
-
-        counter = total;
-        //Debug.Log("return" + counter);
         return total;
     }
 
@@ -579,7 +576,7 @@ public class Inventory : MonoBehaviour
     /// Updates the bullet counter in the in-game overlay UI
     /// </summary>
     /// <param name="item"></param>
-    public void UpdateBulletCounter(Item item)
+    public void UpdateBulletCounterUI(Item item)
     {
         Label bulletCounter = inGameOverlayUI.bulletCountLabel;
         if (selectedWeapon == SelectedWeapon.Melee
@@ -589,6 +586,7 @@ public class Inventory : MonoBehaviour
         }
         else
         {
+            item.totalBullets = CheckItemsLeft(item.bulletID);
             bulletCounter.text = item.bulletsInMag + "/" + item.totalBullets;
         }
 
@@ -691,7 +689,7 @@ public class Inventory : MonoBehaviour
             selectedItem.itemLocation = ItemLocation.Player;
             _playerController.drawnWeaponItem = selectedItem;
             iKAimer.ConstraintHands(selectedItem);
-
+            
         }
         else
         {

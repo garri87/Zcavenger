@@ -7943,15 +7943,18 @@ AnimatorStateTransition:
   - m_ConditionMode: 1
     m_ConditionEvent: Aim
     m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: Prone
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 701254112346241404}
   m_Solo: 0
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.25
+  m_TransitionDuration: 0.58333445
   m_TransitionOffset: 0
-  m_ExitTime: 0.97081715
+  m_ExitTime: 0.93190646
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -19926,7 +19929,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: -203655887218126122, guid: 21e00cf07c01c034e8f06846a70b1747, type: 3}
+  m_Motion: {fileID: -203655887218126122, guid: 7ab698c8842729a4f926b647fb351c89, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -20151,10 +20154,7 @@ AnimatorStateTransition:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: 
-  m_Conditions:
-  - m_ConditionMode: 2
-    m_ConditionEvent: Crouch
-    m_EventTreshold: 0
+  m_Conditions: []
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 5674068606860915165}
   m_Solo: 0
@@ -22603,7 +22603,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b3bbf5ae9279e844b4e72df45723116, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  controller: 2
+  onUpdateController: 0
+  onExitController: 0
 --- !u!1101 &1594804005266654465
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -24911,7 +24912,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b3bbf5ae9279e844b4e72df45723116, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  controller: 3
+  onUpdateController: 0
+  onExitController: 0
 --- !u!1101 &2757466694561576171
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -26202,7 +26204,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b3bbf5ae9279e844b4e72df45723116, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  controller: 1
+  onUpdateController: 0
+  onExitController: 0
 --- !u!1101 &3249180657500100224
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -27090,7 +27093,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b3bbf5ae9279e844b4e72df45723116, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  controller: 1
+  onUpdateController: 3
+  onExitController: 0
 --- !u!1101 &3602353676367223747
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -27999,7 +28003,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b3bbf5ae9279e844b4e72df45723116, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  controller: 1
+  onUpdateController: 0
+  onExitController: 0
 --- !u!1107 &4124955886764140838
 AnimatorStateMachine:
   serializedVersion: 6
@@ -33989,7 +33994,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b3bbf5ae9279e844b4e72df45723116, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  controller: 1
+  onUpdateController: 0
+  onExitController: 0
 --- !u!1101 &6869791169345730359
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -37429,7 +37435,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b3bbf5ae9279e844b4e72df45723116, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  controller: 1
+  onUpdateController: 0
+  onExitController: 0
 --- !u!1101 &8389716813334494057
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -38357,7 +38364,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b3bbf5ae9279e844b4e72df45723116, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  controller: 3
+  onUpdateController: 0
+  onExitController: 0
 --- !u!1102 &8790468993134055613
 AnimatorState:
   serializedVersion: 6

@@ -12,19 +12,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf024635cc165114f8a391313e719346, type: 3}
   m_Name: Baseball Bat
   m_EditorClassIdentifier: 
-  weaponClass: 3
   ID: 1002
-  weaponIcon: {fileID: 21300000, guid: 2e6ee5bcf507eda468375a8387026e31, type: 3}
   weaponName: Baseball bat
   description: Modern version of the cavemen's club. To throw balls very far... and
     heads too, why not?
+  weaponIcon: {fileID: 21300000, guid: 2e6ee5bcf507eda468375a8387026e31, type: 3}
+  weaponPrefab: {fileID: 3764544357597413639, guid: 0882dfa86e0670d4a86b9b41ffa5e967, type: 3}
+  weaponClass: 3
   bulletID: 0
-  bulletImpactPrefab: {fileID: 0}
-  enemyImpactPrefab: {fileID: 0}
-  muzzleFlashPrefab: {fileID: 0}
   damage: 12
   fireRate: 1
   bulletsPerShot: 1
   magazineCap: 0
+  minFireAngle: 0
+  maxFireAngle: 0
   recoilDuration: 0
   recoilMaxRotation: 0
+  blockAttacks: 0
+  explosionRange: 0
+  bulletImpactPrefab: {fileID: 0}
+  enemyImpactPrefab: {fileID: 0}
+  muzzleFlashPrefab: {fileID: 0}
+  shotSound: {fileID: 0}
+  meleeAttackSound: {fileID: 0}
+  dropSound: {fileID: 0}
+  explosionSound: {fileID: 0}
+  magazineOutSound: {fileID: 0}
+  magazineInSound: {fileID: 0}
+  reloadEndSound: {fileID: 0}
+  drawWeaponSound: {fileID: 0}

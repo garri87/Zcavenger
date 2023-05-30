@@ -83,7 +83,7 @@ public class WeaponSound : MonoBehaviour
                 
                 break;
             
-            case "End":
+            case "ReloadEnd":
                 _audioSource.PlayOneShot(reloadEndSound);
                 break;
         }

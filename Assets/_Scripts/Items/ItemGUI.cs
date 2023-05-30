@@ -64,7 +64,6 @@ public class ItemGUI : Editor
     private SerializedProperty _magGameObject;
 
     private SerializedProperty _totalBullets;
-    private SerializedProperty _reloadingWeapon;
     private SerializedProperty _attacking;
     private SerializedProperty _attackNumber;
     private SerializedProperty _meleeAttackTimer;
@@ -152,7 +151,6 @@ public class ItemGUI : Editor
         _magHolder = serializedObject.FindProperty("magHolder");
         _magGameObject = serializedObject.FindProperty("magGameObject");
         _totalBullets = serializedObject.FindProperty("totalBullets");
-        _reloadingWeapon = serializedObject.FindProperty("reloadingWeapon");
         _attacking = serializedObject.FindProperty("attacking");
         _attackNumber = serializedObject.FindProperty("attackNumber");
         _meleeAttackTimer = serializedObject.FindProperty("meleeAttackTimer");
@@ -247,7 +245,6 @@ public class ItemGUI : Editor
                 EditorGUILayout.PropertyField(_magHolder);
                 EditorGUILayout.PropertyField(_magGameObject);
                 EditorGUILayout.PropertyField(_totalBullets);
-                EditorGUILayout.PropertyField(_reloadingWeapon);
                 EditorGUILayout.PropertyField(_attacking);
                 EditorGUILayout.PropertyField(_attackNumber);
                 EditorGUILayout.PropertyField(_meleeAttackTimer);

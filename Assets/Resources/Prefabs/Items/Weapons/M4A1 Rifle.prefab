@@ -181,7 +181,7 @@ MonoBehaviour:
   muzzleCollider: {fileID: 7974566602406068590}
   flashLight: {fileID: 2212970427444290607}
   magHolder: {fileID: 7249398174216032061}
-  magGameObject: {fileID: 0}
+  magGameObject: {fileID: 864607506341184493}
 --- !u!114 &5764966229707904077
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -414,7 +414,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4268980898541358266}
-  - component: {fileID: 9106104362720769822}
   m_Layer: 13
   m_Name: Grip
   m_TagString: Untagged
@@ -437,24 +436,6 @@ Transform:
   m_Father: {fileID: 934804815465297552}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &9106104362720769822
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4720302052762756181}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  outlineMode: 0
-  outlineColor: {r: 1, g: 1, b: 1, a: 1}
-  outlineWidth: 1
-  precomputeOutline: 0
-  bakeKeys: []
-  bakeValues: []
 --- !u!1 &5167620175527544731
 GameObject:
   m_ObjectHideFlags: 0
@@ -543,14 +524,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8155889708158799509}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.066, y: 0.046, z: 0.129}
+  m_LocalRotation: {x: 0.011963662, y: -0.33020285, z: -0.5066893, w: 0.79629695}
+  m_LocalPosition: {x: -0.047, y: -0.015, z: 0.119}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 934804815465297552}
   m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -18.395, y: -34.539, z: -59.174}
 --- !u!1 &8415010759938323534
 GameObject:
   m_ObjectHideFlags: 0

@@ -12,19 +12,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf024635cc165114f8a391313e719346, type: 3}
   m_Name: Knife
   m_EditorClassIdentifier: 
-  weaponClass: 3
   ID: 1001
-  weaponIcon: {fileID: 21300000, guid: 83d8bea90927f174bbacad7eb9abd245, type: 3}
   weaponName: Tactical Knife
   description: Hunting knife, designed for cutting rather than stabbing. The basic
     apocalypse companion.
+  weaponIcon: {fileID: 21300000, guid: 83d8bea90927f174bbacad7eb9abd245, type: 3}
+  weaponPrefab: {fileID: 7001440505925772243, guid: e867f9d41c401c848ae9085993e67cd9, type: 3}
+  weaponClass: 3
   bulletID: 0
-  bulletImpactPrefab: {fileID: 0}
-  enemyImpactPrefab: {fileID: 0}
-  muzzleFlashPrefab: {fileID: 0}
   damage: 8
   fireRate: 1
   bulletsPerShot: 1
   magazineCap: 0
+  minFireAngle: 0
+  maxFireAngle: 0
   recoilDuration: 0
   recoilMaxRotation: 0
+  blockAttacks: 0
+  explosionRange: 0
+  bulletImpactPrefab: {fileID: 0}
+  enemyImpactPrefab: {fileID: 0}
+  muzzleFlashPrefab: {fileID: 0}
+  shotSound: {fileID: 0}
+  meleeAttackSound: {fileID: 0}
+  dropSound: {fileID: 0}
+  explosionSound: {fileID: 0}
+  magazineOutSound: {fileID: 0}
+  magazineInSound: {fileID: 0}
+  reloadEndSound: {fileID: 0}
+  drawWeaponSound: {fileID: 0}

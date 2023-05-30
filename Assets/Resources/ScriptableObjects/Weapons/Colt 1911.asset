@@ -12,19 +12,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf024635cc165114f8a391313e719346, type: 3}
   m_Name: Colt 1911
   m_EditorClassIdentifier: 
-  weaponClass: 2
   ID: 2005
-  weaponIcon: {fileID: 21300000, guid: 6edc021b266c59446a0d2daa24201805, type: 3}
   weaponName: Colt 1911
   description: Semi-Automatic simple action pistol. Uses .45 ACP rounds
+  weaponIcon: {fileID: 21300000, guid: 6edc021b266c59446a0d2daa24201805, type: 3}
+  weaponPrefab: {fileID: 7985733274879894257, guid: d366cc2a55129714d858bbc7d8528151, type: 3}
+  weaponClass: 2
   bulletID: 9002
-  bulletImpactPrefab: {fileID: 100002, guid: 9d25129d5c3e42841a660568a12d1f5b, type: 3}
-  enemyImpactPrefab: {fileID: 4574046231875852703, guid: 072c806ec52c79f419ddf9b0ec5ccfdf, type: 3}
-  muzzleFlashPrefab: {fileID: 100006, guid: ffda10e980415944bb80e1a2263b1712, type: 3}
   damage: 9
   fireRate: 3
   bulletsPerShot: 1
   magazineCap: 7
+  minFireAngle: 0
+  maxFireAngle: 0
   recoilDuration: 0.3
   recoilMaxRotation: 30
+  blockAttacks: 0
   explosionRange: 0
+  bulletImpactPrefab: {fileID: 100002, guid: 9d25129d5c3e42841a660568a12d1f5b, type: 3}
+  enemyImpactPrefab: {fileID: 4574046231875852703, guid: 072c806ec52c79f419ddf9b0ec5ccfdf, type: 3}
+  muzzleFlashPrefab: {fileID: 100006, guid: ffda10e980415944bb80e1a2263b1712, type: 3}
+  shotSound: {fileID: 0}
+  meleeAttackSound: {fileID: 0}
+  dropSound: {fileID: 0}
+  explosionSound: {fileID: 0}
+  magazineOutSound: {fileID: 0}
+  magazineInSound: {fileID: 0}
+  reloadEndSound: {fileID: 0}
+  drawWeaponSound: {fileID: 0}

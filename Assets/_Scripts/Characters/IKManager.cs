@@ -42,6 +42,7 @@ public class IKManager : MonoBehaviour
     public Vector3 targetPosition;
 
     #region Recoil
+    public bool recoilActive;
     public AnimationCurve bulletRecoilCurve;
     public float recoilMaxRotation;
     public float recoilDuration;
@@ -176,7 +177,10 @@ public class IKManager : MonoBehaviour
                         || !_playerController.bandaging
                         || !_playerController.eating)
                     {
-                        RecoilAnimation();
+                        if (recoilActive)
+                        {
+                            RecoilAnimation();
+                        }
                     }
                 }
                 break;

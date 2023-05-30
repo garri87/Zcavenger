@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class ChangeCotroller : StateMachineBehaviour
 {
@@ -14,7 +15,8 @@ public class ChangeCotroller : StateMachineBehaviour
         OnUI,
     }
 
-    public Controller controller;
+    public PlayerController.ControllerType onUpdateController;
+    public PlayerController.ControllerType onExitController;
 
     private PlayerController _playerController;
     
@@ -28,33 +30,13 @@ public class ChangeCotroller : StateMachineBehaviour
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        switch (controller)
-        {
-               case Controller.Default:
-                   _playerController.controllerType = PlayerController.ControllerType.DefaultController;    
-               break;
-               case Controller.StandBy:
-                   _playerController.controllerType = PlayerController.ControllerType.StandByController;    
-
-               break;
-               case Controller.OnLadder:
-                   _playerController.controllerType = PlayerController.ControllerType.OnLadderController;    
-
-               break;
-               case Controller.OnLedge:
-                   _playerController.controllerType = PlayerController.ControllerType.OnLedgeController;    
-
-               break;
-               case Controller.OnUI:
-                   _playerController.controllerType = PlayerController.ControllerType.OnUIController;
-                   break;
-        }
+        _playerController.controllerType = onUpdateController;
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        _playerController.controllerType = PlayerController.ControllerType.DefaultController;
+        _playerController.controllerType = onExitController;
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

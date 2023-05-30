@@ -68,6 +68,8 @@ public class PlayerController : MonoBehaviour
     private bool crouch;
     public bool prone;
     public bool roll;
+    private float rollTime = 0.1f;
+    private float rollTimer;
     public bool blocking;
     public bool trapped;
     public bool beingBitten;
@@ -165,6 +167,7 @@ public class PlayerController : MonoBehaviour
     private SoundSensor _soundSensor;
     [HideInInspector] public AgentController stompTargetAgentController;
     [HideInInspector] public StompDetector _stompDetector;
+    private IKAimer _ikAimer;
 
 
 
@@ -213,6 +216,7 @@ public class PlayerController : MonoBehaviour
         #endregion
 
         _stompDetector = gameObject.transform.Find("StompDetector").GetComponent<StompDetector>();
+        _ikAimer = GetComponent<IKAimer>();
     }
 
     void Start()
@@ -224,6 +228,7 @@ public class PlayerController : MonoBehaviour
             transform.position = gameManager.startingPosition.position;
             SwitchPlayLine(gameManager.startingPlayline);
         }
+        rollTimer = rollTime;
 
     }
 
@@ -331,6 +336,17 @@ public class PlayerController : MonoBehaviour
         {
             controllerType = ControllerType.DefaultController;
         }
+
+        if (roll)
+        {
+            rollTimer -= Time.deltaTime;
+            if (rollTimer <=0)
+            {
+                roll = false;
+                rollTimer = rollTime;
+            }  
+        }
+        
         #endregion
 
         #region Ladder Climbing
@@ -769,6 +785,7 @@ public class PlayerController : MonoBehaviour
             }
 
             //ROLLING
+            
             if (Input.GetKeyDown(keyAssignments.crouchKey.keyCode))
             {
                 if (doubleTapTime > 0 && tapCount == 1 /*Number of Taps you want Minus One*/)
@@ -807,13 +824,49 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        //STOMP ENEMIES
-
+        //ATTACKS
+        
         canStomp = _stompDetector.canStomp;
-        if (canStomp && !beingBitten && Input.GetKeyDown(keyAssignments.attackKey.keyCode))
+        
+        if (!beingBitten && Input.GetKeyDown(keyAssignments.attackKey.keyCode))
         {
-            _animator.SetTrigger("Stomp");
+            //STOMP
+            if (canStomp)
+            {
+                _animator.SetTrigger("Stomp");
+            }
         }
+
+        if (!canStomp && !beingBitten && Input.GetKey(keyAssignments.attackKey.keyCode))
+        {
+            //FIRE WEAPON
+            if (drawnWeaponItem)
+            {
+                if (drawnWeaponItem.meleeAttackTimer <= 0)
+                {
+                    if (drawnWeaponItem.weaponClass == WeaponScriptableObject.WeaponClass.Primary ||
+                        drawnWeaponItem.weaponClass == WeaponScriptableObject.WeaponClass.Secondary)
+                    {
+                        if (isAiming)
+                        {
+                            drawnWeaponItem.FireWeapon();    
+                        }
+                        
+                    }
+
+                    //MELEE ATTACK
+                    if (drawnWeaponItem.weaponClass == WeaponScriptableObject.WeaponClass.Melee)
+                    {
+                        drawnWeaponItem.attacking = true;
+                    }
+
+                    drawnWeaponItem.meleeAttackTimer = drawnWeaponItem.fireRate;
+                }
+            }
+        }
+        
+        
+        
 
         //INTERACTION
         if (onDoor && Input.GetKeyDown(keyAssignments.useKey.keyCode))
@@ -852,6 +905,30 @@ public class PlayerController : MonoBehaviour
 
         #endregion
 
+        //WEAPONS
+        if (Input.GetKeyDown(keyAssignments.reloadKey.keyCode))
+        {
+            if (drawnWeaponItem && !reloadingWeapon && drawnWeaponItem.itemClass == Item.ItemClass.Weapon)
+            {
+                if (drawnWeaponItem.bulletsInMag < drawnWeaponItem.magazineCap &&
+                    _inventory.CheckItemsLeft(drawnWeaponItem.bulletID) > 0)
+                {
+                    reloadingWeapon = true;
+                }
+                else
+                {
+                    Debug.Log("No Ammo found for " + drawnWeaponItem.itemName);
+                    reloadingWeapon = false;
+                }
+            }
+        }
+
+        if (Input.GetKey(keyAssignments.attackKey.keyCode) && !canStomp)
+        {
+            
+            
+        }
+        
         #region PUSH OBJECTS
 
         if (IKManager.pushingObject == true)
@@ -983,6 +1060,7 @@ public class PlayerController : MonoBehaviour
         _animator.SetBool("Drink", drinking);
         _animator.SetBool("Eat", eating);
         _animator.SetBool("GrabItem", grabItem);
+        _animator.SetBool("Reloading", reloadingWeapon);
         
 
         _animator.SetFloat("GroundDistance", CalculateDistance(
@@ -1018,7 +1096,7 @@ public class PlayerController : MonoBehaviour
                 if (roll)
                 {
                     roll = false;
-                    SetColliderShape(PlayerState.IsRolling);
+                    SetColliderShape(PlayerState.Default);
                 }
 
 
@@ -1049,6 +1127,51 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void AnimationSound(string animatorMessage)
+    {
+        switch (animatorMessage)
+        {
+            case "DrawWeaponSound":
+
+                if (drawnWeaponItem)
+                {
+                    drawnWeaponItem._weaponSound.DrawWeaponSound();
+                }
+                
+                break;
+            
+            case "MeleeAttackSound":
+                
+                if (drawnWeaponItem)
+                {
+                    drawnWeaponItem._weaponSound.MeleeAttackSound();
+                }
+                
+                break;
+            
+            case "ExplosiveSound":
+                if (drawnWeaponItem)
+                {
+                    drawnWeaponItem._weaponSound.ExplosiveSound();
+                }
+                break;
+            
+            
+            case "MagOut":
+            case "MagIn":
+            case "ReloadEnd":
+
+                if (drawnWeaponItem)
+                {
+                    drawnWeaponItem._weaponSound.ReloadSound(animatorMessage);
+                }
+                
+                break;
+                
+            
+        }
+        
+    }
     public void OnTopLadderAnim(float instance) //Used for Animator events
     {
         switch (instance)
@@ -1157,6 +1280,7 @@ public class PlayerController : MonoBehaviour
             case "GrabMag":
                 if (drawnWeaponItem.magGameObject != null)
                 {
+                    
                     drawnWeaponItem.magGameObject.transform.parent = leftHandTransform;
                     drawnWeaponItem.magGameObject.transform.position = leftHandTransform.position;
                 }

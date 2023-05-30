@@ -88,15 +88,27 @@ public class IKAimer : MonoBehaviour
 
    private void Update()
    {
-      AimAtTarget();
-
-      if (_playerController.drawnWeaponItem)
+      if (_playerController.drawnWeaponItem && !_playerController.reloadingWeapon)
       {
+         AimAtTarget();
          ConstraintHands(_playerController.drawnWeaponItem);
-         foreach (var bone in boneConstraints)
+         if (_playerController.drawnWeaponItem.ID == 2004 && !_playerController.isAiming)
          {
-            IncreaseConstraintWeight(bone);
+             
+            foreach (var bone in boneConstraints)
+            {
+               DecreaseConstraintWeight(bone);
+            }
          }
+         else
+         {
+            foreach (var bone in boneConstraints)
+            {
+               IncreaseConstraintWeight(bone);
+            }
+         }
+        
+         
       }
       else
       {
@@ -104,35 +116,40 @@ public class IKAimer : MonoBehaviour
          {
             DecreaseConstraintWeight(bone);
          }
+
+         foreach (var aimConstraint in aimConstraints)
+         {
+            aimConstraint.weight -= Time.deltaTime * aimTime;
+         }
       }
     }
    
    private void AimAtTarget()
    {
-      
       targetDistance = Vector3.Distance(_playerController._WeaponHolder.position,
          _playerController.crosshairTransform.position);
     
       if (_playerController.isAiming 
           && targetDistance > minDistance)
       {
-         if (_playerController.drawnWeaponItem.weaponClass != WeaponScriptableObject.WeaponClass.Melee)
+         if (_playerController.drawnWeaponItem.weaponClass != WeaponScriptableObject.WeaponClass.Throwable)
          {
-            
+            if (_playerController.prone)
+            {
+               rightHandAimConstraint.weight += Time.deltaTime * aimTime;
+               headAimConstraint.weight += Time.deltaTime * aimTime;
+            }
+            else
+            {
 
-            for (int i = 0; i < aimConstraints.Count; i++) 
-            { 
-               if (aimConstraints[i].weight < aimWeights[i]) 
+               for (int i = 0; i < aimConstraints.Count; i++)
                {
-                  aimConstraints[i].weight += Time.deltaTime * aimTime;
+                  if (aimConstraints[i].weight < aimWeights[i])
+                  {
+                     aimConstraints[i].weight += Time.deltaTime * aimTime;
+                  }
                }
-               
-            } 
-
-         
-
-            
-
+            }
          }
          else
          {
@@ -171,6 +188,8 @@ public class IKAimer : MonoBehaviour
             try
             {
                leftHandBoneConstraint.data.target.position = weapon.handguardTransform.position;
+               leftHandBoneConstraint.data.target.rotation = weapon.handguardTransform.rotation;
+
                //rightHandBoneConstraint.data.target.position = weapon.gripTransform.position;
             }
             catch (Exception e)

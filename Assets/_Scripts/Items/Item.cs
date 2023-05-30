@@ -107,7 +107,6 @@ public class Item : MonoBehaviour
 
     public bool weaponDrawn;
     public int totalBullets;
-    public bool reloadingWeapon;
     public bool attacking;
     public int attackNumber;
     public float meleeAttackTimer;
@@ -202,7 +201,7 @@ public class Item : MonoBehaviour
 
                 case ItemLocation.Player:
                     itemPickedUp = true;
-
+                    meleeAttackTimer -= Time.deltaTime;
                     switch (itemClass)
                     {
                         case ItemClass.Weapon:
@@ -231,7 +230,12 @@ public class Item : MonoBehaviour
 
             }
         }
-        
+
+        if (quantity <= 0)
+        {
+            playerInventory.itemsList.Remove(this.gameObject);
+            Destroy(gameObject);
+        }
     }
 
 
@@ -258,7 +262,7 @@ public class Item : MonoBehaviour
                         itemModelGO.SetActive(true);
                     }
 
-
+                    outline = GetComponent<Outline>();
                     outline.enabled = false;
 
                     worldTextUI.targetTransform = itemModelGO.transform;
@@ -288,8 +292,16 @@ public class Item : MonoBehaviour
 
                 case ItemClass.Weapon:
                     GetWeaponTransforms(itemModelGO);
-                    _weaponSound = gameObject.AddComponent<WeaponSound>();
+                    if (!itemModelGO.TryGetComponent(out WeaponSound weaponSound))
+                    {
+                        _weaponSound = gameObject.AddComponent<WeaponSound>();
+                    }
+                    else
+                    {
+                        _weaponSound = weaponSound;
+                    }
                     _weaponSound.GetSounds(weaponScriptableObject);
+                    meleeAttackTimer = fireRate;
                     break;
 
                 case ItemClass.Outfit:
@@ -449,6 +461,7 @@ public class Item : MonoBehaviour
 
             bulletsInMag -= 1;
             _weaponSound.FireWeaponSound();
+            playerInventory.UpdateBulletCounterUI(this);
         }
         else
         {
@@ -524,9 +537,10 @@ public class Item : MonoBehaviour
         }
     }
 
+   
     public void ReloadMagazine()
     {
-        totalBullets = playerInventory.CheckItemsLeft(bulletID, totalBullets);
+        totalBullets = playerInventory.CheckItemsLeft(bulletID); //Check existence of compatible ammo
 
         List<Item> itemList = new List<Item>();
 
@@ -537,7 +551,6 @@ public class Item : MonoBehaviour
 
         for (int i = 0; i < itemList.Count; i++)
         {
-
             if (itemList[i].ID == bulletID)
             {
                 while (bulletsInMag < magazineCap)
@@ -547,17 +560,15 @@ public class Item : MonoBehaviour
 
                     if (itemList[i].quantity < 1)
                     {
-                        playerInventory.UpdateBulletCounter(this);
-                        playerInventory.itemsList.Remove(itemList[i].gameObject);
-                        totalBullets = playerInventory.CheckItemsLeft(bulletID, totalBullets);
-
-                        break; // break the loop if the slot has no more bullets and remove bullet item
+                        playerInventory.UpdateBulletCounterUI(this);
+                        totalBullets = playerInventory.CheckItemsLeft(bulletID);
+                        break; // break the loop if the slot has no more bullets
                     }
 
                     if (bulletsInMag == magazineCap)
                     {
-                        totalBullets = playerInventory.CheckItemsLeft(bulletID, totalBullets);
-                        playerInventory.UpdateBulletCounter(this);
+                        totalBullets = playerInventory.CheckItemsLeft(bulletID);
+                        playerInventory.UpdateBulletCounterUI(this);
                         return; //stop the method if we fill the magazine
                     }
                 }
@@ -570,7 +581,6 @@ public class Item : MonoBehaviour
         switch (command)
         {
             case "ReloadStart":
-                reloadingWeapon = true;
 
                 break;
 
@@ -584,7 +594,7 @@ public class Item : MonoBehaviour
 
                 ReloadMagazine();
 
-                reloadingWeapon = false;
+                playerController.reloadingWeapon = false;
                 playerAnimator.SetBool("Reloading", false);
                 break;
         }
