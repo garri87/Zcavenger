@@ -64,35 +64,6 @@ public class RoomGenerator : MonoBehaviour
 
     public bool combineMeshesAtEnd = false;
 
-    /* public string[] roomStyles = new[]
-     {
-         "EmptyRoom",
-         
-         "Hospital_Lobby", //ok 4
-         "Hospital_Reception", //ok 1
-         "Hospital_SurgeryRoom", //ok 2
-         "Hospital_Bathrooms", //ok 3
-         "Hospital_DiningRoom", //ok 3
-         "Hospital_PatientRooms", //ok 1
-         "Hospital_Pharmacy",
-         "Hospital_Warehouse",
-         "Residential_Bathroom",
-         "Residential_Bedroom",
-         "Residential_ElevatorIn",
-         "Residential_ElevatorOut",
-         "Residential_KidBedroom",
-         "Residential_Kitchen",
-         "Residential_Laundry",
-         "Residential_Living",
-         "Residential_Lobby",
-         "Office_Lobby",
-         "Office_Blocks",
-         "Office_Boss",
-         "Office_Warehouse",
-         "Office_Reception",
-         "Office_Bathrooms"
-     };*/
-
     //Estilos de habitación
     public enum RoomStyle
     {
@@ -141,9 +112,15 @@ public class RoomGenerator : MonoBehaviour
 
     public bool debugConstruction;
 
-    public void Init(BuildingGenerator buildingGenerator, int roomWidth, int roomHeight)
+    /// <summary>
+    /// Gets resources from building generator and sets room size
+    /// </summary>
+    /// <param name="buildingScriptable">Building Scriptable Object</param>
+    /// <param name="roomWidth"></param>
+    /// <param name="roomHeight"></param>
+    public void Init(BuildingAssets buildingScriptable, int roomWidth, int roomHeight)
     {
-        buildingScriptableObject = buildingGenerator.buildingScriptableObject;
+        buildingScriptableObject = buildingScriptable;
 
         GetResources(buildingScriptableObject);
 
@@ -154,10 +131,10 @@ public class RoomGenerator : MonoBehaviour
     /// <summary>
     /// Generates a room from seed
     /// </summary>
-    /// <param name="spawnOrigin"></param>
-    /// <param name="gOInLeft"></param>
+    /// <param name="spawnOrigin">Start point of generation</param>
+    /// <param name="gOInLeft">gameobject on left side of the room</param>
     /// <param name="doorInLeft"></param>
-    /// <param name="gOInRight"></param>
+    /// <param name="gOInRight">gameobject on right side of the room</param>
     /// <param name="doorInRight"></param>
     /// <param name="roomStyle"></param>
     /// <param name="debug">Debug the construction?</param>
@@ -183,12 +160,7 @@ public class RoomGenerator : MonoBehaviour
                       ", doorInRight = " + doorInRight +
                       ", withDecoration= " + roomStyle);
         }
-        //Definimos el estilo de habitacion
-        //roomStyle = (RoomGenerator.RoomStyle) Random.Range(
-        //    (int) RoomGenerator.RoomStyle.Hospital_SurgeryRoom,
-        //    (int) RoomGenerator.RoomStyle.end);
-        // Debug.Log("Selected " + roomStyle.ToString());  
-
+        
         //Si el ancho de la habitación es menor a 1, abortar generación y salir de la función
         if (roomWidth < 1)
         {

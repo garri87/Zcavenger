@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
+using UnityEngine.UIElements;
 using Random = UnityEngine.Random;
 
 public class HealthManager : MonoBehaviour
@@ -19,20 +21,23 @@ public class HealthManager : MonoBehaviour
     public PlayerType playerType;
     
     [Header("Health and nutrition")]
-    public int maxHealth;
+    public int maxHealth = 100;
     public int currentHealth;
-    public int maxFood;
-    public int currentFood;
-    public int maxWater;
-    public int currentWater;
+    public int maxHunger;
+    public int currentHunger;
+    public int maxThirst;
+    public int currentThirst;
     public int healthWarningValue = 15;
     
-    [Header("Regen Rate")]
+    [FormerlySerializedAs("updateRate")] [Header("Regen Rate")]
     
-    public float updateRate = 15;//Value in seconds that update the regeneration
+    public float defaultUpdateRate = 15;//Value in seconds that updates regeneration
     public float lowNutritionUpdateRate = 20;
     public float bleedingUpdateRate = 5;
+    public int maxNutritionDecreaseSize = 5;//max points of nutrition to decrease in every cycle
     public int bleedingDamagePerRate;
+    public int lowNutritionDamagePerRate = 1; //Low nutrition damage to player per cycle
+    
     [HideInInspector] public float currentUpdateRate;
     public int regenRate; // Amount of regeneration points when timer reaches updateRate
     public int targetRegen; //Set the limit of regeneration depending the consumed item
@@ -83,12 +88,12 @@ public class HealthManager : MonoBehaviour
             case PlayerType.mainPlayer:
                 
                 maxHealth = 100;
-                maxFood = 100;
-                maxWater = 100;
+                maxHunger = 100;
+                maxThirst = 100;
                 maxStamina = 100;
                 currentHealth = maxHealth;
-                currentFood = maxFood;
-                currentWater = maxWater;
+                currentHunger = maxHunger;
+                currentThirst = maxThirst;
                 currentStamina = maxStamina;
 
                 _bleedingTimer = 0;
@@ -104,13 +109,13 @@ public class HealthManager : MonoBehaviour
     {
         if (playerType == PlayerType.mainPlayer)
         {
-            if (currentFood <= 25 || currentWater <=25 )
+            if (currentHunger <= 25 || currentThirst <=25 )
             {
                 currentUpdateRate = lowNutritionUpdateRate;
             }
             else
             {
-                currentUpdateRate = updateRate;
+                currentUpdateRate = defaultUpdateRate;
             }
 
             if (currentHealth <= healthWarningValue)
@@ -133,11 +138,13 @@ public class HealthManager : MonoBehaviour
             if (_updateTimer >= currentUpdateRate)
             {
                 _updateTimer = 0;
-                currentFood -= Random.Range(1,5);
-                currentWater -= Random.Range(1,5);
+                currentHunger -= Random.Range(1,maxNutritionDecreaseSize);
+                currentThirst -= Random.Range(1,maxNutritionDecreaseSize);
                 currentHealth += regenRate;
                 currentRegen += regenRate;
+                
                 if (currentRegen >= targetRegen || currentHealth == maxHealth)
+                    //if regeneration reach the target value or health is at max, stop regeneration
                 {
                     regenRate = 0;
                     currentRegen = 0;
@@ -148,16 +155,16 @@ public class HealthManager : MonoBehaviour
                     currentHealth = maxHealth;
                 }
                 
-                if (currentFood <= 0)
+                if (currentHunger <= 0)
                 {
-                    currentFood = 0;
-                    currentHealth -= 1;
+                    currentHunger = 0;
+                    currentHealth -= lowNutritionDamagePerRate;
                 }
 
-                if (currentWater <= 0)
+                if (currentThirst <= 0)
                 {
-                    currentWater = 0;
-                    currentHealth -= 1;
+                    currentThirst = 0;
+                    currentHealth -= lowNutritionDamagePerRate;
                 }
             }
             
@@ -171,6 +178,10 @@ public class HealthManager : MonoBehaviour
     }
     void Update()
     {
+        if (playerType == PlayerType.mainPlayer)
+        {
+            UpdateUIStatus();
+        }
         if (currentHealth <= 0)
         {
             currentHealth = 0;
@@ -182,14 +193,14 @@ public class HealthManager : MonoBehaviour
             currentHealth = maxHealth;
         }
 
-        if (currentFood >= maxFood)
+        if (currentHunger >= maxHunger)
         {
-            currentFood = maxFood;
+            currentHunger = maxHunger;
         }
 
-        if (currentWater >= maxWater)
+        if (currentThirst >= maxThirst)
         {
-            currentWater = maxWater;
+            currentThirst = maxThirst;
         }
 
         if (currentStamina >= maxStamina)
@@ -201,6 +212,7 @@ public class HealthManager : MonoBehaviour
         {
             currentStamina = 0;
         }
+        
         
     }
 
@@ -265,6 +277,26 @@ public class HealthManager : MonoBehaviour
         }
     }
 
+    private void UpdateUIStatus()
+    {
+        InGameOverlayUI ui = GameManager.Instance.uiManager.inGameOverlayUIDocument;
+        ui.healthLabel.text = currentHealth.ToString() + " %";
+        ui.hungerLabel.text = currentHunger.ToString() + " %";
+        ui.thirstLabel.text = currentThirst.ToString() + " %";
+        ui.staminaBar.style.width = Length.Percent(currentStamina);
+
+        if (currentStamina < jumpPenalty)
+        {
+            ui.staminaBar.style.backgroundColor = new StyleColor(Color.red);
+        }
+        else
+        {
+            ui.staminaBar.style.backgroundColor = new StyleColor(Color.green);
+        }
+        
+        
+    }
+    
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("DeathZone"))

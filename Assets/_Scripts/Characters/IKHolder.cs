@@ -35,11 +35,11 @@ public class IKHolder : MonoBehaviour
 
    private void Update()
    {
-      if (_playerController.weaponOnHands)
+      if (_playerController._inventory.drawnWeaponItem)
       {
-         rightHandTarget = _playerController.drawnWeaponItem.gripTransform;
+         rightHandTarget = _playerController._inventory.drawnWeaponItem.gripTransform;
          
-         leftHandTarget = _playerController.drawnWeaponItem.handguardTransform; 
+         leftHandTarget = _playerController._inventory.drawnWeaponItem.handguardTransform; 
          leftHandIKWeight = _animator.GetFloat("LeftHandIKWeight"); 
          rightHandIKWeight = _animator.GetFloat("RightHandIKWeight");
          
@@ -48,9 +48,9 @@ public class IKHolder : MonoBehaviour
 
    private void OnAnimatorIK(int layerIndex)
    {
-      if (_playerController.weaponOnHands)
+      if (_playerController._inventory.drawnWeaponItem)
       {
-          handguardTarget.position = _playerController.drawnWeaponItem.handguardTransform.position;
+          handguardTarget.position = _playerController._inventory.drawnWeaponItem.handguardTransform.position;
 
           // _animator.SetIKPosition(AvatarIKGoal.RightHand,rightHandTarget.position);
          // _animator.SetIKRotation(AvatarIKGoal.RightHand,transform.rotation);

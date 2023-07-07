@@ -21,7 +21,9 @@ public class ItemScriptableObject : ScriptableObject
     public bool consumable;
     public bool isStackable;
     public int maxStack;
-
+    public int minLootQuantity;
+    public int maxLootQuantity;
+    
     public int healthRestore;
     public int foodRestore;
     public int waterRestore;

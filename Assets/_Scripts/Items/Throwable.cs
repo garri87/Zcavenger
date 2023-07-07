@@ -2,10 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Throwable : MonoBehaviour
 {
-    public Item _weaponItem;
+    public Item item;
     public GameObject _explosionParticle;
     public GameObject ignitionParticle;
     public MeshRenderer objectRenderer;
@@ -14,7 +15,6 @@ public class Throwable : MonoBehaviour
     public GameObject _impactFlameParticle;
     public float explosionRadius;
     public float explosionForce;
-    private PlayerController _playerController;
     private WeaponSound _weaponSound;
     public bool explosiveArmed;
     private bool exploded;
@@ -22,11 +22,23 @@ public class Throwable : MonoBehaviour
     public float detonationTime = 5;
     public float disableTime = 10;
     [SerializeField]private float disableTimer;
-
+    
+    
+   
+    
     private void Awake()
     {
-        _weaponItem = GetComponent<Item>();
+        try
+        {
+            item = GetComponentInParent<Item>();
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e);
+        }
+        
         _rigidbody = GetComponent<Rigidbody>();
+        _weaponSound = GetComponent<WeaponSound>();
         ignitionParticle.SetActive(false);
     }
 
@@ -34,21 +46,21 @@ public class Throwable : MonoBehaviour
     {
         detonateTimer = detonationTime;
         disableTimer = disableTime;
-        _playerController = GameObject.Find("Player").GetComponent<PlayerController>();
-        _weaponSound = GetComponent<WeaponSound>();
         exploded = false;
 
-       /* switch (_weaponItem.weaponLocation)
+        _rigidbody.isKinematic = true;
+
+       switch (item.itemLocation)
         {
-            case WeaponItem.WeaponLocation.World:
+            case Item.ItemLocation.World:
                 _rigidbody.constraints = RigidbodyConstraints.FreezeAll;
                 break;
             
-            case WeaponItem.WeaponLocation.Player:
+            case Item.ItemLocation.Player:
                 objectRenderer.enabled = true;
                 _rigidbody.constraints = RigidbodyConstraints.FreezePositionZ;
                 break;
-        }*/
+        }
     }
 
     private void Start()
@@ -72,13 +84,13 @@ public class Throwable : MonoBehaviour
         {
             explosiveArmed = false;
             disableTimer -= Time.deltaTime;
+            throwableCollider.isTrigger = true; 
             if (disableTimer <= 0)
             {
                 exploded = false;
                 disableTimer = disableTime;
                 detonateTimer = detonationTime;
-                gameObject.SetActive(false);
-                
+                item.gameObject.SetActive(false);
             }
         }
     }
@@ -87,14 +99,14 @@ public class Throwable : MonoBehaviour
     {
         if (other.collider.CompareTag("Ground") || other.collider.CompareTag("Enemy") )
         {
-            if (_weaponItem.ID == 6002)//molotov
+            if (item.ID == 6002)//molotov
             {
                 if (explosiveArmed)
                 {
                     ignitionParticle.SetActive(false);
                
                     _explosionParticle.transform.position = other.GetContact(0).point;
-                    _explosionParticle.transform.parent = null;
+                    
                     Explode();
                     foreach (ContactPoint contactPoint in other.contacts)
                     {
@@ -104,17 +116,12 @@ public class Throwable : MonoBehaviour
                     }
                 } 
             }
-            
-        }
-        if (other.collider.CompareTag("Ground"))
-        {
-            _weaponItem._weaponSound.DropSound();
+            item._weaponSound.DropSound();
         }
     }
 
     public void Explode()
     {
-        
         Collider[] colliders = Physics.OverlapSphere(transform.position,explosionRadius);
         Transform originPos = this.transform;
         foreach (var objectsInRange in colliders)
@@ -127,16 +134,20 @@ public class Throwable : MonoBehaviour
                 crashObject.Crash();
             }
             
-            if (rigidbody != null)
+            if (rigidbody)
             {
                 rigidbody.AddExplosionForce(explosionForce*100,transform.position,explosionRadius);
             }
 
-            HealthManager healthManager = objectsInRange.GetComponent<HealthManager>();
-            if (healthManager != null)
+            try
             {
-                healthManager.currentHealth -= _weaponItem.damage;
-            }            
+                HealthManager healthManager = objectsInRange.GetComponent<HealthManager>();
+                healthManager.currentHealth -= item.damage;
+            }
+            catch
+            {
+                
+            }
         }
 
         transform.position = originPos.position;
@@ -147,38 +158,33 @@ public class Throwable : MonoBehaviour
         _explosionParticle.SetActive(true);
         objectRenderer.enabled = false;
         exploded = true;
-        Debug.Log("Item exploded!");
+        //Debug.Log("Item exploded!");
         
     }
 
-    public void ThrowObject(bool enabled)
+    public void ThrowObject(Vector2 throwDirection, float throwForce, Inventory inventory)
     {
-        if (enabled)
-        {
-            disableTimer = disableTime;
-            _playerController._animator.SetBool("ThrowableEquip", false);
-            _playerController.isAiming = false;
+            
             explosiveArmed = true;
-            detonateTimer = detonationTime;
-            transform.parent = null;
-            /*
-            Slot throwableSlot = _playerController.gameManager.uiManager.throwableEquipSlot.GetComponent<Slot>();
-            */
-            /*
-            throwableSlot.UpdateWeaponSlot(null);
-            */
             throwableCollider.enabled = true;
-            _weaponItem.itemEquipped = false;
-           // _weaponItem.weaponLocation = WeaponItem.WeaponLocation.Throwed;
             throwableCollider.isTrigger = false;
             ignitionParticle.SetActive(true);
+            _rigidbody.isKinematic = false;
             _rigidbody.useGravity = true;
             
-            Vector3 throwDirection = _playerController.crosshairTransform.position - _playerController.transform.position;
-            _rigidbody.AddForce(throwDirection * _playerController.throwForce, ForceMode.Impulse);
-        }   
-        
+            Vector2 velocidadInicial = throwDirection * throwForce;
+
+            _rigidbody.velocity = velocidadInicial;
+            
+            if (item)
+            {
+                inventory.DropItem(item.gameObject,Item.ItemLocation.Throwed);
+                inventory.drawnWeaponItem = null;
+            }
     }
+    
+    
+    
 
     private void OnDrawGizmosSelected()
     {

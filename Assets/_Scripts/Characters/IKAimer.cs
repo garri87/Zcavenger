@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.Animations.Rigging;
@@ -12,6 +13,7 @@ public class IKAimer : MonoBehaviour
   public RigBuilder rigBuilder;
    public Animator _animator;
    private PlayerController _playerController;
+   private Inventory _inventory;
       
    public TwoBoneIKConstraint leftHandBoneConstraint,rightHandBoneConstraint;
 
@@ -36,11 +38,15 @@ public class IKAimer : MonoBehaviour
    [SerializeField] private float targetDistance;
    public float minDistance = 1f;
    public float aimTime = 1.2f;
+
+   public int[] oneHandedWeapons;
+   
    
    private void Awake()
    {
      // _animator = GetComponentInParent<Animator>();
-      _playerController = GetComponentInParent<PlayerController>();
+      _playerController = GetComponent<PlayerController>();
+      _inventory = GetComponent<Inventory>();
    //   rigBuilder = GetComponentInParent<RigBuilder>();  
 
       //spineAimConstraint.data.constrainedObject = _animator.GetBoneTransform(HumanBodyBones.Spine);
@@ -62,8 +68,17 @@ public class IKAimer : MonoBehaviour
             leftHandBoneConstraint,
             rightHandBoneConstraint
         };
-      
-    }
+
+        oneHandedWeapons = new int[]
+        {
+           2004,
+           2005,
+           1001,
+           6004,
+           6002
+           
+        };
+   }
 
     private void Start()
    {
@@ -88,11 +103,15 @@ public class IKAimer : MonoBehaviour
 
    private void Update()
    {
-      if (_playerController.drawnWeaponItem && !_playerController.reloadingWeapon)
+      if (_inventory.drawnWeaponItem && !_playerController.reloadingWeapon)
       {
          AimAtTarget();
-         ConstraintHands(_playerController.drawnWeaponItem);
-         if (_playerController.drawnWeaponItem.ID == 2004 && !_playerController.isAiming)
+         if (!_playerController._healthManager.isBleeding || 
+             _playerController.isAiming)
+         {
+               ConstraintLeftHand(_inventory.drawnWeaponItem);
+         }
+         if (oneHandedWeapons.Contains(_inventory.drawnWeaponItem.ID) && !_playerController.isAiming)
          {
              
             foreach (var bone in boneConstraints)
@@ -102,9 +121,13 @@ public class IKAimer : MonoBehaviour
          }
          else
          {
-            foreach (var bone in boneConstraints)
+            if (_inventory.drawnWeaponItem.weaponClass != WeaponScriptableObject.WeaponClass.Throwable)
+            {
+               foreach (var bone in boneConstraints)
             {
                IncreaseConstraintWeight(bone);
+            }
+               
             }
          }
         
@@ -124,37 +147,40 @@ public class IKAimer : MonoBehaviour
       }
     }
    
+   /// <summary>
+   /// Controls aim constraints to face a target
+   /// </summary>
    private void AimAtTarget()
    {
-      targetDistance = Vector3.Distance(_playerController._WeaponHolder.position,
+      targetDistance = Vector3.Distance(_playerController._weaponHolder.position,
          _playerController.crosshairTransform.position);
     
       if (_playerController.isAiming 
           && targetDistance > minDistance)
       {
-         if (_playerController.drawnWeaponItem.weaponClass != WeaponScriptableObject.WeaponClass.Throwable)
+         if (_inventory.drawnWeaponItem.weaponClass == WeaponScriptableObject.WeaponClass.Throwable)
          {
-            if (_playerController.prone)
-            {
-               rightHandAimConstraint.weight += Time.deltaTime * aimTime;
-               headAimConstraint.weight += Time.deltaTime * aimTime;
-            }
-            else
-            {
-
-               for (int i = 0; i < aimConstraints.Count; i++)
-               {
-                  if (aimConstraints[i].weight < aimWeights[i])
-                  {
-                     aimConstraints[i].weight += Time.deltaTime * aimTime;
-                  }
-               }
-            }
+            chestAimConstraint.data.aimAxis = MultiAimConstraintData.Axis.X_NEG;
          }
          else
          {
-            
-           
+            chestAimConstraint.data.aimAxis = MultiAimConstraintData.Axis.Z;
+         }
+         if (_playerController.prone)
+         {
+            rightHandAimConstraint.weight += Time.deltaTime * aimTime;
+            headAimConstraint.weight += Time.deltaTime * aimTime;
+         }
+         else
+         {
+
+            for (int i = 0; i < aimConstraints.Count; i++)
+            {
+               if (aimConstraints[i].weight < aimWeights[i])
+               {
+                  aimConstraints[i].weight += Time.deltaTime * aimTime;
+               }
+            }
          }
       }
       if (targetDistance < minDistance)
@@ -165,7 +191,7 @@ public class IKAimer : MonoBehaviour
          }
       }
 
-      if (!_playerController.isAiming || !_playerController.weaponOnHands) 
+      if (!_playerController.isAiming || !_inventory.drawnWeaponItem) 
             //If not aiming or not weapon on hands, decrease the aim constraint weights
       {
          foreach (MultiAimConstraint aimConstraint in aimConstraints)
@@ -183,7 +209,7 @@ public class IKAimer : MonoBehaviour
    }
 
    
-   public void ConstraintHands(Item weapon)
+   public void ConstraintLeftHand(Item weapon)
    {
             try
             {
@@ -198,11 +224,15 @@ public class IKAimer : MonoBehaviour
             }
    }
 
+   /// <summary>
+   /// Gradually decrease a TwoBoneIKConstraint to 0
+   /// </summary>
+   /// <param name="boneIKConstraint"></param>
    private void DecreaseConstraintWeight(TwoBoneIKConstraint boneIKConstraint)
    {
       if (boneIKConstraint.weight > 0)
       {
-         boneIKConstraint.weight -= Time.deltaTime / aimTime;
+         boneIKConstraint.weight -= Time.deltaTime * aimTime;
       }
       else
       {
@@ -210,6 +240,10 @@ public class IKAimer : MonoBehaviour
       }
    }
 
+   /// <summary>
+   /// Gradually increase a TwoBoneIKConstraint to 1
+   /// </summary>
+   /// <param name="boneIKConstraint"></param>
    private void IncreaseConstraintWeight(TwoBoneIKConstraint boneIKConstraint)
    {
       if (boneIKConstraint.weight < 1)

@@ -60,23 +60,23 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.48913044
-        functionName: DrawWeaponAnim
-        data: WeaponDraw
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 0.9021739
-        functionName: DrawWeaponAnim
-        data: End
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
       - time: 0.20652173
         functionName: AnimationSound
         data: DrawWeaponSound
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.48913044
+        functionName: DrawWeaponAnim
+        data: DrawWeapon
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.9047512
+        functionName: DrawWeaponAnim
+        data: End
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0

@@ -46,9 +46,9 @@ public class Bullet : MonoBehaviour
 
     private void OnEnable()
     {
-        if (playerController.weaponOnHands)
+        if (playerController._inventory.drawnWeaponItem)
         {
-            weaponItem = playerController.drawnWeaponItem;
+            weaponItem = playerController._inventory.drawnWeaponItem;
             timer = bulletLifeTime;
             _collider.enabled = true;
            _trailRenderer.enabled = true;
@@ -82,7 +82,7 @@ public class Bullet : MonoBehaviour
         }
        else // Bullet trayectory
        {
-           transform.Translate(transform.TransformDirection(Vector3.up) * bulletSpeed * Time.deltaTime);
+           transform.Translate(transform.TransformDirection(Vector3.up) * (bulletSpeed * Time.deltaTime));
             
            if (timer <= 0) // Disable the bullet GameObject if time expires
            {

@@ -14,6 +14,7 @@ public class BlinkLight : MonoBehaviour
     public bool randomBlink;
     public float minBlinkRate;
     public float maxBlinkRate;
+    private Coroutine blinkCoroutine;
 
     private void Start()
     {
@@ -39,7 +40,10 @@ public class BlinkLight : MonoBehaviour
         {
             blinkRate = Random.Range(minBlinkRate, maxBlinkRate);
         }
-        StartCoroutine(BlinkCycle());
+        if (blinkCoroutine == null)
+        {
+            blinkCoroutine = StartCoroutine(BlinkCycle());
+        }
     }
 
     IEnumerator BlinkCycle()

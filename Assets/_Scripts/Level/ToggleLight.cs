@@ -44,10 +44,4 @@ public class ToggleLight : MonoBehaviour
             }
         }
     }
-
-    private void Update()
-    {
-        
-    }
-    
 }

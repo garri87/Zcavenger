@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.Serialization;
 
 
 [RequireComponent(typeof(WorldTextUI))]
@@ -27,6 +27,8 @@ public class Item : MonoBehaviour
     public Sprite itemIcon;
     public GameObject itemPrefab;
     public int quantity = 1;
+    public int minLootQuantity = 1;
+    public int maxLootQuantity = 1;
     public bool itemPickedUp;
     public bool itemEquipped;
 
@@ -49,7 +51,7 @@ public class Item : MonoBehaviour
     [Header("Transform References")]
 
     public GameObject itemModelGO;
-    public SkinnedMeshRenderer modelRenderer;
+    public SkinnedMeshRenderer modelSkinnedRenderer;
 
     private bool modelInstantiated = false;
 
@@ -113,7 +115,7 @@ public class Item : MonoBehaviour
     public bool firing;
     public bool aiming;
     public bool drawingWeapon;
-    public float meleeAttackDistance;
+    public float meleeAttackDistance = 1;
     private int meleeAttackNumber;
     public LayerMask enemyLayer;
 
@@ -135,16 +137,23 @@ public class Item : MonoBehaviour
     public int backpackCapacity;
     public GameObject equipmentPrefab;
     public SkinnedMeshRenderer targetSkinMesh;
-
+    private MeshFilter modelMeshFilter;
+    private MeshRenderer modelMeshRenderer;
+    
     private Transform playerTransform;
     private PlayerController playerController;
     private IKManager playerIKManager;
     private Inventory playerInventory;
     private Animator playerAnimator;
 
+    
 
     private void OnValidate()
     {
+        if (scriptableObject != null)
+        {
+            GetScriptableObject(scriptableObject);
+        }
     }
 
     private void Awake()
@@ -155,9 +164,12 @@ public class Item : MonoBehaviour
         playerIKManager = playerTransform.GetComponent<IKManager>();
         playerInventory = playerTransform.GetComponent<Inventory>();
         playerAnimator = playerTransform.GetComponent<Animator>();
+        modelMeshFilter = GetComponent<MeshFilter>();
+        modelMeshRenderer = GetComponent<MeshRenderer>();
         worldTextUI = GetComponent<WorldTextUI>();
         modelInstantiated = false;
         InitItem();
+        
         
     }
 
@@ -185,52 +197,81 @@ public class Item : MonoBehaviour
                     transform.Rotate(Vector3.up * (Time.deltaTime * prefabRotationSpeed));
                     _boxCollider.enabled = true;
                     itemModelGO.SetActive(true);
+                    if (itemClass == ItemClass.Outfit)
+                    {
+                        modelMeshRenderer.enabled = true;
+                    }
                     itemPickedUp = false;
+                    itemEquipped = false;
                     break;
 
                 case ItemLocation.Container:
+                    _boxCollider.enabled = false;
                     itemModelGO.SetActive(false);
+                    if (itemClass == ItemClass.Outfit)
+                    {
+                        modelMeshRenderer.enabled = false;
+                    }                    
                     itemPickedUp = false;
+                    itemEquipped = false;
                     break;
 
                 case ItemLocation.Inventory:
+                    _boxCollider.enabled = false;
                     transform.parent = playerInventory.inventoryGo.transform;
                     itemModelGO.SetActive(false);
+                    if (itemClass == ItemClass.Outfit)
+                    {
+                        modelMeshRenderer.enabled = false;
+                    }
                     itemPickedUp = true;
                     break;
 
                 case ItemLocation.Player:
+                    _boxCollider.enabled = false;
                     itemPickedUp = true;
                     meleeAttackTimer -= Time.deltaTime;
                     switch (itemClass)
                     {
                         case ItemClass.Weapon:
+                            if (playerInventory.drawnWeaponItem == this)
+                            {
+                                weaponDrawn = true;
+                            }
                             itemModelGO.SetActive(weaponDrawn);
-                            transform.position = playerController._WeaponHolder.position;
-                            transform.rotation = Quaternion.LookRotation(playerController._WeaponHolder.forward);
-                            transform.parent = playerController._WeaponHolder;
+                            transform.position = playerController._weaponHolder.position;
+                            transform.rotation = Quaternion.LookRotation(playerController._weaponHolder.forward);
+                            transform.parent = playerController._weaponHolder;
                             break;
 
                         case ItemClass.Outfit:
                             itemModelGO.SetActive(true);
-                        break;
+                            modelMeshRenderer.enabled = false;
+                            break;
                     }
                     
                     break;
 
                 case ItemLocation.Throwed:
+                    _boxCollider.enabled = false;
                     itemModelGO.SetActive(true);
+                    itemPickedUp = false;
+                    if (itemClass == ItemClass.Outfit)
+                    {
+                        modelMeshRenderer.enabled = true;
+                    }
                     transform.parent = null;
+                    itemEquipped = false;
+                    worldTextUI.enabled = false;
                     break;
             }
             if (itemLocation != ItemLocation.World && itemLocation != ItemLocation.Throwed)
             {
                 worldTextUI.uIEnabled = false;
                 outline.enabled = false;
-
             }
         }
-
+        
         if (quantity <= 0)
         {
             playerInventory.itemsList.Remove(this.gameObject);
@@ -262,7 +303,7 @@ public class Item : MonoBehaviour
                         itemModelGO.SetActive(true);
                     }
 
-                    outline = GetComponent<Outline>();
+                    outline = itemModelGO.GetComponent<Outline>();
                     outline.enabled = false;
 
                     worldTextUI.targetTransform = itemModelGO.transform;
@@ -283,11 +324,18 @@ public class Item : MonoBehaviour
                     break;
             }
 
+            if (itemClass == ItemClass.Outfit)
+            {
+                modelMeshFilter.mesh = modelSkinnedRenderer.sharedMesh;
+                modelMeshRenderer.materials = modelSkinnedRenderer.materials;
+                transform.localScale = itemModelGO.transform.localScale;
+            }
 
             //OBTENEMOS LOS DATOS DEL ITEM SEGUN CLASE
             switch (itemClass)
             {
                 case ItemClass.Item:
+                    
                     break;
 
                 case ItemClass.Weapon:
@@ -310,10 +358,7 @@ public class Item : MonoBehaviour
 
             worldTextUI = GetComponent<WorldTextUI>();
             worldTextUI.text = itemName + " (" + quantity + ")";
-
             
-
-
         }
         else
         {
@@ -335,7 +380,7 @@ public class Item : MonoBehaviour
         outline.OutlineMode = Outline.Mode.OutlineAll;
         outline.OutlineColor = Color.white;
         outline.enabled = false;
-        modelRenderer = instantiatedItem.GetComponent<SkinnedMeshRenderer>();
+        modelSkinnedRenderer = instantiatedItem.GetComponent<SkinnedMeshRenderer>();
         modelInstantiated = true;
         
         return instantiatedItem;
@@ -404,6 +449,9 @@ public class Item : MonoBehaviour
                 bulletImpactPrefab = weaponScriptable.bulletImpactPrefab;
                 enemyImpactPrefab = weaponScriptable.enemyImpactPrefab;
                 muzzleFlashPrefab = weaponScriptable.muzzleFlashPrefab;
+
+                isStackable = false;
+                maxStack = 1;
             }
 
             else if (scriptableObj is OutfitScriptableObject)
@@ -420,6 +468,9 @@ public class Item : MonoBehaviour
                 itemPrefab = outfitScriptable.outfitPrefab;
                 defense = outfitScriptable.defense;
                 backpackCapacity = outfitScriptable.backpackCapacity;
+                
+                isStackable = false;
+                maxStack = 1;
             }
         }
 
@@ -614,9 +665,9 @@ public class Item : MonoBehaviour
 
             case "MeleeEnd":
                 attacking = false;
-                playerAnimator.SetBool("MeleeAttack1", attacking);
-                playerAnimator.SetBool("MeleeAttack2", attacking);
-                playerAnimator.SetBool("MeleeAttack3", attacking);
+                playerAnimator.SetBool("AxeAttack", attacking);
+                playerAnimator.SetBool("BatAttack", attacking);
+                playerAnimator.SetBool("KnifeAttack", attacking);
                 // playerController.controllerType = PlayerController.ControllerType.DefaultController;
 
                 break;
@@ -660,5 +711,11 @@ public class Item : MonoBehaviour
             }
             
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawCube(transform.position,new Vector3(.5f,.5f,.5f));
     }
 }

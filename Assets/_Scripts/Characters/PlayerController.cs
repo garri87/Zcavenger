@@ -1,5 +1,6 @@
 
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class PlayerController : MonoBehaviour
 {
@@ -95,6 +96,8 @@ public class PlayerController : MonoBehaviour
     public float normalSpeed;
     public float struggleForce = 3;
     public float throwForce = 5;
+    private Vector2 gravity;
+    
     public float hitDistance;
 
     private bool doubleTap;
@@ -141,9 +144,7 @@ public class PlayerController : MonoBehaviour
 
     public Transform crosshairTransform; //Transform reference of the player's crosshair Gameobject
     private SpriteRenderer crosshairSprtRenderer;
-    public Transform _WeaponHolder; //Transform reference to place Child Gameobjects
-    public Item drawnWeaponItem; //Item Component of current drawn weapon
-    public bool weaponOnHands; //Player has weapon in hands?
+    public Transform _weaponHolder; //Transform reference to place Child Gameobjects
     
     public bool isAiming;
     public bool attacking;
@@ -221,6 +222,8 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        gravity = Physics2D.gravity;
+
         currentSpeed = normalSpeed;
 
         if (gameManager)
@@ -485,23 +488,24 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region Controllers Functions
-
+    
+    
     /// <summary>
     /// 
     /// </summary>
     private void WeaponSelectionController()
     {
-
         if (Input.GetKeyDown(keyAssignments.primaryKey.keyCode) && _inventory.equippedPrimaryWeapon)
         {
             if (_inventory.selectedWeapon != Inventory.SelectedWeapon.Primary)
-            {
-                _inventory.DrawWeapon(WeaponScriptableObject.WeaponClass.Primary, true);
-            }
-            else
-            {
-                _inventory.DrawWeapon(WeaponScriptableObject.WeaponClass.Primary, false);
-            }
+                {
+                    _inventory.DrawWeapon(_inventory.equippedPrimaryWeapon, true);
+                    
+                }
+                else
+                {
+                    _inventory.DrawWeapon(_inventory.equippedPrimaryWeapon, false);
+                }
         }
 
         if (Input.GetKeyDown(keyAssignments.secondaryKey.keyCode) && _inventory.equippedSecondaryWeapon)
@@ -509,11 +513,11 @@ public class PlayerController : MonoBehaviour
             if (_inventory.selectedWeapon != Inventory.SelectedWeapon.Secondary)
             {
 
-                _inventory.DrawWeapon(WeaponScriptableObject.WeaponClass.Secondary, true);
+                _inventory.DrawWeapon(_inventory.equippedSecondaryWeapon, true);
             }
             else
             {
-                _inventory.DrawWeapon(WeaponScriptableObject.WeaponClass.Secondary, false);
+                _inventory.DrawWeapon(_inventory.equippedSecondaryWeapon, false);
             }
         }
 
@@ -521,11 +525,11 @@ public class PlayerController : MonoBehaviour
         {
             if (_inventory.selectedWeapon != Inventory.SelectedWeapon.Melee)
             {
-                _inventory.DrawWeapon(WeaponScriptableObject.WeaponClass.Melee, true);
+                _inventory.DrawWeapon(_inventory.equippedMeleeWeapon, true);
             }
             else
             {
-                _inventory.DrawWeapon(WeaponScriptableObject.WeaponClass.Melee, false);
+                _inventory.DrawWeapon(_inventory.equippedMeleeWeapon, false);
             }
         }
 
@@ -533,11 +537,11 @@ public class PlayerController : MonoBehaviour
         {
             if (_inventory.selectedWeapon != Inventory.SelectedWeapon.Throwable)
             {
-                _inventory.DrawWeapon(WeaponScriptableObject.WeaponClass.Throwable, true);
+                _inventory.DrawWeapon(_inventory.equippedThrowableWeapon, true);
             }
             else
             {
-                _inventory.DrawWeapon(WeaponScriptableObject.WeaponClass.Throwable, false);
+                _inventory.DrawWeapon(_inventory.equippedThrowableWeapon, false);
             }
         }
     }
@@ -553,19 +557,23 @@ public class PlayerController : MonoBehaviour
             crosshairSprtRenderer.enabled = false;
         }
 
-        if (drawnWeaponItem)
+        if (_inventory.drawnWeaponItem)
         {
-            if (drawnWeaponItem.weaponDrawn)
+            if (_inventory.drawnWeaponItem.weaponDrawn)
             {
                 //Aiming toggle
                 if (Input.GetKey(keyAssignments.aimBlockKey.keyCode) && !PlayerBusy())
                 {
-                    if (drawnWeaponItem.weaponClass != WeaponScriptableObject.WeaponClass.Melee)
+                    if (_inventory.drawnWeaponItem && _inventory.drawnWeaponItem.weaponClass != WeaponScriptableObject.WeaponClass.Melee)
                     {
                         if (_checkGround.isGrounded && !_climber.attachedToLedge && !trapped && !beingBitten)
                         {
                             playerState = PlayerState.IsAiming;
                             isAiming = true;
+                            if (_inventory.drawnWeaponItem.weaponClass == WeaponScriptableObject.WeaponClass.Throwable)
+                            {
+                                ShowThrowTrayectory(crosshairTransform,throwForce);
+                            }
                         }
                         else
                         {
@@ -573,8 +581,8 @@ public class PlayerController : MonoBehaviour
                         }
                     }
 
-                    if (drawnWeaponItem.weaponClass == WeaponScriptableObject.WeaponClass.Melee &&
-                        drawnWeaponItem.ID != 1001 && !beingBitten && !trapped) // 1001: knife
+                    if (_inventory.drawnWeaponItem.weaponClass == WeaponScriptableObject.WeaponClass.Melee &&
+                        _inventory.drawnWeaponItem.ID != 1001 && !beingBitten && !trapped) // 1001: knife
                     {
                         if (_healthManager.currentStamina >= _healthManager.blockHitPenalty)
                         {
@@ -597,14 +605,39 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (weaponOnHands && Input.GetKeyUp(keyAssignments.aimBlockKey.keyCode))
+        if (Input.GetKeyUp(keyAssignments.aimBlockKey.keyCode))
         {
             isAiming = false;
             blocking = false;
         }
 
     }
-    
+ 
+
+    public int trayectoryPoints = 10;
+    public float timePoint = 0.1f;
+    private void ShowThrowTrayectory(Transform targetTransform, float throwForce)
+    {
+        Transform throwable = _inventory.drawnWeaponItem.transform;
+
+        Vector2 direction = targetTransform.position - throwable.position;
+        float tiempo = timePoint;
+
+        Vector2 initialVelocity = direction * (throwForce / direction.magnitude);
+        Vector2 impulse = initialVelocity * _rigidbody.mass;
+
+        for (int i = 0; i < trayectoryPoints; i++)
+        {
+            Vector2 position = CalculatePosition(tiempo, impulse);
+            tiempo += timePoint;
+            Debug.DrawLine(throwable.position, position, Color.red, timePoint);
+        }
+    }
+    private Vector2 CalculatePosition(float time, Vector2 initialVelocity)
+    {
+        Vector2 position = _inventory.drawnWeaponItem.transform.position;
+        return position + initialVelocity * time + gravity * (0.5f * time * time);
+    }
     public void DefaultController()
     {
 
@@ -840,27 +873,48 @@ public class PlayerController : MonoBehaviour
         if (!canStomp && !beingBitten && Input.GetKey(keyAssignments.attackKey.keyCode))
         {
             //FIRE WEAPON
-            if (drawnWeaponItem)
+            if (_inventory.drawnWeaponItem)
             {
-                if (drawnWeaponItem.meleeAttackTimer <= 0)
+                if (_inventory.drawnWeaponItem.meleeAttackTimer <= 0)
                 {
-                    if (drawnWeaponItem.weaponClass == WeaponScriptableObject.WeaponClass.Primary ||
-                        drawnWeaponItem.weaponClass == WeaponScriptableObject.WeaponClass.Secondary)
+                    if (_inventory.drawnWeaponItem.weaponClass == WeaponScriptableObject.WeaponClass.Primary ||
+                        _inventory.drawnWeaponItem.weaponClass == WeaponScriptableObject.WeaponClass.Secondary)
                     {
                         if (isAiming)
                         {
-                            drawnWeaponItem.FireWeapon();    
+                            _inventory.drawnWeaponItem.FireWeapon();    
                         }
                         
                     }
 
                     //MELEE ATTACK
-                    if (drawnWeaponItem.weaponClass == WeaponScriptableObject.WeaponClass.Melee)
+                    if (_inventory.drawnWeaponItem.weaponClass == WeaponScriptableObject.WeaponClass.Melee)
                     {
-                        drawnWeaponItem.attacking = true;
-                    }
+                        switch (_inventory.drawnWeaponItem.ID)
+                        {
+                            case 1006: // Fire Axe
+                                _animator.SetBool("AxeAttack",true);
+                                break;
+                            case 1002: //Baseball Bat
+                                _animator.SetBool("BatAttack",true);
+                                break;
+                            case 1001: //Knife
+                                _animator.SetBool("KnifeAttack",true);
+                                break;
 
-                    drawnWeaponItem.meleeAttackTimer = drawnWeaponItem.fireRate;
+                        }
+                        _inventory.drawnWeaponItem.attacking = true;
+                    }
+                    //THROW OBJECT
+                    if (_inventory.drawnWeaponItem.weaponClass == WeaponScriptableObject.WeaponClass.Throwable)
+                    {
+                        if (isAiming)
+                        {
+                            _animator.SetTrigger("Throw");
+                        }
+                        
+                    }
+                    _inventory.drawnWeaponItem.meleeAttackTimer = _inventory.drawnWeaponItem.fireRate;
                 }
             }
         }
@@ -908,16 +962,16 @@ public class PlayerController : MonoBehaviour
         //WEAPONS
         if (Input.GetKeyDown(keyAssignments.reloadKey.keyCode))
         {
-            if (drawnWeaponItem && !reloadingWeapon && drawnWeaponItem.itemClass == Item.ItemClass.Weapon)
+            if (_inventory.drawnWeaponItem && !reloadingWeapon && _inventory.drawnWeaponItem.itemClass == Item.ItemClass.Weapon)
             {
-                if (drawnWeaponItem.bulletsInMag < drawnWeaponItem.magazineCap &&
-                    _inventory.CheckItemsLeft(drawnWeaponItem.bulletID) > 0)
+                if (_inventory.drawnWeaponItem.bulletsInMag < _inventory.drawnWeaponItem.magazineCap &&
+                    _inventory.CheckItemsLeft(_inventory.drawnWeaponItem.bulletID) > 0)
                 {
                     reloadingWeapon = true;
                 }
                 else
                 {
-                    Debug.Log("No Ammo found for " + drawnWeaponItem.itemName);
+                    Debug.Log("No Ammo found for " + _inventory.drawnWeaponItem.itemName);
                     reloadingWeapon = false;
                 }
             }
@@ -1030,7 +1084,7 @@ public class PlayerController : MonoBehaviour
         _rigidbody.velocity = Vector3.zero;
         _animator.SetFloat(AnimatorSpeed, 0);
 
-        if (weaponOnHands && Input.GetKeyUp(keyAssignments.aimBlockKey.keyCode))
+        if (Input.GetKeyUp(keyAssignments.aimBlockKey.keyCode))
         {
             isAiming = false;
             blocking = false;
@@ -1133,26 +1187,26 @@ public class PlayerController : MonoBehaviour
         {
             case "DrawWeaponSound":
 
-                if (drawnWeaponItem)
+                if (_inventory.drawnWeaponItem)
                 {
-                    drawnWeaponItem._weaponSound.DrawWeaponSound();
+                    _inventory.drawnWeaponItem._weaponSound.DrawWeaponSound();
                 }
                 
                 break;
             
             case "MeleeAttackSound":
                 
-                if (drawnWeaponItem)
+                if (_inventory.drawnWeaponItem)
                 {
-                    drawnWeaponItem._weaponSound.MeleeAttackSound();
+                    _inventory.drawnWeaponItem._weaponSound.MeleeAttackSound();
                 }
                 
                 break;
             
             case "ExplosiveSound":
-                if (drawnWeaponItem)
+                if (_inventory.drawnWeaponItem)
                 {
-                    drawnWeaponItem._weaponSound.ExplosiveSound();
+                    _inventory.drawnWeaponItem._weaponSound.ExplosiveSound();
                 }
                 break;
             
@@ -1161,9 +1215,9 @@ public class PlayerController : MonoBehaviour
             case "MagIn":
             case "ReloadEnd":
 
-                if (drawnWeaponItem)
+                if (_inventory.drawnWeaponItem)
                 {
-                    drawnWeaponItem._weaponSound.ReloadSound(animatorMessage);
+                    _inventory.drawnWeaponItem._weaponSound.ReloadSound(animatorMessage);
                 }
                 
                 break;
@@ -1274,66 +1328,68 @@ public class PlayerController : MonoBehaviour
         switch (command)
         {
             case "ReloadStart":
-                drawnWeaponItem.ReloadWeaponAnim("ReloadStart");
+                _inventory.drawnWeaponItem.ReloadWeaponAnim("ReloadStart");
                 break;
 
             case "GrabMag":
-                if (drawnWeaponItem.magGameObject != null)
+                if (_inventory.drawnWeaponItem.magGameObject != null)
                 {
                     
-                    drawnWeaponItem.magGameObject.transform.parent = leftHandTransform;
-                    drawnWeaponItem.magGameObject.transform.position = leftHandTransform.position;
+                    _inventory.drawnWeaponItem.magGameObject.transform.parent = leftHandTransform;
+                    _inventory.drawnWeaponItem.magGameObject.transform.position = leftHandTransform.position;
                 }
 
                 break;
 
             case "HideMag":
 
-                if (drawnWeaponItem.magGameObject != null)
+                if (_inventory.drawnWeaponItem.magGameObject != null)
                 {
-                    drawnWeaponItem.magGameObject.SetActive(false);
+                    _inventory.drawnWeaponItem.magGameObject.SetActive(false);
                 }
 
                 break;
 
             case "ShowMag":
-                if (drawnWeaponItem.magGameObject != null)
+                if (_inventory.drawnWeaponItem.magGameObject != null)
                 {
-                    drawnWeaponItem.magGameObject.SetActive(true);
+                    _inventory.drawnWeaponItem.magGameObject.SetActive(true);
                 }
 
                 break;
 
             case "AttachMag":
 
-                if (drawnWeaponItem.magGameObject != null)
+                if (_inventory.drawnWeaponItem.magGameObject != null)
                 {
-                    drawnWeaponItem.magGameObject.transform.parent = drawnWeaponItem.magHolder;
-                    drawnWeaponItem.magGameObject.transform.localPosition = new Vector3(0, 0, 0);
-                    drawnWeaponItem.magGameObject.transform.localEulerAngles = new Vector3(0, 0, 0);
+                    _inventory.drawnWeaponItem.magGameObject.transform.parent = _inventory.drawnWeaponItem.magHolder;
+                    _inventory.drawnWeaponItem.magGameObject.transform.localPosition = new Vector3(0, 0, 0);
+                    _inventory.drawnWeaponItem.magGameObject.transform.localEulerAngles = new Vector3(0, 0, 0);
                 }
 
                 break;
 
             case "ReloadEnd":
-                drawnWeaponItem.ReloadWeaponAnim("ReloadEnd");
+                _inventory.drawnWeaponItem.ReloadWeaponAnim("ReloadEnd");
                 break;
 
             case "MeleeStart":
-                drawnWeaponItem.MeleeAttackAnim("Start");
+                _inventory.drawnWeaponItem.MeleeAttackAnim("Start");
                 break;
 
             case "DoDamage":
                 _healthManager.ConsumeStamina(_healthManager.meleeAttackPenalty);
-                drawnWeaponItem.MeleeAttackAnim("DoDamage");
+                _inventory.drawnWeaponItem.MeleeAttackAnim("DoDamage");
                 break;
 
             case "MeleeEnd":
-                drawnWeaponItem.MeleeAttackAnim("MeleeEnd");
+                _inventory.drawnWeaponItem.MeleeAttackAnim("MeleeEnd");
                 break;
 
             case "Throw":
-                //equippedWeaponItem._throwable.ThrowObject(enabled);
+                Throwable throwable = _inventory.drawnWeaponItem.itemModelGO.GetComponent<Throwable>();
+                throwable.ThrowObject(crosshairTransform.position - _weaponHolder.transform.position,throwForce,_inventory);
+                _animator.SetBool("ThrowableEquip", false);
                 break;
         }
     }

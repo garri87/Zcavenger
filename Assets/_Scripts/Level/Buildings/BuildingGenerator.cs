@@ -10,7 +10,6 @@ using UnityEditor.Timeline;
 using UnityEngine;
 using UnityEngine.AI;
 using NavMeshBuilder = UnityEditor.AI.NavMeshBuilder;
-using Object = System.Object;
 using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(MeshCombiner))]
@@ -37,11 +36,10 @@ public class BuildingGenerator : MonoBehaviour
     public bool entraceFront;
 
     //Definir punto de origen de generación
-    [HideInInspector] public Transform spawnOrigin;
+    public Transform spawnOrigin;
 
     [Space]
     //Definimos una lista de los pisos que se van a generar
-    [HideInInspector]
     public List<GameObject> floorList;
 
     //Definimos una lista de las paredes externas para luego ocultar
@@ -109,6 +107,7 @@ public class BuildingGenerator : MonoBehaviour
     #region Spawners
     public GameObject enemySpawner;
     public GameObject itemSpawner;
+    public List<ScriptableObject> itemPool;
 
     [Range(0, 10)] public int enemySpawnChance = 5;
     [Range(0, 10)] public int itemSpawnChance = 5;
@@ -123,20 +122,27 @@ public class BuildingGenerator : MonoBehaviour
     //Debug opcional
     public bool debugConstruction;
     public Color previewColor = Color.red;
-
+    public bool finished = false;
+    public bool buildAtAwake = false;
     private void Awake()
     {
-        buildingStyle = buildingScriptableObject.buildingStyle;
-        //Cargar recursos de partes segun tipo de familia de edificio
-        GetResources(buildingScriptableObject);
-        spawnOrigin = transform.Find("SpawnOrigin");
+        if (buildAtAwake)
+        {
+            InitBuilding(buildingScriptableObject);
+        }
     }
 
-    private void Start()
+    public void InitBuilding(BuildingAssets scriptableObject)
     {
+        finished = false;
+        buildingScriptableObject = scriptableObject;
+        buildingStyle = scriptableObject.buildingStyle;
+        //Cargar recursos de partes segun tipo de familia de edificio
+        GetResources(scriptableObject);
+        
         //Establecer punto de origen de generacion en x0,y0,z0
         spawnOrigin.position = transform.position;
-
+        floorList = new List<GameObject>();
 
         //Comenzar la generacion de habitaciones
 
@@ -152,22 +158,19 @@ public class BuildingGenerator : MonoBehaviour
                 //Creamos un GameObject vacio para agrupar las habitaciones del piso actual
                 GameObject floorGroup = new GameObject("Floor " + Y + " depth " + Z);
                 floorGroup.transform.position =
-                    new Vector3(transform.position.x, spawnOrigin.position.y, spawnOrigin.position.z);
+                    new Vector3(this.transform.position.x, spawnOrigin.position.y, spawnOrigin.position.z);
+                floorGroup.transform.parent = this.transform;
                 floorList.Add(floorGroup);
-                floorGroup.transform.parent = transform;
-
-                //Colocamos el puntero de generacion en X=0 para empezar a instanciar habitaciones de izquierda a derecha
+                
+                //Colocamos el puntero de generacion en X=0 local para empezar a instanciar habitaciones de izquierda a derecha
                 spawnOrigin.position =
                     new Vector3(transform.position.x, spawnOrigin.position.y, spawnOrigin.position.z);
-
-                //inicializamos la cantidad restante de espacios para calcular cuanto falta para llenar el piso
-
 
                 //SI: el punto de origen se encuentra en coordenada Y = 0 y Z = 0, generar un lobby:
                 if (Y == 0 && Z == 0)
                 {
                     //Colocar un generador de habitacion en puntero de origen
-                    RoomGenerator room = SetRoomSeed(spawnOrigin, maxBldWidth - stairsRoomWidth);
+                    RoomGenerator room = SetRoomSeed(spawnOrigin, floorGroup.transform,maxBldWidth - stairsRoomWidth);
 
                     string buildingName = buildingStyle.ToString();
                     RoomGenerator.RoomStyle roomName = (RoomGenerator.RoomStyle)Enum.Parse(
@@ -184,12 +187,9 @@ public class BuildingGenerator : MonoBehaviour
                         room.BuildRoom(spawnOrigin, exteriorWallsPrefab[0], false, null, false, roomName,
                             debugConstruction);
                     }
-
-
-                    room.transform.parent = floorGroup.transform;
-
+                    
                     //Agregamos al final una habitacion de entrada a escaleras
-                    RoomGenerator stairsRoom = SetRoomSeed(spawnOrigin, stairsRoomWidth);
+                    RoomGenerator stairsRoom = SetRoomSeed(spawnOrigin, floorGroup.transform,stairsRoomWidth);
                     stairsRoom.isStairsEntrace = true;
                     if (entraceSides)
                     {
@@ -202,7 +202,6 @@ public class BuildingGenerator : MonoBehaviour
                             false, RoomGenerator.RoomStyle.EmptyRoom, debugConstruction);
                     }
 
-                    stairsRoom.transform.parent = floorGroup.transform;
                 }
                 //SINO:
                 else
@@ -215,7 +214,7 @@ public class BuildingGenerator : MonoBehaviour
                     for (int X = 0; X < roomsPerFloor; X++)
                     {
                         //colocar un nuevo generador de habitacion y obtener su script
-                        RoomGenerator room = SetRoomSeed(spawnOrigin, roomsWidth[X]);
+                        RoomGenerator room = SetRoomSeed(spawnOrigin,floorGroup.transform, roomsWidth[X]);
                         var styles = Enum.GetNames(typeof(RoomGenerator.RoomStyle)).ToArray();
                         string[] queryStyles =
                             (from style in styles where style.Contains(buildingStyle.ToString()) select style)
@@ -245,10 +244,9 @@ public class BuildingGenerator : MonoBehaviour
                                 roomName, debugConstruction);
                         }
 
-                        room.transform.parent = floorGroup.transform;
                     }
 
-                    RoomGenerator stairsRoom = SetRoomSeed(spawnOrigin, stairsRoomWidth);
+                    RoomGenerator stairsRoom = SetRoomSeed(spawnOrigin,floorGroup.transform, stairsRoomWidth);
 
                     //Verificar si corresponde generar una habitacion de entrada de escalera o escaleras
 
@@ -281,7 +279,6 @@ public class BuildingGenerator : MonoBehaviour
                         stairsRoom.BuildRoom(spawnOrigin, doorWallsPrefabs[0], true, exteriorWallsPrefab[Random.Range(0, exteriorWallsPrefab.Length)],
                             false, roomName, debugConstruction);
                     }
-                    stairsRoom.transform.parent = floorGroup.transform;
                 }
 
                 //mover punto de origen en coordenada X:0 e Y en 1 ud (+ el grosor de las piezas para no interpolar)para continuar generando el siguiente edificio
@@ -301,7 +298,8 @@ public class BuildingGenerator : MonoBehaviour
                 //Generamos luces
                 room.GenerateLights(room.ceilingsList.Count / 2);
 
-                float randomNum = Random.Range(0, 11);
+                float randomNum = Random.Range(1, 11);
+                
                 if (randomNum < enemySpawnChance)
                 {
                     GenerateSpawners(enemySpawner, room.basesList[Random.Range(0, room.basesList.Count)].transform);
@@ -309,7 +307,7 @@ public class BuildingGenerator : MonoBehaviour
 
                 if (randomNum < itemSpawnChance)
                 {
-                    //TODO: GENERAR UN SPAWN DE ITEMS
+                    GenerateSpawners(itemSpawner, room.basesList[Random.Range(0, room.basesList.Count)].transform);
                 }
 
                 //Generamos puertas traseras
@@ -497,7 +495,12 @@ public class BuildingGenerator : MonoBehaviour
         GenerateRoof(maxBldWidth, spawnOrigin);
 
         //Build NavMesh
-        rooms[0].basesList[0].GetComponent<NavMeshSurface>().BuildNavMesh();
+        if (rooms[0].basesList.Count > 0)
+        {
+           rooms[0].basesList[0].GetComponent<NavMeshSurface>().BuildNavMesh();
+        }
+
+        finished = true;
     }
 
     /// <summary>
@@ -529,17 +532,17 @@ public class BuildingGenerator : MonoBehaviour
     /// <param name="spawnOrigin">Origin of the room</param>
     /// <param name="roomWidht">Max room Width</param>
     /// <param name="roomHeight">Max room Height</param>
-    public RoomGenerator SetRoomSeed(Transform spawnOrigin, int roomWidht = 1, int roomHeight = 1)
+    public RoomGenerator SetRoomSeed(Transform spawnOrigin,Transform parent, int roomWidht = 1, int roomHeight = 1)
     {
         //Colocar un generador de habitacion en punto de origen
-        GameObject room = Instantiate(roomSeed, spawnOrigin.position, transform.rotation, roomsTransform);
+        GameObject room = Instantiate(roomSeed, spawnOrigin.position, transform.rotation, parent);
 
         //obtener el script del generador de habitacion
         _roomGen = room.GetComponent<RoomGenerator>();
 
         //Configurar la habitación en estilo y dimensiones 
 
-        _roomGen.Init(this, roomWidht, roomHeight);
+        _roomGen.Init(buildingScriptableObject, roomWidht, roomHeight);
 
         //TODO: Exportar prefabs de interiores y materiales al RoomGenerator
 
@@ -795,8 +798,21 @@ public class BuildingGenerator : MonoBehaviour
 
     public void GenerateSpawners(GameObject spawner, Transform targetTransform)
     {
-        GameObject instSpawn = Instantiate(spawner, targetTransform.position, targetTransform.rotation,
-            targetTransform.parent);
+        GameObject instSpawn = Instantiate(spawner, targetTransform.position + Vector3.up, targetTransform.rotation,
+            transform);
+        if (instSpawn.TryGetComponent(out Item item))
+        {
+            item.scriptableObject = itemPool[Random.Range(0, itemPool.Count)];
+            item.InitItem();
+            if (item.itemClass == Item.ItemClass.Item)
+            {
+                item.quantity = Random.Range(item.minLootQuantity,item.maxLootQuantity + 1);
+            }
+            else
+            {
+                item.quantity = 1;
+            }
+        }
     }
 
     public void CombineMeshes(Transform parent)
@@ -897,7 +913,6 @@ public class BuildingGenerator : MonoBehaviour
             {
                 Debug.Log("Door Detected!");
                 return false;
-
             }
             else
             {
@@ -922,7 +937,7 @@ public class BuildingGenerator : MonoBehaviour
         float zSize = maxBldDepth * partsWidth;
 
         Gizmos.color = previewColor;
-        Gizmos.DrawCube(new Vector3(xCenter, yCenter, zCenter), new Vector3(xSize, ySize, zSize));
+        Gizmos.DrawWireCube(new Vector3(xCenter, yCenter, zCenter), new Vector3(xSize, ySize, zSize));
     }
 
 

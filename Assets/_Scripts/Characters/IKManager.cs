@@ -96,44 +96,24 @@ public class IKManager : MonoBehaviour
 
     }
 
+    
     private void Update()
     {
-        upperMaskConditions = new bool[]{
-            _inventory.drawWeapon,
-            _inventory.holsterWeapon ,
-            _playerController.isAiming ,
-            _playerController.reloadingWeapon ,
-            _playerController._healthManager.isBleeding ,
-            _playerController.bandaging ,
-            _playerController.drinking ,
-            _playerController.eating ,
-            _playerController.grabItem
-        };
-
-        upperMaskActive = false;
-
-        for (int i = 0; i < upperMaskConditions.Length; i++)
-        {
-            if (upperMaskConditions[i] == true)
-            {
-                upperMaskActive = true;
-                break;
-            }
-        }
-
-
-
+        
+        
         switch (playerType)
         {
             case PlayerType.Player:
 
+                upperMaskActive = ActiveUpperMask();
+                
                 SetLayerWeight();
 
                 upperBodyLayerWeight = _animator.GetLayerWeight(1);
                 _animator.SetFloat("LayerWeight", upperBodyLayerWeight);
-                if (_playerController.weaponOnHands)
+                if (_inventory.drawnWeaponItem)
                 {
-                    weaponItem = _playerController.drawnWeaponItem;
+                    weaponItem = _inventory.drawnWeaponItem;
                     recoilMaxRotation = weaponItem.recoilMaxRotation;
                     recoilDuration = weaponItem.recoilDuration;
                 }
@@ -171,7 +151,7 @@ public class IKManager : MonoBehaviour
         switch (playerType)
         {
             case PlayerType.Player:
-                if (_playerController.weaponOnHands && _playerController.isAiming)
+                if (_inventory.drawnWeaponItem && _playerController.isAiming)
                 {
                     if (!_playerController.drinking
                         || !_playerController.bandaging
@@ -237,7 +217,7 @@ public class IKManager : MonoBehaviour
                     if (upperMaskActive)
                     {
                         if (!_playerController.climbingLadder ||
-                            !_playerController.drawnWeaponItem.attacking ||
+                            !_inventory.drawnWeaponItem.attacking ||
                             !_playerController.blocking)
                         {
                             _animator.SetLayerWeight(_animator.GetLayerIndex(upperBodyLayerName), 1);
@@ -342,6 +322,33 @@ public class IKManager : MonoBehaviour
             rightElbowTarget.Rotate(Vector3.up, bulletRecoilCurve.Evaluate(curveTime) * recoilMaxRotation, Space.Self);
             spineTarget.Rotate(Vector3.left, bulletRecoilCurve.Evaluate(curveTime) * recoilMaxRotation / 2, Space.Self);
         }
+    }
+    
+    public bool ActiveUpperMask()
+    {
+        upperMaskConditions = new bool[]{
+            _inventory.drawWeapon,
+            _inventory.holsterWeapon ,
+            _playerController.isAiming ,
+            _playerController.reloadingWeapon ,
+            _playerController._healthManager.isBleeding ,
+            _playerController.bandaging ,
+            _playerController.drinking ,
+            _playerController.eating ,
+            _playerController.grabItem
+        };
+
+        bool active = false;
+
+        for (int i = 0; i < upperMaskConditions.Length; i++)
+        {
+            if (upperMaskConditions[i] == true)
+            {
+                active = true;
+                break;
+            }
+        }
+        return active;
     }
     private void OnDrawGizmos()
     {

@@ -39,7 +39,6 @@ public class Door : MonoBehaviour
     
     private void OnValidate()
     {
-       // text = textGameObject.GetComponent<TextMeshPro>();
         _doorZoneCollider = GetComponent<Collider>();
         switch (doorOrientation)
         {
@@ -70,7 +69,8 @@ public class Door : MonoBehaviour
         {
             if (transform.GetChild(i).TryGetComponent(out HingeJoint hingeJoint))
             {
-                _hingeJoint = hingeJoint;   
+                _hingeJoint = hingeJoint; 
+                break;
             }
         }
         doorPos = doorTransform.position;
@@ -79,7 +79,7 @@ public class Door : MonoBehaviour
 
     private void Update()
     {
-        if (_hingeJoint != null)
+        if (_hingeJoint)
         {
             if (_hingeJoint.angle <-0.2f || _hingeJoint.angle >0.2f)
             {

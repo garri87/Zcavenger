@@ -12,19 +12,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf024635cc165114f8a391313e719346, type: 3}
   m_Name: Grenade
   m_EditorClassIdentifier: 
-  weaponClass: 4
   ID: 6004
-  weaponIcon: {fileID: 21300000, guid: 451cea879bbbca7478e6fb51ff5c2744, type: 3}
   weaponName: Hand Grenade
   description: 
+  weaponIcon: {fileID: 21300000, guid: 451cea879bbbca7478e6fb51ff5c2744, type: 3}
+  weaponPrefab: {fileID: 5184670992651058531, guid: edda909c16307bc44ac9e5d6b9212600, type: 3}
+  weaponClass: 4
   bulletID: 0
-  bulletImpactPrefab: {fileID: 0}
-  enemyImpactPrefab: {fileID: 0}
-  muzzleFlashPrefab: {fileID: 0}
-  damage: 200
+  damage: 80
   fireRate: 1
   bulletsPerShot: 1
   magazineCap: 1
+  minFireAngle: 0
+  maxFireAngle: 0
   recoilDuration: 0
   recoilMaxRotation: 0
+  blockAttacks: 0
   explosionRange: 3
+  bulletImpactPrefab: {fileID: 0}
+  enemyImpactPrefab: {fileID: 0}
+  muzzleFlashPrefab: {fileID: 0}
+  shotSound: {fileID: 0}
+  meleeAttackSound: {fileID: 0}
+  dropSound: {fileID: 8300000, guid: 715c2d83e094f9a44847d557d72b4123, type: 3}
+  explosionSound: {fileID: 8300000, guid: 2e52e9bf8d696674bad8c036f1a8156a, type: 3}
+  magazineOutSound: {fileID: 0}
+  magazineInSound: {fileID: 0}
+  reloadEndSound: {fileID: 0}
+  drawWeaponSound: {fileID: 8300000, guid: 592ab1b970cbc428eb6e02f1644b51cf, type: 3}

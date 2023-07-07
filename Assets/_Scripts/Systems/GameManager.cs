@@ -207,6 +207,7 @@ public class GameManager : MonoBehaviour
         }
         gameOver = true;
         uiManager.ToggleUI(uiManager.gameOverScreenUI, true);
+        uiManager.gameOverScreenUIDocument.ShowGameOver();
 
     }
     public void ExitGame()

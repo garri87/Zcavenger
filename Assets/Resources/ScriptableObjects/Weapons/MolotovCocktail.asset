@@ -12,19 +12,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf024635cc165114f8a391313e719346, type: 3}
   m_Name: MolotovCocktail
   m_EditorClassIdentifier: 
-  weaponClass: 4
   ID: 6002
-  weaponIcon: {fileID: 21300000, guid: 1bb446c7c891b6949b23ddffd138dcdf, type: 3}
   weaponName: Molotov Cocktail
   description: A glass bottle filled with flammable substances
+  weaponIcon: {fileID: 21300000, guid: 1bb446c7c891b6949b23ddffd138dcdf, type: 3}
+  weaponPrefab: {fileID: 3648626213913103089, guid: 4f95b99b7a441534bb74146cabd44f84, type: 3}
+  weaponClass: 4
   bulletID: 7002
-  bulletImpactPrefab: {fileID: 0}
-  enemyImpactPrefab: {fileID: 0}
-  muzzleFlashPrefab: {fileID: 0}
-  damage: 100
+  damage: 20
   fireRate: 1
   bulletsPerShot: 1
   magazineCap: 1
+  minFireAngle: 0
+  maxFireAngle: 0
   recoilDuration: 0
   recoilMaxRotation: 0
+  blockAttacks: 0
   explosionRange: 3.5
+  bulletImpactPrefab: {fileID: 0}
+  enemyImpactPrefab: {fileID: 0}
+  muzzleFlashPrefab: {fileID: 0}
+  shotSound: {fileID: 0}
+  meleeAttackSound: {fileID: 0}
+  dropSound: {fileID: 8300000, guid: 07ae732476730a540a4a619240581e27, type: 3}
+  explosionSound: {fileID: 8300000, guid: 82338c76b9b416d418b25c575f409016, type: 3}
+  magazineOutSound: {fileID: 0}
+  magazineInSound: {fileID: 0}
+  reloadEndSound: {fileID: 0}
+  drawWeaponSound: {fileID: 0}

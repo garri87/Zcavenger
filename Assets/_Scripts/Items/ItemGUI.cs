@@ -17,6 +17,9 @@ public class ItemGUI : Editor
     private SerializedProperty _itemIcon;
     private SerializedProperty _itemPrefab;
     private SerializedProperty _quantity;
+    
+    private SerializedProperty _minLootQuantity;
+    private SerializedProperty _maxLootQuantity;
     private SerializedProperty _itemPickedUp;
     private SerializedProperty _itemEquipped;
     private SerializedProperty _itemLocation;
@@ -106,6 +109,8 @@ public class ItemGUI : Editor
         _itemIcon = serializedObject.FindProperty("itemIcon");
         _itemPrefab = serializedObject.FindProperty("itemPrefab");
         _quantity = serializedObject.FindProperty("quantity");
+        _minLootQuantity = serializedObject.FindProperty("minLootQuantity");
+        _maxLootQuantity = serializedObject.FindProperty("maxLootQuantity");
         _itemPickedUp = serializedObject.FindProperty("itemPickedUp");
         _itemEquipped = serializedObject.FindProperty("itemEquipped");
         _itemLocation = serializedObject.FindProperty("itemLocation");
@@ -193,6 +198,9 @@ public class ItemGUI : Editor
         EditorGUILayout.PropertyField(_itemIcon);
         EditorGUILayout.PropertyField(_itemPrefab);
         EditorGUILayout.PropertyField(_quantity);
+        EditorGUILayout.PropertyField(_minLootQuantity);
+        EditorGUILayout.PropertyField(_maxLootQuantity);
+        
         EditorGUILayout.PropertyField(_itemPickedUp);
         EditorGUILayout.PropertyField(_itemEquipped);
         EditorGUILayout.PropertyField(_itemLocation);
