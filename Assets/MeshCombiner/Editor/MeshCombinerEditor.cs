@@ -4,6 +4,7 @@ using UnityEditor;
 using UnityEngine;
 
 [CustomEditor(typeof(MeshCombiner))]
+[CanEditMultipleObjects]
 public class MeshCombinerEditor : Editor
 {
 	public override void OnInspectorGUI()

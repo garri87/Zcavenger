@@ -51,18 +51,22 @@ public class GraphicsManager : MonoBehaviour
     {
         _gameManager = GameManager.Instance;
         //Switch postprocessing settings 
-        switch (_gameManager.sceneType)
+        if (_gameManager)
         {
-            case GameManager.SceneType.inLevel:
-                globalVolume.profile = InGamevolumeProfile;
-                getVolumeProfileOverrides(InGamevolumeProfile);
-                break;
-            
-            case GameManager.SceneType.mainTitle:
-                globalVolume.profile = mainTitlevolumeProfile;
-                getVolumeProfileOverrides(mainTitlevolumeProfile);
-                break;
+            switch (_gameManager.sceneType)
+            {
+                case GameManager.SceneType.inLevel:
+                    globalVolume.profile = InGamevolumeProfile;
+                    getVolumeProfileOverrides(InGamevolumeProfile);
+                    break;
+
+                case GameManager.SceneType.mainTitle:
+                    globalVolume.profile = mainTitlevolumeProfile;
+                    getVolumeProfileOverrides(mainTitlevolumeProfile);
+                    break;
+            }
         }
+        
        
 
         currentRenderPipelineAsset = QualitySettings.renderPipeline;

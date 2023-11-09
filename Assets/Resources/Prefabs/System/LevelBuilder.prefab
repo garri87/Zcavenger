@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5464995384865869459
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5464995384865869457}
+  - component: {fileID: 5464995384865869456}
+  m_Layer: 0
+  m_Name: LevelBuilder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5464995384865869457
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5464995384865869459}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5464995384865869456
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5464995384865869459}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f2dd49c4098af84a9d9cdb94bb99aa7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buildPointer: {x: 0, y: 0, z: 0}
+  squareQuantity: 5
+  minSquareWidthSize: 6
+  maxSquareWidthSize: 6
+  buildingsPerSquare: 1
+  minFloorCount: 2
+  maxFloorCount: 5
+  buildingConstructorPrefab: {fileID: 1144165114977530257, guid: 3ef247bdb14b70040b08a35a3c3d0116, type: 3}
+  streetPrefabs:
+  - prefab: {fileID: 5872164901520618461, guid: ce86de6199edd89449fb64d75d07de02, type: 3}
+    streetType: 1
+    streetShape: 1
+  - prefab: {fileID: 5416346788302562423, guid: cf27742680abb5e419ce2f7bb41dcdab, type: 3}
+    streetType: 1
+    streetShape: 2
+  - prefab: {fileID: 1867837093279285671, guid: 076b8629b5ee9e74787a8964cbc5f957, type: 3}
+    streetType: 1
+    streetShape: 0
+  - prefab: {fileID: 4504654326644753964, guid: 415cf54ad6e166b4d92c4c68b0cd7129, type: 3}
+    streetType: 0
+    streetShape: 3
+  - prefab: {fileID: 64456004813768801, guid: 7d34889be2feb5646a61dca41561656f, type: 3}
+    streetType: 0
+    streetShape: 0
+  withBuildings: 1
+  randomSquareSize: 0

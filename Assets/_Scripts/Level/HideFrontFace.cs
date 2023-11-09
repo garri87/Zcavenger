@@ -7,6 +7,9 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
 
+/// <summary>
+/// Toggles Renderers ShadowCasting mode to "On" and "ShadowsOnly"
+/// </summary>
 public class HideFrontFace : MonoBehaviour
 {
     public List<Transform> facesToHide;

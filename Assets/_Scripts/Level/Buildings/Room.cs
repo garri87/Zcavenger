@@ -7,5 +7,4 @@ public class Room : ScriptableObject
 {
     public int maxWidth;
 
-    public RoomGenerator.RoomStyle roomStyle;
 }

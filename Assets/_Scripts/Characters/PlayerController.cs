@@ -57,6 +57,8 @@ public class PlayerController : MonoBehaviour
 
     #region Movement Variables
 
+    private static readonly string Horizontal = "Horizontal";
+    private static readonly string Vertical = "Vertical";
     [HideInInspector] public float horizontalInput, verticalInput;
 
     [HideInInspector] private Vector3 lastPosition;
@@ -177,10 +179,11 @@ public class PlayerController : MonoBehaviour
     #region PlayLine variables
 
     public bool onDoor;
+    private LayerMask doorLayer;
 
     public float currentPlayLine = 0;
     public Door doorScript;
-    public Transform mouseTargetLayer;
+    public Transform mouseTargetLayerTransform;
 
     #endregion
 
@@ -199,7 +202,8 @@ public class PlayerController : MonoBehaviour
         mainCamera = Camera.main;
         gameManager = GameManager.Instance;
         keyAssignments = GameManager.Instance._keyAssignments;
-        mouseTargetLayer = GameObject.Find("MouseTargetLayer").transform;
+        mouseTargetLayerTransform = GameObject.Find("MouseTargetLayer").transform;
+        doorLayer = LayerMask.NameToLayer("Door");
         #region GetComponents
 
         keyAssignments = gameManager.GetComponent<KeyAssignments>();
@@ -240,8 +244,8 @@ public class PlayerController : MonoBehaviour
         //   transform.eulerAngles = new Vector3(transform.eulerAngles.x,transform.eulerAngles.y,0); 
         #region axis inputs
 
-        horizontalInput = Input.GetAxis("Horizontal");
-        verticalInput = Input.GetAxis("Vertical");
+        horizontalInput = Input.GetAxis(Horizontal);
+        verticalInput = Input.GetAxis(Vertical);
 
         #endregion
 
@@ -261,8 +265,8 @@ public class PlayerController : MonoBehaviour
         #region PlayLine placement
 
         //Put the mouselayer on the player Z playline
-        mouseTargetLayer.transform.position =
-            new Vector3(mouseTargetLayer.position.x, transform.position.y, currentPlayLine);
+        mouseTargetLayerTransform.transform.position =
+            new Vector3(mouseTargetLayerTransform.position.x, transform.position.y, currentPlayLine);
         Vector3 newPosition = new Vector3(transform.position.x, transform.position.y, currentPlayLine);
         if (transform.position.z != currentPlayLine && !climbingLadder)
         {
@@ -427,7 +431,7 @@ public class PlayerController : MonoBehaviour
             ladderTransform = other.GetComponent<Transform>();
         }
 
-        if (other.CompareTag("Door") || other.CompareTag("StairsDoor") || other.CompareTag("DoubleDoor"))
+        if (other.gameObject.layer == doorLayer)
         {
             if (other.TryGetComponent(out Door door))
             {
@@ -454,11 +458,11 @@ public class PlayerController : MonoBehaviour
         {
             transform.position = new Vector3(transform.position.x,other.transform.position.y,transform.position.z);
         }*/
-
-        if (other.CompareTag("Door") || other.CompareTag("StairsDoor") || other.CompareTag("DoubleDoor"))
+         if (other.gameObject.layer == doorLayer)
         {
-            onDoor = true;
+                onDoor = true; 
         }
+
     }
 
     private void OnTriggerExit(Collider other)
@@ -479,7 +483,7 @@ public class PlayerController : MonoBehaviour
             nextToLadder = false;
         }
 
-        if (other.CompareTag("Door") || other.CompareTag("StairsDoor") || other.CompareTag("DoubleDoor"))
+        if (other.gameObject.layer == doorLayer)
         {
             onDoor = false;
         }
@@ -1535,7 +1539,8 @@ public class PlayerController : MonoBehaviour
         {
             if (Hit.collider.CompareTag(targetTag))
             {
-                hitDistance = Hit.distance;
+
+                hitDistance = (origin - Hit.point).sqrMagnitude;
                 Debug.DrawRay(origin, direction * hitDistance, Color.yellow);
             }
         }

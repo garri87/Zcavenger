@@ -18,7 +18,7 @@ public class Door : MonoBehaviour
     public string doorID;
     public Transform doorTransform;
     [HideInInspector]public Vector3 doorPos;
-    public float doorRotation = 90;
+    public float sideDoorRotation = 90;
     public GameObject textGameObject;
     
     public bool locked;
@@ -36,25 +36,39 @@ public class Door : MonoBehaviour
     private AudioSource _audioSource;
     public AudioClip[] doorOpenSounds;
     public AudioClip[] doorCloseSounds;
-    
+
+    private void SetPlaylines()
+    {
+        outsidePlayLine = Mathf.RoundToInt(transform.position.z - (LevelBuilder.blocksWidth / 2));
+        insidePlayLine = Mathf.RoundToInt(transform.position.z + (LevelBuilder.blocksWidth / 2));
+    }
+
     private void OnValidate()
+    {
+        SetPlaylines();
+    }
+
+    private void Awake()
     {
         _doorZoneCollider = GetComponent<Collider>();
         switch (doorOrientation)
         {
             case DoorOrientation.Back:
                 _doorZoneCollider.enabled = true;
-                transform.rotation = Quaternion.Euler(0,0,0);
+               //transform.rotation = Quaternion.Euler(0,0,0);
 
                 break;
             
             case DoorOrientation.Side:
                 
                 _doorZoneCollider.enabled = false;
-                transform.rotation = Quaternion.Euler(0,doorRotation,0);
-                textGameObject.SetActive(false);
-                text.enabled = false;
-                
+                //transform.rotation = Quaternion.Euler(0,sideDoorRotation,0);
+                if (textGameObject)
+                {
+                    textGameObject.SetActive(false);
+                    text.enabled = false;
+                }
+                                
                 break;
         }
     }
@@ -75,6 +89,14 @@ public class Door : MonoBehaviour
         }
         doorPos = doorTransform.position;
 
+       
+
+    }
+
+
+    private void OnEnable()
+    {
+        SetPlaylines();
     }
 
     private void Update()

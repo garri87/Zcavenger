@@ -113,9 +113,12 @@ MonoBehaviour:
   - {fileID: 4375964324986389452}
   - {fileID: 3552725643052629708}
   selectAllChilds: 0
+  activateOne: 0
   randomRotation: 1
   randomActivation: 1
+  activationProbabilty: 8
   randomMaterial: 0
+  materialIndex: 0
   materials: []
 --- !u!1 &624160426619036671
 GameObject:
@@ -218,9 +221,12 @@ MonoBehaviour:
   gameObjects:
   - {fileID: 624160426619036671}
   selectAllChilds: 0
+  activateOne: 0
   randomRotation: 1
   randomActivation: 0
+  activationProbabilty: 8
   randomMaterial: 0
+  materialIndex: 0
   materials: []
 --- !u!1 &624634064807703487
 GameObject:
@@ -323,9 +329,12 @@ MonoBehaviour:
   gameObjects:
   - {fileID: 624634064807703487}
   selectAllChilds: 0
+  activateOne: 0
   randomRotation: 1
   randomActivation: 0
+  activationProbabilty: 8
   randomMaterial: 0
+  materialIndex: 0
   materials: []
 --- !u!1001 &1639048248719164524
 PrefabInstance:
@@ -394,7 +403,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 9500000, guid: 334a15b23e6d31f44bef4858676d704a, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 334a15b23e6d31f44bef4858676d704a, type: 3}
 --- !u!1 &1639048248719065804 stripped
 GameObject:
@@ -418,9 +428,12 @@ MonoBehaviour:
   gameObjects:
   - {fileID: 1639048248719065804}
   selectAllChilds: 0
+  activateOne: 0
   randomRotation: 0
   randomActivation: 1
+  activationProbabilty: 8
   randomMaterial: 0
+  materialIndex: 0
   materials: []
 --- !u!4 &1639048248719564524 stripped
 Transform:
@@ -494,7 +507,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 9500000, guid: 13c0f408a54463546a570585a55d00ab, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 13c0f408a54463546a570585a55d00ab, type: 3}
 --- !u!4 &1730037219908551538 stripped
 Transform:
@@ -573,7 +587,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 9500000, guid: 13c0f408a54463546a570585a55d00ab, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 13c0f408a54463546a570585a55d00ab, type: 3}
 --- !u!1 &3552725643052629708 stripped
 GameObject:
@@ -652,7 +667,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 9500000, guid: 13c0f408a54463546a570585a55d00ab, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 13c0f408a54463546a570585a55d00ab, type: 3}
 --- !u!1 &4375964324986389452 stripped
 GameObject:
@@ -755,9 +771,12 @@ MonoBehaviour:
   gameObjects:
   - {fileID: 6651690263376312044}
   selectAllChilds: 0
+  activateOne: 0
   randomRotation: 0
   randomActivation: 1
+  activationProbabilty: 8
   randomMaterial: 0
+  materialIndex: 0
   materials: []
 --- !u!4 &6651690263376800460 stripped
 Transform:
@@ -831,7 +850,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 9500000, guid: 13c0f408a54463546a570585a55d00ab, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 13c0f408a54463546a570585a55d00ab, type: 3}
 --- !u!4 &6738129972207255360 stripped
 Transform:
@@ -910,7 +930,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 9500000, guid: 334a15b23e6d31f44bef4858676d704a, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 334a15b23e6d31f44bef4858676d704a, type: 3}
 --- !u!4 &7965950179004752081 stripped
 Transform:
@@ -939,7 +960,10 @@ MonoBehaviour:
   gameObjects:
   - {fileID: 7965950179005054193}
   selectAllChilds: 0
+  activateOne: 0
   randomRotation: 0
   randomActivation: 1
+  activationProbabilty: 8
   randomMaterial: 0
+  materialIndex: 0
   materials: []

@@ -8,7 +8,7 @@ using Random = UnityEngine.Random;
 public class Randomizer : MonoBehaviour
 {
     public float minRotation, maxRotation;
-    public GameObject[] gameObjects;
+    public List<GameObject> gameObjects;
     public bool selectAllChilds;
     public bool activateOne;
     public bool randomRotation;
@@ -29,41 +29,42 @@ public class Randomizer : MonoBehaviour
     {
         if (selectAllChilds)
         {
-            SelectAllChilds(gameObjects);
+            SelectAllChilds();
         }
-
-        if (activateOne)
+        if (gameObjects != null)
         {
-            ActivateOne(gameObjects,Random.Range(0, gameObjects.Length));
-        }
-        
-        foreach (GameObject gameObject in gameObjects)
-        {
-            if (randomActivation)
+            if (activateOne)
             {
-                RandomActivation(gameObject);
+                ActivateOne(gameObjects, Random.Range(0, gameObjects.Count));
             }
 
-            if (randomRotation)
+            foreach (GameObject gameObject in gameObjects)
             {
-                RandomRotation(gameObject);
-            }
+                if (randomActivation)
+                {
+                    RandomActivation(gameObject);
+                }
 
-            if (randomMaterial)
-            {
-                RandomMaterial(gameObject);
+                if (randomRotation)
+                {
+                    RandomRotation(gameObject);
+                }
+
+                if (randomMaterial)
+                {
+                    RandomMaterial(gameObject);
+                }
             }
         }
     }
 
-    public void SelectAllChilds(GameObject[] gameObjects)
+    public void SelectAllChilds()
     {
         if (transform.childCount > 0)
         {
-            gameObjects = new GameObject[transform.childCount];
-            for (int i = 0; i < transform.childCount; i++)
+            foreach (Transform child in transform)
             {
-                gameObjects[i] = transform.GetChild(i).gameObject;
+                gameObjects.Add(child.gameObject);
             }
         }
         else
@@ -106,19 +107,16 @@ public class Randomizer : MonoBehaviour
         }
     }
 
-    public void ActivateOne(GameObject[] gameObjects,int order)
+    public void ActivateOne(List <GameObject> gameObjects,int order)
     {
         if (gameObjects != null)
         {
-            gameObjects[order].SetActive(true);
-
-            for (int i = 0; i < gameObjects.Length; i++)
+            foreach(GameObject go in gameObjects)
             {
-                if (i != order)
-                {
-                    gameObjects[i].SetActive(false);
-                }
+                go.SetActive(false);
             }
+
+            gameObjects[order].SetActive(true);
         }
     }
 }
