@@ -7,14 +7,19 @@ using Random = UnityEngine.Random;
 
 public class Randomizer : MonoBehaviour
 {
-    public float minRotation, maxRotation;
     public List<GameObject> gameObjects;
+
     public bool selectAllChilds;
+
     public bool activateOne;
+
     public bool randomRotation;
+    public float minRotation, maxRotation;
+
     public bool randomActivation;
     [Range(0,10)]
     public int activationProbabilty = 7;
+
     public bool randomMaterial;
     public int materialIndex = 0;
     public Material[] materials;
@@ -35,7 +40,7 @@ public class Randomizer : MonoBehaviour
         {
             if (activateOne)
             {
-                ActivateOne(gameObjects, Random.Range(0, gameObjects.Count));
+                ActivateOne(gameObjects);
             }
 
             foreach (GameObject gameObject in gameObjects)
@@ -107,7 +112,11 @@ public class Randomizer : MonoBehaviour
         }
     }
 
-    public void ActivateOne(List <GameObject> gameObjects,int order)
+    /// <summary>
+    /// activates a random object on the list
+    /// </summary>
+    /// <param name="gameObjects"></param>
+    public void ActivateOne(List <GameObject> gameObjects)
     {
         if (gameObjects != null)
         {
@@ -116,7 +125,7 @@ public class Randomizer : MonoBehaviour
                 go.SetActive(false);
             }
 
-            gameObjects[order].SetActive(true);
+            gameObjects[Random.Range(0, gameObjects.Count)].SetActive(true);
         }
     }
 }

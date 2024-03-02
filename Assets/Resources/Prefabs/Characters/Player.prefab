@@ -1350,38 +1350,38 @@ MonoBehaviour:
   playerState: 1
   horizontalInput: 0
   verticalInput: 0
-  canMove: 0
-  ascending: 0
-  descending: 0
+  currentSpeed: 0
+  normalSpeed: 6
+  jumpForce: 4
+  crouchWalkSpeed: 2
+  injuredSpeed: 1
+  acceleration: 4
   jump: 0
+  isAscending: 0
+  isDescending: 0
+  canMove: 0
   hardLanded: 0
-  prone: 0
-  roll: 0
-  blocking: 0
-  trapped: 0
+  isProne: 0
+  isRolling: 0
+  isBlocking: 0
+  isTrapped: 0
   beingBitten: 0
   alreadyCatched: 0
   onConduct: 0
   onTransition: 0
-  bandaging: 0
-  drinking: 0
-  eating: 0
-  grabItem: 0
-  playerBusy: 0
-  currentSpeed: 0
-  jumpSpeed: 6
-  crouchWalkSpeed: 2
-  injuredSpeed: 1
-  acceleration: 4
-  normalSpeed: 6
+  isBandaging: 0
+  isDrinking: 0
+  isEating: 0
+  grabbingItem: 0
+  playerIsBusy: 0
   struggleForce: 3
   throwForce: 5
-  hitDistance: 0
   canStomp: 0
   stompDamage: 30
   bloodSplatterParticle: {fileID: 4574046231875852703, guid: 0d492ff9a23dd6348aa4d45b85825187, type: 3}
+  hitDistance: 0
   climbVelocity: 2
-  transitionSpeed: 10
+  transitionSpeed: 5
   nextToLadder: 0
   climbingLadder: 0
   upLadder: 0
@@ -1389,11 +1389,8 @@ MonoBehaviour:
   crosshairTransform: {fileID: 8008613908714685623}
   _weaponHolder: {fileID: 1047958999515181659}
   isAiming: 0
-  attacking: 0
-  reloadingWeapon: 0
-  mouseAimMask:
-    serializedVersion: 2
-    m_Bits: 512
+  isAttacking: 0
+  isReloadingWeapon: 0
   gameManager: {fileID: 0}
   _healthManager: {fileID: 0}
   _particleSystem: {fileID: 0}
@@ -1403,10 +1400,14 @@ MonoBehaviour:
   _checkGround: {fileID: 0}
   stompTargetAgentController: {fileID: 0}
   _stompDetector: {fileID: 3782959296623374742}
-  onDoor: 0
   currentPlayLine: 0
+  transitionAcceleration: 2
+  mouseAimMask:
+    serializedVersion: 2
+    m_Bits: 512
+  mouseTargetLayerTransform: {fileID: 0}
+  onDoor: 0
   doorScript: {fileID: 0}
-  mouseTargetLayer: {fileID: 0}
   _inventory: {fileID: 0}
   trayectoryPoints: 10
   timePoint: 0.1

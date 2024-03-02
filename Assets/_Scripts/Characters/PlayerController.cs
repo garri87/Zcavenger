@@ -55,56 +55,74 @@ public class PlayerController : MonoBehaviour
 
     #endregion
 
-    #region Movement Variables
 
     private static readonly string Horizontal = "Horizontal";
     private static readonly string Vertical = "Vertical";
     [HideInInspector] public float horizontalInput, verticalInput;
 
     [HideInInspector] private Vector3 lastPosition;
-    public bool canMove;
-    public bool ascending;
-    public bool descending;
+    [Header("Movement")]
+    public float currentSpeed;
+    public float normalSpeed;
+    public float jumpForce;
+    public float crouchWalkSpeed;
+    public float injuredSpeed = 1;
+    public float acceleration = 4;
+
+
     [HideInInspector] public bool jump;
-    public bool hardLanded;
     private bool walking;
-    private bool crouch;
-    public bool prone;
-    public bool roll;
+
+    [Header("Conditions")]
+    public bool isAscending;
+    public bool isDescending;
+    public bool canMove;
+    public bool hardLanded;
+    private bool isCrouched;
+    public bool isProne;
+    public bool isRolling;
     private float rollTime = 0.1f;
     private float rollTimer;
-    public bool blocking;
-    public bool trapped;
+    public bool isBlocking;
+    public bool isTrapped;
     public bool beingBitten;
     public bool alreadyCatched;
     public bool onConduct;
     public bool onTransition;
-    public bool bandaging;
-    public bool drinking;
-    public bool eating;
-    public bool grabItem;
+    public bool isBandaging;
+    public bool isDrinking;
+    public bool isEating;
+    public bool grabbingItem;
+    public bool playerIsBusy;
 
-    public bool playerBusy;
-
+    [Header("Collider Shapes")]
     private float _crouchColliderHeight;
     private Vector3 _crouchColliderCenter;
     private Vector3 _proneColliderCenter;
 
-    public float currentSpeed;
-    public float jumpSpeed;
-    public float crouchWalkSpeed;
-    public float injuredSpeed = 1;
-    public float acceleration = 4;
-    public float normalSpeed;
+    [Header("Attributes")]
     public float struggleForce = 3;
     public float throwForce = 5;
+
+    #region Unarmed Attacks variables
+
+    [HideInInspector]
+    public bool canStomp = false;
+
+    public int stompDamage = 10;
+    public GameObject bloodSplatterParticle;
+
+    #endregion
+
     private Vector2 gravity;
-    
     public float hitDistance;
 
+    #region DoubleTappingCheck
     private bool doubleTap;
     private float doubleTapTime = 0.5f;
     private int tapCount = 0;
+    #endregion
+
 
     [HideInInspector]
     public int FacingSign
@@ -116,16 +134,6 @@ public class PlayerController : MonoBehaviour
             return dir > 0f ? -1 : dir < 0f ? 1 : 0;
         }
     }
-
-    #endregion
-
-    #region Unarmed Attacks variables
-
-    public bool canStomp = false;
-    public int stompDamage = 10;
-    public GameObject bloodSplatterParticle;
-
-    #endregion
 
     #region Ladders & Ledge Climb variables
 
@@ -149,10 +157,9 @@ public class PlayerController : MonoBehaviour
     public Transform _weaponHolder; //Transform reference to place Child Gameobjects
     
     public bool isAiming;
-    public bool attacking;
-    public bool reloadingWeapon;
+    public bool isAttacking;
+    public bool isReloadingWeapon;
 
-    public LayerMask mouseAimMask;
 
     #endregion
 
@@ -171,30 +178,38 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] public AgentController stompTargetAgentController;
     [HideInInspector] public StompDetector _stompDetector;
     private IKAimer _ikAimer;
-
-
-
     #endregion
 
     #region PlayLine variables
+    [Header("Playline and Mouse Aim")]
+    public float currentPlayLine = 0;
+    private float currentTransitionSpeed = 0f;
+    public float transitionAcceleration = 2f;
 
+    public LayerMask mouseAimMask;
+    public Transform mouseTargetLayerTransform;
+
+    #endregion
+
+    #region DoorsInteraction
+    [Header("Doors Interaction")]
     public bool onDoor;
     private LayerMask doorLayer;
-
-    public float currentPlayLine = 0;
     public Door doorScript;
-    public Transform mouseTargetLayerTransform;
 
     #endregion
 
     #region Inventory Variables
 
     [HideInInspector] public Inventory _inventory;
-    private static readonly int AnimatorSpeed = Animator.StringToHash("Speed");
 
     #endregion
 
+    #region Animator references
+    private static readonly int AnimatorSpeed = Animator.StringToHash("Speed");
     private Transform leftFoot, rightFoot;
+    #endregion
+
 
     private void Awake()
     {
@@ -239,6 +254,7 @@ public class PlayerController : MonoBehaviour
 
     }
 
+   
     void Update()
     {
         //   transform.eulerAngles = new Vector3(transform.eulerAngles.x,transform.eulerAngles.y,0); 
@@ -270,11 +286,18 @@ public class PlayerController : MonoBehaviour
         Vector3 newPosition = new Vector3(transform.position.x, transform.position.y, currentPlayLine);
         if (transform.position.z != currentPlayLine && !climbingLadder)
         {
+            currentTransitionSpeed += Time.deltaTime * transitionAcceleration;
+            if (currentTransitionSpeed >= transitionSpeed)
+            {
+                currentTransitionSpeed = transitionSpeed;
+            }
             transform.position = Vector3.Lerp(transform.position, newPosition, Time.deltaTime * transitionSpeed);
+
         }
         else
         {
             transform.position = newPosition;
+            currentTransitionSpeed = 0f;
         }
 
         #endregion
@@ -289,19 +312,19 @@ public class PlayerController : MonoBehaviour
             _climber.attachedToLedge,
             _climber.climbingLedge,
             climbingToTop,
-            roll,
-            blocking,
-            trapped,
+            isRolling,
+            isBlocking,
+            isTrapped,
             beingBitten,
             hardLanded,
-            blocking
+            isBlocking
         };
 
         switch (controllerType)
         {
             case ControllerType.DefaultController:
                 DefaultController();
-                MouseAim();
+                SetCrosshairPosition();
                 break;
 
             case ControllerType.OnLadderController:
@@ -344,12 +367,12 @@ public class PlayerController : MonoBehaviour
             controllerType = ControllerType.DefaultController;
         }
 
-        if (roll)
+        if (isRolling)
         {
             rollTimer -= Time.deltaTime;
             if (rollTimer <=0)
             {
-                roll = false;
+                isRolling = false;
                 rollTimer = rollTime;
             }  
         }
@@ -570,7 +593,7 @@ public class PlayerController : MonoBehaviour
                 {
                     if (_inventory.drawnWeaponItem && _inventory.drawnWeaponItem.weaponClass != WeaponScriptableObject.WeaponClass.Melee)
                     {
-                        if (_checkGround.isGrounded && !_climber.attachedToLedge && !trapped && !beingBitten)
+                        if (_checkGround.isGrounded && !_climber.attachedToLedge && !isTrapped && !beingBitten)
                         {
                             playerState = PlayerState.IsAiming;
                             isAiming = true;
@@ -586,20 +609,20 @@ public class PlayerController : MonoBehaviour
                     }
 
                     if (_inventory.drawnWeaponItem.weaponClass == WeaponScriptableObject.WeaponClass.Melee &&
-                        _inventory.drawnWeaponItem.ID != 1001 && !beingBitten && !trapped) // 1001: knife
+                        _inventory.drawnWeaponItem.ID != 1001 && !beingBitten && !isTrapped) // 1001: knife
                     {
                         if (_healthManager.currentStamina >= _healthManager.blockHitPenalty)
                         {
-                            blocking = true;
+                            isBlocking = true;
                         }
                         else
                         {
-                            blocking = false;
+                            isBlocking = false;
                         }
                     }
                     else
                     {
-                        blocking = false;
+                        isBlocking = false;
                     }
                 }
                 else
@@ -612,11 +635,14 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyUp(keyAssignments.aimBlockKey.keyCode))
         {
             isAiming = false;
-            blocking = false;
+            isBlocking = false;
         }
 
     }
- 
+
+    /// <summary>
+    ///  Determines the horizontal facing direction of the player towards the mouse
+    /// </summary>
 
     public int trayectoryPoints = 10;
     public float timePoint = 0.1f;
@@ -646,7 +672,7 @@ public class PlayerController : MonoBehaviour
     {
 
         if (!isAiming && !climbingLadder &&
-                    !attacking && !onTransition)
+                    !isAttacking && !onTransition)
         {
             WeaponSelectionController();//Allow weapon change
         }
@@ -657,10 +683,7 @@ public class PlayerController : MonoBehaviour
 
         #region BASIC MOVEMENT
 
-        //Determines the horizontal facing direction of the player towards the mouse
-
-        _rigidbody.MoveRotation(Quaternion.Euler(new Vector3(0,
-          Mathf.Sign(crosshairTransform.position.x - transform.position.x) * 90, transform.rotation.z)));
+        SetFacingDirection();
 
 
         //Set the horizontal keys to move player
@@ -689,7 +712,7 @@ public class PlayerController : MonoBehaviour
 
             if (currentSpeed > crouchWalkSpeed)
             {
-                if (crouch || walking)
+                if (isCrouched || walking)
                 {
                     if (currentSpeed > crouchWalkSpeed)
                     {
@@ -710,7 +733,7 @@ public class PlayerController : MonoBehaviour
         }
 
         //PRONE MOVEMENT SPEED
-        if (prone)
+        if (isProne)
         {
             currentSpeed = crouchWalkSpeed / 4;
         }
@@ -720,7 +743,7 @@ public class PlayerController : MonoBehaviour
         #region PLAYER ACTIONS
 
         //WALKING TOGGLE
-        if (Input.GetKey(keyAssignments.walkKey.keyCode) && !crouch && !prone)
+        if (Input.GetKey(keyAssignments.walkKey.keyCode) && !isCrouched && !isProne)
         {
             walking = true;
             playerState = PlayerState.IsWalking;
@@ -731,7 +754,7 @@ public class PlayerController : MonoBehaviour
 
             _animator.SetFloat(AnimatorSpeed, Mathf.Sign(FacingSign) * horizontalInput * currentSpeed);
         }
-        else if (!crouch && !prone)
+        else if (!isCrouched && !isProne)
         {
             walking = false;
             if (currentSpeed < normalSpeed)
@@ -778,22 +801,22 @@ public class PlayerController : MonoBehaviour
             if (Input.GetKeyDown(keyAssignments.crouchKey.keyCode) && !onConduct &&
                 _animator.GetFloat(AnimatorSpeed) <= crouchWalkSpeed)
             {
-                crouch = !crouch;
-                if (prone)
+                isCrouched = !isCrouched;
+                if (isProne)
                 {
-                    prone = false;
+                    isProne = false;
                     currentSpeed = crouchWalkSpeed;
                 }
 
-                if (crouch)
+                if (isCrouched)
                 {
                     playerState = PlayerState.IsCrouching;
-                    crouch = true;
+                    isCrouched = true;
                     currentSpeed = crouchWalkSpeed;
                     SetColliderShape(PlayerState.IsCrouching);
                 }
 
-                if (!crouch)
+                if (!isCrouched)
                 {
                     currentSpeed = normalSpeed;
                     SetColliderShape(PlayerState.Default);
@@ -802,19 +825,19 @@ public class PlayerController : MonoBehaviour
 
             if (Input.GetKeyDown(keyAssignments.proneKey.keyCode) && !onConduct)
             {
-                prone = !prone;
-                if (crouch)
+                isProne = !isProne;
+                if (isCrouched)
                 {
-                    crouch = false;
+                    isCrouched = false;
                     currentSpeed = crouchWalkSpeed / 2;
                 }
 
-                if (!prone)
+                if (!isProne)
                 {
                     currentSpeed = normalSpeed;
                 }
 
-                if (prone)
+                if (isProne)
                 {
                     SetColliderShape(PlayerState.IsProne);
 
@@ -834,7 +857,7 @@ public class PlayerController : MonoBehaviour
                         && !_healthManager.isInjured)
                     {
                         _animator.SetBool("Crouch", false);
-                        roll = true;
+                        isRolling = true;
                         SetColliderShape(PlayerState.IsRolling);
                     }
 
@@ -846,7 +869,7 @@ public class PlayerController : MonoBehaviour
                 }
             }
 
-            if (roll)
+            if (isRolling)
             {
                 _animator.applyRootMotion = true;
             }
@@ -934,16 +957,16 @@ public class PlayerController : MonoBehaviour
                 if (!doorScript.locked && doorScript.doorOrientation == Door.DoorOrientation.Back)
                 {
                     Debug.Log("doorScript.doorPos.z: " + doorScript.doorPos.z);
-                    Debug.Log("transform.position.z: " + transform.position.z);
+                    Debug.Log("player transform.position.z: " + transform.position.z);
                     if (doorScript.doorTransform.position.z > transform.position.z)
                     {
                         SwitchPlayLine(doorScript.insidePlayLine);
-                        //Debug.Log("Switching to insidePlayLine");
+                        Debug.Log("Switching to insidePlayLine");
                     }
                     else
                     {
                         SwitchPlayLine(doorScript.outsidePlayLine);
-                        //Debug.Log("Switching to outsidePlayLine");
+                        Debug.Log("Switching to outsidePlayLine");
                     }
 
                 }
@@ -966,17 +989,17 @@ public class PlayerController : MonoBehaviour
         //WEAPONS
         if (Input.GetKeyDown(keyAssignments.reloadKey.keyCode))
         {
-            if (_inventory.drawnWeaponItem && !reloadingWeapon && _inventory.drawnWeaponItem.itemClass == Item.ItemClass.Weapon)
+            if (_inventory.drawnWeaponItem && !isReloadingWeapon && _inventory.drawnWeaponItem.itemClass == Item.ItemClass.Weapon)
             {
                 if (_inventory.drawnWeaponItem.bulletsInMag < _inventory.drawnWeaponItem.magazineCap &&
                     _inventory.CheckItemsLeft(_inventory.drawnWeaponItem.bulletID) > 0)
                 {
-                    reloadingWeapon = true;
+                    isReloadingWeapon = true;
                 }
                 else
                 {
                     Debug.Log("No Ammo found for " + _inventory.drawnWeaponItem.itemName);
-                    reloadingWeapon = false;
+                    isReloadingWeapon = false;
                 }
             }
         }
@@ -1091,7 +1114,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyUp(keyAssignments.aimBlockKey.keyCode))
         {
             isAiming = false;
-            blocking = false;
+            isBlocking = false;
         }
     }
 
@@ -1107,18 +1130,18 @@ public class PlayerController : MonoBehaviour
         _animator.SetBool("Aim", isAiming);
         _animator.SetBool("Jump", jump);
         _animator.SetBool("Walking", walking);
-        _animator.SetBool("Crouch", crouch);
-        _animator.SetBool("Prone", prone);
-        _animator.SetBool("Roll", roll);
+        _animator.SetBool("Crouch", isCrouched);
+        _animator.SetBool("Prone", isProne);
+        _animator.SetBool("Roll", isRolling);
         _animator.SetBool("IsDead", _healthManager.IsDead);
-        _animator.SetBool("Blocking", blocking);
-        _animator.SetBool("Trapped", trapped);
+        _animator.SetBool("Blocking", isBlocking);
+        _animator.SetBool("Trapped", isTrapped);
         _animator.SetBool("Bitten", beingBitten);
-        _animator.SetBool("Bandage", bandaging);
-        _animator.SetBool("Drink", drinking);
-        _animator.SetBool("Eat", eating);
-        _animator.SetBool("GrabItem", grabItem);
-        _animator.SetBool("Reloading", reloadingWeapon);
+        _animator.SetBool("Bandage", isBandaging);
+        _animator.SetBool("Drink", isDrinking);
+        _animator.SetBool("Eat", isEating);
+        _animator.SetBool("GrabItem", grabbingItem);
+        _animator.SetBool("Reloading", isReloadingWeapon);
         
 
         _animator.SetFloat("GroundDistance", CalculateDistance(
@@ -1151,9 +1174,9 @@ public class PlayerController : MonoBehaviour
                 }
 
 
-                if (roll)
+                if (isRolling)
                 {
-                    roll = false;
+                    isRolling = false;
                     SetColliderShape(PlayerState.Default);
                 }
 
@@ -1164,19 +1187,19 @@ public class PlayerController : MonoBehaviour
                 break;
 
             case "BandageEnd":
-                bandaging = false;
+                isBandaging = false;
                 break;
 
             case "DrinkEnd":
-                drinking = false;
+                isDrinking = false;
                 break;
 
             case "EatingEnd":
-                eating = false;
+                isEating = false;
                 break;
 
             case "GrabItemEnd":
-                grabItem = false;
+                grabbingItem = false;
                 break;
 
             default:
@@ -1263,17 +1286,17 @@ public class PlayerController : MonoBehaviour
 
     private bool PlayerBusy()
     {
-        if (bandaging || drinking || eating || grabItem)
+        if (isBandaging || isDrinking || isEating || grabbingItem)
         {
-            playerBusy = true;
+            playerIsBusy = true;
         }
-        else if (!bandaging && !drinking && !eating && !grabItem)
+        else if (!isBandaging && !isDrinking && !isEating && !grabbingItem)
         {
-            playerBusy = false;
+            playerIsBusy = false;
 
         }
 
-        return playerBusy;
+        return playerIsBusy;
     }
 
    /* private void CheckWeaponEquipped()
@@ -1309,7 +1332,7 @@ public class PlayerController : MonoBehaviour
         if (value == 1) //jump impulse
         {
             _checkGround.isGrounded = false;
-            _rigidbody.AddForce(Vector3.up * Mathf.Sqrt(jumpSpeed * -1 * Physics.gravity.y), ForceMode.VelocityChange);
+            _rigidbody.AddForce(Vector3.up * Mathf.Sqrt(jumpForce * -1 * Physics.gravity.y), ForceMode.VelocityChange);
             _healthManager.ConsumeStamina(30);
         }
 
@@ -1441,7 +1464,21 @@ public class PlayerController : MonoBehaviour
 
     #region Actions Functions
 
-    private void MouseAim()
+    private void SetFacingDirection()
+    {
+        Vector3 direction = crosshairTransform.position - transform.position;
+        direction.y = 0; // Para mantener la rotación solo en el eje Y
+
+        // Calcular el ángulo de rotación
+        float angle = Vector3.SignedAngle(Vector3.forward, direction, Vector3.up);
+
+        // Limitar la rotación entre -90 y 90 grados
+        angle = Mathf.Clamp(angle, -90f, 90f);
+
+        // Aplicar la rotación al objeto
+        transform.rotation = Quaternion.Euler(0, angle, 0);
+    }
+    private void SetCrosshairPosition()
     {
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
 
@@ -1508,19 +1545,19 @@ public class PlayerController : MonoBehaviour
         {
             if (currentPosition.y > lastPosition.y)
             {
-                ascending = true;
-                descending = false;
+                isAscending = true;
+                isDescending = false;
             }
             else
             {
-                ascending = false;
-                descending = true;
+                isAscending = false;
+                isDescending = true;
             }
         }
         else
         {
-            descending = false;
-            ascending = false;
+            isDescending = false;
+            isAscending = false;
         }
 
         lastPosition = currentPosition;

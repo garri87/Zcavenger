@@ -1,6 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -8,6 +6,7 @@ using UnityEngine.UIElements;
 public class UIManager : MonoBehaviour
 {
     public GameObject mainMenuUI;
+    public GameObject difficultyOptionsUI;
     public GameObject loadingScreenUI;
     public GameObject inGameOverlayUI;
     public GameObject inventoryUI;
@@ -17,6 +16,7 @@ public class UIManager : MonoBehaviour
     public GameObject itemContainerUI;
 
     public MainMenuUI mainMenuUIDocument;
+    public DifficultyOptionsUI difficultyOptionsUIDocument;
     public LoadingScreenUI loadingScreenUIDocument;
     public InGameOverlayUI inGameOverlayUIDocument;
     public InventoryUI inventoryUIDocument;
@@ -34,17 +34,20 @@ public class UIManager : MonoBehaviour
         uiList = new GameObject[]
         {
             mainMenuUI,
+            difficultyOptionsUI,
             loadingScreenUI,
             inGameOverlayUI,
             inventoryUI,
             pauseMenuUI,
             optionsMenuUI,
             gameOverScreenUI,
-            itemContainerUI
+            itemContainerUI,
+
         };
 
 
         mainMenuUIDocument = mainMenuUI.GetComponent<MainMenuUI>();
+        difficultyOptionsUIDocument = difficultyOptionsUI.GetComponent<DifficultyOptionsUI>();
         loadingScreenUIDocument = loadingScreenUI.GetComponent<LoadingScreenUI>();
         inGameOverlayUIDocument = inGameOverlayUI.GetComponent<InGameOverlayUI>();
         inventoryUIDocument = inventoryUI.GetComponent<InventoryUI>();
@@ -63,10 +66,10 @@ public class UIManager : MonoBehaviour
 
     public void CloseAllUI()
     {
-        foreach (GameObject uIObject in uiList)
+        foreach (GameObject uiObject in uiList)
         {
-
-            uIObject.GetComponent<UIDocument>().rootVisualElement.style.display = DisplayStyle.None;
+            uiObject.GetComponent<UIDocument>().rootVisualElement.style.display = DisplayStyle.None;
+    
         }
     }
 

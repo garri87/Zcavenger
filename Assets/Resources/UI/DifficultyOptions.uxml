@@ -1,0 +1,16 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Resources/UI/Styles.uss?fileID=7433441132597879392&amp;guid=1859ad832d278e64a88169bbf99fcc0a&amp;type=3#Styles" />
+    <ui:VisualElement name="Root" class="Root">
+        <ui:VisualElement name="MainMenu" class="MainMenu">
+            <ui:VisualElement name="Title" class="Title" />
+            <ui:VisualElement name="Buttons" style="justify-content: center; align-items: stretch; top: -30px;">
+                <ui:Label text="Choose difficulty" display-tooltip-when-elided="true" name="Label" style="-unity-font-definition: resource(&apos;Fonts/DIRTYEGO SDF&apos;); align-items: auto; position: relative; -unity-text-align: upper-center; color: rgba(255, 255, 255, 255); -unity-font-style: normal; font-size: 22px;" />
+                <ui:Button text="Easy" display-tooltip-when-elided="true" name="EasyButton" />
+                <ui:Button text="Normal" display-tooltip-when-elided="true" name="NormalButton" />
+                <ui:Button text="Hard" display-tooltip-when-elided="true" name="HardButton" />
+                <ui:Button text="Back" display-tooltip-when-elided="true" name="BackButton" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:Label text="V0.4 Alpha" display-tooltip-when-elided="true" name="Version" class="Version" />
+    </ui:VisualElement>
+</ui:UXML>

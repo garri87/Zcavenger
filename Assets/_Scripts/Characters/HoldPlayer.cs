@@ -58,7 +58,7 @@ public class HoldPlayer : StateMachineBehaviour
             switch (agentController.enemyType)
             {
                 case Enemy.EnemyType.Crippled:
-                    playerController.trapped = true;
+                    playerController.isTrapped = true;
 
                     break;
                 
@@ -104,7 +104,7 @@ public class HoldPlayer : StateMachineBehaviour
                 agentController.attacking = false;
                 agentController.playerCatch = false;
                 _navMeshAgent.isStopped = false;
-                playerController.trapped = false;
+                playerController.isTrapped = false;
                 playerController.beingBitten = false;
                 catchTimer = catchTime;
                 playerController.alreadyCatched = false;
@@ -117,7 +117,7 @@ public class HoldPlayer : StateMachineBehaviour
     public void ReleasePlayer()
     {
         agentController.playerCatch = false;
-        playerController.trapped = false;
+        playerController.isTrapped = false;
         playerController.beingBitten = false;
         playerAlreadyCatched = false;
         playerController.onTransition = false;

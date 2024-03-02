@@ -36,7 +36,7 @@ public class Climber : MonoBehaviour
    ledgeType = climbable.ledgeType;
    orientation = climbable.orientation;
 
-   if (Input.GetKey(_playerController.keyAssignments.jumpKey.keyCode) && _playerController.@descending)
+   if (Input.GetKey(_playerController.keyAssignments.jumpKey.keyCode) && _playerController.isDescending)
    {
     if (climbable.orientation != Climbable.Orientation.Back)
     {

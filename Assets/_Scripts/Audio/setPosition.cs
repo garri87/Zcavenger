@@ -13,12 +13,34 @@ public class setPosition : MonoBehaviour
 
     private void Awake()
     {
-        targetTransform = GameObject.Find("Player").transform;
+        if (!targetTransform)
+        {
+            SearchForPlayer("Player");
+        }
+        else
+        {
+           ParentListener(targetTransform);
+        }
+
     }
 
-
-    private void Update()
+ private void ParentListener(Transform parent)
     {
-        transform.position = targetTransform.position + Vector3.up;
+        transform.parent = parent;
+        transform.position = parent.position + Vector3.up;
+    }
+
+private void SearchForPlayer(string name)
+    {
+        try
+        {
+            Transform player = GameObject.Find(name).transform;
+            ParentListener(player);
+        }
+        catch (Exception e)
+        {
+            Debug.Log("No Player Found. Exception: " + e);
+        }
     }
 }
+

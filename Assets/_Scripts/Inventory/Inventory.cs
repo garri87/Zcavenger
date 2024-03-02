@@ -178,7 +178,7 @@ public class Inventory : MonoBehaviour
                 if (collectItemTransform)
                 {
                     AddItemToInventory(collectItemTransform.gameObject);
-                    _playerController.grabItem = true;
+                    _playerController.grabbingItem = true;
                     onItem = false;
                 }
             }

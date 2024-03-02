@@ -158,17 +158,8 @@ public class Item : MonoBehaviour
 
     private void Awake()
     {
-        _boxCollider = GetComponent<BoxCollider>();
-        playerTransform = GameObject.Find("Player").transform;
-        playerController = playerTransform.GetComponent<PlayerController>();
-        playerIKManager = playerTransform.GetComponent<IKManager>();
-        playerInventory = playerTransform.GetComponent<Inventory>();
-        playerAnimator = playerTransform.GetComponent<Animator>();
-        modelMeshFilter = GetComponent<MeshFilter>();
-        modelMeshRenderer = GetComponent<MeshRenderer>();
-        worldTextUI = GetComponent<WorldTextUI>();
-        modelInstantiated = false;
-        InitItem();
+       
+      //  InitItem();
         
         
     }
@@ -286,6 +277,27 @@ public class Item : MonoBehaviour
     /// </summary>
     public void InitItem()
     {
+
+        _boxCollider = GetComponent<BoxCollider>();
+        if (!playerTransform)
+        {
+            playerTransform = GameObject.Find("Player").transform;
+        }
+        
+        if (playerTransform)
+        {
+            playerController = playerTransform.GetComponent<PlayerController>();
+            playerIKManager = playerTransform.GetComponent<IKManager>();
+            playerInventory = playerTransform.GetComponent<Inventory>();
+            playerAnimator = playerTransform.GetComponent<Animator>();
+        }
+
+        if (!modelMeshFilter) modelMeshFilter = GetComponent<MeshFilter>();
+        if (!modelMeshRenderer) modelMeshRenderer = GetComponent<MeshRenderer>();
+        if (!worldTextUI) worldTextUI = GetComponent<WorldTextUI>();
+        modelInstantiated = false;
+
+
         if (scriptableObject)
         {
             GetScriptableObject(scriptableObject);
@@ -309,6 +321,7 @@ public class Item : MonoBehaviour
                     worldTextUI.targetTransform = itemModelGO.transform;
                     worldTextUI.uIEnabled = false;
                     break;
+
                 case ItemLocation.Container:
 
 
@@ -454,7 +467,7 @@ public class Item : MonoBehaviour
                 maxStack = 1;
             }
 
-            else if (scriptableObj is OutfitScriptableObject)
+            else if (scriptableObject is OutfitScriptableObject)
             {
                 itemClass = ItemClass.Outfit;
                 quantity = 1;
@@ -645,7 +658,7 @@ public class Item : MonoBehaviour
 
                 ReloadMagazine();
 
-                playerController.reloadingWeapon = false;
+                playerController.isReloadingWeapon = false;
                 playerAnimator.SetBool("Reloading", false);
                 break;
         }

@@ -103,7 +103,7 @@ public class IKAimer : MonoBehaviour
 
    private void Update()
    {
-      if (_inventory.drawnWeaponItem && !_playerController.reloadingWeapon)
+      if (_inventory.drawnWeaponItem && !_playerController.isReloadingWeapon)
       {
          AimAtTarget();
          if (!_playerController._healthManager.isBleeding || 
@@ -166,7 +166,7 @@ public class IKAimer : MonoBehaviour
          {
             chestAimConstraint.data.aimAxis = MultiAimConstraintData.Axis.Z;
          }
-         if (_playerController.prone)
+         if (_playerController.isProne)
          {
             rightHandAimConstraint.weight += Time.deltaTime * aimTime;
             headAimConstraint.weight += Time.deltaTime * aimTime;

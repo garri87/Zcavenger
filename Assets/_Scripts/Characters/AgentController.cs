@@ -5,6 +5,7 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 
@@ -91,6 +92,7 @@ public class AgentController : MonoBehaviour
     private bool growl;
     [HideInInspector] public bool hisHit;
 
+    public Floor.BuildingType[] buildingTypes; 
     private void OnValidate()
     {
         try
@@ -129,6 +131,20 @@ public class AgentController : MonoBehaviour
 
         _animator.SetBool(enemyType.ToString(), true);
         _animator.SetInteger("State", animationState);
+
+        switch (GameManager.Instance.gameDifficulty)
+        {
+            case GameManager.GameDifficulty.Easy:
+                _healthManager.currentHealth /= 4;
+                break;
+            case GameManager.GameDifficulty.Normal:
+                _healthManager.currentHealth /= 2;
+                break;  
+
+            case GameManager.GameDifficulty.Hard: 
+                                
+                break;
+        }
     }
 
 
@@ -414,7 +430,7 @@ public class AgentController : MonoBehaviour
         {
             if (hit.collider.CompareTag("Player"))
             {
-                if (!playerController.blocking)
+                if (!playerController.isBlocking)
                 {
                     switch (enemyType)
                     {
@@ -442,7 +458,7 @@ public class AgentController : MonoBehaviour
                             if (!playerController.alreadyCatched)
                             {
                                 playerCatch = true;
-                                playerController.trapped = true;
+                                playerController.isTrapped = true;
                                 playerController.alreadyCatched = true;
                             }
 
@@ -466,7 +482,7 @@ public class AgentController : MonoBehaviour
                     playerAnimator.SetBool("OnWall", false);
                     playerAnimator.SetBool("ClimbingLadder", false);
                     playerAnimator.SetBool("Jump", false);
-                    playerController.reloadingWeapon = false;
+                    playerController.isReloadingWeapon = false;
                     if (enemyType != Enemy.EnemyType.Crippled)
                     {
                         playerAnimator.SetTrigger("Hit");
@@ -519,7 +535,7 @@ public class AgentController : MonoBehaviour
 
         attacking = false;
         playerCatch = false;
-        playerController.trapped = false;
+        playerController.isTrapped = false;
         playerController.beingBitten = false;
         playerController.alreadyCatched = false;
 

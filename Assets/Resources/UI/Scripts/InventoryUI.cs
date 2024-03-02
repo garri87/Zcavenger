@@ -148,9 +148,24 @@ public class InventoryUI : MonoBehaviour
     private void Start()
     {
         _camera = Camera.main;
-        playerInventory = GameObject.Find("Player").GetComponent<Inventory>();
 
-        FillInventoryWithSlots(playerInventory.maxCapacity);
+        GameObject player = GameObject.Find("Player");
+        if (player)
+        {
+            if (player.TryGetComponent<Inventory>(out Inventory inventory))
+            {
+                playerInventory = inventory;
+                FillInventoryWithSlots(playerInventory.maxCapacity);
+
+            }
+            else
+            {
+                Debug.Log("No player inventory found on scene");
+            }
+        }
+        
+
+
     }
 
     private void Update()

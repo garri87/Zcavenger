@@ -514,8 +514,8 @@ MonoBehaviour:
   locked: 0
   _doorZoneCollider: {fileID: 1236376791974193642}
   text: {fileID: 2697724180953081121}
-  insidePlayLine: 2
-  outsidePlayLine: 1
+  insidePlayLine: 3
+  outsidePlayLine: -3
   doorOpenSounds:
   - {fileID: 8300000, guid: 2590abbc7a195bb489ac737033389abb, type: 3}
   - {fileID: 8300000, guid: d520670dcb3edf147844b5014c7dd3a7, type: 3}
@@ -555,8 +555,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.9073304, y: 1.5, z: 10}
-  m_Center: {x: 0.009079158, y: 1.0509131, z: 0}
+  m_Size: {x: 0.9, y: 1.5, z: 10}
+  m_Center: {x: 0, y: 1.05, z: 0}
 --- !u!82 &3922698626155583150
 AudioSource:
   m_ObjectHideFlags: 0

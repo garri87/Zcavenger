@@ -1045,7 +1045,6 @@ MonoBehaviour:
   - {fileID: 2100000, guid: fd96118e766e7b246ae715491d2cd869, type: 2}
   - {fileID: 2100000, guid: 2149baccf21e31043a0e66c87a72bfcd, type: 2}
   - {fileID: 2100000, guid: 4e3472c094b8146469870886e7ccf1a0, type: 2}
-  - {fileID: -7445379338211790851, guid: b30c41c91ed8d79499f2c3afbdb0e7f5, type: 3}
   - {fileID: 2100000, guid: 9ecdf17553552eb4b8fddd19cf0a8a20, type: 2}
   - {fileID: 2100000, guid: 09f24017279ca784a92d5599e2b5fb4c, type: 2}
   - {fileID: 2100000, guid: 923bf66aab305b34b81ee39b6b34761e, type: 2}
@@ -1142,6 +1141,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1239938167841181608}
+  - component: {fileID: 541203755391177076}
   m_Layer: 0
   m_Name: cabinet_3 (2)
   m_TagString: Untagged
@@ -1168,6 +1168,33 @@ Transform:
   m_Father: {fileID: 7677092282806760698}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: -90, y: 265.6, z: -165}
+--- !u!114 &541203755391177076
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1239938167841181609}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4aa8019394e2b6d48acfaefc4cfe6421, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minRotation: 0
+  maxRotation: 0
+  gameObjects: []
+  selectAllChilds: 1
+  activateOne: 0
+  randomRotation: 0
+  randomActivation: 0
+  activationProbabilty: 8
+  randomMaterial: 1
+  materialIndex: 0
+  materials:
+  - {fileID: 2100000, guid: 4e3472c094b8146469870886e7ccf1a0, type: 2}
+  - {fileID: 2100000, guid: 2149baccf21e31043a0e66c87a72bfcd, type: 2}
+  - {fileID: 2100000, guid: b44f80c94b4119841b7c1746c42b7aa7, type: 2}
+  - {fileID: 2100000, guid: b18edcafb495d334c9e547924a5f9be8, type: 2}
 --- !u!1 &1239938167909381641
 GameObject:
   m_ObjectHideFlags: 0

@@ -5,15 +5,8 @@ using UnityEngine;
 
 public class DoorSelector : MonoBehaviour
 {
-    public enum DoorType
-    {
-        Residential,
-        Hospital,
-        Office,
-        Stairs,
-        Any,
-    }
-    public DoorType doorType;
+   
+    public Floor.BuildingType buildingType = Floor.BuildingType.Residential;
 
     public Door.DoorOrientation doorOrientation;
 
@@ -22,29 +15,33 @@ public class DoorSelector : MonoBehaviour
     private string doorTag;
 
     public bool doubleDoor;
+    public bool stairsDoor;
     
-    private void Start()
+    
+    private void Awake()
     {
-        switch (doorType)
+        if (!stairsDoor)
         {
-            case DoorType.Residential:
-                doorTag = "ResidentialDoor";
-                break;
-            case DoorType.Hospital:
-                doorTag = "HospitalDoor";
+            switch (buildingType)
+            {
+                case Floor.BuildingType.Hospital:
+                    doorTag = "HospitalDoor";
 
-                break;
-            case DoorType.Office:
-                doorTag = "OfficeDoor";
+                    break;
+                case Floor.BuildingType.Residential:
+                    doorTag = "ResidentialDoor";
 
-                break;
-            case DoorType.Stairs:
-                doorTag = "StairsDoor";
-                break;
-            default:
-                doorTag = "";
-                break;
+                    break;
+                default:
+                    doorTag = "";
+                    break;
+            }
         }
+        else
+        {
+            doorTag = "StairsDoor";
+        }
+       
 
         if (doubleDoor) doorTag += "Double";
 
@@ -61,6 +58,11 @@ public class DoorSelector : MonoBehaviour
 
     public void ActivateDoor(string doorTag)
     {
+        foreach (Door door in doors)
+        {
+            door.gameObject.SetActive(false);
+        }
+
         if (doors != null)
         {
             for (int i = 0; i < doors.Count; i++)
@@ -77,15 +79,9 @@ public class DoorSelector : MonoBehaviour
 
     public void SetupDoor(Door door)
     {
-            door.doorOrientation = doorOrientation;
+        door.doorOrientation = doorOrientation;
         door.transform.rotation = new Quaternion(0, 0, 0, 0);
-
-        if (doorOrientation == Door.DoorOrientation.Back)
-        {
-           // door.outsidePlayLine = Mathf.RoundToInt(door.transform.parent.parent.parent.position.z);
-           // door.insidePlayLine = Mathf.RoundToInt(door.transform.parent.parent.parent.position.z + LevelBuilder.blocksWidth);
-        }
-            
+        door.SetPlaylines();
        
     }
 }

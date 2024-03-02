@@ -1754,7 +1754,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &4044684103946528425
 Animator:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -1771,7 +1771,8 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &503253323401627676
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1813,6 +1814,7 @@ MonoBehaviour:
   originTransform: {fileID: 0}
   currentPlayLine: 0
   hisHit: 0
+  buildingTypes: 000000000100000002000000
 --- !u!114 &7164241723569613050
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1828,15 +1830,17 @@ MonoBehaviour:
   playerType: 1
   maxHealth: 0
   currentHealth: 0
-  maxFood: 0
-  currentFood: 0
-  maxWater: 0
-  currentWater: 0
+  maxHunger: 0
+  currentHunger: 0
+  maxThirst: 0
+  currentThirst: 0
   healthWarningValue: 15
-  updateRate: 5
+  defaultUpdateRate: 5
   lowNutritionUpdateRate: 20
   bleedingUpdateRate: 5
+  maxNutritionDecreaseSize: 5
   bleedingDamagePerRate: 0
+  lowNutritionDamagePerRate: 1
   currentUpdateRate: 0
   regenRate: 0
   targetRegen: 0
@@ -1915,6 +1919,8 @@ MonoBehaviour:
   isIKActive: 1
   playerType: 1
   _animator: {fileID: 4044684103946528425}
+  upperBodyLayerName: UpperBody
+  upperMaskActive: 0
   leftHandTarget: {fileID: 0}
   rightHandTarget: {fileID: 0}
   leftElbowTarget: {fileID: 0}
@@ -1923,6 +1929,7 @@ MonoBehaviour:
   agentHead: {fileID: 8912103586414613032}
   weaponItem: {fileID: 0}
   targetPosition: {x: 0, y: 0, z: 0}
+  recoilActive: 0
   bulletRecoilCurve:
     serializedVersion: 2
     m_Curve: []

@@ -80,25 +80,6 @@ MonoBehaviour:
   bladeRotation:
     m_OverrideState: 0
     m_Value: -180
---- !u!114 &-6903223465203413224
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 221518ef91623a7438a71fef23660601, type: 3}
-  m_Name: WhiteBalance
-  m_EditorClassIdentifier: 
-  active: 1
-  temperature:
-    m_OverrideState: 1
-    m_Value: -40.1
-  tint:
-    m_OverrideState: 1
-    m_Value: -14.6
 --- !u!114 &-2520701091119125475
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -126,6 +107,25 @@ MonoBehaviour:
     m_Value: 0.2
   rounded:
     m_OverrideState: 0
+    m_Value: 0
+--- !u!114 &-2393253582515183883
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 221518ef91623a7438a71fef23660601, type: 3}
+  m_Name: WhiteBalance
+  m_EditorClassIdentifier: 
+  active: 1
+  temperature:
+    m_OverrideState: 1
+    m_Value: 37
+  tint:
+    m_OverrideState: 1
     m_Value: 0
 --- !u!114 &-1014840200162327489
 MonoBehaviour:
@@ -164,7 +164,7 @@ MonoBehaviour:
     m_Value: {r: 1, g: 1, b: 1, a: 1}
   balance:
     m_OverrideState: 1
-    m_Value: 37
+    m_Value: 5
 --- !u!114 &-632315532135335724
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -206,7 +206,7 @@ MonoBehaviour:
   - {fileID: -8976590784430927384}
   - {fileID: -632315532135335724}
   - {fileID: -1014840200162327489}
-  - {fileID: -6903223465203413224}
+  - {fileID: -2393253582515183883}
   - {fileID: 6229876595091839121}
   - {fileID: -861461355315380827}
   - {fileID: -2520701091119125475}
@@ -225,13 +225,13 @@ MonoBehaviour:
   active: 1
   threshold:
     m_OverrideState: 1
-    m_Value: 1.34
+    m_Value: 24.84
   intensity:
     m_OverrideState: 1
-    m_Value: 0.36
+    m_Value: 0.2
   scatter:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 0.166
   clamp:
     m_OverrideState: 0
     m_Value: 65404.19
@@ -247,6 +247,7 @@ MonoBehaviour:
   dirtTexture:
     m_OverrideState: 0
     m_Value: {fileID: 2800000, guid: 721867d92a37b53458853f3884e21607, type: 3}
+    dimension: 1
   dirtIntensity:
     m_OverrideState: 0
     m_Value: 0

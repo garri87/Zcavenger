@@ -1,15 +1,13 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class BuildingConstructor : MonoBehaviour
 {
     private float blockHeight = 3.01f;
+    public Floor.BuildingType buildingType;
     public int floorCount = 3;
     public int floorHeight = 1;
-    public int floorWidth = 6;   
+    public Floor.FloorWidth floorWidth = Floor.FloorWidth.Medium;   
     public int floorDepth = 2;
 
     private Floor.StairsPosition stairsPosition;
@@ -23,7 +21,7 @@ public class BuildingConstructor : MonoBehaviour
 
     public void InitBuild()
     {
-        GetPools();
+       floorsPool = GetPools(buildingType);
 
         buildCursor = transform.position;
         
@@ -34,19 +32,19 @@ public class BuildingConstructor : MonoBehaviour
             if (y == 0)
             {
                 //Spawn Base sections
-               _floorGo = GetFloorFromPool(floorsPool, Floor.FloorType.Base, stairsPosition, floorWidth, floorHeight, floorDepth, buildCursor);
+               _floorGo = GetFloorFromPool(floorsPool, Floor.FloorLocation.Base, stairsPosition, floorWidth, floorHeight, floorDepth, buildCursor);
                 MoveCursor(Vector3.up, blockHeight);
 
             }else if (y < floorCount)
             {
                 //Spawn middle sections
-                _floorGo = GetFloorFromPool(floorsPool, Floor.FloorType.Middle, stairsPosition, floorWidth, floorHeight, floorDepth, buildCursor);
+                _floorGo = GetFloorFromPool(floorsPool, Floor.FloorLocation.Middle, stairsPosition, floorWidth, floorHeight, floorDepth, buildCursor);
                 MoveCursor(Vector3.up, blockHeight);
             }
             else if (y < floorCount+1)
             {
                 //Spawn roof sections
-                _floorGo = GetFloorFromPool(floorsPool, Floor.FloorType.Roof, stairsPosition, floorWidth, floorHeight, floorDepth, buildCursor);
+                _floorGo = GetFloorFromPool(floorsPool, Floor.FloorLocation.Roof, stairsPosition, floorWidth, floorHeight, floorDepth, buildCursor);
                 MoveCursor(Vector3.up, blockHeight);
             }
             
@@ -63,15 +61,15 @@ public class BuildingConstructor : MonoBehaviour
     ///  
     /// </summary>
     /// <param name="floorPool">List of floors</param>
-    /// <param name="floorType"></param>
+    /// <param name="floorLocation"></param>
     /// <param name="stairsPosition"></param>
     /// <param name="floorWidth"></param>
     /// <param name="floorHeight"></param>
     /// <param name="floorDepth"></param>
     /// <param name="spawnPosition"></param>
     /// <returns></returns>
-    public GameObject GetFloorFromPool(List<Floor> floorPool,Floor.FloorType floorType,
-       Floor.StairsPosition stairsPosition,int floorWidth,
+    public GameObject GetFloorFromPool(List<Floor> floorPool,Floor.FloorLocation floorLocation,
+       Floor.StairsPosition stairsPosition, Floor.FloorWidth floorWidth,
        int floorHeight,int floorDepth,Vector3 spawnPosition)
     {
         GameObject floor = null;
@@ -79,11 +77,11 @@ public class BuildingConstructor : MonoBehaviour
 
         for (int i = 0; i < floorPool.Count; i++)
         {
-            if (floorPool[i].floorType == floorType
+            if (floorPool[i].floorLocation == floorLocation
                 && floorPool[i].stairsPosition == stairsPosition
-                && floorPool[i].width == floorWidth
-                && floorPool[i].height == floorHeight
-                && floorPool[i].depth == floorDepth)
+                && floorPool[i].floorWidth == floorWidth
+                && floorPool[i].floorHeight == floorHeight
+                && floorPool[i].floorDepth == floorDepth)
             {
                 if (!floorPool[i].gameObject.activeSelf)
                 {
@@ -104,19 +102,49 @@ public class BuildingConstructor : MonoBehaviour
             floor = Instantiate(auxFloor,spawnPosition,Quaternion.identity,floorPoolTransform);
         }
 
+        if (floor && floor.TryGetComponent<Floor>(out Floor floorComp))
+        {
+            switch (GameManager.Instance.gameDifficulty)
+            {
+                case GameManager.GameDifficulty.Easy:
+                    floorComp.enemyProbability = Random.Range(0, 3);
+                    floorComp.itemProbability = Random.Range(0, 11);
+                    break;
+                case GameManager.GameDifficulty.Normal:
+                    floorComp.enemyProbability = Random.Range(4, 7);
+                    floorComp.itemProbability = Random.Range(0, 8);
+                    break;
+                case GameManager.GameDifficulty.Hard:
+                    floorComp.enemyProbability = Random.Range(7, 11);
+                    floorComp.itemProbability = Random.Range(0, 5);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+
         floor.gameObject.SetActive(true);
         floor.transform.position = spawnPosition;
+        floor.GetComponent<Floor>().buildingType = buildingType;
         
         return floor;
 
     }
     
-    public void GetPools()
+    public List<Floor> GetPools(Floor.BuildingType buildingType)
     {
+        List<Floor> pool = new List<Floor>();
         floorPoolTransform = GameObject.Find("FloorsPool").transform;
         for (int i = 0; i < floorPoolTransform.childCount ; i++)
         {
-            floorsPool.Add(floorPoolTransform.GetChild(i).transform.GetComponent<Floor>());
+            Floor floor = floorPoolTransform.GetChild(i).transform.GetComponent<Floor>();
+            if (floor.buildingType == buildingType)
+            {
+                pool.Add(floor);
+            }
         }
+        return pool;
     }
+
 }

@@ -59,11 +59,14 @@ MonoBehaviour:
   loadingGame: 0
   tips: []
   transitionSpeed: 2
-  version: 0.3a
+  version: 0.4a
   startingPosition: {fileID: 0}
   endLevelPosition: {fileID: 0}
   startingPlayline: 0
+  gameDifficulty: 0
+  finishedLevel: 0
   gameOver: 0
+  scriptableObjectItems: []
 --- !u!114 &1161256350271930987
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -287,22 +290,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1161256350271930989}
     m_Modifications:
-    - target: {fileID: 826691261578130839, guid: c103450ca16a2ce498419f46b1319ddd, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 826691261628665600, guid: c103450ca16a2ce498419f46b1319ddd, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 826691261969983245, guid: c103450ca16a2ce498419f46b1319ddd, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 826691262030177953, guid: c103450ca16a2ce498419f46b1319ddd, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 826691262636882833, guid: c103450ca16a2ce498419f46b1319ddd, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -349,92 +336,47 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 826691262636882839, guid: c103450ca16a2ce498419f46b1319ddd, type: 3}
       propertyPath: m_Name
-      value: UI
+      value: UI-v2
       objectReference: {fileID: 0}
-    - target: {fileID: 826691262703568022, guid: c103450ca16a2ce498419f46b1319ddd, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 826691263196827834, guid: c103450ca16a2ce498419f46b1319ddd, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 826691263393008951, guid: c103450ca16a2ce498419f46b1319ddd, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3150580612395596891, guid: c103450ca16a2ce498419f46b1319ddd, type: 3}
-      propertyPath: mainMenuUI
+    - target: {fileID: 4504557545874749938, guid: c103450ca16a2ce498419f46b1319ddd, type: 3}
+      propertyPath: hintsText
       value: 
-      objectReference: {fileID: 6442529306529701387}
-    - target: {fileID: 3150580612395596891, guid: c103450ca16a2ce498419f46b1319ddd, type: 3}
-      propertyPath: inventoryUI
-      value: 
-      objectReference: {fileID: 6442529307602015645}
-    - target: {fileID: 3150580612395596891, guid: c103450ca16a2ce498419f46b1319ddd, type: 3}
-      propertyPath: pauseMenuUI
-      value: 
-      objectReference: {fileID: 6442529307202485308}
-    - target: {fileID: 3150580612395596891, guid: c103450ca16a2ce498419f46b1319ddd, type: 3}
-      propertyPath: optionsMenuUI
-      value: 
-      objectReference: {fileID: 6442529307259665808}
-    - target: {fileID: 3150580612395596891, guid: c103450ca16a2ce498419f46b1319ddd, type: 3}
-      propertyPath: inGameOverlayUI
-      value: 
-      objectReference: {fileID: 6442529307685957386}
-    - target: {fileID: 3150580612395596891, guid: c103450ca16a2ce498419f46b1319ddd, type: 3}
-      propertyPath: loadingScreenUI
-      value: 
-      objectReference: {fileID: 6442529306066717223}
-    - target: {fileID: 3150580612395596891, guid: c103450ca16a2ce498419f46b1319ddd, type: 3}
-      propertyPath: gameOverScreenUI
-      value: 
-      objectReference: {fileID: 6442529305872766890}
-    - target: {fileID: 7232663360945069450, guid: c103450ca16a2ce498419f46b1319ddd, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 8253876897362228629}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c103450ca16a2ce498419f46b1319ddd, type: 3}
---- !u!1 &6442529305872766890 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 826691263393008951, guid: c103450ca16a2ce498419f46b1319ddd, type: 3}
-  m_PrefabInstance: {fileID: 5913377046890977949}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &6442529306066717223 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 826691263196827834, guid: c103450ca16a2ce498419f46b1319ddd, type: 3}
   m_PrefabInstance: {fileID: 5913377046890977949}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &6442529306529701387 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 826691262703568022, guid: c103450ca16a2ce498419f46b1319ddd, type: 3}
-  m_PrefabInstance: {fileID: 5913377046890977949}
+--- !u!114 &8253876897362228629
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6442529306066717223}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdb72255d477db341a610f359334f6c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hints:
+  - Hold the jump key to grab a ledge and up key to climb.
+  - Press the crouch key twice to do a roll.
+  - Keep hydrated! Low thirst percentages cause slow stamina regeneration.
+  - Remember to keep your stomach full! Low hunger percentages cause slow health
+    regeneration.
+  - If your thirst or hunger meter goes to 0, you will gradually lose health.
+  - Use bandages or first-aid kits to prevent bleeding damage.
+  - Be wise using your flashlight, batteries drains quickly
+  - Crippled enemies can be crushed by pressing the attack key above them.
+  - If an undead catches you, try to get away pressing the jump key repeatedly.
+  - Check every room in buildings, they contain valuable resources for your survival
+    and maybe surprises!.
 --- !u!4 &6442529306592764172 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 826691262636882833, guid: c103450ca16a2ce498419f46b1319ddd, type: 3}
-  m_PrefabInstance: {fileID: 5913377046890977949}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &6442529307202485308 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 826691262030177953, guid: c103450ca16a2ce498419f46b1319ddd, type: 3}
-  m_PrefabInstance: {fileID: 5913377046890977949}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &6442529307259665808 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 826691261969983245, guid: c103450ca16a2ce498419f46b1319ddd, type: 3}
-  m_PrefabInstance: {fileID: 5913377046890977949}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &6442529307602015645 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 826691261628665600, guid: c103450ca16a2ce498419f46b1319ddd, type: 3}
-  m_PrefabInstance: {fileID: 5913377046890977949}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &6442529307685957386 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 826691261578130839, guid: c103450ca16a2ce498419f46b1319ddd, type: 3}
   m_PrefabInstance: {fileID: 5913377046890977949}
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &8766702286676223686 stripped

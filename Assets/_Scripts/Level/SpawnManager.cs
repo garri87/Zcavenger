@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
 {
     
-    public Enemy[] enemyType;
-    public GameObject[] enemyPrefabs;
+    public Enemy[] enemyScriptables;
+    public List<GameObject> enemyPrefabs;
+    public bool autoSpawn = false;
     public float spawnCooldown = 30f;
     
     [SerializeField]
@@ -16,7 +18,9 @@ public class SpawnManager : MonoBehaviour
     private int enemyCount;
 
     public bool randomEnemy;
-    public int order = 0;
+    public int randomOrder = 0;
+
+    public Floor.BuildingType buildingType;
 
     private AgentController agentController;
 
@@ -37,37 +41,64 @@ public class SpawnManager : MonoBehaviour
            SpawnEnemy(random: randomEnemy);
         }
 
-        if (enemyCount <= 0)
+        if (autoSpawn)
         {
-            timer -= Time.deltaTime;
-        }
+            if (enemyCount <= 0)
+            {
+                timer -= Time.deltaTime;
+            }
 
-        if (enemyCount == 0 && timer < 0)
-        {
-            SpawnEnemy();
-            
-            timer = spawnCooldown;
+            if (enemyCount == 0 && timer < 0)
+            {
+                SpawnEnemy();
+
+                timer = spawnCooldown;
+            }
         }
-        
     }
 
-    public void SpawnEnemy(Enemy type = null, bool random = true, int count = 1)
+    public void Init(Floor.BuildingType buildingType)
+    {
+        this.buildingType = buildingType;
+        for (int i = 0; i < enemyPrefabs.Count; i++)
+        {
+            AgentController agentController = enemyPrefabs[i].GetComponent<AgentController>();
+            if (!agentController.buildingTypes.Contains(buildingType))
+            {
+                enemyPrefabs.RemoveAt(i);
+            }
+        }
+        autoSpawn = true;
+    }
+
+    public void SpawnEnemy(Enemy scriptableObject = null, bool random = true, int count = 1)
     {
         if (random)
         {
-            order = Random.Range(0, enemyType.Length);
+            randomOrder = Random.Range(0, enemyScriptables.Length);
         }
 
-        int selectedPrefab = Random.Range(0,enemyPrefabs.Length);
+        int randomPrefab = Random.Range(0,enemyPrefabs.Count);
 
         for (int i = 0; i < count; i++)
         {
-            GameObject instantiatedEnemy = Instantiate(enemyPrefabs[selectedPrefab],
-                transform.position, Quaternion.Euler(0,-90,0),transform);
-        
-            agentController = instantiatedEnemy.GetComponent<AgentController>();
-            agentController.enemyScriptableObject = enemyType[order]; 
-            Debug.Log("Enemy "+ instantiatedEnemy.name +" Spawned!");
+            GameObject enemyPrefab = enemyPrefabs[randomPrefab];
+            agentController = enemyPrefab.GetComponent<AgentController>();
+            if (scriptableObject)
+            {
+                agentController.enemyScriptableObject = scriptableObject;
+
+            }
+            else
+            {
+                agentController.enemyScriptableObject = enemyScriptables[randomOrder];
+
+            }
+
+            Instantiate(enemyPrefab,transform.position, Quaternion.Euler(0, -90, 0),
+                    transform);
+                Debug.Log("Enemy " + enemyPrefab.name + " Spawned!");
+            
         }
         
     }

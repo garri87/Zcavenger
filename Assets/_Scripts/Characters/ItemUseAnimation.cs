@@ -64,19 +64,19 @@ public class ItemUseAnimation : StateMachineBehaviour
         switch (itemType)
         {
             case ItemType.Bandage:
-                playerController.bandaging = false;
+                playerController.isBandaging = false;
                 break;
             
             case ItemType.Water:
-                playerController.drinking = false;
+                playerController.isDrinking = false;
                 break;
             
             case ItemType.Food:
-                playerController.eating = false;
+                playerController.isEating = false;
                 break;
             
             case ItemType.GrabItem:
-                playerController.grabItem = false;
+                playerController.grabbingItem = false;
                 break;
         }    
     }

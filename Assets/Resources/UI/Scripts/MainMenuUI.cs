@@ -31,7 +31,7 @@ public class MainMenuUI : MonoBehaviour
         exitButton = root.Q<Button>("ExitButton");
         versionLabel = root.Q<Label>("Version");
 
-        startGameButton.RegisterCallback<ClickEvent>(StartGame);
+        startGameButton.RegisterCallback<ClickEvent>(DifficultyOptions);
         optionsButton.RegisterCallback<ClickEvent>(OptionsMenu);
         exitButton.RegisterCallback<ClickEvent>(ExitGame);
 
@@ -39,9 +39,10 @@ public class MainMenuUI : MonoBehaviour
 
     }
 
-    public void StartGame(ClickEvent evt)
+    public void DifficultyOptions(ClickEvent evt)
     {
-       gameManager.StartGame();
+        uiManager.CloseAllUI();
+        uiManager.ToggleUI(uiManager.difficultyOptionsUI, true);
     }
 
     public void ExitGame(ClickEvent evt)

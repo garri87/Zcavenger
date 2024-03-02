@@ -110,9 +110,12 @@ public class Throwable : MonoBehaviour
                     Explode();
                     foreach (ContactPoint contactPoint in other.contacts)
                     {
-                        GameObject damageFlame = ObjectPool.SharedInstance.GetPooledObject("DamageFlame");
-                        damageFlame.transform.position = contactPoint.point;
-                        damageFlame.SetActive(true);
+                        if (ObjectPool.SharedInstance) {
+                            GameObject damageFlame = ObjectPool.SharedInstance.GetPooledObject("DamageFlame");
+                            damageFlame.transform.position = contactPoint.point;
+                            damageFlame.SetActive(true);
+                        }
+                      
                     }
                 } 
             }

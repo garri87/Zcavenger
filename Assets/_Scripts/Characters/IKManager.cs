@@ -153,9 +153,9 @@ public class IKManager : MonoBehaviour
             case PlayerType.Player:
                 if (_inventory.drawnWeaponItem && _playerController.isAiming)
                 {
-                    if (!_playerController.drinking
-                        || !_playerController.bandaging
-                        || !_playerController.eating)
+                    if (!_playerController.isDrinking
+                        || !_playerController.isBandaging
+                        || !_playerController.isEating)
                     {
                         if (recoilActive)
                         {
@@ -218,7 +218,7 @@ public class IKManager : MonoBehaviour
                     {
                         if (!_playerController.climbingLadder ||
                             !_inventory.drawnWeaponItem.attacking ||
-                            !_playerController.blocking)
+                            !_playerController.isBlocking)
                         {
                             _animator.SetLayerWeight(_animator.GetLayerIndex(upperBodyLayerName), 1);
                         }
@@ -330,12 +330,12 @@ public class IKManager : MonoBehaviour
             _inventory.drawWeapon,
             _inventory.holsterWeapon ,
             _playerController.isAiming ,
-            _playerController.reloadingWeapon ,
+            _playerController.isReloadingWeapon ,
             _playerController._healthManager.isBleeding ,
-            _playerController.bandaging ,
-            _playerController.drinking ,
-            _playerController.eating ,
-            _playerController.grabItem
+            _playerController.isBandaging ,
+            _playerController.isDrinking ,
+            _playerController.isEating ,
+            _playerController.grabbingItem
         };
 
         bool active = false;

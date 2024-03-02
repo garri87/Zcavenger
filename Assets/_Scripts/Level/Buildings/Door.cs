@@ -6,6 +6,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
+[RequireComponent(typeof(BoxCollider))]
+[RequireComponent(typeof(AudioSource))]
+
 public class Door : MonoBehaviour
 {
     public enum DoorOrientation
@@ -36,12 +39,9 @@ public class Door : MonoBehaviour
     private AudioSource _audioSource;
     public AudioClip[] doorOpenSounds;
     public AudioClip[] doorCloseSounds;
+    public bool debug = false;
 
-    private void SetPlaylines()
-    {
-        outsidePlayLine = Mathf.RoundToInt(transform.position.z - (LevelBuilder.blocksWidth / 2));
-        insidePlayLine = Mathf.RoundToInt(transform.position.z + (LevelBuilder.blocksWidth / 2));
-    }
+   
 
     private void OnValidate()
     {
@@ -89,15 +89,15 @@ public class Door : MonoBehaviour
         }
         doorPos = doorTransform.position;
 
-       
-
-    }
-
-
-    private void OnEnable()
-    {
         SetPlaylines();
+
     }
+
+
+    /*private void OnEnable()
+    {
+        
+    }*/
 
     private void Update()
     {
@@ -172,5 +172,29 @@ public class Door : MonoBehaviour
             text.enabled = false;
 
         }
+    }
+
+
+    public void SetPlaylines()
+    {
+        if (debug)
+        {
+            //  Debug.Log("Setting Play Lines...");
+            //  Debug.Log("Level Builder blocksWidth is : " + LevelBuilder.blocksWidth);
+        }
+
+        int num = LevelBuilder.blocksWidth / 2;
+
+
+        outsidePlayLine = Mathf.RoundToInt(this.transform.position.z - num);
+
+        insidePlayLine = Mathf.RoundToInt(this.transform.position.z + num);
+        if (debug)
+        {
+            // Debug.Log("Num is " + num);
+            // Debug.Log("Outside Playline is: " + outsidePlayLine);
+            // Debug.Log("Inside Playline is: " + insidePlayLine);
+        }
+
     }
 }

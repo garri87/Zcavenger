@@ -6,30 +6,27 @@ using UnityEngine;
 
 public class ToggleLight : MonoBehaviour
 {
-    public bool toogleLight;
+    public bool lightsEnabled;
     public Light[] lightSources;
 
     private void OnValidate()
     {
-        if (lightSources != null) 
-        {
-            foreach (Light light in lightSources)
-            {
-                light.enabled = toogleLight;
-            }
-        }
-
-        
+        Toggle();        
     }
 
     private void Start()
     {
-        if (lightSources != null) 
+        Toggle();
+    }
+
+    private void Toggle()
+    {
+        if (lightSources != null)
         {
             foreach (Light light in lightSources)
             {
-                light.enabled = toogleLight;
-               
+                light.enabled = lightsEnabled;
+
             }
         }
     }
