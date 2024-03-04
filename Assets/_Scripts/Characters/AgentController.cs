@@ -27,6 +27,14 @@ public class AgentController : MonoBehaviour
 
     #endregion
 
+    
+
+    [Header("AI Behaviour")]
+    public float
+        agentAlertTime =
+            5; //Time in seconds that the agent is on alert state when the target goes off sight
+
+    [HideInInspector] public float alertTimer;
 
     public enum AgentState
     {
@@ -35,16 +43,11 @@ public class AgentController : MonoBehaviour
         Dead,
     }
 
-    [Header("AI Behaviour")]
-    public float
-        agentAlertTime =
-            5; //Tiempo en segundos que el agente esta en alerta cuando el objetivo sale de su campo de vision
-
-    [HideInInspector] public float alertTimer;
-
     public AgentState agentState;
+
     public int animationState;
-    public float disableTime;
+
+    public float disableTime;//Time in seconds that the agent's gameobject will be disabled
     [SerializeField] private float disableTimer;
 
     #region Player references
@@ -65,22 +68,20 @@ public class AgentController : MonoBehaviour
     private float minSpeed;
     private float maxSpeed;
     [HideInInspector] public float distanceToPlayer;
-    public float attackDistance;
+    public float attackRange;
     private int minDamage;
     private int maxDamage;
     private int bleedDamageProbability;
+    public float attackRate;
 
     #endregion
 
-    #region Attacks Variables
-
-    public float attackRate;
     public bool attacking;
     public bool playerCatch;
     public LayerMask attackLayerMask;
     private float attackTimer;
 
-    #endregion
+   
 
     #region Playline Variables
 
@@ -89,10 +90,12 @@ public class AgentController : MonoBehaviour
 
     #endregion
 
-    private bool growl;
+    private bool growl = false;
+
     [HideInInspector] public bool hisHit;
 
-    public Floor.BuildingType[] buildingTypes; 
+    public Floor.BuildingType[] buildingTypes; //Types of building where the agent usually appears
+
     private void OnValidate()
     {
         try
@@ -193,6 +196,16 @@ public class AgentController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Forces the agent z position to current playline
+    /// </summary>
+    private void SetAgentPlayline(float playLine)
+    {
+        if (transform.position.z != playLine)
+        {
+            transform.position = new Vector3(transform.position.x, transform.position.y, Mathf.Lerp(transform.position.z, playLine, Time.deltaTime * 4));
+        }
+    } 
 
     private void Update()
     {
@@ -200,36 +213,31 @@ public class AgentController : MonoBehaviour
         _animator.SetBool("PlayerCatch", playerCatch);
         _animator.SetBool("Attack", attacking);
 
-        if (_healthManager.IsDead)
-        {
-            agentState = AgentState.Dead;
-        }
-
+        agentState = _healthManager.IsDead ? AgentState.Dead : agentState;
+        
         if (playerHealthManager.IsDead)
         {
+            attacking = false;
             playerCatch = false;
+            _navMeshAgent.SetDestination(this.transform.position);
         }
 
         switch (agentState)
         {
             case AgentState.Active:
 
-                if (transform.position.z != currentPlayLine)
-                {
-                    transform.position = new Vector3(transform.position.x, transform.position.y,Mathf.Lerp(transform.position.z,currentPlayLine,Time.deltaTime*4));
-                }
+                SetAgentPlayline(currentPlayLine);
+               
                 if (_navMeshAgent.isOnNavMesh)
                 {
                      _rigidbody.velocity =
                          new Vector3(_rigidbody.velocity.x, _rigidbody.velocity.y, _rigidbody.velocity.z);
 
                     //Moving Animation if navmeshAgent is moving
-
-                    if (_navMeshAgent. velocity.magnitude < 0.1f ||
+                    if (_navMeshAgent.velocity.magnitude < 0.1f ||
                         !_navMeshAgent.CalculatePath(playerPosition.position,_navMeshAgent.path))
-                    {
+                    {//Stop the Agent if there's no possible path to player
                         _animator.SetBool("IsMoving", false);
-                        
                     }
                     else
                     {
@@ -250,9 +258,8 @@ public class AgentController : MonoBehaviour
                         attackTimer -= Time.deltaTime;
 
                         if (enemyType == Enemy.EnemyType.Crippled)
-                        {
-                                  _rigidbody.MoveRotation(Quaternion.Euler(new Vector3(0, 0,
-                                      90 * Mathf.Sign(playerPosition.position.x - transform.position.x))));
+                        { 
+                            _rigidbody.MoveRotation(Quaternion.Euler(new Vector3(0, 0,90 * Mathf.Sign(playerPosition.position.x - transform.position.x))));
                         }
 
                         if (_navMeshAgent.enabled == true)
@@ -263,6 +270,10 @@ public class AgentController : MonoBehaviour
                                 _navMeshAgent.SetDestination(playerPosition.position);
                             }
 
+                            if (playerHealthManager)
+                            {
+
+                            }
                             //Attack Player
                             if (_enemyFov.targetAttackable && !playerHealthManager.IsDead && !playerCatch)
                             {
@@ -282,12 +293,7 @@ public class AgentController : MonoBehaviour
                                 attacking = false;
                             }
 
-                            if (playerHealthManager.IsDead)
-                            {
-                                attacking = false;
-                                _navMeshAgent.SetDestination(this.transform.position);
-                                playerCatch = false;
-                            }
+                            
                         }
 
                         if (!growl)
@@ -421,81 +427,89 @@ public class AgentController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Performs validations if attack hits something
+    /// </summary>
     private void Attack()
     {
         RaycastHit hit;
         if (Physics.Raycast(transform.position + Vector3.up,
-                transform.TransformDirection(Vector3.forward) * attackDistance, out hit, attackDistance,
+                transform.TransformDirection(Vector3.forward) * attackRange, out hit, attackRange,
                 attackLayerMask.value))
         {
             if (hit.collider.CompareTag("Player"))
             {
-                if (!playerController.isBlocking)
+                if (playerController)
                 {
-                    switch (enemyType)
+                    if (!playerController.isBlocking)
                     {
-                        case Enemy.EnemyType.Humanoid:
-                            break;
+                        
+                        switch (enemyType)
+                        {
+                            case Enemy.EnemyType.Humanoid:
+                                break;
 
-                        case Enemy.EnemyType.Walker:
+                            case Enemy.EnemyType.Walker:
 
-                            if (!playerController.alreadyCatched)
-                            {
-                                playerCatch = true;
-                                playerController.beingBitten = true;
-                                playerController.alreadyCatched = true;
-                            }
+                                if (!playerController.alreadyCatched)
+                                {
+                                    playerCatch = true;
+                                    playerController.beingBitten = true;
+                                    playerController.alreadyCatched = true;
+                                }
 
-                            break;
+                                break;
 
-                        case Enemy.EnemyType.Runner:
-                            break;
+                            case Enemy.EnemyType.Runner:
+                                break;
 
-                        case Enemy.EnemyType.Crawler:
-                            break;
+                            case Enemy.EnemyType.Crawler:
+                                break;
 
-                        case Enemy.EnemyType.Crippled:
-                            if (!playerController.alreadyCatched)
-                            {
-                                playerCatch = true;
-                                playerController.isTrapped = true;
-                                playerController.alreadyCatched = true;
-                            }
+                            case Enemy.EnemyType.Crippled:
+                                if (!playerController.alreadyCatched)
+                                {
+                                    playerCatch = true;
+                                    playerController.isTrapped = true;
+                                    playerController.alreadyCatched = true;
+                                }
 
-                            break;
+                                break;
 
-                        case Enemy.EnemyType.Brute:
-                            break;
+                            case Enemy.EnemyType.Brute:
+                                break;
+                        }
+
+                        DealDamage(playerHealthManager);
+                        attacking = false;
+                        if (playerController._inventory.drawnWeaponItem != null)
+                        {
+                            playerController._inventory.drawnWeaponItem.attacking = false;
+                        }
+
+                        playerAnimator.SetBool("MeleeAttack1", false);
+                        playerAnimator.SetBool("MeleeAttack2", false);
+                        playerAnimator.SetBool("MeleeAttack3", false);
+                        playerAnimator.SetBool("OnLedge", false);
+                        playerAnimator.SetBool("OnWall", false);
+                        playerAnimator.SetBool("ClimbingLadder", false);
+                        playerAnimator.SetBool("Jump", false);
+                        playerController.isReloadingWeapon = false;
+                        if (enemyType != Enemy.EnemyType.Crippled)
+                        {
+                            playerAnimator.SetTrigger("Hit");
+                        }
+
+                        playerController.controllerType = PlayerController.ControllerType.DefaultController;
+
+                        playerController.DefaultController();
                     }
-
-                    DealDamage();
-                    attacking = false;
-                    if (playerController._inventory.drawnWeaponItem != null)
+                    else
                     {
-                        playerController._inventory.drawnWeaponItem.attacking = false;
+                        playerAnimator.SetTrigger("BlockHit");
                     }
-
-                    playerAnimator.SetBool("MeleeAttack1", false);
-                    playerAnimator.SetBool("MeleeAttack2", false);
-                    playerAnimator.SetBool("MeleeAttack3", false);
-                    playerAnimator.SetBool("OnLedge", false);
-                    playerAnimator.SetBool("OnWall", false);
-                    playerAnimator.SetBool("ClimbingLadder", false);
-                    playerAnimator.SetBool("Jump", false);
-                    playerController.isReloadingWeapon = false;
-                    if (enemyType != Enemy.EnemyType.Crippled)
-                    {
-                        playerAnimator.SetTrigger("Hit");
-                    }
-
-                    playerController.controllerType = PlayerController.ControllerType.DefaultController;
-
-                    playerController.DefaultController();
                 }
-                else
-                {
-                    playerAnimator.SetTrigger("BlockHit");
-                }
+                
             }
 
             if (hit.collider.CompareTag("Crashable"))
@@ -552,18 +566,16 @@ public class AgentController : MonoBehaviour
         }
     }
 
-    private void DealDamage()
+    private void DealDamage(HealthManager healthManager)
     {
         int bleedingProb = Random.Range(0, 100);
         if (bleedingProb <= bleedDamageProbability)
         {
-            Debug.Log("Player is Bleeding! by a chance of: " + bleedingProb + " %");
-            playerHealthManager.isBleeding = true;
+            healthManager.isBleeding = true;
         }
 
         int damageGiven = Random.Range(minDamage, maxDamage);
-        playerHealthManager.currentHealth -= damageGiven;
-        Debug.Log("Player Took " + damageGiven + " damage");
+        healthManager.currentHealth -= damageGiven;
     }
 
 
@@ -598,12 +610,12 @@ public class AgentController : MonoBehaviour
         maxDamage = scriptableObject.maxDamage;
         bleedDamageProbability = scriptableObject.bleedDamageProbability;
         attackRate = scriptableObject.attackRate;
-        attackDistance = scriptableObject.attackDistance;
+        attackRange = scriptableObject.attackDistance;
     }
 
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.magenta;
-        Gizmos.DrawRay(transform.position + Vector3.up, transform.TransformDirection(Vector3.forward) * attackDistance);
+        Gizmos.DrawRay(transform.position + Vector3.up, transform.TransformDirection(Vector3.forward) * attackRange);
     }
 }

@@ -122,7 +122,7 @@ NavMeshSettings:
     preserveTilesOutsideBounds: 0
     debug:
       m_Flags: 0
-  m_NavMeshData: {fileID: 0}
+  m_NavMeshData: {fileID: 23800000, guid: 24f963410703fd748ac485622c2a6b94, type: 2}
 --- !u!1001 &1043898
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3387,7 +3387,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh28162
+  m_Name: pb_Mesh28164
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -3653,7 +3653,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh28044
+  m_Name: pb_Mesh28046
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -5685,7 +5685,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &931625359
 Transform:
   m_ObjectHideFlags: 0
@@ -8068,7 +8068,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4978887431982856648, guid: 07390c9ef383de941bcc9c0521cf2e18, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4978887431982856649, guid: 07390c9ef383de941bcc9c0521cf2e18, type: 3}
       propertyPath: m_RootOrder
@@ -9405,7 +9405,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2971485535890748474, guid: ae9ce5b411f9cc6478dff27f584c314d, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2971485535890748476, guid: ae9ce5b411f9cc6478dff27f584c314d, type: 3}
       propertyPath: FOVObject
@@ -9429,7 +9429,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2971485535890748477, guid: ae9ce5b411f9cc6478dff27f584c314d, type: 3}
       propertyPath: enemyType
-      value: 4
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2971485535890748477, guid: ae9ce5b411f9cc6478dff27f584c314d, type: 3}
       propertyPath: attackRate
@@ -9442,7 +9442,7 @@ PrefabInstance:
     - target: {fileID: 2971485535890748477, guid: ae9ce5b411f9cc6478dff27f584c314d, type: 3}
       propertyPath: enemyScriptableObject
       value: 
-      objectReference: {fileID: 11400000, guid: 9f4b3dd34ce2a8d41ac08c57af1202b0, type: 2}
+      objectReference: {fileID: 11400000, guid: 4c026e7a306bfe54ca40219186197d29, type: 2}
     - target: {fileID: 2971485535890748477, guid: ae9ce5b411f9cc6478dff27f584c314d, type: 3}
       propertyPath: attackLayerMask.m_Bits
       value: 65
@@ -11416,7 +11416,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5464995384865869459, guid: a8f7c7a763d09d84ca9e339aaf7d2e69, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a8f7c7a763d09d84ca9e339aaf7d2e69, type: 3}
@@ -16654,7 +16654,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2125072732
 Transform:
   m_ObjectHideFlags: 0
@@ -16799,7 +16799,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2971485535890748474, guid: ae9ce5b411f9cc6478dff27f584c314d, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2971485535890748476, guid: ae9ce5b411f9cc6478dff27f584c314d, type: 3}
       propertyPath: FOVObject
@@ -17499,6 +17499,10 @@ PrefabInstance:
     - target: {fileID: 2971485535890748474, guid: ae9ce5b411f9cc6478dff27f584c314d, type: 3}
       propertyPath: m_Name
       value: Zombie_Default
+      objectReference: {fileID: 0}
+    - target: {fileID: 2971485535890748474, guid: ae9ce5b411f9cc6478dff27f584c314d, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2971485535890748477, guid: ae9ce5b411f9cc6478dff27f584c314d, type: 3}
       propertyPath: player

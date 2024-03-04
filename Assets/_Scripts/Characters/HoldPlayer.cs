@@ -13,10 +13,10 @@ public class HoldPlayer : StateMachineBehaviour
     public float transitionSpeed = 8;
     private Transform headBoneTransform;
     private Transform playerTransform;
-    private bool playerAlreadyCatched;
+    private bool playerAlreadyCatched = false;
     public float catchTimer;
-    [HideInInspector]public float catchTime = 10;
-    [HideInInspector]public float catchForce = 4;
+    public float catchTime = 10;
+    public float catchForce = 4;
     public float struggleForce; 
 
 
@@ -24,7 +24,7 @@ public class HoldPlayer : StateMachineBehaviour
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
    override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
    {
-       Debug.Log("HoldPlayer OnStateEnter");
+       //Debug.Log("HoldPlayer OnStateEnter");
        agentController = animator.GetComponent<AgentController>();
        playerController = agentController.player.GetComponent<PlayerController>();
        _navMeshAgent = agentController._navMeshAgent;
@@ -50,8 +50,9 @@ public class HoldPlayer : StateMachineBehaviour
                 else 
                 { 
                     playerTransform.position = new Vector3(playerTransform.position.x, catchVector.y,catchVector.z); 
-                    playerAlreadyCatched = true;
                 }   
+                playerAlreadyCatched = true;
+
             }
             agentController.agentState = AgentController.AgentState.Ontransition;
             _navMeshAgent.isStopped = true;
@@ -69,7 +70,7 @@ public class HoldPlayer : StateMachineBehaviour
             }
             StruggleTimer();
         }
-        if (catchTimer <=0 || !playerController.beingBitten)
+        if (catchTimer <=0)
         {
             ReleasePlayer();
         }
@@ -80,8 +81,8 @@ public class HoldPlayer : StateMachineBehaviour
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         Debug.Log("HoldPlayer OnStateExit");
-
-        ReleasePlayer();
+        
+      //  ReleasePlayer();
 
     }
     

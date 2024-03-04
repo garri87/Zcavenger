@@ -1467,15 +1467,15 @@ public class PlayerController : MonoBehaviour
     private void SetFacingDirection()
     {
         Vector3 direction = crosshairTransform.position - transform.position;
-        direction.y = 0; // Para mantener la rotaci髇 solo en el eje Y
+        direction.y = 0; // Para mantener la rotaci贸n solo en el eje Y
 
-        // Calcular el 醤gulo de rotaci髇
+        // Calcular el 谩ngulo de rotaci贸n
         float angle = Vector3.SignedAngle(Vector3.forward, direction, Vector3.up);
 
-        // Limitar la rotaci髇 entre -90 y 90 grados
+        // Limitar la rotaci贸n entre -90 y 90 grados
         angle = Mathf.Clamp(angle, -90f, 90f);
 
-        // Aplicar la rotaci髇 al objeto
+        // Aplicar la rotaci贸n al objeto
         transform.rotation = Quaternion.Euler(0, angle, 0);
     }
     private void SetCrosshairPosition()
