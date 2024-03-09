@@ -320,6 +320,7 @@ public class PlayerController : MonoBehaviour
             isBlocking
         };
 
+     
         switch (controllerType)
         {
             case ControllerType.DefaultController:
@@ -354,12 +355,23 @@ public class PlayerController : MonoBehaviour
                 canMove = false;
                 break;
             }
+ 
         }
 
         if (!canMove)
         {
-            controllerType = ControllerType.StandByController;
-
+            if (climbingLadder)
+            {
+                controllerType = ControllerType.OnLadderController;
+            }
+            else if (_climber.attachedToLedge || _climber.climbingLedge)
+            {
+                controllerType = ControllerType.OnLedgeController;
+            }
+            else
+            {
+                controllerType = ControllerType.StandByController;
+            }
         }
 
         if (canMove)
@@ -670,7 +682,6 @@ public class PlayerController : MonoBehaviour
     }
     public void DefaultController()
     {
-
         if (!isAiming && !climbingLadder &&
                     !isAttacking && !onTransition)
         {
@@ -1030,8 +1041,6 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape) || _inventory.showInventory == false)
         {
             _inventory.showInventory = false;
-            controllerType = ControllerType.DefaultController;
-
         }
     }
 
@@ -1048,7 +1057,6 @@ public class PlayerController : MonoBehaviour
                 _rigidbody.useGravity = true;
                 _animator.applyRootMotion = false;
                 climbingToTop = false;
-                controllerType = ControllerType.DefaultController;
             }
 
             if (upLadder && verticalInput > 0)
@@ -1064,10 +1072,7 @@ public class PlayerController : MonoBehaviour
                 _animator.applyRootMotion = false;
             }
         }
-        else if (!climbingToTop)
-        {
-            controllerType = ControllerType.DefaultController;
-        }
+      
 
         if (!climbingToTop && !upLadder)
         {
@@ -1170,7 +1175,6 @@ public class PlayerController : MonoBehaviour
                 {
                     climbingToTop = false;
                     hardLanded = false;
-                    controllerType = ControllerType.DefaultController;
                 }
 
 
@@ -1267,14 +1271,11 @@ public class PlayerController : MonoBehaviour
                 break;
 
             case 1: //End
-
-
                 _rigidbody.useGravity = true;
                 _animator.applyRootMotion = false;
                 climbingToTop = false;
                 climbingLadder = false;
                 _collider.enabled = true;
-                controllerType = ControllerType.DefaultController;
                 break;
         }
     }

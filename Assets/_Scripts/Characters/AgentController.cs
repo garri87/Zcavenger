@@ -76,12 +76,13 @@ public class AgentController : MonoBehaviour
 
     #endregion
 
+    private bool canAttack;
     public bool attacking;
     public bool playerCatch;
     public LayerMask attackLayerMask;
     private float attackTimer;
+    private RaycastHit attackHit;
 
-   
 
     #region Playline Variables
 
@@ -100,7 +101,7 @@ public class AgentController : MonoBehaviour
     {
         try
         {
-            GetEnemyType(enemyScriptableObject);
+            GetEnemyAttr(enemyScriptableObject);
         }
         catch
         {
@@ -108,61 +109,40 @@ public class AgentController : MonoBehaviour
         }
     }
 
+    
 
     private void Awake()
     {
         originTransform = this.transform;
 
-        _animator = GetComponent<Animator>();
-        _navMeshAgent = GetComponent<NavMeshAgent>();
-        _checkGround = GetComponentInChildren<CheckGround>();
-        _enemyFov = GetComponent<EnemyFOV>();
-        _healthManager = GetComponent<HealthManager>();
-        _rigidbody = GetComponent<Rigidbody>();
-        _capsuleCollider = GetComponent<CapsuleCollider>();
-        _animator.SetBool(enemyType.ToString(), true);
+        GetComponents();
 
-        GetEnemyType(enemyScriptableObject);
+        GetEnemyAttr(enemyScriptableObject);
 
-        _navMeshAgent.speed = Random.Range(minSpeed, maxSpeed);
+
         _navMeshAgent.updateRotation = false;
     }
 
     private void OnEnable()
     {
+
+        GetEnemyAttr(enemyScriptableObject);
+
+        _navMeshAgent.speed = Random.Range(minSpeed, maxSpeed);
+
         disableTimer = disableTime;
 
-        _animator.SetBool(enemyType.ToString(), true);
-        _animator.SetInteger("State", animationState);
-
-        switch (GameManager.Instance.gameDifficulty)
-        {
-            case GameManager.GameDifficulty.Easy:
-                _healthManager.currentHealth /= 4;
-                break;
-            case GameManager.GameDifficulty.Normal:
-                _healthManager.currentHealth /= 2;
-                break;  
-
-            case GameManager.GameDifficulty.Hard: 
-                                
-                break;
-        }
+        SetEnemyDifficulty(GameManager.Instance.gameDifficulty);
     }
 
-
+   
     void Start()
     {
         currentPlayLine = transform.position.z;
         
         GetPlayer();
-        _animator.SetBool("Runner", false);
-        _animator.SetBool("Walker", false);
-        _animator.SetBool("Crippled", false);
-        _animator.SetBool("Crawler", false);
-        _animator.SetBool("Brute", false);
-        _animator.SetBool("Humanoid", false);
-        _animator.SetBool(enemyType.ToString(), true);
+
+        if(_animator)SetAnimatorParam(_animator);
 
         if (enemyType == Enemy.EnemyType.Crippled)
         {
@@ -199,13 +179,7 @@ public class AgentController : MonoBehaviour
     /// <summary>
     /// Forces the agent z position to current playline
     /// </summary>
-    private void SetAgentPlayline(float playLine)
-    {
-        if (transform.position.z != playLine)
-        {
-            transform.position = new Vector3(transform.position.x, transform.position.y, Mathf.Lerp(transform.position.z, playLine, Time.deltaTime * 4));
-        }
-    } 
+    
 
     private void Update()
     {
@@ -217,10 +191,12 @@ public class AgentController : MonoBehaviour
         
         if (playerHealthManager.IsDead)
         {
+            canAttack = false;
             attacking = false;
             playerCatch = false;
             _navMeshAgent.SetDestination(this.transform.position);
         }
+        
 
         switch (agentState)
         {
@@ -254,12 +230,12 @@ public class AgentController : MonoBehaviour
                     
                     if (_enemyFov.targetInSight)
                     {
-                        alertTimer = agentAlertTime;
-                        attackTimer -= Time.deltaTime;
+                        alertTimer = agentAlertTime; //resets the alert time
+                        attackTimer -= Time.deltaTime; //starts the attack timer
 
                         if (enemyType == Enemy.EnemyType.Crippled)
                         { 
-                            _rigidbody.MoveRotation(Quaternion.Euler(new Vector3(0, 0,90 * Mathf.Sign(playerPosition.position.x - transform.position.x))));
+                            _rigidbody.MoveRotation(Quaternion.Euler(new Vector3(0, 0,90 * Mathf.Sign(playerPosition.position.x - transform.position.x)))); //Rotates towards the target
                         }
 
                         if (_navMeshAgent.enabled == true)
@@ -270,22 +246,25 @@ public class AgentController : MonoBehaviour
                                 _navMeshAgent.SetDestination(playerPosition.position);
                             }
 
-                            if (playerHealthManager)
-                            {
-
-                            }
+                       
                             //Attack Player
                             if (_enemyFov.targetAttackable && !playerHealthManager.IsDead && !playerCatch)
                             {
                                 if (attackTimer <= 0)
                                 {
+                                    canAttack= true;
                                     attacking = true;
                                     attackTimer = attackRate;
+                                }
+                                else
+                                {
+                                    canAttack= false;
                                 }
                             }
                             else
                             {
                                 attacking = false;
+                                canAttack= false;
                             }
 
                             if (!_enemyFov.targetAttackable)
@@ -309,7 +288,7 @@ public class AgentController : MonoBehaviour
                         {
                             alertTimer -= Time.deltaTime;
                             if (alertTimer <= 0)
-                            {
+                            {//Go to player last known location
                                 Vector3 targetLastLocation = new Vector3(_enemyFov.targetLastLocation.x,
                                     transform.position.y, _enemyFov.targetLastLocation.z);
                                 RaycastHit hit;
@@ -432,24 +411,23 @@ public class AgentController : MonoBehaviour
     /// </summary>
     private void Attack()
     {
-        RaycastHit hit;
         if (Physics.Raycast(transform.position + Vector3.up,
-                transform.TransformDirection(Vector3.forward) * attackRange, out hit, attackRange,
+                transform.TransformDirection(Vector3.forward) * attackRange, out attackHit, attackRange,
                 attackLayerMask.value))
         {
-            if (hit.collider.CompareTag("Player"))
+            if (attackHit.collider.CompareTag("Player"))
             {
                 if (playerController)
                 {
                     if (!playerController.isBlocking)
                     {
-                        
                         switch (enemyType)
                         {
                             case Enemy.EnemyType.Humanoid:
                                 break;
 
                             case Enemy.EnemyType.Walker:
+                            case Enemy.EnemyType.Crippled:
 
                                 if (!playerController.alreadyCatched)
                                 {
@@ -461,18 +439,10 @@ public class AgentController : MonoBehaviour
                                 break;
 
                             case Enemy.EnemyType.Runner:
+
                                 break;
 
                             case Enemy.EnemyType.Crawler:
-                                break;
-
-                            case Enemy.EnemyType.Crippled:
-                                if (!playerController.alreadyCatched)
-                                {
-                                    playerCatch = true;
-                                    playerController.isTrapped = true;
-                                    playerController.alreadyCatched = true;
-                                }
 
                                 break;
 
@@ -500,9 +470,6 @@ public class AgentController : MonoBehaviour
                             playerAnimator.SetTrigger("Hit");
                         }
 
-                        playerController.controllerType = PlayerController.ControllerType.DefaultController;
-
-                        playerController.DefaultController();
                     }
                     else
                     {
@@ -512,9 +479,9 @@ public class AgentController : MonoBehaviour
                 
             }
 
-            if (hit.collider.CompareTag("Crashable"))
+            if (attackHit.collider.CompareTag("Crashable"))
             {
-                hit.collider.GetComponent<CrashObject>().Crash();
+                attackHit.collider.GetComponent<CrashObject>().Crash();
             }
         }
     }
@@ -601,7 +568,8 @@ public class AgentController : MonoBehaviour
         }
     }
 
-    private void GetEnemyType(Enemy scriptableObject)
+
+    private void GetEnemyAttr(Enemy scriptableObject)
     {
         enemyType = scriptableObject.enemyType;
         maxSpeed = scriptableObject.speed;
@@ -611,6 +579,56 @@ public class AgentController : MonoBehaviour
         bleedDamageProbability = scriptableObject.bleedDamageProbability;
         attackRate = scriptableObject.attackRate;
         attackRange = scriptableObject.attackDistance;
+    }
+
+    private void SetAgentPlayline(float playLine)
+    {
+        if (transform.position.z != playLine)
+        {
+            transform.position = new Vector3(transform.position.x, transform.position.y, Mathf.Lerp(transform.position.z, playLine, Time.deltaTime * 4));
+        }
+    }
+
+    private void GetComponents()
+    {
+        _animator = GetComponent<Animator>();
+        _navMeshAgent = GetComponent<NavMeshAgent>();
+        _checkGround = GetComponentInChildren<CheckGround>();
+        _enemyFov = GetComponent<EnemyFOV>();
+        _healthManager = GetComponent<HealthManager>();
+        _rigidbody = GetComponent<Rigidbody>();
+        _capsuleCollider = GetComponent<CapsuleCollider>();
+    }
+
+    public void SetEnemyDifficulty(GameManager.GameDifficulty difficulty)
+    {
+        switch (difficulty)
+        {
+            case GameManager.GameDifficulty.Easy:
+                _healthManager.currentHealth /= 4;
+                //Quarter health
+                break;
+            case GameManager.GameDifficulty.Normal:
+                _healthManager.currentHealth /= 2;
+                //Half health
+                break;
+
+            case GameManager.GameDifficulty.Hard:
+                //Full health
+                break;
+        }
+    }
+
+    private void SetAnimatorParam(Animator animator)
+    {
+        animator.SetInteger("State", animationState);
+        animator.SetBool("Runner", false);
+        animator.SetBool("Walker", false);
+        animator.SetBool("Crippled", false);
+        animator.SetBool("Crawler", false);
+        animator.SetBool("Brute", false);
+        animator.SetBool("Humanoid", false);
+        animator.SetBool(enemyType.ToString(), true);
     }
 
     private void OnDrawGizmos()
