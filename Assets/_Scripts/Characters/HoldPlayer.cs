@@ -76,7 +76,6 @@ public class HoldPlayer : StateMachineBehaviour
         }
     }
 
-    
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
@@ -97,21 +96,10 @@ public class HoldPlayer : StateMachineBehaviour
         {
             catchTimer = catchTime;
         }
+
         if (Input.GetKeyDown(GameManager.Instance._keyAssignments.jumpKey.keyCode))
         {
             catchTimer -= struggleForce;
-            if (catchTimer <=0)
-            {
-                agentController.attacking = false;
-                agentController.playerCatch = false;
-                _navMeshAgent.isStopped = false;
-                playerController.isTrapped = false;
-                playerController.beingBitten = false;
-                catchTimer = catchTime;
-                playerController.alreadyCatched = false;
-                playerController.controllerType = PlayerController.ControllerType.DefaultController;
-                playerController.onTransition = false;
-            }
         }
     }
     

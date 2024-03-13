@@ -1,3 +1,4 @@
+using Autodesk.Fbx;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -56,7 +57,7 @@ public class AgentController : MonoBehaviour
     private Animator playerAnimator;
     private PlayerController playerController;
     private HealthManager playerHealthManager;
-    private Transform playerPosition;
+    private Transform playerTransform;
     private Quaternion playerRotation;
     [HideInInspector] public Vector3 playerDirection;
 
@@ -162,7 +163,7 @@ public class AgentController : MonoBehaviour
     {
         if (player != null)
         {
-            playerPosition = player.transform;
+            playerTransform = player.transform;
             playerDirection = (player.transform.position - transform.position).normalized;
         }
 
@@ -180,6 +181,13 @@ public class AgentController : MonoBehaviour
     /// Forces the agent z position to current playline
     /// </summary>
     
+    public bool TargetReachable(NavMeshAgent navMeshAgent, Vector3 targetPos)
+    {
+        
+        return navMeshAgent.CalculatePath(targetPos, navMeshAgent.path);
+
+    }
+
 
     private void Update()
     {
@@ -206,27 +214,26 @@ public class AgentController : MonoBehaviour
                
                 if (_navMeshAgent.isOnNavMesh)
                 {
-                     _rigidbody.velocity =
-                         new Vector3(_rigidbody.velocity.x, _rigidbody.velocity.y, _rigidbody.velocity.z);
+                     _rigidbody.velocity = new Vector3(
+                         x:_rigidbody.velocity.x,
+                         y: _rigidbody.velocity.y, 
+                         z: _rigidbody.velocity.z);
 
                     //Moving Animation if navmeshAgent is moving
-                    if (_navMeshAgent.velocity.magnitude < 0.1f ||
-                        !_navMeshAgent.CalculatePath(playerPosition.position,_navMeshAgent.path))
-                    {//Stop the Agent if there's no possible path to player
-                        _animator.SetBool("IsMoving", false);
+                    if (_navMeshAgent.velocity.magnitude < 0.1f || !TargetReachable(_navMeshAgent,playerTransform.position))
+                    {//Stop the Agent if velocity is less than 0 or there's no possible path to player
+                      _animator.SetBool("IsMoving", false);
                     }
                     else
                     {
-                        _animator.SetBool("IsMoving", true);
+                      _animator.SetBool("IsMoving", true);
                     }
-                    
+                                        
                     //Stop the Agent if reach the waypoint
                     if (_navMeshAgent.remainingDistance < 0.2f)
                     {
                         _navMeshAgent.SetDestination(this.transform.position);
                     }
-
-                    
                     
                     if (_enemyFov.targetInSight)
                     {
@@ -234,19 +241,23 @@ public class AgentController : MonoBehaviour
                         attackTimer -= Time.deltaTime; //starts the attack timer
 
                         if (enemyType == Enemy.EnemyType.Crippled)
-                        { 
-                            _rigidbody.MoveRotation(Quaternion.Euler(new Vector3(0, 0,90 * Mathf.Sign(playerPosition.position.x - transform.position.x)))); //Rotates towards the target
+                        {
+                            Vector3 rot = new Vector3(
+                                x: 0, 
+                                y: 0, 
+                                z: 90 * Mathf.Sign(playerTransform.position.x - transform.position.x));
+
+                            _rigidbody.MoveRotation(rot:Quaternion.Euler(euler:rot)); //Rotates towards the target
                         }
 
-                        if (_navMeshAgent.enabled == true)
+                        if (_navMeshAgent.enabled)
                         {
                             //Chase Target
                             if (!attacking && !_enemyFov.targetAttackable)
                             {
-                                _navMeshAgent.SetDestination(playerPosition.position);
+                                _navMeshAgent.SetDestination(playerTransform.position);
                             }
 
-                       
                             //Attack Player
                             if (_enemyFov.targetAttackable && !playerHealthManager.IsDead && !playerCatch)
                             {
@@ -271,8 +282,6 @@ public class AgentController : MonoBehaviour
                             {
                                 attacking = false;
                             }
-
-                            
                         }
 
                         if (!growl)
@@ -283,10 +292,10 @@ public class AgentController : MonoBehaviour
                     }
 
                     if (!_enemyFov.targetInSight || !_enemyFov.targetInRange)
-                    {
+                    {//If target not in sigth or range
                         if (_navMeshAgent.enabled == true)
                         {
-                            alertTimer -= Time.deltaTime;
+                            alertTimer -= Time.deltaTime; //start alert timer
                             if (alertTimer <= 0)
                             {//Go to player last known location
                                 Vector3 targetLastLocation = new Vector3(_enemyFov.targetLastLocation.x,
@@ -294,9 +303,16 @@ public class AgentController : MonoBehaviour
                                 RaycastHit hit;
                                 Ray ray = new Ray(transform.position + Vector3.up,
                                     (targetLastLocation - transform.position)+Vector3.up); 
-                                if (Physics.Raycast(ray,out hit,_enemyFov.viewRadius,_enemyFov.obstacleLayers))
+                                if (Physics.Raycast(
+                                    ray:ray,
+                                    hitInfo: out hit,
+                                    maxDistance:_enemyFov.viewRadius,
+                                    layerMask:_enemyFov.obstacleLayers))
                                 {
-                                    targetLastLocation = new Vector3(hit.point.x, transform.position.y, hit.point.z);
+                                    targetLastLocation = new Vector3(
+                                        x:hit.point.x,
+                                        y: transform.position.y,
+                                        z:hit.point.z);
                                 }
                                 
                                 _navMeshAgent.SetDestination(targetLastLocation);
@@ -452,8 +468,9 @@ public class AgentController : MonoBehaviour
 
                         DealDamage(playerHealthManager);
                         attacking = false;
+
                         if (playerController._inventory.drawnWeaponItem != null)
-                        {
+                        {//Cancel player attack if receiving damage
                             playerController._inventory.drawnWeaponItem.attacking = false;
                         }
 
@@ -469,10 +486,10 @@ public class AgentController : MonoBehaviour
                         {
                             playerAnimator.SetTrigger("Hit");
                         }
-
                     }
                     else
                     {
+                        //If player is blocking activate block recoil animation
                         playerAnimator.SetTrigger("BlockHit");
                     }
                 }
@@ -481,13 +498,14 @@ public class AgentController : MonoBehaviour
 
             if (attackHit.collider.CompareTag("Crashable"))
             {
+                //if hits a destructible object, activate object crash method 
                 attackHit.collider.GetComponent<CrashObject>().Crash();
             }
         }
     }
 
     /// <summary>
-    /// Function called when a enemy dies
+    /// Function called once when agent dies
     /// </summary>
     private void EnemyDeath()
     {

@@ -11,8 +11,6 @@ public class CancelMovement : StateMachineBehaviour
     }
 
     public ObjectType objectType;
-    
-    
     private AgentController _agentController;
     private PlayerController _playerController;
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state

@@ -78,7 +78,7 @@ public class PlayerController : MonoBehaviour
     public bool isDescending;
     public bool canMove;
     public bool hardLanded;
-    private bool isCrouched;
+    public bool isCrouched;
     public bool isProne;
     public bool isRolling;
     private float rollTime = 0.1f;
@@ -379,16 +379,8 @@ public class PlayerController : MonoBehaviour
             controllerType = ControllerType.DefaultController;
         }
 
-        if (isRolling)
-        {
-            rollTimer -= Time.deltaTime;
-            if (rollTimer <=0)
-            {
-                isRolling = false;
-                rollTimer = rollTime;
-            }  
-        }
-        
+        PlayerRoll();
+               
         #endregion
 
         #region Ladder Climbing
@@ -853,36 +845,6 @@ public class PlayerController : MonoBehaviour
                     SetColliderShape(PlayerState.IsProne);
 
                 }
-            }
-
-            //ROLLING
-            
-            if (Input.GetKeyDown(keyAssignments.crouchKey.keyCode))
-            {
-                if (doubleTapTime > 0 && tapCount == 1 /*Number of Taps you want Minus One*/)
-                {
-                    //Has double tapped
-
-                    if (_animator.GetFloat(AnimatorSpeed) > 0.1f
-                        && _healthManager.currentStamina >= _healthManager.rollPenalty
-                        && !_healthManager.isInjured)
-                    {
-                        _animator.SetBool("Crouch", false);
-                        isRolling = true;
-                        SetColliderShape(PlayerState.IsRolling);
-                    }
-
-                }
-                else
-                {
-                    doubleTapTime = 0.5f;
-                    tapCount += 1;
-                }
-            }
-
-            if (isRolling)
-            {
-                _animator.applyRootMotion = true;
             }
 
             if (doubleTapTime > 0)
@@ -1586,11 +1548,14 @@ public class PlayerController : MonoBehaviour
         return hitDistance;
     }
 
+    /// <summary>
+    /// Shapes the collider depending the state of the player
+    /// </summary>
+    /// <param name="state"></param>
     public void SetColliderShape(PlayerState state)
     {
         switch (state)
         {
-
             case PlayerState.IsClimbingLedge:
                 _collider.direction = 1; //y
                 _collider.height = 1.76f;
@@ -1628,5 +1593,48 @@ public class PlayerController : MonoBehaviour
                 break;
         }
 
+    }
+    public void PlayerRoll()
+    {
+        if (controllerType == ControllerType.DefaultController)
+        {
+            if (Input.GetKeyDown(keyAssignments.crouchKey.keyCode))
+            {
+                if (doubleTapTime > 0 && tapCount == 1 /*Number of Taps you want Minus One*/)
+                {
+                    //Has double tapped
+
+                    if (_animator.GetFloat(AnimatorSpeed) > 0.1f
+                        && _healthManager.currentStamina >= _healthManager.rollPenalty
+                        && !_healthManager.isInjured)
+                    {
+                        _animator.SetBool("Crouch", false);
+                        isRolling = true;
+                        SetColliderShape(PlayerState.IsRolling);
+                    }
+
+                }
+                else
+                {
+                    doubleTapTime = 0.5f;
+                    tapCount += 1;
+                }
+            }
+
+            if (isRolling)
+            {
+                _animator.applyRootMotion = true;
+            }
+        }
+
+        if (isRolling)
+        {
+            rollTimer -= Time.deltaTime;
+            if (rollTimer <= 0)
+            {
+                isRolling = false;
+                rollTimer = rollTime;
+            }
+        }
     }
 }
