@@ -41,7 +41,7 @@ public class Door : MonoBehaviour
     public AudioClip[] doorCloseSounds;
     public bool debug = false;
 
-   
+    public static string DoorLayer = "Door";
 
     private void OnValidate()
     {

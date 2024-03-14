@@ -55,7 +55,7 @@ public class HoldPlayer : StateMachineBehaviour
 
             }
             agentController.agentState = AgentController.AgentState.Ontransition;
-            _navMeshAgent.isStopped = true;
+            //_navMeshAgent.isStopped = true;
             switch (agentController.enemyType)
             {
                 case Enemy.EnemyType.Crippled:
@@ -80,8 +80,8 @@ public class HoldPlayer : StateMachineBehaviour
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         Debug.Log("HoldPlayer OnStateExit");
-        
-      //  ReleasePlayer();
+
+        agentController._navMeshAgent.enabled = false;
 
     }
     

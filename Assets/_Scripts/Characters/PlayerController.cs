@@ -2,6 +2,16 @@
 using UnityEngine;
 using UnityEngine.Serialization;
 
+
+[RequireComponent(typeof(HealthManager))]
+[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(Inventory))]
+[RequireComponent(typeof(PlayerAudio))]
+[RequireComponent(typeof(Climber))]
+[RequireComponent(typeof(CapsuleCollider))]
+[RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(IKAimer))]
+
 public class PlayerController : MonoBehaviour
 {
     #region ControllerTypes
@@ -194,7 +204,7 @@ public class PlayerController : MonoBehaviour
     #region DoorsInteraction
     [Header("Doors Interaction")]
     public bool onDoor;
-    private LayerMask doorLayer;
+    [SerializeField]private LayerMask doorLayer;
     public Door doorScript;
 
     #endregion
@@ -209,7 +219,10 @@ public class PlayerController : MonoBehaviour
     private static readonly int AnimatorSpeed = Animator.StringToHash("Speed");
     private Transform leftFoot, rightFoot;
     #endregion
-
+    
+  
+    
+    
 
     private void Awake()
     {
@@ -218,7 +231,8 @@ public class PlayerController : MonoBehaviour
         gameManager = GameManager.Instance;
         keyAssignments = GameManager.Instance._keyAssignments;
         mouseTargetLayerTransform = GameObject.Find("MouseTargetLayer").transform;
-        doorLayer = LayerMask.NameToLayer("Door");
+        string doorLayerName = Door.DoorLayer;
+        doorLayer = LayerMask.NameToLayer(doorLayerName);
         #region GetComponents
 
         keyAssignments = gameManager.GetComponent<KeyAssignments>();
@@ -695,9 +709,9 @@ public class PlayerController : MonoBehaviour
 
         //replicate velocity data to animator
         _animator.SetFloat(AnimatorSpeed,
-            (Mathf.Sign(FacingSign) * horizontalInput * currentSpeed));
+            (Mathf.Sign(FacingSign) * horizontalInput * currentSpeed * 1.3f));
         _animator.SetFloat("VerticalVelocity", _rigidbody.velocity.y);
-
+        
 
 
         //MOVING ANIMATION

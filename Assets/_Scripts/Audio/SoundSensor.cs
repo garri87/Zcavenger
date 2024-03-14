@@ -11,6 +11,10 @@ public class SoundSensor : MonoBehaviour
     public LayerMask layerMask;
 
     private AgentController listenerAgentController;
+
+    [SerializeField]
+    private string enemyTag = AgentController.AgentTag;
+    
     private void Awake()
     {
         sensorScale = 0;
@@ -34,7 +38,7 @@ public class SoundSensor : MonoBehaviour
 
         foreach (Collider listener in listeners)
         {
-            if (listener.CompareTag("Enemy"))
+            if (listener.CompareTag(enemyTag))
             {
                 if (listener.transform.GetComponent<AgentController>() == null)
                 {
@@ -67,7 +71,7 @@ public class SoundSensor : MonoBehaviour
         }
     }
 
-    private void OnDrawGizmos()
+    private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow; 
         Gizmos.DrawWireSphere(transform.position+Vector3.up,sensorScale);

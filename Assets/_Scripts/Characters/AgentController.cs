@@ -56,6 +56,7 @@ public class AgentController : MonoBehaviour
     [HideInInspector] public GameObject player;
     private Animator playerAnimator;
     private PlayerController playerController;
+    [SerializeField]
     private HealthManager playerHealthManager;
     private Transform playerTransform;
     private Quaternion playerRotation;
@@ -66,8 +67,8 @@ public class AgentController : MonoBehaviour
     #region Enemy Scriptable Object Variables
 
     public Enemy.EnemyType enemyType;
-    private float minSpeed;
-    private float maxSpeed;
+    [SerializeField]
+    private float minSpeed, maxSpeed;
     [HideInInspector] public float distanceToPlayer;
     public float attackRange;
     private int minDamage;
@@ -77,6 +78,7 @@ public class AgentController : MonoBehaviour
 
     #endregion
 
+    private bool isMoving;
     private bool canAttack;
     public bool attacking;
     public bool playerCatch;
@@ -98,6 +100,8 @@ public class AgentController : MonoBehaviour
 
     public Floor.BuildingType[] buildingTypes; //Types of building where the agent usually appears
 
+    public static string AgentTag = "Enemy";
+    
     private void OnValidate()
     {
         try
@@ -194,6 +198,8 @@ public class AgentController : MonoBehaviour
         _animator.SetBool("PlayerInSight", _enemyFov.targetInSight);
         _animator.SetBool("PlayerCatch", playerCatch);
         _animator.SetBool("Attack", attacking);
+        _animator.SetBool("IsMoving", isMoving);
+
 
         agentState = _healthManager.IsDead ? AgentState.Dead : agentState;
         
@@ -222,11 +228,11 @@ public class AgentController : MonoBehaviour
                     //Moving Animation if navmeshAgent is moving
                     if (_navMeshAgent.velocity.magnitude < 0.1f || !TargetReachable(_navMeshAgent,playerTransform.position))
                     {//Stop the Agent if velocity is less than 0 or there's no possible path to player
-                      _animator.SetBool("IsMoving", false);
+                        isMoving = false;
                     }
                     else
                     {
-                      _animator.SetBool("IsMoving", true);
+                        isMoving = true;
                     }
                                         
                     //Stop the Agent if reach the waypoint
@@ -330,7 +336,8 @@ public class AgentController : MonoBehaviour
                 {
                     _navMeshAgent.SetDestination(transform.position);
                 }
-                _animator.SetBool("IsMoving", false);
+
+                isMoving = false;
                 //_rigidbody.velocity = new Vector3(0, _rigidbody.velocity.y, 0);
 
                 break;
@@ -388,6 +395,7 @@ public class AgentController : MonoBehaviour
                 break;
 
             case "AttackEnd":
+              
                 attacking = false;
                 _animator.SetBool("Attack", false);
                 disableTimer = disableTime;
@@ -416,8 +424,8 @@ public class AgentController : MonoBehaviour
                 break;
 
             case "PushBack":
-                _rigidbody.AddForce(Vector3.back * 20, ForceMode.Impulse);
-
+                
+                _rigidbody.AddForce(Vector3.back * 40, ForceMode.Impulse);
                 break;
         }
     }
@@ -466,7 +474,16 @@ public class AgentController : MonoBehaviour
                                 break;
                         }
 
-                        DealDamage(playerHealthManager);
+                        if (playerHealthManager)
+                        { 
+                            DealDamage(playerHealthManager);
+                        }
+                        else
+                        {
+                            Debug.Log("No health manager found");
+                        }
+                        
+                        
                         attacking = false;
 
                         if (playerController._inventory.drawnWeaponItem != null)
@@ -474,9 +491,9 @@ public class AgentController : MonoBehaviour
                             playerController._inventory.drawnWeaponItem.attacking = false;
                         }
 
-                        playerAnimator.SetBool("MeleeAttack1", false);
-                        playerAnimator.SetBool("MeleeAttack2", false);
-                        playerAnimator.SetBool("MeleeAttack3", false);
+                        playerAnimator.SetBool("AxeAttack", false);
+                        playerAnimator.SetBool("BatAttack", false);
+                        playerAnimator.SetBool("KnifeAttack", false);
                         playerAnimator.SetBool("OnLedge", false);
                         playerAnimator.SetBool("OnWall", false);
                         playerAnimator.SetBool("ClimbingLadder", false);
@@ -538,7 +555,7 @@ public class AgentController : MonoBehaviour
         playerController.beingBitten = false;
         playerController.alreadyCatched = false;
 
-        _animator.SetBool("IsMoving", false);
+        isMoving = false;
         _enemyFov.enabled = false;
 
         disableTimer -= Time.deltaTime;
@@ -551,16 +568,17 @@ public class AgentController : MonoBehaviour
         }
     }
 
-    private void DealDamage(HealthManager healthManager)
+    private void DealDamage(HealthManager targetHealthMngr)
     {
+        
         int bleedingProb = Random.Range(0, 100);
         if (bleedingProb <= bleedDamageProbability)
         {
-            healthManager.isBleeding = true;
+            targetHealthMngr.isBleeding = true;
         }
 
         int damageGiven = Random.Range(minDamage, maxDamage);
-        healthManager.currentHealth -= damageGiven;
+        targetHealthMngr.currentHealth -= damageGiven;
     }
 
 

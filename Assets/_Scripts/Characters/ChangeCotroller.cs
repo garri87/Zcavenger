@@ -6,14 +6,7 @@ using UnityEngine.Serialization;
 
 public class ChangeCotroller : StateMachineBehaviour
 {
-    public enum Controller
-    {
-        Default,
-        StandBy,
-        OnLadder,
-        OnLedge,
-        OnUI,
-    }
+   
 
     public PlayerController.ControllerType onUpdateController;
     public PlayerController.ControllerType onExitController;

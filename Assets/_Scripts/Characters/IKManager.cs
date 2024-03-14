@@ -240,19 +240,19 @@ public class IKManager : MonoBehaviour
                 break;
 
             case PlayerType.Enemy:
-
-                if (_agentController.attacking ||
-                    _agentController.playerCatch ||
-                    /*_agentController._enemyFov.targetInSight||*/ _agentController.hisHit)
-                {
-                    _animator.SetLayerWeight(_animator.GetLayerIndex(upperBodyLayerName), 1);
-                }
-                else
-                {
-                    _animator.SetLayerWeight(_animator.GetLayerIndex(upperBodyLayerName), 0);
-                }
-
-
+                
+                    if (_agentController.attacking ||
+                        _agentController.playerCatch ||
+                        _agentController._enemyFov.targetAttackable ||
+                        _agentController._enemyFov.targetInSight || _agentController.hisHit)
+                    {
+                        _animator.SetLayerWeight(_animator.GetLayerIndex(upperBodyLayerName), 1);
+                    }
+                    else if (!_agentController._enemyFov.targetAttackable)
+                    {
+                        _animator.SetLayerWeight(_animator.GetLayerIndex(upperBodyLayerName), 0);
+                    }
+                    
                 break;
 
         }
