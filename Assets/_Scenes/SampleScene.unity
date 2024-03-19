@@ -1027,7 +1027,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-8710
+  m_Name: pb_Mesh-8712
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -3395,7 +3395,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh28156
+  m_Name: pb_Mesh28154
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -4744,7 +4744,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-7630
+  m_Name: pb_Mesh-7632
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -7816,16 +7816,20 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 2971485535890748477, guid: ae9ce5b411f9cc6478dff27f584c314d, type: 3}
-      propertyPath: minSpeed
-      value: 0.2
+      propertyPath: maxSpeed
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 2971485535890748477, guid: ae9ce5b411f9cc6478dff27f584c314d, type: 3}
-      propertyPath: enemyType
+      propertyPath: minSpeed
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 2971485535890748477, guid: ae9ce5b411f9cc6478dff27f584c314d, type: 3}
+      propertyPath: enemyType
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2971485535890748477, guid: ae9ce5b411f9cc6478dff27f584c314d, type: 3}
       propertyPath: attackRate
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2971485535890748477, guid: ae9ce5b411f9cc6478dff27f584c314d, type: 3}
       propertyPath: attackRange
@@ -7838,7 +7842,7 @@ PrefabInstance:
     - target: {fileID: 2971485535890748477, guid: ae9ce5b411f9cc6478dff27f584c314d, type: 3}
       propertyPath: enemyScriptableObject
       value: 
-      objectReference: {fileID: 11400000, guid: 9f4b3dd34ce2a8d41ac08c57af1202b0, type: 2}
+      objectReference: {fileID: 11400000, guid: ec6d2cc2eb0189a4baf2aafa76aa4346, type: 2}
     - target: {fileID: 2971485535890748477, guid: ae9ce5b411f9cc6478dff27f584c314d, type: 3}
       propertyPath: attackLayerMask.m_Bits
       value: 65
@@ -9609,7 +9613,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-7594
+  m_Name: pb_Mesh-7596
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -15560,19 +15564,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2971485535890748477, guid: ae9ce5b411f9cc6478dff27f584c314d, type: 3}
       propertyPath: minSpeed
-      value: 0.3
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 2971485535890748477, guid: ae9ce5b411f9cc6478dff27f584c314d, type: 3}
       propertyPath: enemyType
-      value: 1
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 2971485535890748477, guid: ae9ce5b411f9cc6478dff27f584c314d, type: 3}
       propertyPath: attackRate
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 2971485535890748477, guid: ae9ce5b411f9cc6478dff27f584c314d, type: 3}
       propertyPath: attackRange
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2971485535890748477, guid: ae9ce5b411f9cc6478dff27f584c314d, type: 3}
       propertyPath: attackDistance
@@ -15581,7 +15585,7 @@ PrefabInstance:
     - target: {fileID: 2971485535890748477, guid: ae9ce5b411f9cc6478dff27f584c314d, type: 3}
       propertyPath: enemyScriptableObject
       value: 
-      objectReference: {fileID: 11400000, guid: 4c026e7a306bfe54ca40219186197d29, type: 2}
+      objectReference: {fileID: 11400000, guid: 9f4b3dd34ce2a8d41ac08c57af1202b0, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ae9ce5b411f9cc6478dff27f584c314d, type: 3}
 --- !u!4 &9032080876731346777 stripped

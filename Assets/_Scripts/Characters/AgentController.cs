@@ -208,7 +208,11 @@ public class AgentController : MonoBehaviour
             canAttack = false;
             attacking = false;
             playerCatch = false;
-            _navMeshAgent.SetDestination(this.transform.position);
+
+            if (_navMeshAgent.isOnNavMesh)
+            {
+                _navMeshAgent.SetDestination(this.transform.position);
+            }
         }
         
 
