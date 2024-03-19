@@ -2445,6 +2445,12 @@ AnimatorStateTransition:
   - m_ConditionMode: 2
     m_ConditionEvent: Trapped
     m_EventTreshold: 0
+  - m_ConditionMode: 1
+    m_ConditionEvent: Aim
+    m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: Bitten
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -6322759671494525298}
   m_Solo: 0
@@ -14064,9 +14070,9 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.25
+  m_TransitionDuration: 0.12610751
   m_TransitionOffset: 0
-  m_ExitTime: 0.6250001
+  m_ExitTime: 0.62500006
   m_HasExitTime: 1
   m_HasFixedDuration: 1
   m_InterruptionSource: 2
@@ -15313,6 +15319,12 @@ AnimatorStateTransition:
   - m_ConditionMode: 1
     m_ConditionEvent: Bitten
     m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: IsDead
+    m_EventTreshold: 0
+  - m_ConditionMode: 1
+    m_ConditionEvent: IsMoving
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -8186311633883701016}
   m_Solo: 0
@@ -15324,9 +15336,9 @@ AnimatorStateTransition:
   m_ExitTime: 0.75
   m_HasExitTime: 0
   m_HasFixedDuration: 1
-  m_InterruptionSource: 0
+  m_InterruptionSource: 1
   m_OrderedInterruption: 1
-  m_CanTransitionToSelf: 1
+  m_CanTransitionToSelf: 0
 --- !u!1101 &-1541807800436644369
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -24532,7 +24544,7 @@ AnimatorStateMachine:
     m_Position: {x: 400, y: 0, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 123379115579786926}
-    m_Position: {x: 300, y: -110, z: 0}
+    m_Position: {x: 330, y: -100, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -1405594795735586767}
     m_Position: {x: 650, y: 230, z: 0}
@@ -24544,7 +24556,7 @@ AnimatorStateMachine:
   m_EntryTransitions: []
   m_StateMachineTransitions: {}
   m_StateMachineBehaviours: []
-  m_AnyStatePosition: {x: 60, y: 60, z: 0}
+  m_AnyStatePosition: {x: 70, y: 50, z: 0}
   m_EntryPosition: {x: 50, y: 110, z: 0}
   m_ExitPosition: {x: 50, y: 0, z: 0}
   m_ParentStateMachinePosition: {x: 40, y: 170, z: 0}
