@@ -42,7 +42,7 @@ public class MainMenuUI : MonoBehaviour
     public void DifficultyOptions(ClickEvent evt)
     {
         uiManager.CloseAllUI();
-        uiManager.ToggleUI(uiManager.difficultyOptionsUI, true);
+        uiManager.ToggleUI(uiManager.difficultyOptionsUIGO, true);
     }
 
     public void ExitGame(ClickEvent evt)
@@ -52,6 +52,6 @@ public class MainMenuUI : MonoBehaviour
 
     public void OptionsMenu(ClickEvent evt)
     {
-        uiManager.ToggleUI(uiManager.optionsMenuUI,true);
+        uiManager.ToggleUI(uiManager.optionsMenuUIGO,true);
     }
 }

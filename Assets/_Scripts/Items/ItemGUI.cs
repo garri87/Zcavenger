@@ -29,6 +29,8 @@ public class ItemGUI : Editor
     private SerializedProperty _itemTransform;
     private SerializedProperty _prefabRotationSpeed;
     private SerializedProperty _worldTextUI;
+    private SerializedProperty _worldTextVTAsset;
+
 
     // Item variables
     private SerializedProperty _healthRestore;
@@ -120,6 +122,7 @@ public class ItemGUI : Editor
         _itemTransform = serializedObject.FindProperty("itemTransform");
         _prefabRotationSpeed = serializedObject.FindProperty("prefabRotationSpeed");
         _worldTextUI = serializedObject.FindProperty("worldTextUI");
+        _worldTextVTAsset = serializedObject.FindProperty("worldTextVTAsset");
 
         // Item variables
         _healthRestore = serializedObject.FindProperty("healthRestore");
@@ -211,6 +214,7 @@ public class ItemGUI : Editor
         EditorGUILayout.PropertyField(_itemTransform);
         EditorGUILayout.PropertyField(_prefabRotationSpeed);
         EditorGUILayout.PropertyField(_worldTextUI);
+        EditorGUILayout.PropertyField(_worldTextVTAsset);
 
         
 

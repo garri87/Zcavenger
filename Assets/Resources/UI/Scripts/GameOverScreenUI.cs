@@ -6,15 +6,15 @@ using UnityEngine.UIElements;
 
 public class GameOverScreenUI : MonoBehaviour
 {
-    public UIDocument gameOverScreen;
+    public UIDocument gameOverScreenUIDocument;
     public Label gameOverlabel;
     public string gameOverText = "YOU ARE DEAD";
 
     private void OnEnable()
     {
-        gameOverScreen = GetComponent<UIDocument>();
+        gameOverScreenUIDocument = GetComponent<UIDocument>();
 
-        VisualElement root = gameOverScreen.rootVisualElement;
+        VisualElement root = gameOverScreenUIDocument.rootVisualElement;
 
         gameOverlabel = root.Q<Label>();
 

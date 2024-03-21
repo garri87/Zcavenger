@@ -14,7 +14,7 @@ public class InventoryUI : MonoBehaviour
     public VisualElement inventorySlotArea;
     public Label capacityLabel;
 
-    public VisualTreeAsset slotTemplate;
+    public static VisualTreeAsset slotTemplate;
     public List<VisualElement> inventorySlotList;
 
     public VisualElement outfitSlotsArea;
@@ -45,7 +45,7 @@ public class InventoryUI : MonoBehaviour
     public Label inspectItemTitle;
     public Label inspectItemInfo;
     public VisualElement statsPanel;
-    public VisualTreeAsset statTemplate;
+    public static VisualTreeAsset statTemplate;//Item stat template used for show item stats
     public List<VisualElement> itemStats;
     public Button inspectCloseButton;
 

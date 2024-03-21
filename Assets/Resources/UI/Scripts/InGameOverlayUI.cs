@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 
 public class InGameOverlayUI : MonoBehaviour
 {
-    public UIDocument inGameOverlay;
+    public UIDocument inGameOverlayUIDocument;
     
     public VisualElement playerstatusPanel;
     public Label healthLabel;

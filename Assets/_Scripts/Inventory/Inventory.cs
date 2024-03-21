@@ -94,8 +94,8 @@ public class Inventory : MonoBehaviour
         //playerWeaponHolder = transform.Find("WeaponHolder");
         iKAimer = GetComponent<IKAimer>();
         uIManager = GameManager.Instance.uiManager;
-        inventoryUI = uIManager.inventoryUI.GetComponent<InventoryUI>();
-        inGameOverlayUI = uIManager.inGameOverlayUI.GetComponent<InGameOverlayUI>();
+        inventoryUI = uIManager.inventoryUIGO.GetComponent<InventoryUI>();
+        inGameOverlayUI = uIManager.inGameOverlayUIGO.GetComponent<InGameOverlayUI>();
 
 
         selectedWeapons = new Dictionary<SelectedWeapon, Item>
@@ -324,7 +324,7 @@ public class Inventory : MonoBehaviour
             showInventory = false;
         }
 
-        uIManager.ToggleUI(uIManager.inventoryUI, showInventory);
+        uIManager.ToggleUI(uIManager.inventoryUIGO, showInventory);
     }
 
     /// <summary>

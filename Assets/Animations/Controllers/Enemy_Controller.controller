@@ -2094,6 +2094,19 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
+--- !u!114 &-3460185791495538238
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a03717339c82c274792b40284bf0b019, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectType: 0
 --- !u!1102 &-3424603248738287268
 AnimatorState:
   serializedVersion: 6
@@ -3165,7 +3178,8 @@ AnimatorState:
   - {fileID: 871185763314265180}
   - {fileID: 5636198792070188646}
   - {fileID: 4469815081020492118}
-  m_StateMachineBehaviours: []
+  m_StateMachineBehaviours:
+  - {fileID: 3665890863982385223}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -4103,9 +4117,6 @@ AnimatorStateTransition:
   m_PrefabAsset: {fileID: 0}
   m_Name: 
   m_Conditions:
-  - m_ConditionMode: 1
-    m_ConditionEvent: PlayerInSight
-    m_EventTreshold: 0
   - m_ConditionMode: 1
     m_ConditionEvent: Brute
     m_EventTreshold: 0
@@ -5114,6 +5125,19 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
+--- !u!114 &3665890863982385223
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a03717339c82c274792b40284bf0b019, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectType: 0
 --- !u!1101 &3758780528930902713
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -5879,7 +5903,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Mutant Roaring
-  m_Speed: 1
+  m_Speed: 2
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -4754100605024671575}
@@ -6362,7 +6386,8 @@ AnimatorState:
   - {fileID: -5534497629843868344}
   - {fileID: 4447535824457379179}
   - {fileID: -8209418469149524873}
-  m_StateMachineBehaviours: []
+  m_StateMachineBehaviours:
+  - {fileID: -3460185791495538238}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1

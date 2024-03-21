@@ -1,64 +1,69 @@
 
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UIElements;
 
 
 public class UIManager : MonoBehaviour
 {
-    public GameObject mainMenuUI;
-    public GameObject difficultyOptionsUI;
-    public GameObject loadingScreenUI;
-    public GameObject inGameOverlayUI;
-    public GameObject inventoryUI;
-    public GameObject pauseMenuUI;
-    public GameObject optionsMenuUI;
-    public GameObject gameOverScreenUI;
-    public GameObject itemContainerUI;
+    public GameObject mainMenuUIGO;
+    public GameObject difficultyOptionsUIGO;
+    public GameObject loadingScreenUIGO;
+    public GameObject inGameOverlayUIGO;
+    public GameObject inventoryUIGO;
+    public GameObject pauseMenuUIGO;
+    public GameObject optionsMenuUIGO;
+    public GameObject gameOverScreenUIGO;
+    public GameObject itemContainerUIGO;
+    public GameObject worldTextUIGO;
+    
+    public MainMenuUI mainMenuUI;
+    public DifficultyOptionsUI difficultyOptionsUI;
+    public LoadingScreenUI loadingScreenUI;
+    public InGameOverlayUI inGameOverlayUI;
+    public InventoryUI inventoryUI;
+    public PauseMenuUI pauseMenuUI;
+    public OptionsMenuUI optionsMenuUI;
+    public GameOverScreenUI gameOverScreenUI;
+    public ItemContainerUI itemContainerUI;
+    public WorldTextUI WorldTextUI;
 
-    public MainMenuUI mainMenuUIDocument;
-    public DifficultyOptionsUI difficultyOptionsUIDocument;
-    public LoadingScreenUI loadingScreenUIDocument;
-    public InGameOverlayUI inGameOverlayUIDocument;
-    public InventoryUI inventoryUIDocument;
-    public PauseMenuUI pauseMenuUIDocument;
-    public OptionsMenuUI optionsMenuUIDocument;
-    public GameOverScreenUI gameOverScreenUIDocument;
-    public ItemContainerUI itemContainerUIDocument;
 
-
-    private GameObject[] uiList;
+    private UIDocument[] uiDocuments;
 
 
     private void OnEnable()
     {
-        uiList = new GameObject[]
+        uiDocuments = new UIDocument[]
         {
-            mainMenuUI,
-            difficultyOptionsUI,
-            loadingScreenUI,
-            inGameOverlayUI,
-            inventoryUI,
-            pauseMenuUI,
-            optionsMenuUI,
-            gameOverScreenUI,
-            itemContainerUI,
+            mainMenuUI.GetComponent<UIDocument>(),
+            difficultyOptionsUI.GetComponent<UIDocument>(),
+            loadingScreenUI.GetComponent<UIDocument>(),
+            inGameOverlayUI.GetComponent<UIDocument>(),
+            inventoryUI.GetComponent<UIDocument>(),
+            pauseMenuUI.GetComponent<UIDocument>(),
+            optionsMenuUI.GetComponent<UIDocument>(),
+            gameOverScreenUI.GetComponent<UIDocument>(),
+            itemContainerUI.GetComponent<UIDocument>(),
+            WorldTextUI.GetComponent<UIDocument>(),
 
         };
 
 
-        mainMenuUIDocument = mainMenuUI.GetComponent<MainMenuUI>();
-        difficultyOptionsUIDocument = difficultyOptionsUI.GetComponent<DifficultyOptionsUI>();
-        loadingScreenUIDocument = loadingScreenUI.GetComponent<LoadingScreenUI>();
-        inGameOverlayUIDocument = inGameOverlayUI.GetComponent<InGameOverlayUI>();
-        inventoryUIDocument = inventoryUI.GetComponent<InventoryUI>();
-        pauseMenuUIDocument = pauseMenuUI.GetComponent<PauseMenuUI>();
-        optionsMenuUIDocument = optionsMenuUI.GetComponent<OptionsMenuUI>();
-        gameOverScreenUIDocument = gameOverScreenUI.GetComponent<GameOverScreenUI>();
-        itemContainerUIDocument = itemContainerUI.GetComponent<ItemContainerUI>();
+        mainMenuUI = mainMenuUIGO.GetComponent<MainMenuUI>();
+        difficultyOptionsUI = difficultyOptionsUIGO.GetComponent<DifficultyOptionsUI>();
+        loadingScreenUI = loadingScreenUIGO.GetComponent<LoadingScreenUI>();
+        inGameOverlayUI = inGameOverlayUIGO.GetComponent<InGameOverlayUI>();
+        inventoryUI = inventoryUIGO.GetComponent<InventoryUI>();
+        pauseMenuUI = pauseMenuUIGO.GetComponent<PauseMenuUI>();
+        optionsMenuUI = optionsMenuUIGO.GetComponent<OptionsMenuUI>();
+        gameOverScreenUI = gameOverScreenUIGO.GetComponent<GameOverScreenUI>();
+        itemContainerUI = itemContainerUIGO.GetComponent<ItemContainerUI>();
+        WorldTextUI = worldTextUIGO.GetComponent<WorldTextUI>();
 
-        foreach (var ui in uiList)
+        foreach (var uiDocument in uiDocuments)
         {
-            ui.GetComponent<UIDocument>().enabled = true;
+            uiDocument.enabled = true;
         }
     }
 
@@ -66,24 +71,14 @@ public class UIManager : MonoBehaviour
 
     public void CloseAllUI()
     {
-        foreach (GameObject uiObject in uiList)
+        foreach (UIDocument uiDocument in uiDocuments)
         {
-            uiObject.GetComponent<UIDocument>().rootVisualElement.style.display = DisplayStyle.None;
-    
+            uiDocument.rootVisualElement.style.display = DisplayStyle.None;
         }
     }
 
-    public void ToggleUI(GameObject uiGameobject, bool enabled)
+    public void ToggleUI(UIDocument uIDocument, bool enabled)
     {
-        UIDocument uIDocument = uiGameobject.GetComponent<UIDocument>();
-
-        if (enabled)
-        {
-            uIDocument.rootVisualElement.style.display = DisplayStyle.Flex;
-        }
-        else
-        {
-            uIDocument.rootVisualElement.style.display = DisplayStyle.None;
-        }
+        uIDocument.rootVisualElement.style.display = enabled ? DisplayStyle.Flex : DisplayStyle.None;
     }
 }

@@ -279,7 +279,7 @@ public class HealthManager : MonoBehaviour
 
     private void UpdateUIStatus()
     {
-        InGameOverlayUI ui = GameManager.Instance.uiManager.inGameOverlayUIDocument;
+        InGameOverlayUI ui = GameManager.Instance.uiManager.inGameOverlayUI;
         ui.healthLabel.text = currentHealth.ToString() + " %";
         ui.hungerLabel.text = currentHunger.ToString() + " %";
         ui.thirstLabel.text = currentThirst.ToString() + " %";

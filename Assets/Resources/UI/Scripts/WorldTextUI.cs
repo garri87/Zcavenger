@@ -28,6 +28,10 @@ public class WorldTextUI : MonoBehaviour
 
     private void OnEnable()
     {
+        if (!targetTransform)
+        {
+            targetTransform = transform;
+        }
         uiDocument = GetComponent<UIDocument>();
         _camera = Camera.main;
         root = uiDocument.rootVisualElement;

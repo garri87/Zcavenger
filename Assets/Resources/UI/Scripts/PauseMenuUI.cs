@@ -47,8 +47,8 @@ public class PauseMenuUI : MonoBehaviour
 
     private void OpenOptions(ClickEvent evt)
     {
-        uIManager.ToggleUI(uIManager.optionsMenuUI, true);
-        OptionsMenuUI optionsUI = uIManager.optionsMenuUI.GetComponent<OptionsMenuUI>();
+        uIManager.ToggleUI(uIManager.optionsMenuUIGO, true);
+        OptionsMenuUI optionsUI = uIManager.optionsMenuUIGO.GetComponent<OptionsMenuUI>();
         optionsUI.CloseAllTabs();
         optionsUI.displayTab.style.display = DisplayStyle.Flex;
     }

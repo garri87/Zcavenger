@@ -4,7 +4,7 @@ using UnityEngine.UIElements;
 
 public class DifficultyOptionsUI : MonoBehaviour
 {
-    public UIDocument difficultyOptions;
+    public UIDocument difficultyOptionsUIDocument;
 
     public Button easyButton,normalButton,hardButton,backButton;
 
@@ -18,9 +18,9 @@ public class DifficultyOptionsUI : MonoBehaviour
         gameManager = GameManager.Instance;
         uiManager = gameManager.uiManager;
 
-        difficultyOptions = GetComponent<UIDocument>();
+        difficultyOptionsUIDocument = GetComponent<UIDocument>();
 
-        root = difficultyOptions.rootVisualElement;
+        root = difficultyOptionsUIDocument.rootVisualElement;
 
         easyButton = root.Q<Button>("EasyButton");
         normalButton = root.Q<Button>("NormalButton");
@@ -42,7 +42,7 @@ public class DifficultyOptionsUI : MonoBehaviour
 
     public void MainMenu(ClickEvent evt)
     {
-        uiManager.ToggleUI(uiManager.mainMenuUI, true);
+        uiManager.ToggleUI(uiManager.mainMenuUIGO, true);
     }
 
 }

@@ -1,17 +1,12 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
-using UnityEngine.SocialPlatforms;
-using UnityEngine.UI;
 using UnityEngine.UIElements;
-using Random = UnityEngine.Random;
 using System.Linq;
+using Array = System.Array;
 
 public class ItemContainer : MonoBehaviour
 {
-
+    [Header("Container Attributes")]
     [Range(1, 15)] public int containerSize;
     private int minSize = 1;
     private int maxSize = 15;
@@ -35,46 +30,40 @@ public class ItemContainer : MonoBehaviour
 
     [SerializeField] private bool interactable;
     [SerializeField] private bool containerOpen;
+    public bool containerFilled;
+
+    #region Components
 
     private UIManager _uiManager;
-    public ItemContainerUI itemContainerUI;
-    public TextMeshPro worldUIText;
 
     public Outline meshOutline;
     private PlayerController playerController;
     private Inventory playerInventory;
-    public bool containerFilled;
-    private VisualElement slotTemplate;
+
+    public WorldTextUI _worldTextUI;
+    public UIDocument itemContainerUIDocument;
+    private KeyAssignments keyassignments = GameManager.Instance._keyAssignments;
+    private UIManager _uIManager = GameManager.Instance.uiManager;
+    #endregion
+
+    private VisualTreeAsset slotTemplate = InventoryUI.slotTemplate;
+    private VisualTreeAsset statTemplate = InventoryUI.statTemplate;
+
+    public GameObject itemTemplatePrefab;
     private void OnValidate()
     {
-
-
-        if (scriptableObjects.Any())
-        {
-            if (orderedQuantity.Length != scriptableObjects.Count)
-            {
-                Array.Resize(ref orderedQuantity, scriptableObjects.Count);
-            }
-            for (int i = 0; i < orderedQuantity.Length; i++)
-            {
-                if (orderedQuantity[i] == 0)
-                {
-                    int minQuantity = 1 * lootMultiplier;
-                    orderedQuantity[i] = Random.Range(minQuantity, minQuantity * lootMultiplier);
-                }
-            }
-        }
-
+        OrderQuantities(scriptableObjects);
     }
 
     private void Awake()
     {
-        _uiManager = GameManager.Instance.uiManager;
-
-        itemContainerUI = _uiManager.itemContainerUI.GetComponent<ItemContainerUI>();
-
+        if (_uiManager)
+        {
+            itemContainerUIDocument = _uiManager.itemContainerUI.itemContainerUIDocument;
+        }
         if (randomSize)
         {
+               
             containerSize = Random.Range(minSize, maxSize);
         }
 
@@ -112,22 +101,21 @@ public class ItemContainer : MonoBehaviour
 
     private void Start()
     {
-        slotTemplate = itemContainerUI.containerSlot;
-        worldUIText.text = "Open [ " + GameManager.Instance._keyAssignments.useKey.keyCode.ToString().ToUpper() + " ]";
-
+       // worldUIText.text = "Open [ " + GameManager.Instance._keyAssignments.useKey.keyCode.ToString().ToUpper() + " ]";
     }
 
     private void Update()
     {
         meshOutline.enabled = interactable;
-        worldUIText.gameObject.SetActive(interactable);
+
         if (interactable)
         {
             if (Input.GetKeyDown(GameManager.Instance._keyAssignments.useKey.keyCode))
             {
                 containerOpen = true;
             }
-
+            _uiManager.ToggleUI(_uiManager.WorldTextUI.uiDocument,interactable);
+            playerInventory.showInventory = containerOpen;
         }
         else
         {
@@ -142,15 +130,13 @@ public class ItemContainer : MonoBehaviour
             {
                 containerOpen = false;
             }
-            itemContainerUI.root.style.display = DisplayStyle.Flex;
+            _uiManager.ToggleUI(itemContainerUIDocument, containerOpen);
         }
         else
         {
-            itemContainerUI.root.style.display = DisplayStyle.None;
-
+            _uiManager.ToggleUI(itemContainerUIDocument, containerOpen);
         }
 
-        playerInventory.showInventory = containerOpen;
 
     }
 
@@ -181,16 +167,40 @@ public class ItemContainer : MonoBehaviour
         }
     }
 
+    private void OrderQuantities(List<ScriptableObject> scriptableList)
+    {
+        if (scriptableList.Any())
+        {
+            if (orderedQuantity.Length != scriptableList.Count)
+            {
+                
+                Array.Resize(ref orderedQuantity, scriptableList.Count);
+            }
+            for (int i = 0; i < orderedQuantity.Length; i++)
+            {
+                if (orderedQuantity[i] == 0)
+                {
+                    int minQuantity = 1 * lootMultiplier;
+                    orderedQuantity[i] = Random.Range(minQuantity, minQuantity * lootMultiplier);
+                }
+            }
+        }
+    }
 
+    /// <summary>
+    /// Creates a item GameObject inside a container
+    /// </summary>
+    /// <param name="scriptableObj"></param>
+    /// <returns></returns>
     public GameObject GenerateItemGO(ScriptableObject scriptableObj)
     {
-
-        GameObject newItemGO = new GameObject(scriptableObj.name);
-        Item item = newItemGO.AddComponent<Item>();
+        GameObject newItemGO = Instantiate(itemTemplatePrefab, transform);
+        newItemGO.name = scriptableObj.name;
+        Item item = newItemGO.GetComponent<Item>();
         item.scriptableObject = scriptableObj;
         item.itemLocation = Item.ItemLocation.Container;
         item.InitItem();
-
+        newItemGO.SetActive(false);
         return newItemGO;
     }
 
@@ -210,7 +220,7 @@ public class ItemContainer : MonoBehaviour
     /// </summary>
     public void RefreshContainerUI(List<Item> itemList)
     {
-        itemContainerUI.containerSlotArea.Clear();
+        _uiManager.itemContainerUI.containerSlotArea.Clear();
 
         if (randomItems)
         {
@@ -218,30 +228,15 @@ public class ItemContainer : MonoBehaviour
             {
                 Item randomItem = itemList[Random.Range(0, itemList.Count)];
                 randomItem.quantity = orderedQuantity[i];
-                VisualElement slot = slotTemplate;
+                VisualElement slot = slotTemplate.Instantiate();
                 Label slotLabel = slot.Q<Label>();
                 slotLabel.text = randomItem.quantity.ToString();
                 slot.style.backgroundImage = new StyleBackground(randomItem.itemIcon);
 
-                itemContainerUI.containerSlotArea.Add(slot);
+                _uiManager.itemContainerUI.containerSlotArea.Add(slot);
             }
         }
 
-    }
-
-
-    public void ToggleContainerUI()
-    {
-        containerOpen = !containerOpen;
-
-        if (containerOpen)
-        {
-            playerInventory.showInventory = true;
-        }
-        if (!containerOpen)
-        {
-            playerInventory.showInventory = false;
-        }
     }
 
     public void TakeAll()

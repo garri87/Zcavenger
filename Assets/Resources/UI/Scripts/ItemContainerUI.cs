@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 public class ItemContainerUI : MonoBehaviour
 {
 
-    public UIDocument itemContainerUI;
+    public UIDocument itemContainerUIDocument;
     public VisualElement root;
 
     public Label containerLabel;
@@ -38,7 +38,7 @@ public class ItemContainerUI : MonoBehaviour
     public Label inspectItemTitle;
     public Label inspectItemInfo;
     public VisualElement statsPanel;
-    public VisualTreeAsset statTemplate;
+    public VisualTreeAsset statTemplate;//Item stat template used for show item stats
     public List<VisualElement> itemStats;
     public Button inspectCloseButton;
 
@@ -46,8 +46,8 @@ public class ItemContainerUI : MonoBehaviour
 
     private void OnEnable()
     {
-        itemContainerUI = GetComponent<UIDocument>();
-        root = itemContainerUI.rootVisualElement;
+        itemContainerUIDocument = GetComponent<UIDocument>();
+        root = itemContainerUIDocument.rootVisualElement;
 
         containerLabel = root.Q<Label>("ContainerName");
         containerSlotArea = root.Q<VisualElement>("SlotsPanel");

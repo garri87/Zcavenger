@@ -3,11 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.UIElements;
 
 
 [RequireComponent(typeof(WorldTextUI))]
 [RequireComponent(typeof(BoxCollider))]
 [RequireComponent(typeof(WorldTextUI))]
+[RequireComponent(typeof(UIDocument))]
 public class Item : MonoBehaviour
 {
     public enum ItemClass
@@ -63,6 +65,7 @@ public class Item : MonoBehaviour
 
     [Header("UI")]
     public WorldTextUI worldTextUI;
+    public VisualTreeAsset worldTextVTAsset;
 
     [Header("Item Attributes")]
     public ItemScriptableObject itemScriptableObject;
@@ -294,7 +297,12 @@ public class Item : MonoBehaviour
 
         if (!modelMeshFilter) modelMeshFilter = GetComponent<MeshFilter>();
         if (!modelMeshRenderer) modelMeshRenderer = GetComponent<MeshRenderer>();
-        if (!worldTextUI) worldTextUI = GetComponent<WorldTextUI>();
+        if (!worldTextUI)
+        {
+            worldTextUI = GetComponent<WorldTextUI>();
+            worldTextUI.uiDocument.visualTreeAsset = worldTextVTAsset;
+        }
+            
         modelInstantiated = false;
 
 
