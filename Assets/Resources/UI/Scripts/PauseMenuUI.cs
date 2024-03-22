@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 
 public class PauseMenuUI : MonoBehaviour
 {
-    public UIDocument pauseMenu;
+    public UIDocument pauseMenuUIDocument;
 
     public VisualElement root;
     public Button resumeButton;
@@ -20,8 +20,8 @@ public class PauseMenuUI : MonoBehaviour
     private void OnEnable()
     {
         uIManager = GameManager.Instance.uiManager;
-        pauseMenu = GetComponent<UIDocument>();
-        root = pauseMenu.rootVisualElement;
+        pauseMenuUIDocument = GetComponent<UIDocument>();
+        root = pauseMenuUIDocument.rootVisualElement;
 
         resumeButton = root.Q<Button>("ResumeButton");
         optionsButton = root.Q<Button>("OptionsButton");
@@ -47,7 +47,7 @@ public class PauseMenuUI : MonoBehaviour
 
     private void OpenOptions(ClickEvent evt)
     {
-        uIManager.ToggleUI(uIManager.optionsMenuUIGO, true);
+        uIManager.ToggleUI(uIManager.optionsMenuUI.optionsMenuUIDocument, true);
         OptionsMenuUI optionsUI = uIManager.optionsMenuUIGO.GetComponent<OptionsMenuUI>();
         optionsUI.CloseAllTabs();
         optionsUI.displayTab.style.display = DisplayStyle.Flex;

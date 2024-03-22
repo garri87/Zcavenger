@@ -110,19 +110,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   containerSize: 15
-  lootMultiplier: 1
   randomSize: 0
-  randomWeapons: 0
+  lootMultiplier: 1
   randomItems: 0
+  scriptableObjects: []
+  itemGOList: []
+  orderedQuantity: 
   interactable: 0
   containerOpen: 0
   containerFilled: 0
-  weaponPrefabs: []
-  itemScriptableObjects: []
-  orderedQuantity: 
-  containerUIWindow: {fileID: 0}
-  worldUIText: {fileID: 0}
-  worldUITMP: {fileID: 0}
   meshOutline: {fileID: 1444643330808256933}
-  itemTemplate: {fileID: 1643082142514611498, guid: b9eac2de9eb08ef4d9dab5000ee1bd0b, type: 3}
-  containerSlotsTransform: {fileID: 0}
+  _worldTextUI: {fileID: 0}
+  itemContainerUIDocument: {fileID: 0}
+  itemTemplatePrefab: {fileID: 1643082142514611498, guid: b9eac2de9eb08ef4d9dab5000ee1bd0b, type: 3}

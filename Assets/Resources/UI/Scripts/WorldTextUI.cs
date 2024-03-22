@@ -45,8 +45,7 @@ public class WorldTextUI : MonoBehaviour
     {
         if (uIEnabled && targetTransform != null)
         {
-            SetPosition(_frame, targetTransform);
-            _label.text = text;
+            SetWorldTextUI(targetTransform,text);
         }
         if (uIEnabled)
         {
@@ -61,12 +60,14 @@ public class WorldTextUI : MonoBehaviour
     /// <summary>
     /// Places the element in the target position
     /// </summary>
-    public void SetPosition(VisualElement element, Transform target)
+    public void SetWorldTextUI(Transform newTarget, string newText)
     {
         Vector2 newPosition = RuntimePanelUtils.CameraTransformWorldToPanel(
-            element.panel, target.position, _camera);
-        newPosition.x = (newPosition.x  - element.layout.width / 2 * offsetPosition.x);
-        newPosition.y = (newPosition.y  - element.layout.height / 2 * offsetPosition.y);
-        element.transform.position = newPosition;
+            _frame.panel, newTarget.position, _camera);
+        newPosition.x = (newPosition.x  - _frame.layout.width / 2 * offsetPosition.x);
+        newPosition.y = (newPosition.y  - _frame.layout.height / 2 * offsetPosition.y);
+        _frame.transform.position = newPosition;
+        _label.text = newText;
+
     }
 }

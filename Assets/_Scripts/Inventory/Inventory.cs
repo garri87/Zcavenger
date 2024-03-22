@@ -324,7 +324,7 @@ public class Inventory : MonoBehaviour
             showInventory = false;
         }
 
-        uIManager.ToggleUI(uIManager.inventoryUIGO, showInventory);
+        uIManager.ToggleUI(uIManager.inventoryUI.inventoryUIDocument, showInventory);
     }
 
     /// <summary>

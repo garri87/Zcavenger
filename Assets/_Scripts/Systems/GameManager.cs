@@ -134,7 +134,7 @@ public class GameManager : MonoBehaviour
         {
             case SceneType.mainTitle:
                 uiManager.CloseAllUI();
-                uiManager.ToggleUI(uiManager.mainMenuUIGO,true);
+                uiManager.ToggleUI(uiManager.mainMenuUI.mainMenuUIDocument,true);
               
                 _graphicsManager.globalVolume.profile = _graphicsManager.mainTitlevolumeProfile;
                 break;
@@ -146,7 +146,7 @@ public class GameManager : MonoBehaviour
                 playerController = player.GetComponent<PlayerController>();
                 playerHealthManager = player.GetComponent<HealthManager>();
 
-                uiManager.ToggleUI(uiManager.inGameOverlayUIGO,true);
+                uiManager.ToggleUI(uiManager.inGameOverlayUI.inGameOverlayUIDocument,true);
 
                 _graphicsManager.globalVolume.profile = _graphicsManager.InGamevolumeProfile;
                 break;
@@ -166,13 +166,13 @@ public class GameManager : MonoBehaviour
                 {
                     if (!loadingGame)
                     {
-                        uiManager.ToggleUI(uiManager.mainMenuUIGO,true);
+                        uiManager.ToggleUI(uiManager.mainMenuUI.mainMenuUIDocument,true);
                     }
                 }
 
                 if (loadingGame)
                 {
-                    uiManager.ToggleUI(uiManager.loadingScreenUIGO,true);
+                    uiManager.ToggleUI(uiManager.loadingScreenUI.loadingScreenUIDocument,true);
                 }
                 break;
 
@@ -205,7 +205,7 @@ public class GameManager : MonoBehaviour
     public void StartGame(GameDifficulty difficulty)
     {
         uiManager.CloseAllUI();
-        uiManager.ToggleUI(uiManager.loadingScreenUIGO, true);
+        uiManager.ToggleUI(uiManager.loadingScreenUI.loadingScreenUIDocument, true);
         loadingGame = true;
         this.gameDifficulty = difficulty;
         
@@ -218,13 +218,13 @@ public class GameManager : MonoBehaviour
 
         if (gamePaused)
         {
-            uiManager.ToggleUI(uiManager.pauseMenuUIGO,true);
+            uiManager.ToggleUI(uiManager.pauseMenuUI.pauseMenuUIDocument,true);
             Time.timeScale = 0;
         }
         else
         {
-            uiManager.ToggleUI(uiManager.pauseMenuUIGO, false);
-            uiManager.ToggleUI(uiManager.optionsMenuUIGO, false);
+            uiManager.ToggleUI(uiManager.pauseMenuUI.pauseMenuUIDocument, false);
+            uiManager.ToggleUI(uiManager.optionsMenuUI.optionsMenuUIDocument, false);
             Time.timeScale = 1;
         }
     }
@@ -244,7 +244,7 @@ public class GameManager : MonoBehaviour
             Debug.Log("GAME OVER");
         }
         gameOver = true;
-        uiManager.ToggleUI(uiManager.gameOverScreenUIGO, true);
+        uiManager.ToggleUI(uiManager.gameOverScreenUI.gameOverScreenUIDocument, true);
         uiManager.gameOverScreenUI.ShowGameOver();
 
     }

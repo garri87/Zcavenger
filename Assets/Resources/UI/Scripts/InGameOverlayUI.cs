@@ -34,8 +34,8 @@ public class InGameOverlayUI : MonoBehaviour
             
         }
 
-        inGameOverlay = GetComponent<UIDocument>();
-        VisualElement root = inGameOverlay.rootVisualElement;
+        inGameOverlayUIDocument = GetComponent<UIDocument>();
+        VisualElement root = inGameOverlayUIDocument.rootVisualElement;
         
         
     playerstatusPanel = root.Q<VisualElement>("PlayerStatus");

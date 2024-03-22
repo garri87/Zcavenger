@@ -42,7 +42,7 @@ public class DifficultyOptionsUI : MonoBehaviour
 
     public void MainMenu(ClickEvent evt)
     {
-        uiManager.ToggleUI(uiManager.mainMenuUIGO, true);
+        uiManager.ToggleUI(uiManager.mainMenuUI.mainMenuUIDocument, true);
     }
 
 }

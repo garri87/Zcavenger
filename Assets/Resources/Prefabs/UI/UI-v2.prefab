@@ -61,7 +61,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7706261ad1ccf844689697c6e95772cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inGameOverlay: {fileID: 0}
+  inGameOverlayUIDocument: {fileID: 826691261578130833}
 --- !u!1 &826691261628665600
 GameObject:
   m_ObjectHideFlags: 0
@@ -123,9 +123,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 719df5d580eda5e48b7fad22cf69e30b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventoryUI: {fileID: 0}
+  inventoryUIDocument: {fileID: 826691261628665602}
   slotTemplate: {fileID: 9197481963319205126, guid: c7713b67b5d3e5c4a92396aec3f1c5c2, type: 3}
-  statTemplate: {fileID: 9197481963319205126, guid: 917c0bfb0cdfead4c8d8aadd5ace3502, type: 3}
   emptySlotImg: {fileID: 21300000, guid: 286837fff4b87ee40b28e136a945ac25, type: 3}
 --- !u!1 &826691261969983245
 GameObject:
@@ -158,7 +157,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 826691262636882833}
-  m_RootOrder: 1
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &826691261969983247
 MonoBehaviour:
@@ -188,7 +187,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfee8762f324b9a4297eebd8d8a5c0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  optionsMenu: {fileID: 0}
+  optionsMenuUIDocument: {fileID: 826691261969983247}
   keyAssignTemplate: {fileID: 0}
   currentKeyCode: 0
 --- !u!1 &826691262030177953
@@ -252,7 +251,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9e6db42b547d3141ab01e5034cdd0b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pauseMenu: {fileID: 0}
+  pauseMenuUIDocument: {fileID: 826691262030177955}
 --- !u!1 &826691262636882839
 GameObject:
   m_ObjectHideFlags: 0
@@ -283,14 +282,15 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 826691262703568023}
-  - {fileID: 826691261969983246}
+  - {fileID: 234435157178020497}
   - {fileID: 826691263196827835}
   - {fileID: 826691261578130832}
   - {fileID: 826691261628665601}
   - {fileID: 826691262030177954}
+  - {fileID: 826691261969983246}
   - {fileID: 826691263393008944}
   - {fileID: 7684031972636871865}
-  - {fileID: 234435157178020497}
+  - {fileID: 5219844073815972280}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -306,24 +306,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca6be35f48a2ea6479d86c4066ca1b45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainMenuUI: {fileID: 826691262703568022}
-  difficultyOptionsUI: {fileID: 4153239088854448318}
-  loadingScreenUI: {fileID: 826691263196827834}
-  inGameOverlayUI: {fileID: 826691261578130839}
-  inventoryUI: {fileID: 826691261628665600}
-  pauseMenuUI: {fileID: 826691262030177953}
-  optionsMenuUI: {fileID: 826691261969983245}
-  gameOverScreenUI: {fileID: 826691263393008951}
-  itemContainerUI: {fileID: 7232663360945069450}
-  mainMenuUIDocument: {fileID: 0}
-  difficultyOptionsUIDocument: {fileID: 0}
-  loadingScreenUIDocument: {fileID: 0}
-  inGameOverlayUIDocument: {fileID: 0}
-  inventoryUIDocument: {fileID: 0}
-  pauseMenuUIDocument: {fileID: 0}
-  optionsMenuUIDocument: {fileID: 0}
-  gameOverScreenUIDocument: {fileID: 0}
-  itemContainerUIDocument: {fileID: 0}
+  mainMenuUIGO: {fileID: 826691262703568022}
+  difficultyOptionsUIGO: {fileID: 4153239088854448318}
+  loadingScreenUIGO: {fileID: 826691263196827834}
+  inGameOverlayUIGO: {fileID: 826691261578130839}
+  inventoryUIGO: {fileID: 826691261628665600}
+  pauseMenuUIGO: {fileID: 826691262030177953}
+  optionsMenuUIGO: {fileID: 826691261969983245}
+  gameOverScreenUIGO: {fileID: 826691263393008951}
+  itemContainerUIGO: {fileID: 7232663360945069450}
+  worldTextUIGO: {fileID: 7847586503277697436}
+  mainMenuUI: {fileID: 2920981915339112397}
+  difficultyOptionsUI: {fileID: 2162636386031842046}
+  loadingScreenUI: {fileID: 4504557545874749938}
+  inGameOverlayUI: {fileID: 1770783797886246703}
+  inventoryUI: {fileID: 5339526777229204232}
+  pauseMenuUI: {fileID: 6435149705770462513}
+  optionsMenuUI: {fileID: 1195721175249275134}
+  gameOverScreenUI: {fileID: 328552985843362865}
+  itemContainerUI: {fileID: 7931661803436202635}
+  WorldTextUI: {fileID: 6317800744304455069}
 --- !u!1 &826691262703568022
 GameObject:
   m_ObjectHideFlags: 0
@@ -385,7 +387,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f15d000fe689934e972471b010c0c30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainMenu: {fileID: 0}
+  mainMenuUIDocument: {fileID: 826691262703568016}
 --- !u!1 &826691263196827834
 GameObject:
   m_ObjectHideFlags: 0
@@ -447,8 +449,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50f103c25436e6d4fbca18c25293e7d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  loadingScreen: {fileID: 0}
+  loadingScreenUIDocument: {fileID: 826691263196827780}
   hintsText: {fileID: 0}
+  currentHint: 
+  hintChangeTime: 2
 --- !u!1 &826691263393008951
 GameObject:
   m_ObjectHideFlags: 0
@@ -480,7 +484,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 826691262636882833}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &826691263393008945
 MonoBehaviour:
@@ -510,7 +514,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f3129e624ccc3f4484f0bd4affdde25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameOverScreen: {fileID: 0}
+  gameOverScreenUIDocument: {fileID: 826691263393008945}
   gameOverText: YOU ARE DEAD
 --- !u!1 &4153239088854448318
 GameObject:
@@ -543,7 +547,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 826691262636882833}
-  m_RootOrder: 8
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2977499448634758181
 MonoBehaviour:
@@ -573,7 +577,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68aba5f51f7c6a849bd010ac98432864, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  difficultyOptions: {fileID: 0}
+  difficultyOptionsUIDocument: {fileID: 2977499448634758181}
 --- !u!1 &7232663360945069450
 GameObject:
   m_ObjectHideFlags: 0
@@ -605,7 +609,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 826691262636882833}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1381663204955658751
 MonoBehaviour:
@@ -635,8 +639,74 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7db3336565623864d8b141da9fc0698e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemContainerUI: {fileID: 0}
+  itemContainerUIDocument: {fileID: 1381663204955658751}
   itemContainer: {fileID: 0}
   playerInventory: {fileID: 0}
   selectedSlot: 0
-  statTemplate: {fileID: 0}
+  statTemplate: {fileID: 9197481963319205126, guid: 917c0bfb0cdfead4c8d8aadd5ace3502, type: 3}
+--- !u!1 &7847586503277697436
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5219844073815972280}
+  - component: {fileID: 6317800744304455069}
+  - component: {fileID: 661753168475339460}
+  m_Layer: 0
+  m_Name: WorldTextUI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5219844073815972280
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7847586503277697436}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 826691262636882833}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6317800744304455069
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7847586503277697436}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e37dba1dcc55f934e9adb4867c10f14b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uiDocument: {fileID: 0}
+  targetTransform: {fileID: 0}
+  text: Place_text
+  offsetPosition: {x: 0, y: 0}
+  uIEnabled: 0
+--- !u!114 &661753168475339460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7847586503277697436}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_PanelSettings: {fileID: 11400000, guid: 39c88d5e18d92dc4ea53f642f4d7c1ae, type: 2}
+  m_ParentUI: {fileID: 0}
+  sourceAsset: {fileID: 9197481963319205126, guid: fbf0376fc48c9184d848ddc4842a4226, type: 3}
+  m_SortingOrder: 0

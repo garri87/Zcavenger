@@ -13,7 +13,7 @@ using System.Linq;
 
 public class OptionsMenuUI : MonoBehaviour
 {
-    public UIDocument optionsMenu;
+    public UIDocument optionsMenuUIDocument;
     public VisualElement root;
 
     //Display Tab
@@ -110,8 +110,8 @@ public class OptionsMenuUI : MonoBehaviour
     private void Start()
     {
         keyAssignments = GameManager.Instance._keyAssignments;
-        optionsMenu = GetComponent<UIDocument>();
-        root = optionsMenu.rootVisualElement;
+        optionsMenuUIDocument = GetComponent<UIDocument>();
+        root = optionsMenuUIDocument.rootVisualElement;
 
         gameManager = GameManager.Instance;
         graphicsManager = gameManager._graphicsManager;

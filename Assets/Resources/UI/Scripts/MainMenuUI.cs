@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 
 public class MainMenuUI : MonoBehaviour
 {
-    public UIDocument mainMenu;
+    public UIDocument mainMenuUIDocument;
 
     public Button startGameButton;
     public Button optionsButton;
@@ -22,8 +22,8 @@ public class MainMenuUI : MonoBehaviour
     {
         gameManager = GameManager.Instance;
         uiManager = gameManager.uiManager;
-        mainMenu = GetComponent<UIDocument>();
-        root = mainMenu.rootVisualElement;
+        mainMenuUIDocument = GetComponent<UIDocument>();
+        root = mainMenuUIDocument.rootVisualElement;
 
 
         startGameButton = root.Q<Button>("StartGameButton");
@@ -42,7 +42,7 @@ public class MainMenuUI : MonoBehaviour
     public void DifficultyOptions(ClickEvent evt)
     {
         uiManager.CloseAllUI();
-        uiManager.ToggleUI(uiManager.difficultyOptionsUIGO, true);
+        uiManager.ToggleUI(uiManager.difficultyOptionsUI.difficultyOptionsUIDocument, true);
     }
 
     public void ExitGame(ClickEvent evt)
@@ -52,6 +52,6 @@ public class MainMenuUI : MonoBehaviour
 
     public void OptionsMenu(ClickEvent evt)
     {
-        uiManager.ToggleUI(uiManager.optionsMenuUIGO,true);
+        uiManager.ToggleUI(uiManager.optionsMenuUI.optionsMenuUIDocument,true);
     }
 }

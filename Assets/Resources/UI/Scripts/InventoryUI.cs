@@ -7,14 +7,14 @@ using UnityEngine.UIElements;
 
 public class InventoryUI : MonoBehaviour
 {
-    public UIDocument inventoryUI;
+    public UIDocument inventoryUIDocument;
     public VisualElement root;
 
    [Header("Items area")]
     public VisualElement inventorySlotArea;
     public Label capacityLabel;
 
-    public static VisualTreeAsset slotTemplate;
+    public VisualTreeAsset slotTemplate;
     public List<VisualElement> inventorySlotList;
 
     public VisualElement outfitSlotsArea;
@@ -62,9 +62,9 @@ public class InventoryUI : MonoBehaviour
     {
        
         
-        inventoryUI = GetComponent<UIDocument>();
+        inventoryUIDocument = GetComponent<UIDocument>();
 
-        root = inventoryUI.rootVisualElement;
+        root = inventoryUIDocument.rootVisualElement;
 
         #region Inventory Slots Area
 

@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using System.Linq;
 using Array = System.Array;
+using Exception = System.Exception; 
 
 public class ItemContainer : MonoBehaviour
 {
@@ -42,12 +43,12 @@ public class ItemContainer : MonoBehaviour
 
     public WorldTextUI _worldTextUI;
     public UIDocument itemContainerUIDocument;
-    private KeyAssignments keyassignments = GameManager.Instance._keyAssignments;
-    private UIManager _uIManager = GameManager.Instance.uiManager;
+    private KeyAssignments _keyassignments;
+    private UIManager _uIManager;
     #endregion
 
-    private VisualTreeAsset slotTemplate = InventoryUI.slotTemplate;
-    private VisualTreeAsset statTemplate = InventoryUI.statTemplate;
+    private VisualTreeAsset slotTemplate;
+    private VisualTreeAsset statTemplate;
 
     public GameObject itemTemplatePrefab;
     private void OnValidate()
@@ -57,9 +58,12 @@ public class ItemContainer : MonoBehaviour
 
     private void Awake()
     {
+        _uIManager = GameManager.Instance.uiManager;
+        _keyassignments = GameManager.Instance._keyAssignments;
         if (_uiManager)
         {
             itemContainerUIDocument = _uiManager.itemContainerUI.itemContainerUIDocument;
+            _worldTextUI = _uiManager.worldTextUI;
         }
         if (randomSize)
         {
@@ -69,29 +73,33 @@ public class ItemContainer : MonoBehaviour
 
 
         int index = 0;
-        for (int i = 0; i < containerSize; i++)
+        if (scriptableObjects != null)
         {
-            if (randomItems)
+            for (int i = 0; i < containerSize; i++)
             {
-                itemGOList.Add(GenerateItemGO(scriptableObjects[Random.Range(0, scriptableObjects.Count)]));
-            }
-            else
-            {
-                try
+                if (randomItems)
                 {
+                    itemGOList.Add(GenerateItemGO(scriptableObjects[Random.Range(0, scriptableObjects.Count)]));
+                }
+                else
+                {
+                    try
+                    {
 
-                    itemGOList.Add(GenerateItemGO(scriptableObjects[index]));
-                    index++;
-                }
-                catch
-                {
-                    index = 0;
-                    itemGOList.Add(GenerateItemGO(scriptableObjects[index]));
-                    index++;
+                        itemGOList.Add(GenerateItemGO(scriptableObjects[index]));
+                        index++;
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.Log("Error creating item object" + e);
+                        index = 0;
+                        itemGOList.Add(GenerateItemGO(scriptableObjects[index]));
+                        index++;
+                    }
                 }
             }
+
         }
-
     }
 
     private void OnEnable()
@@ -101,7 +109,7 @@ public class ItemContainer : MonoBehaviour
 
     private void Start()
     {
-       // worldUIText.text = "Open [ " + GameManager.Instance._keyAssignments.useKey.keyCode.ToString().ToUpper() + " ]";
+        _worldTextUI.text =  $"Open [ {_keyassignments.useKey.keyCode.ToString().ToUpper()} ]";
     }
 
     private void Update()
@@ -110,11 +118,11 @@ public class ItemContainer : MonoBehaviour
 
         if (interactable)
         {
-            if (Input.GetKeyDown(GameManager.Instance._keyAssignments.useKey.keyCode))
+            if (Input.GetKeyDown(_keyassignments.useKey.keyCode))
             {
                 containerOpen = true;
             }
-            _uiManager.ToggleUI(_uiManager.WorldTextUI.uiDocument,interactable);
+            _uiManager.ToggleUI(_uiManager.worldTextUI.uiDocument,interactable);
             playerInventory.showInventory = containerOpen;
         }
         else
@@ -126,7 +134,7 @@ public class ItemContainer : MonoBehaviour
         if (containerOpen)
         {
             playerController.controllerType = PlayerController.ControllerType.StandByController;
-            if (Input.GetKeyDown(GameManager.Instance._keyAssignments.inventoryKey.keyCode) || Input.GetKeyDown(KeyCode.Escape))
+            if (Input.GetKeyDown(_keyassignments.inventoryKey.keyCode) || Input.GetKeyDown(KeyCode.Escape))
             {
                 containerOpen = false;
             }

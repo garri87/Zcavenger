@@ -26,7 +26,7 @@ public class UIManager : MonoBehaviour
     public OptionsMenuUI optionsMenuUI;
     public GameOverScreenUI gameOverScreenUI;
     public ItemContainerUI itemContainerUI;
-    public WorldTextUI WorldTextUI;
+    public WorldTextUI worldTextUI;
 
 
     private UIDocument[] uiDocuments;
@@ -45,7 +45,7 @@ public class UIManager : MonoBehaviour
             optionsMenuUI.GetComponent<UIDocument>(),
             gameOverScreenUI.GetComponent<UIDocument>(),
             itemContainerUI.GetComponent<UIDocument>(),
-            WorldTextUI.GetComponent<UIDocument>(),
+            worldTextUI.GetComponent<UIDocument>(),
 
         };
 
@@ -59,7 +59,7 @@ public class UIManager : MonoBehaviour
         optionsMenuUI = optionsMenuUIGO.GetComponent<OptionsMenuUI>();
         gameOverScreenUI = gameOverScreenUIGO.GetComponent<GameOverScreenUI>();
         itemContainerUI = itemContainerUIGO.GetComponent<ItemContainerUI>();
-        WorldTextUI = worldTextUIGO.GetComponent<WorldTextUI>();
+        worldTextUI = worldTextUIGO.GetComponent<WorldTextUI>();
 
         foreach (var uiDocument in uiDocuments)
         {

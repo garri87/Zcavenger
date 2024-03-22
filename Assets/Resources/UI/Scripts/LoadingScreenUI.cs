@@ -4,7 +4,7 @@ using UnityEngine.UIElements;
 
 public class LoadingScreenUI : MonoBehaviour
 {
-   public UIDocument loadingScreen;
+   public UIDocument loadingScreenUIDocument;
    public VisualElement root;
 
    public VisualElement progressBar;
@@ -17,8 +17,8 @@ public class LoadingScreenUI : MonoBehaviour
 
    private void OnEnable()
    {
-      loadingScreen = GetComponent<UIDocument>();
-      root = loadingScreen.rootVisualElement;
+      loadingScreenUIDocument = GetComponent<UIDocument>();
+      root = loadingScreenUIDocument.rootVisualElement;
 
         progressBar = root.Q<VisualElement>("Foreground");
       hintsLabel = root.Q<Label>("Hints");

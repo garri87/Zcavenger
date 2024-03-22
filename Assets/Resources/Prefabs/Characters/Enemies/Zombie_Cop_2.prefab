@@ -715,7 +715,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: b0a47ea941e81524a827a132249a82a1, type: 2}
+  - {fileID: 2100000, guid: f88ffd80fb16fc64eb62e0ac809b4a97, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -996,7 +996,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: babff9a3c24c63c4fafa9c5faeeed6b1, type: 2}
+  - {fileID: 2100000, guid: 4e414ab54e4899e4c892a38745484455, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1634,7 +1634,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: babff9a3c24c63c4fafa9c5faeeed6b1, type: 2}
+  - {fileID: 2100000, guid: 4e414ab54e4899e4c892a38745484455, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2107,7 +2107,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: b0a47ea941e81524a827a132249a82a1, type: 2}
+  - {fileID: 2100000, guid: f88ffd80fb16fc64eb62e0ac809b4a97, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2513,7 +2513,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 392a0787f0ac6434c9040baf40638a4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyScriptableObject: {fileID: 11400000, guid: 7093168215a16f24792c0a6a7d9efc89, type: 2}
+  enemyScriptableObject: {fileID: 0}
   _rigidbody: {fileID: 0}
   _animator: {fileID: 2708736672661902237}
   _navMeshAgent: {fileID: 0}
@@ -2529,10 +2529,13 @@ MonoBehaviour:
   disableTime: 5
   disableTimer: 0
   player: {fileID: 0}
+  playerHealthManager: {fileID: 0}
   playerDirection: {x: 0, y: 0, z: 0}
   enemyType: 0
+  minSpeed: 0
+  maxSpeed: 0
   distanceToPlayer: 0
-  attackDistance: 0
+  attackRange: 0
   attackRate: 0
   attacking: 0
   playerCatch: 0

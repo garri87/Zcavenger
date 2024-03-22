@@ -5,11 +5,6 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UIElements;
 
-
-[RequireComponent(typeof(WorldTextUI))]
-[RequireComponent(typeof(BoxCollider))]
-[RequireComponent(typeof(WorldTextUI))]
-[RequireComponent(typeof(UIDocument))]
 public class Item : MonoBehaviour
 {
     public enum ItemClass
@@ -65,7 +60,6 @@ public class Item : MonoBehaviour
 
     [Header("UI")]
     public WorldTextUI worldTextUI;
-    public VisualTreeAsset worldTextVTAsset;
 
     [Header("Item Attributes")]
     public ItemScriptableObject itemScriptableObject;
@@ -161,10 +155,11 @@ public class Item : MonoBehaviour
 
     private void Awake()
     {
-       
-      //  InitItem();
-        
-        
+        if (GameManager.Instance)
+        {
+            worldTextUI = GameManager.Instance.uiManager.worldTextUI;
+        }
+        //  InitItem();
     }
 
 
@@ -281,12 +276,9 @@ public class Item : MonoBehaviour
     public void InitItem()
     {
 
-        _boxCollider = GetComponent<BoxCollider>();
-        if (!playerTransform)
-        {
-            playerTransform = GameObject.Find("Player").transform;
-        }
-        
+        if (!_boxCollider) _boxCollider = GetComponent<BoxCollider>();
+        if (!playerTransform) playerTransform = GameObject.Find("Player").transform;
+              
         if (playerTransform)
         {
             playerController = playerTransform.GetComponent<PlayerController>();
@@ -297,14 +289,9 @@ public class Item : MonoBehaviour
 
         if (!modelMeshFilter) modelMeshFilter = GetComponent<MeshFilter>();
         if (!modelMeshRenderer) modelMeshRenderer = GetComponent<MeshRenderer>();
-        if (!worldTextUI)
-        {
-            worldTextUI = GetComponent<WorldTextUI>();
-            worldTextUI.uiDocument.visualTreeAsset = worldTextVTAsset;
-        }
-            
+        if (!worldTextUI) worldTextUI = GetComponent<WorldTextUI>();
+                    
         modelInstantiated = false;
-
 
         if (scriptableObject)
         {
