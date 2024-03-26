@@ -2513,7 +2513,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 392a0787f0ac6434c9040baf40638a4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyScriptableObject: {fileID: 0}
+  enemyScriptableObject: {fileID: 11400000, guid: 4c026e7a306bfe54ca40219186197d29, type: 2}
   _rigidbody: {fileID: 0}
   _animator: {fileID: 2708736672661902237}
   _navMeshAgent: {fileID: 0}
@@ -2531,12 +2531,12 @@ MonoBehaviour:
   player: {fileID: 0}
   playerHealthManager: {fileID: 0}
   playerDirection: {x: 0, y: 0, z: 0}
-  enemyType: 0
-  minSpeed: 0
-  maxSpeed: 0
+  enemyType: 1
+  minSpeed: 0.5
+  maxSpeed: 0.5
   distanceToPlayer: 0
-  attackRange: 0
-  attackRate: 0
+  attackRange: 0.6
+  attackRate: 0.5
   attacking: 0
   playerCatch: 0
   attackLayerMask:

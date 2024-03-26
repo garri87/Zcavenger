@@ -12,9 +12,19 @@ public class GameManager : MonoBehaviour
     {
         get
         {
+            
             if (_instance == null)
             {
+                Debug.Log("GameManager Instance started");
                 _instance = FindObjectOfType<GameManager>();
+                if (_instance)
+                {
+                    Debug.Log("GameManager Instance found");
+                }
+                else
+                {
+                    Debug.Log("No GameManager in Instance");
+                }
                 /*if (_instance == null)
                 {
                     GameObject go = new GameObject("GameManager");
@@ -94,14 +104,15 @@ public class GameManager : MonoBehaviour
     };
 
 
-    public List<ScriptableObject> scriptableObjectItems;
+    public List<ScriptableObject> scriptableObjects;
 
-    private List<ScriptableObject> GetScriptableResources()
+    private List<ScriptableObject> GetScriptablesFromResources()
     {
         List<Object> objectList = new List<Object>();
         objectList.AddRange(Resources.LoadAll("ScriptableObjects/Items", typeof(ScriptableObject)));
         objectList.AddRange(Resources.LoadAll("ScriptableObjects/Outfits", typeof(ScriptableObject)));
         objectList.AddRange(Resources.LoadAll("ScriptableObjects/Weapons", typeof(ScriptableObject)));
+        objectList.AddRange(Resources.LoadAll("ScriptableObjects/Characters", typeof(ScriptableObject)));
 
         List<ScriptableObject> scriptableList = objectList.OfType<ScriptableObject>().ToList();
 
@@ -116,13 +127,13 @@ public class GameManager : MonoBehaviour
 #else
         Debug.unityLogger.logEnabled = false;
 #endif
-        uiManager = GetComponentInChildren<UIManager>();
+        if(!uiManager)uiManager = GetComponentInChildren<UIManager>();
 
 
-        _graphicsManager = GetComponent<GraphicsManager>();
-        _audioManager = GetComponent<AudioManager>();
-        _keyAssignments = GetComponent<KeyAssignments>();
-
+        if(!_graphicsManager)_graphicsManager = GetComponent<GraphicsManager>();
+        if(!_audioManager) _audioManager = GetComponent<AudioManager>();
+        if(!_keyAssignments) _keyAssignments = GetComponent<KeyAssignments>();
+        
     }
 
     void Start()
@@ -141,7 +152,7 @@ public class GameManager : MonoBehaviour
 
             case SceneType.inLevel:
                 uiManager.CloseAllUI();
-                scriptableObjectItems = GetScriptableResources();
+                scriptableObjects = GetScriptablesFromResources();
                 player = GameObject.Find("Player");
                 playerController = player.GetComponent<PlayerController>();
                 playerHealthManager = player.GetComponent<HealthManager>();

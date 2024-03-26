@@ -49,8 +49,7 @@ public class Item : MonoBehaviour
 
     public GameObject itemModelGO;
     public SkinnedMeshRenderer modelSkinnedRenderer;
-
-    private bool modelInstantiated = false;
+    public bool modelInstantiated = false;
 
 
     private BoxCollider _boxCollider;
@@ -155,17 +154,25 @@ public class Item : MonoBehaviour
 
     private void Awake()
     {
-        if (GameManager.Instance)
-        {
-            worldTextUI = GameManager.Instance.uiManager.worldTextUI;
-        }
+        
         //  InitItem();
     }
 
 
     private void OnEnable()
     {
+        if (GameManager.Instance)
+        {
+            worldTextUI = GameManager.Instance.uiManager.worldTextUI;
+            keyAssignments = GameManager.Instance._keyAssignments;
+        }
         InitItem();
+    }
+
+    private void Start()
+    {
+        
+
     }
 
     private void Update()
@@ -313,13 +320,18 @@ public class Item : MonoBehaviour
                     outline = itemModelGO.GetComponent<Outline>();
                     outline.enabled = false;
 
-                    worldTextUI.targetTransform = itemModelGO.transform;
-                    worldTextUI.uIEnabled = false;
                     break;
 
                 case ItemLocation.Container:
-
-
+                    if (!modelInstantiated)
+                    {
+                        itemModelGO = InstantiateItem(itemPrefab);
+                        itemModelGO.SetActive(false);
+                    }
+                    else
+                    {
+                        itemModelGO.SetActive(false);
+                    }
                     break;
                 case ItemLocation.Player:
 
@@ -684,7 +696,7 @@ public class Item : MonoBehaviour
 
     #endregion
 
-
+    private KeyAssignments keyAssignments;
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
@@ -695,7 +707,7 @@ public class Item : MonoBehaviour
                 {
                     case ItemLocation.World:
                         outline.enabled = true;
-                        worldTextUI.uIEnabled = true;
+                        worldTextUI.SetWorldTextUI(transform,$"{itemName} {keyAssignments}");
                         break;
                 }
             }

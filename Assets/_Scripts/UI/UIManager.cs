@@ -1,6 +1,5 @@
 
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UIElements;
 
 
@@ -30,9 +29,9 @@ public class UIManager : MonoBehaviour
 
 
     private UIDocument[] uiDocuments;
-
-
-    private void OnEnable()
+    
+    
+    private void Awake()
     {
         uiDocuments = new UIDocument[]
         {

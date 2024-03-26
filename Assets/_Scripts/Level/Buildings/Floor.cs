@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 
@@ -63,7 +64,8 @@ public class Floor : MonoBehaviour
     public Transform interiorsGroup;
     public SpawnManager[] enemySpawers;
     public Item[] itemSpawners;
-    private List<ScriptableObject> scriptableItemList;
+    private List<ScriptableObject> scriptableObjects;
+    private List<ScriptableObject> itemScriptableObjects;
 
     [Range(0,10)]
     public int enemyProbability = 0, itemProbability = 0;
@@ -108,7 +110,9 @@ public class Floor : MonoBehaviour
                 enemyProbability = 5;
                 break;
         }
-        scriptableItemList = GameManager.Instance.scriptableObjectItems;
+        scriptableObjects = GameManager.Instance.scriptableObjects;
+        itemScriptableObjects = scriptableObjects.Where(obj => obj.GetType() == typeof(ItemScriptableObject) || obj.GetType() == typeof(WeaponScriptableObject)).ToList();
+
 
         SetSpawners(itemSpawners, itemProbability);
         SetSpawners(enemySpawers, enemyProbability);
@@ -141,8 +145,6 @@ public class Floor : MonoBehaviour
             RaycastHit backHit;
             RaycastHit forwardHit;
 
-
-
             int rand = Random.Range(1, 10);
             if (rand > 0 && rand < probability)
             {
@@ -170,9 +172,9 @@ public class Floor : MonoBehaviour
                         }
                         else
                         {
-                            if (scriptableItemList.Count > 0)
+                            if (scriptableObjects.Count > 0)
                             {
-                                ScriptableObject scriptableItem = scriptableItemList[Random.Range(0, scriptableItemList.Count)];
+                                ScriptableObject scriptableItem = itemScriptableObjects[Random.Range(0, scriptableObjects.Count)];
                                 item.scriptableObject = scriptableItem;
 
                                 item.gameObject.SetActive(true);

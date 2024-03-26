@@ -111,6 +111,7 @@ public class AgentController : MonoBehaviour
         catch
         {
             Debug.LogWarning("No Scriptable Object found on " + gameObject.name);
+            
         }
     }
 

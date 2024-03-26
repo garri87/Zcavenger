@@ -38,7 +38,7 @@ public class ItemContainerUI : MonoBehaviour
     public Label inspectItemTitle;
     public Label inspectItemInfo;
     public VisualElement statsPanel;
-    public VisualTreeAsset statTemplate;//Item stat template used for show item stats
+    public VisualTreeAsset statTemplate,slotTemplate;//Item stat template used for show item stats
     public List<VisualElement> itemStats;
     public Button inspectCloseButton;
 
@@ -48,10 +48,8 @@ public class ItemContainerUI : MonoBehaviour
     {
         itemContainerUIDocument = GetComponent<UIDocument>();
         root = itemContainerUIDocument.rootVisualElement;
-
         containerLabel = root.Q<Label>("ContainerName");
         containerSlotArea = root.Q<VisualElement>("SlotsPanel");
-        containerSlot = containerSlotArea.Q<VisualElement>("Slot");
 
         #region Inspect Window
 
@@ -88,16 +86,21 @@ public class ItemContainerUI : MonoBehaviour
 
     public void FillInventoryWithSlots(int capacity)
     {
+
         for (int i = 0; i < capacity; i++)
         {
-            containerSlotArea.Add(containerSlot);
-        }
+            if(containerSlotArea.childCount < capacity)
+            {
+                containerSlotArea.Add(slotTemplate.Instantiate());
+            }
+        }   
 
         containerSlotList = containerSlotArea.Query<VisualElement>("Slot").ToList();
 
         for (int i = 0; i < containerSlotList.Count; i++)
         {
             containerSlotList[i].name = "Slot_" + i;
+            containerSlotList[i].AddToClassList("Slot");
         }
 
 

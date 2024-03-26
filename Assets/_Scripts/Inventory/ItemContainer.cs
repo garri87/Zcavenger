@@ -21,7 +21,7 @@ public class ItemContainer : MonoBehaviour
 
     public List<ScriptableObject> scriptableObjects = new List<ScriptableObject>();
 
-    [HideInInspector]
+    
     public List<GameObject> itemGOList;
 
     /// <summary>
@@ -44,7 +44,6 @@ public class ItemContainer : MonoBehaviour
     public WorldTextUI _worldTextUI;
     public UIDocument itemContainerUIDocument;
     private KeyAssignments _keyassignments;
-    private UIManager _uIManager;
     #endregion
 
     private VisualTreeAsset slotTemplate;
@@ -54,12 +53,32 @@ public class ItemContainer : MonoBehaviour
     private void OnValidate()
     {
         OrderQuantities(scriptableObjects);
+        
     }
 
     private void Awake()
     {
-        _uIManager = GameManager.Instance.uiManager;
+        
+        
+    }
+
+    private void OnEnable()
+    {
+
+        meshOutline.enabled = false;
+    }
+    
+    private void Start()
+    {
+        _uiManager = GameManager.Instance.uiManager;
+        if (_uiManager == null)
+        {
+            Debug.Log("Cannot reach GameManager Instance");
+        }
+
         _keyassignments = GameManager.Instance._keyAssignments;
+
+
         if (_uiManager)
         {
             itemContainerUIDocument = _uiManager.itemContainerUI.itemContainerUIDocument;
@@ -67,7 +86,7 @@ public class ItemContainer : MonoBehaviour
         }
         if (randomSize)
         {
-               
+
             containerSize = Random.Range(minSize, maxSize);
         }
 
@@ -75,41 +94,47 @@ public class ItemContainer : MonoBehaviour
         int index = 0;
         if (scriptableObjects != null)
         {
+            int quantity = 0;
+            int order = 0;
             for (int i = 0; i < containerSize; i++)
             {
+                
+                if (orderedQuantity.Length > i)
+                {
+                    quantity = orderedQuantity[i];
+                    order = 0;
+                }
+                else
+                {
+                    quantity = orderedQuantity[order];
+                    order++;
+                }
+
                 if (randomItems)
                 {
-                    itemGOList.Add(GenerateItemGO(scriptableObjects[Random.Range(0, scriptableObjects.Count)]));
+                    itemGOList.Add(GenerateItemGO(scriptableObjects[Random.Range(0, scriptableObjects.Count)], quantity));
                 }
                 else
                 {
                     try
                     {
-
-                        itemGOList.Add(GenerateItemGO(scriptableObjects[index]));
+                        itemGOList.Add(GenerateItemGO(scriptableObjects[index],quantity));
                         index++;
                     }
                     catch (Exception e)
                     {
                         Debug.Log("Error creating item object" + e);
                         index = 0;
-                        itemGOList.Add(GenerateItemGO(scriptableObjects[index]));
+                        itemGOList.Add(GenerateItemGO(scriptableObjects[index],quantity));
                         index++;
                     }
                 }
             }
-
+            
         }
-    }
-
-    private void OnEnable()
-    {
-        meshOutline.enabled = false;
-    }
-
-    private void Start()
-    {
         _worldTextUI.text =  $"Open [ {_keyassignments.useKey.keyCode.ToString().ToUpper()} ]";
+        _uiManager.itemContainerUI.inspectItemPanel.style.display = DisplayStyle.None;
+
     }
 
     private void Update()
@@ -118,11 +143,14 @@ public class ItemContainer : MonoBehaviour
 
         if (interactable)
         {
-            if (Input.GetKeyDown(_keyassignments.useKey.keyCode))
+            if (Input.GetKeyDown(_keyassignments.useKey.keyCode) || Input.GetKeyDown(_keyassignments.inventoryKey.keyCode))
             {
-                containerOpen = true;
+                containerOpen = !containerOpen;
+                _uiManager.itemContainerUI.FillInventoryWithSlots(containerSize);
+                _uiManager.ToggleUI(itemContainerUIDocument, containerOpen);
+
             }
-            _uiManager.ToggleUI(_uiManager.worldTextUI.uiDocument,interactable);
+            _uiManager.ToggleUI(_uiManager.worldTextUI.uiDocument,!containerOpen);
             playerInventory.showInventory = containerOpen;
         }
         else
@@ -134,16 +162,13 @@ public class ItemContainer : MonoBehaviour
         if (containerOpen)
         {
             playerController.controllerType = PlayerController.ControllerType.StandByController;
-            if (Input.GetKeyDown(_keyassignments.inventoryKey.keyCode) || Input.GetKeyDown(KeyCode.Escape))
+            if (Input.GetKeyDown(KeyCode.Escape))
             {
                 containerOpen = false;
             }
-            _uiManager.ToggleUI(itemContainerUIDocument, containerOpen);
         }
-        else
-        {
-            _uiManager.ToggleUI(itemContainerUIDocument, containerOpen);
-        }
+        _uiManager.ToggleUI(itemContainerUIDocument, containerOpen);
+
 
 
     }
@@ -200,15 +225,15 @@ public class ItemContainer : MonoBehaviour
     /// </summary>
     /// <param name="scriptableObj"></param>
     /// <returns></returns>
-    public GameObject GenerateItemGO(ScriptableObject scriptableObj)
+    public GameObject GenerateItemGO(ScriptableObject scriptableObj, int quantity)
     {
         GameObject newItemGO = Instantiate(itemTemplatePrefab, transform);
         newItemGO.name = scriptableObj.name;
         Item item = newItemGO.GetComponent<Item>();
-        item.scriptableObject = scriptableObj;
+        item.GetScriptableObject(scriptableObj);
         item.itemLocation = Item.ItemLocation.Container;
+        item.quantity = quantity;
         item.InitItem();
-        newItemGO.SetActive(false);
         return newItemGO;
     }
 
